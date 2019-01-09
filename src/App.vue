@@ -9,6 +9,7 @@
       :currency="currency"
       :locale="locale"
       :distraction-free="distractionFree"
+      :allow-negative="allowNegative"
       class="currency-input"/>
     <p>Raw number value: {{ value }}</p>
     <aside>
@@ -16,9 +17,17 @@
       <p>
         <label>
           <input
+            v-model="allowNegative"
+            type="checkbox">
+          Allow negative
+        </label>
+      </p>
+      <p>
+        <label>
+          <input
             v-model="distractionFree"
             type="checkbox">
-          Distracion free
+          Distraction free
         </label>
       </p>
       <p>
@@ -59,7 +68,8 @@ export default {
       value: 200,
       currency: 'USD',
       locale: undefined,
-      distractionFree: true
+      distractionFree: true,
+      allowNegative: true
     }
   }
 }

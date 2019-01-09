@@ -1,8 +1,9 @@
-const nonDigitsRegExp = /\D+/g
+import { onlyDigits, removePrefix, removeSuffix } from './formatHelper'
+
 const digitRegExp = /\d/
 const caretTrap = '[]'
 
-const convertToMask = strNumber => strNumber.split('').map((char) => digitRegExp.test(char) ? digitRegExp : char)
+const convertToMask = (strNumber) => strNumber.split('').map((char) => digitRegExp.test(char) ? digitRegExp : char)
 
 const createNumberMask = (
   {
@@ -11,7 +12,7 @@ const createNumberMask = (
     includeThousandsSeparator = true,
     thousandsSeparatorSymbol = ',',
     allowDecimal = true,
-    allowNegative = false,
+    allowNegative = true,
     decimalSymbol = '.',
     decimalLimit = 2,
     integerLimit = null
@@ -21,59 +22,51 @@ const createNumberMask = (
   const thousandsSeparatorSymbolLength = thousandsSeparatorSymbol ? thousandsSeparatorSymbol.length : 0
 
   return (rawValue = '') => {
-    const rawValueLength = rawValue.length
-    const indexOfLastDecimal = rawValue.lastIndexOf(decimalSymbol)
-    const hasDecimal = indexOfLastDecimal !== -1
-    const isNegative = (rawValue[0] === '-') && allowNegative
-
-    let integer, fraction, mask
-
-    if (isNegative) {
-      rawValue = rawValue.toString().substr(1)
+    if (rawValue === '' || (rawValue[0] === prefix[0] && rawValue.length === 1)) {
+      return prefix.split('').concat([digitRegExp]).concat(suffix.split(''))
+    } else if (rawValue === decimalSymbol && allowDecimal) {
+      return prefix.split('').concat(['0', decimalSymbol, digitRegExp]).concat(suffix.split(''))
     }
 
-    if (rawValue.slice(suffixLength * -1) === suffix) {
-      rawValue = rawValue.slice(0, suffixLength * -1)
-    }
+    const indexOfDecimalSymbol = rawValue.indexOf(decimalSymbol)
+    const hasDecimal = indexOfDecimalSymbol !== -1
+    const negative = rawValue.startsWith('-') && allowNegative
+
+    let integer, fraction
+
+    rawValue = removePrefix(rawValue, '-')
+    rawValue = removePrefix(rawValue, prefix)
+    rawValue = removeSuffix(rawValue, suffix)
 
     if (hasDecimal && allowDecimal) {
-      integer = rawValue.slice(rawValue.slice(0, prefixLength) === prefix ? prefixLength : 0, indexOfLastDecimal)
-      fraction = rawValue.slice(indexOfLastDecimal + 1, rawValueLength)
-      fraction = convertToMask(fraction.replace(nonDigitsRegExp, ''))
+      const numberParts = rawValue.split(decimalSymbol)
+      integer = numberParts[0]
+      fraction = convertToMask(onlyDigits(numberParts[1]))
     } else {
-      if (rawValue.slice(0, prefixLength) === prefix) {
-        integer = rawValue.slice(prefixLength)
-      } else {
-        integer = rawValue
-      }
+      integer = rawValue
     }
 
     if (integerLimit && typeof integerLimit === 'number') {
       const thousandsSeparatorRegex = thousandsSeparatorSymbol === '.' ? '[.]' : `${thousandsSeparatorSymbol}`
       const numberOfThousandSeparators = (integer.match(new RegExp(thousandsSeparatorRegex, 'g')) || []).length
-
       integer = integer.slice(0, integerLimit + (numberOfThousandSeparators * thousandsSeparatorSymbolLength))
     }
 
-    integer = integer.replace(nonDigitsRegExp, '')
+    integer = onlyDigits(integer)
     integer = integer.replace(/^0+(0$|[^0])/, '$1')
-
     integer = (includeThousandsSeparator) ? integer.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSeparatorSymbol) : integer
 
-    mask = convertToMask(integer)
+    let mask = convertToMask(integer)
 
     if (hasDecimal && allowDecimal) {
-      if (rawValue[indexOfLastDecimal - 1] !== decimalSymbol) {
+      if (rawValue[indexOfDecimalSymbol - 1] !== decimalSymbol) {
         mask.push(caretTrap)
       }
-
       mask.push(decimalSymbol, caretTrap)
-
       if (fraction) {
         if (typeof decimalLimit === 'number') {
           fraction = fraction.slice(0, decimalLimit)
         }
-
         mask = mask.concat(fraction)
       }
     }
@@ -82,14 +75,16 @@ const createNumberMask = (
       mask = prefix.split('').concat(mask)
     }
 
-    if (isNegative) {
+    if (negative) {
+      if (mask.length === prefixLength) {
+        mask.push(digitRegExp)
+      }
       mask = [/-/].concat(mask)
     }
 
-    if (suffix.length > 0) {
+    if (suffixLength > 0) {
       mask = mask.concat(suffix.split(''))
     }
-
     return mask
   }
 }

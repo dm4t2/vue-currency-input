@@ -55,6 +55,16 @@ describe('CurrencyInput', () => {
         expect(wrapper.vm.$options.props.distractionFree.default).toBe(true)
       })
     })
+
+    describe('allowNegative', () => {
+      it('is of type Boolean', () => {
+        expect(wrapper.vm.$options.props.allowNegative.type).toBe(Boolean)
+      })
+
+      it('defaults to true', () => {
+        expect(wrapper.vm.$options.props.allowNegative.default).toBe(true)
+      })
+    })
   })
 
   describe('when the component is mounted', () => {

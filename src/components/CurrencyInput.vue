@@ -7,7 +7,7 @@
 <script>
 import { createTextMaskInputElement } from 'text-mask-core'
 import createNumberMask from '../utils/createNumberMask'
-import { onlyDigits, removePrefix, removeSuffix } from '../utils/formatHelper'
+import { parse } from '../utils/formatHelper'
 
 export default {
   name: 'CurrencyInput',
@@ -25,6 +25,10 @@ export default {
       required: true
     },
     distractionFree: {
+      type: Boolean,
+      default: true
+    },
+    allowNegative: {
       type: Boolean,
       default: true
     }
@@ -53,12 +57,14 @@ export default {
         suffix: this.focus && this.distractionFree ? '' : formattedNumber.substring(formattedNumber.lastIndexOf(allowDecimal ? '0' : '4') + 1),
         decimalSymbol: allowDecimal ? formattedNumber.substr(formattedNumber.indexOf('4') + 1, 1) : null,
         thousandsSeparatorSymbol: formattedNumber.substr(formattedNumber.indexOf('1') + 1, 1),
+        allowNegative: this.allowNegative,
         allowDecimal
       }
     },
     textMaskInputElement () {
       return createTextMaskInputElement({
         inputElement: this.$el,
+        guide: false,
         mask: createNumberMask(this.config)
       })
     },
@@ -78,6 +84,9 @@ export default {
         this.updateValue(this.fixedFractionNumberFormat.format(value))
       }
     },
+    allowNegative () {
+      this.updateValue(this.formattedValue)
+    },
     locale: 'applyFixedFractionFormat',
     currency: 'applyFixedFractionFormat'
   },
@@ -87,7 +96,6 @@ export default {
   methods: {
     handleInput (e) {
       this.updateValue(e.target.value)
-      this.$emit('input', this.numberValue)
     },
     handleBlur () {
       this.focus = false
@@ -104,29 +112,17 @@ export default {
     },
     updateValue (value) {
       this.format(value)
-      this.numberValue = this.parse(this.formattedValue)
-    },
-    parse (str) {
-      if (str.length === 0) {
-        return null
-      }
-      str = removePrefix(str, this.config.prefix)
-      str = removeSuffix(str, this.config.suffix)
-      if (this.config.allowDecimal && str.indexOf(this.config.decimalSymbol) !== -1) {
-        const numberParts = str.split(this.config.decimalSymbol)
-        const intDigits = onlyDigits(numberParts[0])
-        const fractionDigits = numberParts[1]
-        return Number(`${intDigits}.${fractionDigits}`)
-      } else {
-        return Number(onlyDigits(str))
-      }
+      this.numberValue = parse(this.formattedValue, this.config)
+      this.$emit('input', this.numberValue)
     },
     format (value) {
       this.textMaskInputElement.update(value)
       this.formattedValue = this.$el.value
     },
     applyFixedFractionFormat () {
-      if (this.numberValue !== null) {
+      if (this.numberValue === null) {
+        this.formattedValue = ''
+      } else {
         this.format(this.fixedFractionNumberFormat.format(this.numberValue.toFixed(2)))
       }
     },

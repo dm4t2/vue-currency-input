@@ -40,3 +40,4 @@ Name | Type | Description
 `currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code. This prop is required.
 `locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is the runtime's default locale.
 `distraction-free` | Boolean | Whether to hide the currency prefix/suffix and unnecessary fraction part on focus. Default is `true`.
+`allow-negative` | Boolean | Whether negative values are allowed. Default is `true`.

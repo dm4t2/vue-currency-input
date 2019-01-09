@@ -3,6 +3,7 @@
 exports[`CurrencyInput currency format config when the format has a prefix builds the config correctly 1`] = `
 Object {
   "allowDecimal": true,
+  "allowNegative": true,
   "decimalSymbol": ".",
   "prefix": "€ ",
   "suffix": "",
@@ -13,6 +14,7 @@ Object {
 exports[`CurrencyInput currency format config when the format has a suffix builds the config correctly 1`] = `
 Object {
   "allowDecimal": true,
+  "allowNegative": true,
   "decimalSymbol": ",",
   "prefix": "",
   "suffix": " €",
