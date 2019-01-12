@@ -45,7 +45,7 @@ export default {
       return {
         ...this.$listeners,
         input: (e) => this.handleInput(e),
-        focus: () => this.handleFocus(),
+        focus: (e) => this.handleFocus(e),
         blur: () => this.handleBlur()
       }
     },
@@ -101,14 +101,15 @@ export default {
       this.focus = false
       this.applyFixedFractionFormat()
     },
-    handleFocus () {
-      this.focus = true
-      if (this.numberValue !== null) {
-        if (this.distractionFree) {
+    handleFocus (e) {
+      this.$nextTick(() => {
+        const caretPosition = e.target.selectionStart - this.config.prefix.length
+        this.focus = true
+        if (this.numberValue !== null && this.distractionFree) {
           this.format(new Intl.NumberFormat(this.locale).format(this.numberValue))
+          this.setCaretPosition(Math.max(0, caretPosition))
         }
-        this.$nextTick(() => this.setCaretPosition(this.formattedValue.length - this.config.suffix.length))
-      }
+      })
     },
     updateValue (value) {
       this.format(value)

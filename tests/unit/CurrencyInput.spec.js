@@ -136,35 +136,47 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is focused', () => {
-    describe('caret position', () => {
-      it('sets the caret position correctly', async () => {
-        jest.spyOn(wrapper.vm, 'setCaretPosition')
-        wrapper.setProps({ value: 1234.5 })
+    describe('distraction free mode is enabled', () => {
+      it('applies the distraction free format', async () => {
+        wrapper.setProps({ value: 1234.5, distractionFree: true })
 
         wrapper.trigger('focus')
         await wrapper.vm.$nextTick()
 
-        expect(wrapper.vm.setCaretPosition).toHaveBeenCalledWith(7)
-      })
-    })
-
-    describe('distraction free mode is enabled', () => {
-      it('applies the distraction free format', () => {
-        wrapper.setProps({ value: 1234.5, distractionFree: true })
-
-        wrapper.trigger('focus')
-
         expect(wrapper.vm.formattedValue).toBe('1,234.5')
+      })
+
+      it('sets the caret position correctly', async () => {
+        wrapper.setProps({ value: 1234.5, distractionFree: true })
+        jest.spyOn(wrapper.vm, 'setCaretPosition')
+
+        wrapper.element.setSelectionRange(1, 1)
+        wrapper.trigger('focus')
+        await wrapper.vm.$nextTick()
+
+        expect(wrapper.vm.setCaretPosition).toHaveBeenCalledWith(0)
       })
     })
 
     describe('distraction free mode is disabled', () => {
-      it('leaves the current value untouched', () => {
+      it('leaves the current value untouched', async () => {
         wrapper.setProps({ value: 1234.5, distractionFree: false })
 
         wrapper.trigger('focus')
+        await wrapper.vm.$nextTick()
 
         expect(wrapper.vm.formattedValue).toBe('€1,234.50')
+      })
+
+      it('leaves the caret position untouched', async () => {
+        wrapper.setProps({ value: 1234.5, distractionFree: false })
+        jest.spyOn(wrapper.vm, 'setCaretPosition')
+
+        wrapper.element.setSelectionRange(3, 3)
+        wrapper.trigger('focus')
+        await wrapper.vm.$nextTick()
+
+        expect(wrapper.element.selectionStart).toBe(3)
       })
     })
   })
