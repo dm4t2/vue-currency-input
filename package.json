@@ -4,19 +4,30 @@
   "version": "1.0.0",
   "license": "MIT",
   "main": "dist/vue-currency-input.common.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "author": "Matthias Stiller",
   "repository": {
     "type": "git",
     "url": "https://github.com/dm4t2/vue-currency-input.git"
   },
   "homepage": "https://github.com/dm4t2/vue-currency-input",
-  "keywords": ["vue", "input mask", "text mask", "money", "currency format", "i18n"],
+  "keywords": [
+    "vue",
+    "input mask",
+    "text mask",
+    "money input",
+    "currency format",
+    "i18n"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib src/components/CurrencyInput.vue --formats commonjs",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "dependencies": {
     "text-mask-core": "^5.1.2",
