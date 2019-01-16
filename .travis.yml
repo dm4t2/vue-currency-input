@@ -2,15 +2,21 @@ language: node_js
 node_js:
   - "10"
 install:
+  - yarn
   - yarn global add vuepress
-script:
-  - yarn docs:build
 cache:
   directories:
     - "node_modules"
-deploy:
-  provider: pages
-  skip-cleanup: true
-  local_dir: docs/.vuepress/dist
-  github-token: $GITHUB_TOKEN
-  repo: dm4t2/vue-currency-input
+jobs:
+  include:
+    - stage: Unit Tests
+      script: yarn test:unit
+    - stage: Deploy GitHub Pages
+      script: yarn docs:build
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        local_dir: docs/.vuepress/dist
+        github-token: $GITHUB_TOKEN
+        repo: dm4t2/vue-currency-input
+
