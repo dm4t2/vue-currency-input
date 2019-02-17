@@ -15,7 +15,10 @@ export const removeSuffix = (str, suffix) => {
 }
 
 export const parse = (str, { decimalSymbol, allowNegative = true } = {}) => {
-  if (str && str.trim().length > 0) {
+  if (typeof str === 'number') {
+    return str
+  }
+  if (str && typeof str === 'string' && str.trim().length) {
     const negative = str.startsWith('-') && allowNegative
     const numberParts = str.split(decimalSymbol)
     let number = onlyDigits(numberParts[0])
@@ -25,8 +28,31 @@ export const parse = (str, { decimalSymbol, allowNegative = true } = {}) => {
     if (numberParts.length === 2) {
       number += '.' + onlyDigits(numberParts[1])
     }
-    number = Number(number)
-    return Number.isNaN(number) ? null : number
+    if (number) {
+      number = Number(number)
+      return Number.isNaN(number) ? null : number
+    }
   }
   return null
+}
+
+export const getCurrencyFormatConfig = ({ locale, currency, allowNegative = true } = {}) => {
+  const numberFormat = new Intl.NumberFormat(locale, currency ? { style: 'currency', currency } : { minimumFractionDigits: 2 })
+  const formattedNumber = numberFormat.format(1234)
+  const decimalLimit = (formattedNumber.match(/0/g) || []).length
+  const decimalSymbol = decimalLimit > 0 ? formattedNumber.substr(formattedNumber.indexOf('4') + 1, 1) : null
+  const allowDecimal = decimalSymbol !== null
+  const prefix = formattedNumber.substring(0, formattedNumber.indexOf('1'))
+  const suffix = formattedNumber.substring(formattedNumber.lastIndexOf(decimalLimit > 0 ? '0' : '4') + 1)
+  const thousandsSeparatorSymbol = formattedNumber.substr(formattedNumber.indexOf('1') + 1, 1)
+
+  return {
+    prefix,
+    suffix,
+    thousandsSeparatorSymbol,
+    decimalSymbol,
+    allowNegative,
+    decimalLimit,
+    allowDecimal
+  }
 }

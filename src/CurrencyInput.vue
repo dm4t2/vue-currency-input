@@ -6,8 +6,8 @@
 
 <script>
 import { createTextMaskInputElement } from 'text-mask-core'
-import createNumberMask from '../utils/createNumberMask'
-import { parse } from '../utils/formatHelper'
+import createNumberMask from './utils/createNumberMask'
+import { getCurrencyFormatConfig, parse } from './utils/formatHelper'
 
 export default {
   name: 'CurrencyInput',
@@ -50,32 +50,27 @@ export default {
       }
     },
     config () {
-      const formattedNumber = this.currencyFormat.format(1234)
-      const allowDecimal = formattedNumber.indexOf('0') !== -1
-      return {
-        prefix: this.focus && this.distractionFree ? '' : formattedNumber.substring(0, formattedNumber.indexOf('1')),
-        suffix: this.focus && this.distractionFree ? '' : formattedNumber.substring(formattedNumber.lastIndexOf(allowDecimal ? '0' : '4') + 1),
-        decimalSymbol: allowDecimal ? formattedNumber.substr(formattedNumber.indexOf('4') + 1, 1) : null,
-        thousandsSeparatorSymbol: formattedNumber.substr(formattedNumber.indexOf('1') + 1, 1),
-        allowNegative: this.allowNegative,
-        allowDecimal
-      }
+      return getCurrencyFormatConfig(this.$props)
+    },
+    hidePrefix () {
+      return this.focus && this.distractionFree
+    },
+    hideSuffix () {
+      return this.focus && this.distractionFree
     },
     textMaskInputElement () {
       return createTextMaskInputElement({
         inputElement: this.$el,
         guide: false,
-        mask: createNumberMask(this.config)
-      })
-    },
-    currencyFormat () {
-      return new Intl.NumberFormat(this.locale, {
-        style: 'currency',
-        currency: this.currency
+        mask: createNumberMask({
+          ...this.config,
+          prefix: this.hidePrefix ? '' : this.config.prefix,
+          suffix: this.hideSuffix ? '' : this.config.suffix
+        })
       })
     },
     fixedFractionNumberFormat () {
-      return new Intl.NumberFormat(this.locale, { minimumFractionDigits: this.config.allowDecimal ? 2 : 0 })
+      return new Intl.NumberFormat(this.locale, { minimumFractionDigits: this.config.decimalLimit })
     }
   },
   watch: {
@@ -124,7 +119,7 @@ export default {
       if (this.numberValue === null) {
         this.formattedValue = ''
       } else {
-        this.format(this.fixedFractionNumberFormat.format(this.numberValue.toFixed(2)))
+        this.format(this.fixedFractionNumberFormat.format(this.numberValue))
       }
     },
     setCaretPosition (caretPosition) {

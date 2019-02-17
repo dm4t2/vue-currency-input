@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import CurrencyInput from '../../src/components/CurrencyInput'
+import CurrencyInput from '../../src/CurrencyInput'
 
 describe('CurrencyInput', () => {
   let wrapper, propsData
@@ -9,10 +9,6 @@ describe('CurrencyInput', () => {
       locale: 'en'
     }
     wrapper = mountComponent(propsData)
-  })
-
-  it('is a Vue component', () => {
-    expect(wrapper.isVueInstance()).toBe(true)
   })
 
   describe('props', () => {
@@ -75,35 +71,6 @@ describe('CurrencyInput', () => {
         methods: { applyFixedFractionFormat }
       })
       expect(applyFixedFractionFormat).toHaveBeenCalled()
-    })
-  })
-
-  describe('currency format config', () => {
-    let format
-    beforeEach(() => {
-      format = jest.fn()
-      wrapper = shallowMount(CurrencyInput, {
-        propsData,
-        computed: {
-          currencyFormat: jest.fn(() => ({ format }))
-        }
-      })
-    })
-
-    describe('when the format has a prefix', () => {
-      it('builds the config correctly', () => {
-        format.mockReturnValue('€ 1,234.00')
-
-        expect(wrapper.vm.config).toMatchSnapshot()
-      })
-    })
-
-    describe('when the format has a suffix', () => {
-      it('builds the config correctly', () => {
-        format.mockReturnValue('1.234,00 €')
-
-        expect(wrapper.vm.config).toMatchSnapshot()
-      })
     })
   })
 

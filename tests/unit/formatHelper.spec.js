@@ -1,4 +1,4 @@
-import { parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
+import { getCurrencyFormatConfig, parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
 
 describe('formatHelper', () => {
   describe('removePrefix', () => {
@@ -31,7 +31,16 @@ describe('formatHelper', () => {
       expect(parse(undefined)).toBeNull()
     })
 
-    it('parses postive values correctly', () => {
+    it('parses invalid values correctly', () => {
+      expect(parse('abc')).toBeNull()
+      expect(parse('a b c')).toBeNull()
+    })
+
+    it('returns a passed number directly', () => {
+      expect(parse(1234)).toBe(1234)
+    })
+
+    it('parses positive values correctly', () => {
       expect(parse('1234')).toBe(1234)
       expect(parse('$1234')).toBe(1234)
       expect(parse('1234 €')).toBe(1234)
@@ -57,6 +66,12 @@ describe('formatHelper', () => {
     it('ignores decimal symbols if not configured', () => {
       expect(parse('1234.5')).toBe(12345)
       expect(parse('1234,5')).toBe(12345)
+    })
+  })
+
+  describe('getCurrencyFormatConfig', () => {
+    it('returns the correct config', () => {
+      expect(getCurrencyFormatConfig({ currency: 'EUR' })).toMatchSnapshot()
     })
   })
 })
