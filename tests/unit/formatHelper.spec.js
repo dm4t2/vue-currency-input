@@ -1,4 +1,4 @@
-import { getCurrencyFormatConfig, parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
+import { getCaretPosition, getCurrencyFormatConfig, parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
 
 describe('formatHelper', () => {
   describe('removePrefix', () => {
@@ -24,14 +24,14 @@ describe('formatHelper', () => {
   })
 
   describe('parse', () => {
-    it('parses empty values correctly', () => {
+    it('parses empty values', () => {
       expect(parse('')).toBeNull()
       expect(parse(' ')).toBeNull()
       expect(parse(null)).toBeNull()
       expect(parse(undefined)).toBeNull()
     })
 
-    it('parses invalid values correctly', () => {
+    it('parses invalid values', () => {
       expect(parse('abc')).toBeNull()
       expect(parse('a b c')).toBeNull()
     })
@@ -40,13 +40,13 @@ describe('formatHelper', () => {
       expect(parse(1234)).toBe(1234)
     })
 
-    it('parses positive values correctly', () => {
+    it('parses positive values', () => {
       expect(parse('1234')).toBe(1234)
       expect(parse('$1234')).toBe(1234)
       expect(parse('1234 €')).toBe(1234)
     })
 
-    it('parses negative values correctly', () => {
+    it('parses negative values', () => {
       expect(parse('-1234')).toBe(-1234)
       expect(parse('-$1234')).toBe(-1234)
       expect(parse('-1234 €')).toBe(-1234)
@@ -54,7 +54,7 @@ describe('formatHelper', () => {
       expect(parse('-1234 €', { allowNegative: false })).toBe(1234)
     })
 
-    it('parses values with fraction correctly', () => {
+    it('parses values with fraction', () => {
       expect(parse('1234.50', { decimalSymbol: '.' })).toBe(1234.5)
       expect(parse('$1234.50', { decimalSymbol: '.' })).toBe(1234.5)
       expect(parse('1234.50 €', { decimalSymbol: '.' })).toBe(1234.5)
@@ -72,6 +72,18 @@ describe('formatHelper', () => {
   describe('getCurrencyFormatConfig', () => {
     it('returns the correct config', () => {
       expect(getCurrencyFormatConfig({ currency: 'EUR' })).toMatchSnapshot()
+    })
+  })
+
+  describe('getCaretPosition', () => {
+    it('calculates the caret position for distraction free mode', () => {
+      expect(getCaretPosition({ value: '€1,234,567.89', selectionStart: 1 }, { prefix: '€', thousandsSeparatorSymbol: ',' })).toBe(0)
+      expect(getCaretPosition({ value: '€1,234,567.89', selectionStart: 4 }, { prefix: '€', thousandsSeparatorSymbol: ',' })).toBe(2)
+      expect(getCaretPosition({ value: '€1,234,567.89', selectionStart: 8 }, { prefix: '€', thousandsSeparatorSymbol: ',' })).toBe(5)
+
+      expect(getCaretPosition({ value: '1.234.567,89 €', selectionStart: 1 }, { prefix: '', thousandsSeparatorSymbol: '.' })).toBe(1)
+      expect(getCaretPosition({ value: '1.234.567,89 €', selectionStart: 2 }, { prefix: '', thousandsSeparatorSymbol: '.' })).toBe(1)
+      expect(getCaretPosition({ value: '1.234.567,89 €', selectionStart: 7 }, { prefix: '', thousandsSeparatorSymbol: '.' })).toBe(5)
     })
   })
 })

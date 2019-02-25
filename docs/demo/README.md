@@ -1,2 +1,2 @@
 # Live Demo
-<Demo/>
+<ComponentDemo/>

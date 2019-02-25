@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <Demo/>
+    <h2>Component</h2>
+    <ComponentDemo/>
+    <h2>Directive</h2>
+    <DirectiveDemo/>
   </div>
 </template>
 
 <script>
-import Demo from '../docs/.vuepress/components/Demo'
+import ComponentDemo from '../docs/.vuepress/components/ComponentDemo'
+import DirectiveDemo from '../docs/.vuepress/components/DirectiveDemo'
 
 export default {
   name: 'App',
-  components: { Demo }
+  components: { DirectiveDemo, ComponentDemo }
 }
 </script>
 

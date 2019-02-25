@@ -110,18 +110,17 @@ describe('CurrencyInput', () => {
         wrapper.trigger('focus')
         await wrapper.vm.$nextTick()
 
-        expect(wrapper.vm.formattedValue).toBe('1,234.5')
+        expect(wrapper.vm.formattedValue).toBe('1234.5')
       })
 
       it('sets the caret position correctly', async () => {
         wrapper.setProps({ value: 1234.5, distractionFree: true })
-        jest.spyOn(wrapper.vm, 'setCaretPosition')
 
         wrapper.element.setSelectionRange(1, 1)
         wrapper.trigger('focus')
         await wrapper.vm.$nextTick()
 
-        expect(wrapper.vm.setCaretPosition).toHaveBeenCalledWith(0)
+        expect(wrapper.element.selectionStart).toBe(0)
       })
     })
 
@@ -137,7 +136,6 @@ describe('CurrencyInput', () => {
 
       it('leaves the caret position untouched', async () => {
         wrapper.setProps({ value: 1234.5, distractionFree: false })
-        jest.spyOn(wrapper.vm, 'setCaretPosition')
 
         wrapper.element.setSelectionRange(3, 3)
         wrapper.trigger('focus')

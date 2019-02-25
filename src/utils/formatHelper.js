@@ -56,3 +56,11 @@ export const getCurrencyFormatConfig = ({ locale, currency, allowNegative = true
     allowDecimal
   }
 }
+
+export const getCaretPosition = (el, { prefix, thousandsSeparatorSymbol }) => {
+  return Math.max(0,
+    el.selectionStart -
+    prefix.length -
+    (el.value.substring(0, el.selectionStart).match(new RegExp(thousandsSeparatorSymbol === '.' ? '\\.' : thousandsSeparatorSymbol, 'g')) || []).length
+  )
+}

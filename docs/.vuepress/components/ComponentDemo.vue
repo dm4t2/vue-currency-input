@@ -60,7 +60,7 @@
 import CurrencyInput from '../../../src/CurrencyInput'
 
 export default {
-  name: 'Demo',
+  name: 'ComponentDemo',
   components: { CurrencyInput },
   data () {
     return {

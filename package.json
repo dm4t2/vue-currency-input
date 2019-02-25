@@ -3,9 +3,12 @@
   "description": "A component for Vue.js proving an easy input of currency formatted numbers.",
   "version": "1.1.0",
   "license": "MIT",
+  "unpkg": "dist/vue-currency-input.umd.min.js",
+  "jsdelivr": "dist/vue-currency-input.umd.min.js",
   "main": "dist/vue-currency-input.common.js",
   "files": [
-    "dist"
+    "dist/*.js",
+    "src"
   ],
   "author": "Matthias Stiller",
   "repository": {
@@ -23,21 +26,23 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib src/components/CurrencyInput.vue --formats commonjs",
+    "build": "vue-cli-service build --target lib src/index.js",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
-    "text-mask-core": "^5.1.2",
+    "text-mask-core": "^5.1.2"
+  },
+  "peerDependencies": {
     "vue": "^2.5.21"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.2.0",
-    "@vue/cli-plugin-eslint": "^3.2.1",
-    "@vue/cli-plugin-unit-jest": "^3.2.0",
-    "@vue/cli-service": "^3.2.0",
+    "@vue/cli-plugin-babel": "^3.4.1",
+    "@vue/cli-plugin-eslint": "^3.4.1",
+    "@vue/cli-plugin-unit-jest": "^3.4.1",
+    "@vue/cli-service": "^3.4.1",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-core": "7.0.0-bridge.0",

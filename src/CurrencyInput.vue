@@ -7,7 +7,7 @@
 <script>
 import { createTextMaskInputElement } from 'text-mask-core'
 import createNumberMask from './utils/createNumberMask'
-import { getCurrencyFormatConfig, parse } from './utils/formatHelper'
+import { getCurrencyFormatConfig, getCaretPosition, parse } from './utils/formatHelper'
 
 export default {
   name: 'CurrencyInput',
@@ -44,18 +44,15 @@ export default {
     listeners () {
       return {
         ...this.$listeners,
-        input: (e) => this.handleInput(e),
-        focus: (e) => this.handleFocus(e),
+        input: (e) => this.updateValue(e.target.value),
+        focus: () => this.handleFocus(),
         blur: () => this.handleBlur()
       }
     },
     config () {
       return getCurrencyFormatConfig(this.$props)
     },
-    hidePrefix () {
-      return this.focus && this.distractionFree
-    },
-    hideSuffix () {
+    isDistractionFreeView () {
       return this.focus && this.distractionFree
     },
     textMaskInputElement () {
@@ -64,8 +61,9 @@ export default {
         guide: false,
         mask: createNumberMask({
           ...this.config,
-          prefix: this.hidePrefix ? '' : this.config.prefix,
-          suffix: this.hideSuffix ? '' : this.config.suffix
+          prefix: this.isDistractionFreeView ? '' : this.config.prefix,
+          suffix: this.isDistractionFreeView ? '' : this.config.suffix,
+          thousandsSeparatorSymbol: this.isDistractionFreeView ? '' : this.config.thousandsSeparatorSymbol
         })
       })
     },
@@ -89,20 +87,17 @@ export default {
     this.applyFixedFractionFormat()
   },
   methods: {
-    handleInput (e) {
-      this.updateValue(e.target.value)
-    },
     handleBlur () {
       this.focus = false
       this.applyFixedFractionFormat()
     },
-    handleFocus (e) {
+    handleFocus () {
       this.$nextTick(() => {
-        const caretPosition = e.target.selectionStart - this.config.prefix.length
+        const caretPosition = getCaretPosition(this.$el, this.config)
         this.focus = true
         if (this.numberValue !== null && this.distractionFree) {
           this.format(new Intl.NumberFormat(this.locale).format(this.numberValue))
-          this.setCaretPosition(Math.max(0, caretPosition))
+          this.$el.setSelectionRange(caretPosition, caretPosition)
         }
       })
     },
@@ -121,9 +116,6 @@ export default {
       } else {
         this.format(this.fixedFractionNumberFormat.format(this.numberValue))
       }
-    },
-    setCaretPosition (caretPosition) {
-      this.$el.setSelectionRange(caretPosition, caretPosition)
     }
   }
 }
