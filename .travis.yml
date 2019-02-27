@@ -14,6 +14,8 @@ jobs:
     - stage: Deploy GitHub Pages
       script: yarn docs:build
       deploy:
+        on:
+          branch: master
         provider: pages
         skip-cleanup: true
         local_dir: docs/.vuepress/dist
