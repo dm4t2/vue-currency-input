@@ -1,6 +1,6 @@
 <template>
   <div class="demo">
-    <input v-model.lazy="value" v-currency="{locale, currency, distractionFree, allowNegative}" class="demo__currency-input"/>
+    <input v-model="value" v-currency="{locale, currency, distractionFree, allowNegative}" class="demo__currency-input"/>
     <p>Raw number value: <code>{{ value !== null ? value : 'null' }}</code></p>
     <hr>
     <h3>Settings</h3>

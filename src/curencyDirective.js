@@ -7,6 +7,15 @@ export default {
     const inputElement = init(el, binding.value)
     applyFixedFractionFormat(inputElement)
 
+    inputElement.addEventListener('input', (e) => {
+      format(inputElement)
+      el.dispatchEvent(new CustomEvent('format', {
+        detail: {
+          formattedValue: inputElement.value,
+          numberValue: JSON.parse(inputElement.dataset.numberValue)
+        }
+      }))
+    }, { capture: true })
     inputElement.addEventListener('focus', () => {
       const directiveOptions = JSON.parse(inputElement.dataset.options)
       inputElement.dataset.focus = JSON.stringify(true)
@@ -14,7 +23,6 @@ export default {
         setTimeout(() => {
           const currencyFormatConfig = getCurrencyFormatConfig(directiveOptions)
           const caretPosition = getCaretPosition(inputElement, currencyFormatConfig)
-          console.log(caretPosition)
           format(inputElement, parse(inputElement.value, currencyFormatConfig))
           inputElement.setSelectionRange(caretPosition, caretPosition)
         }, 0)
@@ -41,7 +49,7 @@ export default {
 const init = (el, options) => {
   const inputElement = el.matches('input') ? el : el.querySelector('input')
   if (!inputElement) {
-    throw new Error('The Currency Vue Directive must be applied on an element consists of an input element')
+    throw new Error('The <v-currency> directive must be applied on an element consists of an input element')
   }
   inputElement.dataset.options = JSON.stringify({
     distractionFree: true,
@@ -53,26 +61,26 @@ const init = (el, options) => {
 
 const applyFixedFractionFormat = (el, value = parse(el.value, getCurrencyFormatConfig(JSON.parse(el.dataset.options)))) => {
   format(el, value)
-  el.dispatchEvent(new CustomEvent('input', { detail: { value } }))
-  el.dispatchEvent(new CustomEvent('change', { detail: { value } }))
+  el.dispatchEvent(new CustomEvent('input'))
+  el.dispatchEvent(new CustomEvent('change'))
 }
 
-const format = (el, value = el.value) => {
+export const format = (el, value = el.value) => {
   const options = JSON.parse(el.dataset.options)
   const currencyFormatConfig = getCurrencyFormatConfig(options)
   const focus = el.dataset.focus
   if (typeof value === 'number') {
-    el.dataset.numberValue = JSON.stringify(value)
-    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: focus ? 0 : currencyFormatConfig.decimalLimit }).format(value)
+    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: focus && options.distractionFree ? 0 : currencyFormatConfig.decimalLimit }).format(value)
   }
   createTextMaskInputElement({
     inputElement: el,
     guide: false,
     mask: createNumberMask({
       ...currencyFormatConfig,
-      prefix: focus ? '' : currencyFormatConfig.prefix,
-      suffix: focus ? '' : currencyFormatConfig.suffix,
-      thousandsSeparatorSymbol: focus ? '' : currencyFormatConfig.thousandsSeparatorSymbol
+      prefix: focus && options.distractionFree ? '' : currencyFormatConfig.prefix,
+      suffix: focus && options.distractionFree ? '' : currencyFormatConfig.suffix,
+      thousandsSeparatorSymbol: focus && options.distractionFree ? '' : currencyFormatConfig.thousandsSeparatorSymbol
     })
   }).update(value)
+  el.dataset.numberValue = JSON.stringify(parse(el.value, currencyFormatConfig))
 }
