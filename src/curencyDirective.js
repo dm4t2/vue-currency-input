@@ -7,9 +7,9 @@ export default {
     const inputElement = init(el, binding.value)
     applyFixedFractionFormat(inputElement)
 
-    inputElement.addEventListener('input', (e) => {
+    inputElement.addEventListener('input', () => {
       format(inputElement)
-      el.dispatchEvent(new CustomEvent('format', {
+      el.dispatchEvent(new CustomEvent('ci-input', {
         detail: {
           formattedValue: inputElement.value,
           numberValue: JSON.parse(inputElement.dataset.numberValue)

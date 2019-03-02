@@ -2,7 +2,7 @@
   <input
     v-currency="{locale, currency, distractionFree, allowNegative}"
     :value="formattedValue"
-    @format="handleFormat">
+    @ci-input="handleInput">
 </template>
 
 <script>
@@ -48,7 +48,7 @@ export default {
     }
   },
   methods: {
-    handleFormat ({ detail }) {
+    handleInput ({ detail }) {
       this.$emit('input', detail.numberValue)
       this.formattedValue = detail.formattedValue
     }
