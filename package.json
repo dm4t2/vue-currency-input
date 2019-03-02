@@ -33,9 +33,9 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
-    "vue": "^2.6.8",
     "text-mask-addons": "^3.8.0",
-    "text-mask-core": "^5.1.2"
+    "text-mask-core": "^5.1.2",
+    "vue": "^2.6.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.1",
@@ -46,7 +46,8 @@
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
-    "vue-template-compiler": "^2.6.8"
+    "vue-template-compiler": "^2.6.8",
+    "vuepress": "^0.14.9"
   },
   "eslintConfig": {
     "root": true,
