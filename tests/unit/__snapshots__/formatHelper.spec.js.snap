@@ -6,7 +6,7 @@ Object {
   "allowNegative": true,
   "decimalLimit": 2,
   "decimalSymbol": ".",
-  "prefix": "€ ",
+  "prefix": "€",
   "suffix": "",
   "thousandsSeparatorSymbol": ",",
 }

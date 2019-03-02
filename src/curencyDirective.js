@@ -1,6 +1,6 @@
-import { createTextMaskInputElement } from 'text-mask-core'
-import createNumberMask from './utils/createNumberMask'
 import { getCaretPosition, getCurrencyFormatConfig, parse } from './utils/formatHelper'
+import createNumberMask from 'text-mask-addons/src/createNumberMask'
+import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
 
 export default {
   bind (el, binding) {
