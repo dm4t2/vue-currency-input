@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import currencyDirective, { format } from './curencyDirective'
+import currencyDirective from './curencyDirective'
+import { format } from './utils/formatHelper'
 
 export default {
   name: 'CurrencyInput',
@@ -42,15 +43,15 @@ export default {
   },
   watch: {
     value (value) {
-      if (!this.$el.dataset.focus) {
+      if (!this.$el.$ci.focus) {
         format(this.$el, value)
       }
     }
   },
   methods: {
-    handleInput ({ detail }) {
-      this.$emit('input', detail.numberValue)
-      this.formattedValue = detail.formattedValue
+    handleInput () {
+      this.$emit('input', this.$el.$ci.numberValue)
+      this.formattedValue = this.$el.value
     }
   }
 }

@@ -1,4 +1,23 @@
+import createNumberMask from 'text-mask-addons/src/createNumberMask'
+
 export const onlyDigits = (str) => str.replace(/\D+/g, '')
+
+export const format = (el, value = el.value, { options, currencyFormatConfig, textMaskInputElement, focus } = el.$ci) => {
+  if (typeof value === 'number') {
+    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: focus && options.distractionFree ? 0 : currencyFormatConfig.decimalLimit }).format(value)
+  }
+  textMaskInputElement.update(value, {
+    inputElement: el,
+    guide: false,
+    mask: createNumberMask({
+      ...currencyFormatConfig,
+      prefix: focus && options.distractionFree ? '' : currencyFormatConfig.prefix,
+      suffix: focus && options.distractionFree ? '' : currencyFormatConfig.suffix,
+      thousandsSeparatorSymbol: focus && options.distractionFree ? '' : currencyFormatConfig.thousandsSeparatorSymbol
+    })
+  })
+  el.$ci.numberValue = parse(el.value, currencyFormatConfig)
+}
 
 export const parse = (str, { decimalSymbol, allowNegative = true } = {}) => {
   if (typeof str === 'number') {

@@ -1,4 +1,4 @@
-import { getCaretPosition, getCurrencyFormatConfig, parse } from './utils/formatHelper'
+import { format, getCaretPosition, getCurrencyFormatConfig, parse } from './utils/formatHelper'
 import createNumberMask from 'text-mask-addons/src/createNumberMask'
 import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
 
@@ -9,19 +9,13 @@ export default {
 
     inputElement.addEventListener('input', () => {
       format(inputElement)
-      el.dispatchEvent(new CustomEvent('ci-input', {
-        detail: {
-          formattedValue: inputElement.value,
-          numberValue: JSON.parse(inputElement.dataset.numberValue)
-        }
-      }))
+      el.dispatchEvent(new Event('ci-input'))
     }, { capture: true })
     inputElement.addEventListener('focus', () => {
-      const directiveOptions = JSON.parse(inputElement.dataset.options)
-      inputElement.dataset.focus = JSON.stringify(true)
-      if (directiveOptions.distractionFree) {
+      const { options, currencyFormatConfig } = inputElement.$ci
+      if (options.distractionFree) {
+        inputElement.$ci.focus = true
         setTimeout(() => {
-          const currencyFormatConfig = getCurrencyFormatConfig(directiveOptions)
           const caretPosition = getCaretPosition(inputElement, currencyFormatConfig)
           format(inputElement, parse(inputElement.value, currencyFormatConfig))
           inputElement.setSelectionRange(caretPosition, caretPosition)
@@ -29,7 +23,7 @@ export default {
       }
     })
     inputElement.addEventListener('blur', () => {
-      delete inputElement.dataset.focus
+      inputElement.$ci.focus = false
       applyFixedFractionFormat(inputElement)
     })
   },
@@ -41,46 +35,39 @@ export default {
       binding.value.allowNegative !== binding.oldValue.allowNegative
     ) {
       const inputElement = init(el, binding.value)
-      applyFixedFractionFormat(inputElement, JSON.parse(inputElement.dataset.numberValue))
+      applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
     }
   }
 }
 
-const init = (el, options) => {
+const DEFAULT_OPTIONS = {
+  distractionFree: true,
+  allowNegative: true
+}
+
+const init = (el, optionsFromBinding) => {
   const inputElement = el.matches('input') ? el : el.querySelector('input')
   if (!inputElement) {
     throw new Error('The <v-currency> directive must be applied on an element consists of an input element')
   }
-  inputElement.dataset.options = JSON.stringify({
-    distractionFree: true,
-    allowNegative: true,
-    ...options
+  const options = { ...DEFAULT_OPTIONS, ...optionsFromBinding }
+  const currencyFormatConfig = getCurrencyFormatConfig(options)
+  const textMaskInputElement = createTextMaskInputElement({
+    inputElement,
+    guide: false,
+    mask: createNumberMask(currencyFormatConfig)
   })
+  inputElement.$ci = {
+    ...inputElement.$ci || {},
+    options,
+    currencyFormatConfig,
+    textMaskInputElement
+  }
   return inputElement
 }
 
-const applyFixedFractionFormat = (el, value = parse(el.value, getCurrencyFormatConfig(JSON.parse(el.dataset.options)))) => {
+const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormatConfig)) => {
   format(el, value)
-  el.dispatchEvent(new CustomEvent('input'))
-  el.dispatchEvent(new CustomEvent('change'))
-}
-
-export const format = (el, value = el.value) => {
-  const options = JSON.parse(el.dataset.options)
-  const currencyFormatConfig = getCurrencyFormatConfig(options)
-  const focus = el.dataset.focus
-  if (typeof value === 'number') {
-    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: focus && options.distractionFree ? 0 : currencyFormatConfig.decimalLimit }).format(value)
-  }
-  createTextMaskInputElement({
-    inputElement: el,
-    guide: false,
-    mask: createNumberMask({
-      ...currencyFormatConfig,
-      prefix: focus && options.distractionFree ? '' : currencyFormatConfig.prefix,
-      suffix: focus && options.distractionFree ? '' : currencyFormatConfig.suffix,
-      thousandsSeparatorSymbol: focus && options.distractionFree ? '' : currencyFormatConfig.thousandsSeparatorSymbol
-    })
-  }).update(value)
-  el.dataset.numberValue = JSON.stringify(parse(el.value, currencyFormatConfig))
+  el.dispatchEvent(new Event('input'))
+  el.dispatchEvent(new Event('change'))
 }
