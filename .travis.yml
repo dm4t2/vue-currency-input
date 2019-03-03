@@ -11,6 +11,7 @@ jobs:
     - stage: Unit Tests
       script: yarn test:unit
     - stage: Deploy GitHub Pages
+      if: branch = master
       script: yarn docs:build
       deploy:
         on:
