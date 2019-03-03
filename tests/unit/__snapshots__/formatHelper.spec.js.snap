@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formatHelper getCurrencyFormatConfig returns the correct config 1`] = `
+Object {
+  "allowDecimal": true,
+  "allowNegative": true,
+  "decimalLimit": 2,
+  "decimalSymbol": ".",
+  "prefix": "€",
+  "suffix": "",
+  "thousandsSeparatorSymbol": ",",
+}
+`;

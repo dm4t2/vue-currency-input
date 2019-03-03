@@ -2,25 +2,36 @@
 sidebar: auto
 ---
 
-# Getting started
-## Installation
+# Overview
+
+## Introduction
+The Vue Currency Input plugin provides a standalone component (`<currency-input>`) and a directive (`v-currency`) allowing an easy input of currency formatted numbers.
+
+## Getting started
+Install the npm package:
 ``` bash
 npm install vue-currency-input 
 # OR 
 yarn add vue-currency-input
 ```
 
-## Local import
+Add the Vue plugin in your `main.js`:
+``` js
+import Vue from 'vue'
+import VueCurrencyInput from 'vue-currency-input'
+
+Vue.use(VueCurrencyInput)
+```
+
+## Usage
+### Component
 ``` vue
 <template>
-  <CurrencyInput v-model="value" :currency="currency"/>
+  <currency-input v-model="value" :currency="currency"/>
 </template>
 
 <script>
-import CurrencyInput from 'vue-currency-input'
-
 export default {
-  components: { CurrencyInput },
   data: () => ({
     value: 1000,
     currency: 'USD'
@@ -28,14 +39,31 @@ export default {
 }
 </script>
 ```
-    
+
+### Directive
+The `v-currency` directive is great if you want to decorate existing input components with currency format capabilities (for example like those from [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)).
+
+``` vue
+<template>
+  <input v-model="value" v-currency="{currency}"/>
+</template>
+
+<script>
+export default {
+  data: () => ({
+    value: 1000,
+    currency: 'USD'
+  })
+}
+</script>
+```
+
 ## Configuration
-The component can be configured by the following properties:
 
 Name | Type | Description
 --- | --- | --- 
-`value` | Number |  The value of the input. In conjunction with `v-model` it updates the binded value with the raw number value on input changes.
+`value` | Number |  The value of the input. If `v-model` is used with the component, it will always emit the raw number value (see [Live Demo](/demo/))
 `currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`). This prop is required.
 `locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is the runtime's default locale.
-`distraction-free` | Boolean | Whether to hide the currency prefix/suffix and unnecessary fraction part on focus. Default is `true`.
+`distraction-free` | Boolean | Whether to edit the raw number value on focus. Default is `true`.
 `allow-negative` | Boolean | Whether negative values are allowed. Default is `true`.

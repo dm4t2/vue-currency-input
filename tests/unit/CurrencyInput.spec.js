@@ -1,18 +1,17 @@
 import { shallowMount } from '@vue/test-utils'
-import CurrencyInput from '../../src/components/CurrencyInput'
+import CurrencyInput from '../../src/CurrencyInput'
+
+jest.useFakeTimers()
 
 describe('CurrencyInput', () => {
   let wrapper, propsData
   beforeEach(() => {
     propsData = {
       currency: 'EUR',
-      locale: 'en'
+      locale: 'en',
+      value: 1234.5
     }
     wrapper = mountComponent(propsData)
-  })
-
-  it('is a Vue component', () => {
-    expect(wrapper.isVueInstance()).toBe(true)
   })
 
   describe('props', () => {
@@ -69,41 +68,7 @@ describe('CurrencyInput', () => {
 
   describe('when the component is mounted', () => {
     it('applies the fixed fraction format to the initial value', () => {
-      const applyFixedFractionFormat = jest.fn()
-      shallowMount(CurrencyInput, {
-        propsData,
-        methods: { applyFixedFractionFormat }
-      })
-      expect(applyFixedFractionFormat).toHaveBeenCalled()
-    })
-  })
-
-  describe('currency format config', () => {
-    let format
-    beforeEach(() => {
-      format = jest.fn()
-      wrapper = shallowMount(CurrencyInput, {
-        propsData,
-        computed: {
-          currencyFormat: jest.fn(() => ({ format }))
-        }
-      })
-    })
-
-    describe('when the format has a prefix', () => {
-      it('builds the config correctly', () => {
-        format.mockReturnValue('€ 1,234.00')
-
-        expect(wrapper.vm.config).toMatchSnapshot()
-      })
-    })
-
-    describe('when the format has a suffix', () => {
-      it('builds the config correctly', () => {
-        format.mockReturnValue('1.234,00 €')
-
-        expect(wrapper.vm.config).toMatchSnapshot()
-      })
+      expect(wrapper.element.value).toBe('€1,234.50')
     })
   })
 
@@ -113,15 +78,15 @@ describe('CurrencyInput', () => {
 
       wrapper.trigger('input')
 
-      expect(wrapper.vm.formattedValue).toBe('€1,234')
+      expect(wrapper.element.value).toBe('€1,234')
     })
 
     it('emits the raw number value', () => {
-      wrapper.element.value = '€1,234.5'
+      wrapper.element.value = '12345'
 
       wrapper.trigger('input')
 
-      expect(wrapper.emitted('input')[0][0]).toBe(1234.5)
+      expect(wrapper.emitted('input')[0][0]).toBe(12345)
     })
 
     describe('when the input is cleared', () => {
@@ -137,44 +102,42 @@ describe('CurrencyInput', () => {
 
   describe('when the input is focused', () => {
     describe('distraction free mode is enabled', () => {
-      it('applies the distraction free format', async () => {
-        wrapper.setProps({ value: 1234.5, distractionFree: true })
+      it('applies the distraction free format', () => {
+        wrapper.setProps({ distractionFree: true })
 
         wrapper.trigger('focus')
-        await wrapper.vm.$nextTick()
+        jest.runOnlyPendingTimers()
 
-        expect(wrapper.vm.formattedValue).toBe('1,234.5')
+        expect(wrapper.element.value).toBe('1234.5')
       })
 
-      it('sets the caret position correctly', async () => {
-        wrapper.setProps({ value: 1234.5, distractionFree: true })
-        jest.spyOn(wrapper.vm, 'setCaretPosition')
+      it('sets the caret position correctly', () => {
+        wrapper.setProps({ distractionFree: true })
 
         wrapper.element.setSelectionRange(1, 1)
         wrapper.trigger('focus')
-        await wrapper.vm.$nextTick()
+        jest.runOnlyPendingTimers()
 
-        expect(wrapper.vm.setCaretPosition).toHaveBeenCalledWith(0)
+        expect(wrapper.element.selectionStart).toBe(0)
       })
     })
 
     describe('distraction free mode is disabled', () => {
-      it('leaves the current value untouched', async () => {
-        wrapper.setProps({ value: 1234.5, distractionFree: false })
+      it('leaves the current value untouched', () => {
+        wrapper.setProps({ value: 5432.1, distractionFree: false })
 
         wrapper.trigger('focus')
-        await wrapper.vm.$nextTick()
+        jest.runOnlyPendingTimers()
 
-        expect(wrapper.vm.formattedValue).toBe('€1,234.50')
+        expect(wrapper.vm.formattedValue).toBe('€5,432.10')
       })
 
-      it('leaves the caret position untouched', async () => {
-        wrapper.setProps({ value: 1234.5, distractionFree: false })
-        jest.spyOn(wrapper.vm, 'setCaretPosition')
+      it('leaves the caret position untouched', () => {
+        wrapper.setProps({ value: 5432.1, distractionFree: false })
 
         wrapper.element.setSelectionRange(3, 3)
         wrapper.trigger('focus')
-        await wrapper.vm.$nextTick()
+        jest.runOnlyPendingTimers()
 
         expect(wrapper.element.selectionStart).toBe(3)
       })
@@ -192,6 +155,4 @@ describe('CurrencyInput', () => {
   })
 })
 
-const mountComponent = (propsData) => {
-  return shallowMount(CurrencyInput, { propsData })
-}
+const mountComponent = (propsData) => shallowMount(CurrencyInput, { propsData })

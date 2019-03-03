@@ -57,14 +57,14 @@
 </template>
 
 <script>
-import CurrencyInput from '../../../src/components/CurrencyInput'
+import CurrencyInput from '../../../src/CurrencyInput'
 
 export default {
-  name: 'Demo',
+  name: 'ComponentDemo',
   components: { CurrencyInput },
   data () {
     return {
-      value: null,
+      value: 1234.5,
       currency: 'USD',
       locale: undefined,
       distractionFree: true,
