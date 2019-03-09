@@ -1,7 +1,7 @@
 import currencyFormatConfig from '../../src/utils/currencyFormatConfig'
+import Intl from 'intl'
 
-// eslint-disable-next-line no-global-assign
-Intl = require('Intl')
+global.Intl = Intl
 
 describe('currencyFormatConfig', () => {
   it('returns the correct config', () => {

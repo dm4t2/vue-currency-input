@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils'
 import CurrencyInput from '../../src/CurrencyInput'
+import Intl from 'intl'
 
-// eslint-disable-next-line no-global-assign
-Intl = require('Intl')
+global.Intl = Intl
 
 jest.useFakeTimers()
 
