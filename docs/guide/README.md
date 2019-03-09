@@ -65,5 +65,6 @@ Name | Type | Description
 `value` | Number |  The value of the input. If `v-model` is used with the component, it will always emit the raw number value (see [Live Demo](/demo/))
 `currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`). This prop is required.
 `locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is the runtime's default locale.
-`distraction-free` | Boolean | Whether to edit the raw number value on focus. Default is `true`.
-`allow-negative` | Boolean | Whether negative values are allowed. Default is `true`.
+`distraction-free` | Boolean | Whether to hide the formatting and unnecessary fraction digits on focus. Default is `true`.
+`min` | Number | Minimun value. Default is `null` (no limitation). Must be less than `max`.
+`max` | Number | Maximum value. Default is `null` (no limitation). Must be greater than `min`.

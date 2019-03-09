@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils'
 import CurrencyInput from '../../src/CurrencyInput'
+import Intl from 'intl'
+
+global.Intl = Intl
 
 jest.useFakeTimers()
 
@@ -55,13 +58,23 @@ describe('CurrencyInput', () => {
       })
     })
 
-    describe('allowNegative', () => {
-      it('is of type Boolean', () => {
-        expect(wrapper.vm.$options.props.allowNegative.type).toBe(Boolean)
+    describe('min', () => {
+      it('is of type Number', () => {
+        expect(wrapper.vm.$options.props.min.type).toBe(Number)
       })
 
-      it('defaults to true', () => {
-        expect(wrapper.vm.$options.props.allowNegative.default).toBe(true)
+      it('defaults to null', () => {
+        expect(wrapper.vm.$options.props.min.default).toBeNull()
+      })
+    })
+
+    describe('max', () => {
+      it('is of type Number', () => {
+        expect(wrapper.vm.$options.props.max.type).toBe(Number)
+      })
+
+      it('defaults to null', () => {
+        expect(wrapper.vm.$options.props.max.default).toBeNull()
       })
     })
   })
@@ -70,15 +83,39 @@ describe('CurrencyInput', () => {
     it('applies the fixed fraction format to the initial value', () => {
       expect(wrapper.element.value).toBe('€1,234.50')
     })
+
+    describe('the initial value is less than the min value', () => {
+      it('sets the min value', () => {
+        wrapper = mountComponent({ ...propsData, value: 100, min: 1000 })
+
+        expect(wrapper.element.value).toBe('€1,000.00')
+      })
+    })
+
+    describe('the initial value is larger than the max value', () => {
+      it('sets the max value', () => {
+        wrapper = mountComponent({ ...propsData, value: 1500, max: 1000 })
+
+        expect(wrapper.element.value).toBe('€1,000.00')
+      })
+    })
+
+    describe('the configured number range is invalid', () => {
+      it('ignores the number range', () => {
+        wrapper = mountComponent({ ...propsData, min: 500, max: 400 })
+
+        expect(wrapper.element.value).toBe('€1,234.50')
+      })
+    })
   })
 
-  describe('when the input is changed', () => {
+  describe('when the input is changed by the user', () => {
     it('formats the value correctly', () => {
-      wrapper.element.value = '1234'
+      wrapper.element.value = '12345'
 
       wrapper.trigger('input')
 
-      expect(wrapper.element.value).toBe('€1,234')
+      expect(wrapper.element.value).toBe('€12,345')
     })
 
     it('emits the raw number value', () => {
@@ -86,7 +123,7 @@ describe('CurrencyInput', () => {
 
       wrapper.trigger('input')
 
-      expect(wrapper.emitted('input')[0][0]).toBe(12345)
+      expect(wrapper.emitted('input')[1][0]).toBe(12345)
     })
 
     describe('when the input is cleared', () => {
@@ -95,8 +132,30 @@ describe('CurrencyInput', () => {
 
         wrapper.trigger('input')
 
-        expect(wrapper.emitted('input')[0][0]).toBeNull()
+        expect(wrapper.emitted('input')[1][0]).toBeNull()
       })
+    })
+  })
+
+  describe('when the input is changed externally', () => {
+    it('formats the value correctly', () => {
+      wrapper.setProps({ value: 12345 })
+
+      expect(wrapper.element.value).toBe('€12,345.00')
+    })
+
+    it('emits the raw number value', () => {
+      wrapper.setProps({ value: 12345 })
+
+      expect(wrapper.emitted('input')[1][0]).toBe(12345)
+    })
+
+    it('ignores changes if focused', () => {
+      wrapper.trigger('focus')
+
+      wrapper.setProps({ value: 12345 })
+
+      expect(wrapper.emitted('input')[1]).toBeFalsy()
     })
   })
 
@@ -111,14 +170,24 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.value).toBe('1234.5')
       })
 
-      it('sets the caret position correctly', () => {
-        wrapper.setProps({ distractionFree: true })
+      it('sets the caret to right position if the locale is "en"', () => {
+        wrapper.setProps({ value: 1234567.89, distractionFree: true })
 
-        wrapper.element.setSelectionRange(1, 1)
+        wrapper.element.setSelectionRange(8, 8)
         wrapper.trigger('focus')
         jest.runOnlyPendingTimers()
 
-        expect(wrapper.element.selectionStart).toBe(0)
+        expect(wrapper.element.selectionStart).toBe(5)
+      })
+
+      it('sets the caret to right position if the locale is "de"', () => {
+        wrapper.setProps({ value: 1234567.89, distractionFree: true, locale: 'de' })
+
+        wrapper.element.setSelectionRange(8, 8)
+        wrapper.trigger('focus')
+        jest.runOnlyPendingTimers()
+
+        expect(wrapper.element.selectionStart).toBe(6)
       })
     })
 
@@ -145,14 +214,42 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is blurred', () => {
+    it('handles the native change event correctly', () => {
+      wrapper.trigger('change')
+
+      expect(wrapper.emitted('input')[1]).toBeFalsy()
+    })
+
     it('applies the fixed fraction format', () => {
-      wrapper.setProps({ value: 1234.5 })
+      wrapper.setProps({ value: 10 })
 
       wrapper.trigger('blur')
 
-      expect(wrapper.vm.formattedValue).toBe('€1,234.50')
+      expect(wrapper.vm.formattedValue).toBe('€10.00')
+    })
+
+    describe('the current value is less than the min value', () => {
+      it('sets the min value', () => {
+        wrapper.setProps({ value: 100, min: 1000 })
+
+        wrapper.trigger('blur')
+
+        expect(wrapper.vm.formattedValue).toBe('€1,000.00')
+      })
+    })
+
+    describe('the current value is larger than the max value', () => {
+      it('sets the max value', () => {
+        wrapper.setProps({ value: 1500, max: 1000 })
+
+        wrapper.trigger('blur')
+
+        expect(wrapper.vm.formattedValue).toBe('€1,000.00')
+      })
     })
   })
 })
 
-const mountComponent = (propsData) => shallowMount(CurrencyInput, { propsData })
+const mountComponent = (propsData) => {
+  return shallowMount(CurrencyInput, { propsData, attachToDocument: true })
+}

@@ -1,13 +1,12 @@
 <template>
   <input
-    v-currency="{locale, currency, distractionFree, allowNegative}"
+    v-currency="{locale, currency, distractionFree, min, max}"
     :value="formattedValue"
-    @ci-input="handleInput">
+    @change="handleChange">
 </template>
 
 <script>
 import currencyDirective from './curencyDirective'
-import { format } from './utils/formatHelper'
 
 export default {
   name: 'CurrencyInput',
@@ -31,9 +30,13 @@ export default {
       type: Boolean,
       default: true
     },
-    allowNegative: {
-      type: Boolean,
-      default: true
+    min: {
+      type: Number,
+      default: null
+    },
+    max: {
+      type: Number,
+      default: null
     }
   },
   data () {
@@ -44,14 +47,16 @@ export default {
   watch: {
     value (value) {
       if (!this.$el.$ci.focus) {
-        format(this.$el, value)
+        this.$el.dispatchEvent(new CustomEvent('input', { detail: { value } }))
       }
     }
   },
   methods: {
-    handleInput () {
-      this.$emit('input', this.$el.$ci.numberValue)
-      this.formattedValue = this.$el.value
+    handleChange ({ detail }) {
+      if (detail) {
+        this.$emit('input', detail.numberValue)
+        this.formattedValue = detail.formattedValue
+      }
     }
   }
 }
