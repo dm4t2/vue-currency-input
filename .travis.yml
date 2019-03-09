@@ -2,10 +2,7 @@ language: node_js
 node_js:
   - "10"
 install:
-  - yarn
-cache:
-  directories:
-    - "node_modules"
+  - yarn install
 jobs:
   include:
     - stage: Unit Tests
