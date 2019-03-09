@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`currencyFormatConfig returns the correct config 1`] = `
+Object {
+  "allowDecimal": true,
+  "decimalLimit": 2,
+  "decimalSymbol": ",",
+  "prefix": "",
+  "suffix": " €",
+  "thousandsSeparatorSymbol": ".",
+}
+`;
+
+exports[`currencyFormatConfig returns the correct config 2`] = `
+Object {
+  "allowDecimal": true,
+  "decimalLimit": 2,
+  "decimalSymbol": ".",
+  "prefix": "$",
+  "suffix": "",
+  "thousandsSeparatorSymbol": ",",
+}
+`;
+
+exports[`currencyFormatConfig returns the correct config 3`] = `
+Object {
+  "allowDecimal": false,
+  "decimalLimit": 0,
+  "decimalSymbol": null,
+  "prefix": "",
+  "suffix": " JPY",
+  "thousandsSeparatorSymbol": " ",
+}
+`;

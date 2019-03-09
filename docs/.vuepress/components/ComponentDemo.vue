@@ -5,20 +5,13 @@
       :currency="currency"
       :locale="locale"
       :distraction-free="distractionFree"
-      :allow-negative="allowNegative"
+      :min="min"
+      :max="max"
       class="demo__currency-input"/>
     <p>Raw number value: <code>{{ value !== null ? value : 'null' }}</code></p>
     <hr>
     <h3>Settings</h3>
     <div class="settings">
-      <p>
-        <label>
-          <span>Allow negative</span>
-          <input
-            v-model="allowNegative"
-            type="checkbox">
-        </label>
-      </p>
       <p>
         <label>
           <span>Distraction free</span>
@@ -52,6 +45,28 @@
           </select>
         </label>
       </p>
+      <p>
+        <label>
+          <span>Min value</span>
+          <input
+            min="-10000"
+            :max="max ? max : 10000"
+            v-model.number="min"
+            type="range">
+        </label>
+        <code v-if="min">{{ min }}</code>
+      </p>
+      <p>
+        <label>
+          <span>Max value</span>
+          <input
+            :min="min ? min : -10000"
+            max="10000"
+            v-model.number="max"
+            type="range">
+        </label>
+        <code v-if="max">{{ max }}</code>
+      </p>
     </div>
   </div>
 </template>
@@ -64,17 +79,18 @@ export default {
   components: { CurrencyInput },
   data () {
     return {
-      value: 1234.5,
+      value: null,
       currency: 'USD',
       locale: undefined,
       distractionFree: true,
-      allowNegative: true
+      min: null,
+      max: null
     }
   }
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .demo {
   background-color: #f6f8fa;
   padding: 32px;
@@ -84,11 +100,21 @@ export default {
   display: flex;
   align-items: center;
   margin: 0 0 4px 0;
+  height: 30px;
+}
+
+.settings label {
+  display: flex;
+  align-items: center;
+}
+
+.settings p code {
+  margin-left: 8px;
 }
 
 .settings label > span {
   display: inline-block;
-  width: 150px;
+  width: 130px;
 }
 
 select, input {

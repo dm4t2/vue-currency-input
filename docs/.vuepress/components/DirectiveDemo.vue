@@ -2,20 +2,12 @@
   <div class="demo">
     <input
       v-model="value"
-      v-currency="{locale, currency, distractionFree, allowNegative}"
+      v-currency="{locale, currency, distractionFree, min, max}"
       class="demo__currency-input"/>
     <p>Raw number value: <code>{{ value !== null ? value : 'null' }}</code></p>
     <hr>
     <h3>Settings</h3>
     <div class="settings">
-      <p>
-        <label>
-          <span>Allow negative</span>
-          <input
-            v-model="allowNegative"
-            type="checkbox">
-        </label>
-      </p>
       <p>
         <label>
           <span>Distraction free</span>
@@ -66,13 +58,14 @@ export default {
       currency: 'USD',
       locale: undefined,
       distractionFree: true,
-      allowNegative: true
+      min: -Infinity,
+      max: 1000
     }
   }
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .demo {
   background-color: #f6f8fa;
   padding: 32px;
@@ -81,7 +74,12 @@ export default {
 .settings p {
   display: flex;
   align-items: center;
-  margin: 0 0 4px 0;
+  margin: 0 0 8px 0;
+}
+
+.settings label {
+  display: flex;
+  align-items: center;
 }
 
 .settings label > span {
