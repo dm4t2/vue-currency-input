@@ -57,11 +57,12 @@ const optionsChanged = (oldOptions, newOptions) => {
 
 const init = (el, optionsFromBinding) => {
   const inputElement = el.matches('input') ? el : el.querySelector('input')
+  if (!inputElement) {
+    throw new Error('The directive must be applied on an element consists of an input element')
+  }
   const options = { ...DEFAULT_OPTIONS, ...optionsFromBinding }
   if (options.min !== null && options.max !== null && options.min > options.max) {
-    console.warn('Ignoring invalid number range')
-    options.min = DEFAULT_OPTIONS.min
-    options.max = DEFAULT_OPTIONS.max
+    throw new Error('Invalid number range')
   }
   const currencyFormatConfig = getCurrencyFormatConfig(options)
   const textMaskInputElement = createTextMaskInputElement({ inputElement, mask: [] })

@@ -101,10 +101,8 @@ describe('CurrencyInput', () => {
     })
 
     describe('the configured number range is invalid', () => {
-      it('ignores the number range', () => {
-        wrapper = mountComponent({ ...propsData, min: 500, max: 400 })
-
-        expect(wrapper.element.value).toBe('€1,234.50')
+      it('throws an error', () => {
+        expect(() => mountComponent({ ...propsData, min: 500, max: 400 })).toThrowError('Invalid number range')
       })
     })
   })
