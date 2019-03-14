@@ -2,6 +2,7 @@ import getCurrencyFormatConfig from './utils/currencyFormatConfig'
 import { parse } from './utils/formatHelper'
 import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
 import createNumberMask from 'text-mask-addons/src/createNumberMask'
+import defaultOptions from './defaultOptions'
 
 export default {
   bind (el, binding) {
@@ -43,16 +44,8 @@ export default {
   }
 }
 
-const DEFAULT_OPTIONS = {
-  locale: undefined,
-  currency: null,
-  distractionFree: true,
-  min: null,
-  max: null
-}
-
 const optionsChanged = (oldOptions, newOptions) => {
-  return Object.keys(DEFAULT_OPTIONS).some((key) => oldOptions[key] !== newOptions[key])
+  return Object.keys(defaultOptions).some((key) => oldOptions[key] !== newOptions[key])
 }
 
 const init = (el, optionsFromBinding) => {
@@ -60,7 +53,7 @@ const init = (el, optionsFromBinding) => {
   if (!inputElement) {
     throw new Error('The directive must be applied on an element consists of an input element')
   }
-  const options = { ...DEFAULT_OPTIONS, ...optionsFromBinding }
+  const options = { ...defaultOptions, ...optionsFromBinding }
   if (options.min !== null && options.max !== null && options.min > options.max) {
     throw new Error('Invalid number range')
   }

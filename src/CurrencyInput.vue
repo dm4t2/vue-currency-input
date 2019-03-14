@@ -7,6 +7,7 @@
 
 <script>
 import currencyDirective from './curencyDirective'
+import defaultOptions from './defaultOptions'
 
 export default {
   name: 'CurrencyInput',
@@ -20,7 +21,7 @@ export default {
     },
     locale: {
       type: String,
-      default: undefined
+      default: defaultOptions.locale
     },
     currency: {
       type: String,
@@ -28,15 +29,15 @@ export default {
     },
     distractionFree: {
       type: Boolean,
-      default: true
+      default: defaultOptions.distractionFree
     },
     min: {
       type: Number,
-      default: null
+      default: defaultOptions.min
     },
     max: {
       type: Number,
-      default: null
+      default: defaultOptions.max
     }
   },
   data () {

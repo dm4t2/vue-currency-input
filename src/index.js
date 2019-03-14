@@ -2,9 +2,9 @@ import component from './CurrencyInput'
 import directive from './curencyDirective'
 
 const plugin = {
-  install (Vue, { componentName, directiveName } = {}) {
-    Vue.component(componentName || component.name, component)
-    Vue.directive(directiveName || 'currency', directive)
+  install (Vue, { componentName = component.name, directiveName = 'currency' } = {}) {
+    Vue.component(componentName, component)
+    Vue.directive(directiveName, directive)
   }
 }
 
