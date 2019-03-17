@@ -1,8 +1,8 @@
 import getCurrencyFormatConfig from './utils/currencyFormatConfig'
 import { parse } from './utils/formatHelper'
 import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
-import createNumberMask from 'text-mask-addons/src/createNumberMask'
 import defaultOptions from './defaultOptions'
+import createCurrencyMask from './utils/createCurrencyMask'
 
 export default {
   bind (el, binding) {
@@ -92,7 +92,7 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
   }
   textMaskInputElement.update(value, {
     inputElement: el,
-    mask: createNumberMask({
+    mask: createCurrencyMask({
       ...currencyFormatConfig,
       prefix: hideFormatting ? '' : currencyFormatConfig.prefix,
       suffix: hideFormatting ? '' : currencyFormatConfig.suffix,

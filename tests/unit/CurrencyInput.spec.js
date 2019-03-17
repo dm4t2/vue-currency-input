@@ -249,5 +249,5 @@ describe('CurrencyInput', () => {
 })
 
 const mountComponent = (propsData) => {
-  return shallowMount(CurrencyInput, { propsData, attachToDocument: true })
+  return shallowMount(CurrencyInput, { propsData })
 }
