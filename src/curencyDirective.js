@@ -92,7 +92,6 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
   }
   textMaskInputElement.update(value, {
     inputElement: el,
-    guide: false,
     mask: createNumberMask({
       ...currencyFormatConfig,
       prefix: hideFormatting ? '' : currencyFormatConfig.prefix,
