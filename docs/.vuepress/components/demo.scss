@@ -1,0 +1,43 @@
+.demo {
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.5;
+  font-size: 14px;
+  background-color: #f6f8fa;
+  padding: 32px;
+}
+
+.demo__options {
+  p {
+    display: flex;
+    align-items: center;
+    margin: 0 0 4px 0;
+    height: 28px;
+
+    code {
+      margin-left: 8px;
+    }
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+
+    & > span {
+      display: inline-block;
+      width: 120px;
+    }
+  }
+
+  select, input {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+.demo__currency-input {
+  font-size: 24px;
+  padding: 8px 12px;
+  max-width: 100%;
+  box-sizing: border-box;
+}

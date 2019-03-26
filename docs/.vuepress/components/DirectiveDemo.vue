@@ -6,8 +6,8 @@
       class="demo__currency-input"/>
     <p>Raw number value: <code>{{ value !== null ? value : 'null' }}</code></p>
     <hr>
-    <h3>Settings</h3>
-    <div class="settings">
+    <h3>Options</h3>
+    <div class="demo__options">
       <p>
         <label>
           <span>Distraction free</span>
@@ -65,37 +65,6 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
-.demo {
-  background-color: #f6f8fa;
-  padding: 32px;
-}
-
-.settings p {
-  display: flex;
-  align-items: center;
-  margin: 0 0 8px 0;
-}
-
-.settings label {
-  display: flex;
-  align-items: center;
-}
-
-.settings label > span {
-  display: inline-block;
-  width: 150px;
-}
-
-select, input {
-  margin: 0;
-  font-size: 16px;
-}
-
-.demo__currency-input {
-  font-size: 24px;
-  padding: 8px 12px;
-  max-width: 100%;
-  box-sizing: border-box;
-}
+<style lang="scss" scoped>
+@import "demo.scss";
 </style>

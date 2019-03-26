@@ -16,9 +16,3 @@ export default {
   components: { DirectiveDemo, ComponentDemo }
 }
 </script>
-
-<style lang="css">
-#app {
-  font-family: "Segoe UI", Arial, sans-serif;
-}
-</style>
