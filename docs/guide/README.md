@@ -5,7 +5,8 @@ sidebar: auto
 # Overview
 
 ## Introduction
-The Vue Currency Input plugin provides a standalone component (`<currency-input>`) and a directive (`v-currency`) allowing an easy input of currency formatted numbers.
+The Vue Currency Input plugin allows an easy input of currency formatted numbers. 
+It provides both a standalone component (`<currency-input>`) and a custom Vue directive (`v-currency`) for decorating existing input components with currency format capabilities.
 
 ## Getting started
 Install the npm package:
