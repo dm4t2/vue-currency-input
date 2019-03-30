@@ -35,10 +35,7 @@ export default ({ prefix, suffix, thousandsSeparatorSymbol, allowDecimal, allowN
     let mask = convertToMask(integer)
 
     if (hasDecimal && allowDecimal) {
-      if (rawValue[indexOfDecimalSymbol - 1] !== decimalSymbol) {
-        mask.push(caretTrap)
-      }
-      mask.push(decimalSymbol, caretTrap)
+      mask.push(caretTrap, decimalSymbol, caretTrap)
       if (fraction) {
         if (typeof decimalLimit === 'number') {
           fraction = fraction.slice(0, decimalLimit)
