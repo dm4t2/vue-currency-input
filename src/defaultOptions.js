@@ -3,5 +3,6 @@ export default {
   currency: 'EUR',
   distractionFree: true,
   min: null,
-  max: null
+  max: null,
+  validateOnInput: false
 }

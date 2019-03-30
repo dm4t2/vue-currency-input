@@ -54,7 +54,7 @@ const init = (el, optionsFromBinding) => {
     throw new Error('The directive must be applied on an element consists of an input element')
   }
   const options = { ...defaultOptions, ...optionsFromBinding }
-  if (options.min !== null && options.max !== null && options.min > options.max) {
+  if (options.min != null && options.max != null && options.min > options.max) {
     throw new Error('Invalid number range')
   }
   const currencyFormatConfig = getCurrencyFormatConfig(options)
@@ -82,16 +82,27 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
 const format = (el, value = el.value, { options, currencyFormatConfig, textMaskInputElement, focus } = el.$ci) => {
   const hideFormatting = focus && options.distractionFree
   if (typeof value === 'number') {
-    if (options.min !== null && value < options.min) {
+    if (options.min != null && value < options.min) {
       value = options.min
     }
-    if (options.max !== null && value > options.max) {
+    if (options.max != null && value > options.max) {
       value = options.max
     }
     value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: hideFormatting ? 0 : currencyFormatConfig.decimalLimit }).format(value)
   }
   textMaskInputElement.update(value, {
     inputElement: el,
+    pipe: (conformedValue, { previousConformedValue }) => {
+      if (options.validateOnInput) {
+        if (options.min != null && parse(conformedValue, currencyFormatConfig) < options.min) {
+          return previousConformedValue
+        }
+        if (options.max != null && parse(conformedValue, currencyFormatConfig) > options.max) {
+          return previousConformedValue
+        }
+      }
+      return conformedValue
+    },
     mask: createCurrencyMask({
       ...currencyFormatConfig,
       prefix: hideFormatting ? '' : currencyFormatConfig.prefix,

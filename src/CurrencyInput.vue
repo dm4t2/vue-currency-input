@@ -1,6 +1,6 @@
 <template>
   <input
-    v-currency="{locale, currency, distractionFree, min, max}"
+    v-currency="{locale, currency, distractionFree, min, max, validateOnInput}"
     :value="formattedValue"
     @change="handleChange">
 </template>
@@ -38,6 +38,10 @@ export default {
     max: {
       type: Number,
       default: defaultOptions.max
+    },
+    validateOnInput: {
+      type: Boolean,
+      default: defaultOptions.validateOnInput
     }
   },
   data () {

@@ -7,6 +7,7 @@
       :distraction-free="distractionFree"
       :min="min"
       :max="max"
+      :validate-on-input="validateOnInput"
       class="demo__currency-input"/>
     <p>Raw number value: <code>{{ value !== null ? value : 'null' }}</code></p>
     <hr>
@@ -67,6 +68,14 @@
         </label>
         <code v-if="max">{{ max }}</code>
       </p>
+      <p>
+        <label>
+          <span>Validate on input</span>
+          <input
+            v-model="validateOnInput"
+            type="checkbox">
+        </label>
+      </p>
     </div>
   </div>
 </template>
@@ -84,7 +93,8 @@ export default {
       locale: undefined,
       distractionFree: false,
       min: null,
-      max: null
+      max: null,
+      validateOnInput: false
     }
   }
 }

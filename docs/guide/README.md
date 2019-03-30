@@ -66,5 +66,6 @@ Name | Type | Description
 `currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`). This prop is required.
 `locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is the runtime's default locale.
 `distraction-free` | Boolean | Whether to hide the formatting and unnecessary fraction digits on focus. Default is `true`.
-`min` | Number | Minimun value. Default is `null` (no limitation). Must be less than `max`.
+`min` | Number | Minimum value. Default is `null` (no limitation). Must be less than `max`.
 `max` | Number | Maximum value. Default is `null` (no limitation). Must be greater than `min`.
+`validate-on-input` | Boolean | Whether to apply the number range validation on input. Default is `false` (validation is applied on blur). **Not recommended** when using both `min` and `max` values for validation.
