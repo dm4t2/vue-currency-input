@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
-import CurrencyInput from '../../src/CurrencyInput'
 import Intl from 'intl'
+import CurrencyInput from '../../src/CurrencyInput'
 
 global.Intl = Intl
 
@@ -17,71 +17,27 @@ describe('CurrencyInput', () => {
     wrapper = mountComponent(propsData)
   })
 
-  describe('props', () => {
-    describe('value', () => {
-      it('is of type Number', () => {
-        expect(wrapper.vm.$options.props.value.type).toBe(Number)
+  describe('initial value', () => {
+    describe('the initial value is a valid number', () => {
+      it('sets the correct formatted value for configured currency and locale', () => {
+        expect(mountComponent({ currency: 'EUR', locale: 'de', value: 1234.5 }).element.value).toBe('1.234,50 €')
+        expect(mountComponent({ currency: 'EUR', locale: 'en', value: 1234.5 }).element.value).toBe('€1,234.50')
+        expect(mountComponent({ currency: 'EUR', locale: 'fr', value: 1234.5 }).element.value).toBe('1 234,50 €')
       })
 
-      it('defaults to null', () => {
-        expect(wrapper.vm.$options.props.value.default).toBeNull()
-      })
-    })
-
-    describe('currency', () => {
-      it('is of type String', () => {
-        expect(wrapper.vm.$options.props.currency.type).toBe(String)
-      })
-
-      it('is required', () => {
-        expect(wrapper.vm.$options.props.currency.required).toBe(true)
+      it('rounds float numbers if the currency format supports no fraction', () => {
+        expect(mountComponent({ currency: 'JPY', locale: 'de', value: 1234.5 }).element.value).toBe('1.235 ¥')
       })
     })
 
-    describe('locale', () => {
-      it('is of type String', () => {
-        expect(wrapper.vm.$options.props.locale.type).toBe(String)
+    describe('the initial value is invalid', () => {
+      it('sets a empty value', () => {
+        expect(mountComponent({ currency: 'EUR', value: '' }).element.value).toBe('')
+        expect(mountComponent({ currency: 'EUR', value: ' ' }).element.value).toBe('')
+        expect(mountComponent({ currency: 'EUR', value: 'foo' }).element.value).toBe('')
+        expect(mountComponent({ currency: 'EUR', value: '1234,5' }).element.value).toBe('')
+        expect(mountComponent({ currency: 'JPY', value: '1234,5' }).element.value).toBe('')
       })
-
-      it('defaults to undefined', () => {
-        expect(wrapper.vm.$options.props.locale.required).toBe(undefined)
-      })
-    })
-
-    describe('distractionFree', () => {
-      it('is of type Boolean', () => {
-        expect(wrapper.vm.$options.props.distractionFree.type).toBe(Boolean)
-      })
-
-      it('defaults to true', () => {
-        expect(wrapper.vm.$options.props.distractionFree.default).toBe(true)
-      })
-    })
-
-    describe('min', () => {
-      it('is of type Number', () => {
-        expect(wrapper.vm.$options.props.min.type).toBe(Number)
-      })
-
-      it('defaults to null', () => {
-        expect(wrapper.vm.$options.props.min.default).toBeNull()
-      })
-    })
-
-    describe('max', () => {
-      it('is of type Number', () => {
-        expect(wrapper.vm.$options.props.max.type).toBe(Number)
-      })
-
-      it('defaults to null', () => {
-        expect(wrapper.vm.$options.props.max.default).toBeNull()
-      })
-    })
-  })
-
-  describe('when the component is mounted', () => {
-    it('applies the fixed fraction format to the initial value', () => {
-      expect(wrapper.element.value).toBe('€1,234.50')
     })
 
     describe('the initial value is less than the min value', () => {

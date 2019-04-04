@@ -1,6 +1,21 @@
-import { parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
+import { isNumeric, parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
 
 describe('formatHelper', () => {
+  describe('isNumeric', () => {
+    it('checks if a string is numeric', () => {
+      expect(isNumeric(null)).toBe(false)
+      expect(isNumeric(undefined)).toBe(false)
+      expect(isNumeric('')).toBe(false)
+      expect(isNumeric('.1')).toBe(true)
+      expect(isNumeric('0.01')).toBe(true)
+      expect(isNumeric('0')).toBe(true)
+      expect(isNumeric('-1234')).toBe(true)
+      expect(isNumeric('1234')).toBe(true)
+      expect(isNumeric('1234,5')).toBe(false)
+      expect(isNumeric('1234.5')).toBe(true)
+    })
+  })
+
   describe('removePrefix', () => {
     it('removes a prefix', () => {
       expect(removePrefix('abc', 'a')).toBe('bc')

@@ -1,3 +1,5 @@
+export const isNumeric = (str) => !isNaN(parseFloat(str)) && isFinite(str)
+
 export const onlyDigits = (str) => str.replace(/\D+/g, '')
 
 export const removePrefix = (str, prefix) => {

@@ -1,5 +1,5 @@
 import getCurrencyFormatConfig from './utils/currencyFormatConfig'
-import { parse } from './utils/formatHelper'
+import { isNumeric, parse } from './utils/formatHelper'
 import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
 import defaultOptions from './defaultOptions'
 import createCurrencyMask from './utils/createCurrencyMask'
@@ -7,7 +7,7 @@ import createCurrencyMask from './utils/createCurrencyMask'
 export default {
   bind (el, binding) {
     const inputElement = init(el, binding.value)
-    applyFixedFractionFormat(inputElement)
+    applyFixedFractionFormat(inputElement, isNumeric(inputElement.value) ? Number(inputElement.value) : null)
 
     inputElement.addEventListener('input', ({ detail }) => {
       format(inputElement, detail ? detail.value : inputElement.value)
@@ -69,6 +69,9 @@ const init = (el, optionsFromBinding) => {
 }
 
 const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormatConfig)) => {
+  if (value != null && !el.$ci.currencyFormatConfig.allowDecimal) {
+    value = Math.round(value)
+  }
   format(el, value)
   el.dispatchEvent(new Event('input'))
   el.dispatchEvent(new CustomEvent('change', {
