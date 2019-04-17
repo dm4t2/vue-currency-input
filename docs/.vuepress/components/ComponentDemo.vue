@@ -91,7 +91,7 @@ export default {
       value: 1234.5,
       currency: 'USD',
       locale: undefined,
-      distractionFree: false,
+      distractionFree: true,
       min: null,
       max: null,
       validateOnInput: false

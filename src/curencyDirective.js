@@ -92,6 +92,10 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
       value = options.max
     }
     value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: hideFormatting ? 0 : currencyFormatConfig.decimalLimit }).format(value)
+    if (options.distractionFree) {
+      // force invalidation of text mask's previousConformedValue
+      value += ' '
+    }
   }
   textMaskInputElement.update(value, {
     inputElement: el,

@@ -65,26 +65,20 @@ describe('CurrencyInput', () => {
 
   describe('when the input is changed by the user', () => {
     it('formats the value correctly', () => {
-      wrapper.element.value = '12345'
-
-      wrapper.trigger('input')
+      wrapper.setValue('12345')
 
       expect(wrapper.element.value).toBe('€12,345')
     })
 
     it('emits the raw number value', () => {
-      wrapper.element.value = '12345'
-
-      wrapper.trigger('input')
+      wrapper.setValue('12345')
 
       expect(wrapper.emitted('input')[1][0]).toBe(12345)
     })
 
     describe('when the input is cleared', () => {
       it('emits a null value', () => {
-        wrapper.element.value = ''
-
-        wrapper.trigger('input')
+        wrapper.setValue('')
 
         expect(wrapper.emitted('input')[1][0]).toBeNull()
       })
@@ -124,7 +118,7 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.value).toBe('1234.5')
       })
 
-      it('sets the caret to right position if the locale is "en"', () => {
+      it('sets the caret to the right position if the locale is "en"', () => {
         wrapper.setProps({ value: 1234567.89, distractionFree: true })
 
         wrapper.element.setSelectionRange(8, 8)
@@ -134,7 +128,7 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.selectionStart).toBe(5)
       })
 
-      it('sets the caret to right position if the locale is "de"', () => {
+      it('sets the caret to the right position if the locale is "de"', () => {
         wrapper.setProps({ value: 1234567.89, distractionFree: true, locale: 'de' })
 
         wrapper.element.setSelectionRange(8, 8)
@@ -152,7 +146,7 @@ describe('CurrencyInput', () => {
         wrapper.trigger('focus')
         jest.runOnlyPendingTimers()
 
-        expect(wrapper.vm.formattedValue).toBe('€5,432.10')
+        expect(wrapper.element.value).toBe('€5,432.10')
       })
 
       it('leaves the caret position untouched', () => {
@@ -175,11 +169,15 @@ describe('CurrencyInput', () => {
     })
 
     it('applies the fixed fraction format', () => {
-      wrapper.setProps({ value: 10 })
-
+      wrapper.trigger('focus')
+      wrapper.setValue('')
+      wrapper.setValue('1')
+      wrapper.setValue('1.')
+      wrapper.setValue('1.3')
+      wrapper.setValue('1.34')
       wrapper.trigger('blur')
 
-      expect(wrapper.vm.formattedValue).toBe('€10.00')
+      expect(wrapper.element.value).toBe('€1.34')
     })
 
     describe('the current value is less than the min value', () => {
@@ -188,7 +186,7 @@ describe('CurrencyInput', () => {
 
         wrapper.trigger('blur')
 
-        expect(wrapper.vm.formattedValue).toBe('€1,000.00')
+        expect(wrapper.element.value).toBe('€1,000.00')
       })
     })
 
@@ -198,7 +196,7 @@ describe('CurrencyInput', () => {
 
         wrapper.trigger('blur')
 
-        expect(wrapper.vm.formattedValue).toBe('€1,000.00')
+        expect(wrapper.element.value).toBe('€1,000.00')
       })
     })
   })
