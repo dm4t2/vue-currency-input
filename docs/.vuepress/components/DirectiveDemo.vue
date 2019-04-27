@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import currencyDirective from '../../../src/curencyDirective'
+import currencyDirective from '../../../src/currencyDirective'
 export default {
   name: 'DirectiveDemo',
   directives: {

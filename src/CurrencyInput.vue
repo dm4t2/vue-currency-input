@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import currencyDirective from './curencyDirective'
+import currencyDirective from './currencyDirective'
 import defaultOptions from './defaultOptions'
 
 export default {

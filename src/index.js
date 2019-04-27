@@ -1,5 +1,5 @@
 import component from './CurrencyInput'
-import directive from './curencyDirective'
+import directive from './currencyDirective'
 
 const plugin = {
   install (Vue, { componentName = component.name, directiveName = 'currency' } = {}) {
