@@ -1,8 +1,8 @@
-import getCurrencyFormatConfig from './utils/currencyFormatConfig'
-import { isNumeric, parse } from './utils/formatHelper'
 import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
 import defaultOptions from './defaultOptions'
 import createCurrencyMask from './utils/createCurrencyMask'
+import currencyFormatConfig from './utils/currencyFormatConfig'
+import { isNumeric, parse } from './utils/formatHelper'
 
 export default {
   bind (el, binding) {
@@ -25,7 +25,7 @@ export default {
       if (options.distractionFree) {
         setTimeout(() => {
           const caretPosition = getCaretPosition(inputElement)
-          format(inputElement, parse(inputElement.value, currencyFormatConfig))
+          format(inputElement, parse(inputElement.value, currencyFormatConfig.decimalSymbol))
           inputElement.setSelectionRange(caretPosition, caretPosition)
         }, 0)
       }
@@ -57,18 +57,16 @@ const init = (el, optionsFromBinding) => {
   if (options.min != null && options.max != null && options.min > options.max) {
     throw new Error('Invalid number range')
   }
-  const currencyFormatConfig = getCurrencyFormatConfig(options)
-  const textMaskInputElement = createTextMaskInputElement({ inputElement, mask: [] })
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormatConfig,
-    textMaskInputElement
+    currencyFormatConfig: currencyFormatConfig(options.locale, options.currency),
+    textMaskInputElement: createTextMaskInputElement({ inputElement, mask: [] })
   }
   return inputElement
 }
 
-const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormatConfig)) => {
+const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormatConfig.decimalSymbol)) => {
   if (value != null && !el.$ci.currencyFormatConfig.allowDecimal) {
     value = Math.round(value)
   }
@@ -101,10 +99,10 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
     inputElement: el,
     pipe: (conformedValue, { previousConformedValue }) => {
       if (options.validateOnInput) {
-        if (options.min != null && parse(conformedValue, currencyFormatConfig) < options.min) {
+        if (options.min != null && parse(conformedValue, currencyFormatConfig.decimalSymbol) < options.min) {
           return previousConformedValue
         }
-        if (options.max != null && parse(conformedValue, currencyFormatConfig) > options.max) {
+        if (options.max != null && parse(conformedValue, currencyFormatConfig.decimalSymbol) > options.max) {
           return previousConformedValue
         }
       }
@@ -118,7 +116,7 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
       allowNegative: (options.min === null && options.max === null) || options.min < 0 || options.max < 0
     })
   })
-  el.$ci.numberValue = parse(el.value, currencyFormatConfig)
+  el.$ci.numberValue = parse(el.value, currencyFormatConfig.decimalSymbol)
 }
 
 const getCaretPosition = (el, { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormatConfig) => {

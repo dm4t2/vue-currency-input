@@ -1,4 +1,4 @@
-export default ({ locale, currency }) => {
+export default (locale, currency) => {
   const numberFormat = new Intl.NumberFormat(locale, { style: 'currency', currency })
   const formattedNumber = numberFormat.format(1234)
   const decimalLimit = (formattedNumber.match(/0/g) || []).length

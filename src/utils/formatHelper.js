@@ -16,19 +16,19 @@ export const removeSuffix = (str, suffix) => {
   return str
 }
 
-export const parse = (str, { decimalSymbol, allowNegative = true } = {}) => {
+export const parse = (str, decimalSymbol) => {
   if (typeof str === 'number') {
     return str
   }
   if (str && typeof str === 'string' && str.trim().length) {
-    const negative = str.startsWith('-') && allowNegative
+    const negative = str.startsWith('-')
     const numberParts = str.split(decimalSymbol)
     let number = onlyDigits(numberParts[0])
     if (negative) {
-      number = '-' + number
+      number = `-${number}`
     }
     if (numberParts.length === 2) {
-      number += '.' + onlyDigits(numberParts[1])
+      number += `.${onlyDigits(numberParts[1])}`
     }
     if (number) {
       number = Number(number)
