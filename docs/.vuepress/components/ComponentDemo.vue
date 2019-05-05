@@ -9,7 +9,7 @@
       :max="max"
       :validate-on-input="validateOnInput"
       class="demo__currency-input"/>
-    <p>Raw number value: <code>{{ value !== null ? value : 'null' }}</code></p>
+    <p>Raw number value: <code>{{ value != null ? value : 'null' }}</code></p>
     <hr>
     <h3>Options</h3>
     <div class="demo__options">
@@ -86,17 +86,15 @@ import CurrencyInput from '../../../src/CurrencyInput'
 export default {
   name: 'ComponentDemo',
   components: { CurrencyInput },
-  data () {
-    return {
-      value: 1234.5,
-      currency: 'USD',
-      locale: undefined,
-      distractionFree: true,
-      min: null,
-      max: null,
-      validateOnInput: false
-    }
-  }
+  data: () => ({
+    value: 1234.5,
+    currency: 'USD',
+    locale: undefined,
+    distractionFree: true,
+    min: null,
+    max: null,
+    validateOnInput: false
+  })
 }
 </script>
 

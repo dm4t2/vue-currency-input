@@ -1,6 +1,6 @@
 <template>
   <input
-    v-currency="{locale, currency, distractionFree, min, max, validateOnInput}"
+    v-currency="options"
     :value="formattedValue"
     @change="handleChange">
 </template>
@@ -21,32 +21,43 @@ export default {
     },
     locale: {
       type: String,
-      default: defaultOptions.locale
+      default: undefined
     },
     currency: {
       type: String,
-      required: true
+      default: undefined
     },
     distractionFree: {
       type: Boolean,
-      default: defaultOptions.distractionFree
+      default: undefined
     },
     min: {
       type: Number,
-      default: defaultOptions.min
+      default: undefined
     },
     max: {
       type: Number,
-      default: defaultOptions.max
+      default: undefined
     },
     validateOnInput: {
       type: Boolean,
-      default: defaultOptions.validateOnInput
+      default: undefined
     }
   },
   data () {
     return {
       formattedValue: this.value
+    }
+  },
+  computed: {
+    options () {
+      const options = { ...this.$CI_DEFAULT_OPTIONS || defaultOptions }
+      Object.keys(options).forEach((key) => {
+        if (this[key] !== undefined) {
+          options[key] = this[key]
+        }
+      })
+      return options
     }
   },
   watch: {

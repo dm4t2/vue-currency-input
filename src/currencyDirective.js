@@ -1,4 +1,5 @@
 import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
+import Vue from 'vue'
 import defaultOptions from './defaultOptions'
 import createCurrencyMask from './utils/createCurrencyMask'
 import currencyFormatConfig from './utils/currencyFormatConfig'
@@ -37,7 +38,7 @@ export default {
     })
   },
   componentUpdated (el, binding) {
-    if (optionsChanged(binding.oldValue, binding.value)) {
+    if (!!binding.value && optionsChanged(binding.oldValue, binding.value)) {
       const inputElement = init(el, binding.value)
       applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
     }
@@ -53,7 +54,7 @@ const init = (el, optionsFromBinding) => {
   if (!inputElement) {
     throw new Error('The directive must be applied on an element consists of an input element')
   }
-  const options = { ...defaultOptions, ...optionsFromBinding }
+  const options = { ...(Vue.prototype.$CI_DEFAULT_OPTIONS || defaultOptions), ...optionsFromBinding }
   if (options.min != null && options.max != null && options.min > options.max) {
     throw new Error('Invalid number range')
   }
