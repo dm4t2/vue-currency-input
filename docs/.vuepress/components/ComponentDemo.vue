@@ -81,11 +81,9 @@
 </template>
 
 <script>
-import CurrencyInput from '../../../src/CurrencyInput'
 
 export default {
   name: 'ComponentDemo',
-  components: { CurrencyInput },
   data: () => ({
     value: 1234.5,
     currency: 'USD',

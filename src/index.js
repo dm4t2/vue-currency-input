@@ -1,6 +1,8 @@
 import directive from './currencyDirective'
 import component from './CurrencyInput'
 import defaultOptions from './defaultOptions'
+import currencyFormatConfig from './utils/currencyFormatConfig'
+import { parse } from './utils/formatHelper'
 
 const plugin = {
   install (Vue, {
@@ -8,9 +10,11 @@ const plugin = {
     directiveName = 'currency',
     globalOptions = {}
   } = {}) {
-    Vue.prototype.$CI_DEFAULT_OPTIONS = { ...defaultOptions, ...globalOptions }
+    const options = { ...defaultOptions, ...globalOptions }
+    Vue.prototype.$CI_DEFAULT_OPTIONS = options
     Vue.component(componentName, component)
     Vue.directive(directiveName, directive)
+    Vue.prototype.$parseCurrency = (str, locale = options.locale, currency = options.currency) => parse(str, currencyFormatConfig(locale, currency).decimalSymbol)
   }
 }
 

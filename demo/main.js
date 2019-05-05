@@ -1,6 +1,8 @@
 import Vue from 'vue'
+import VueCurrencyInput from '../src/'
 import App from './App.vue'
 
+Vue.use(VueCurrencyInput)
 Vue.config.productionTip = false
 
 new Vue({
