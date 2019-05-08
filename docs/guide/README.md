@@ -1,8 +1,8 @@
 ---
-sidebar: auto
+sidebarDepth: 3
 ---
 
-# Overview
+# Guide
 
 ## Introduction
 The Vue Currency Input plugin allows an easy input of currency formatted numbers. 
@@ -21,52 +21,69 @@ Add the Vue plugin in your `main.js`:
 import Vue from 'vue'
 import VueCurrencyInput from 'vue-currency-input'
 
-Vue.use(VueCurrencyInput)
+const pluginOptions = { /* see config reference */ }
+Vue.use(VueCurrencyInput, pluginOptions)
 ```
+
+This registers the component/directive globally and will provide the Vue instance method `$parseCurrency`.
 
 ## Usage
 ### Component
-``` vue
-<template>
-  <currency-input v-model="value" :currency="currency"/>
-</template>
+The `currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the raw number value (see [Live Demo](/demo/)). All other [component props](/config/#component-props) are optional.
 
-<script>
-export default {
-  data: () => ({
-    value: 1000,
-    currency: 'USD'
-  })
-}
-</script>
-```
+<<< @/docs/.vuepress/components/ComponentExample.vue
 
 ### Directive
 The `v-currency` directive is great if you want to decorate existing input components with currency format capabilities (for example like those from [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)).
 
-``` vue
+<<< @/docs/.vuepress/components/DirectiveExample.vue
+
+::: warning Getting the raw number value
+In comparision to the `<currency-input>` component the `v-currency` directive will emit always the formatted string instead of the raw number value when used with `v-model`. 
+To get the number value you can use the `$parseCurrency` instance method (see [Live Demo](/demo/#directive)).
+:::
+
+## Alternative installation methods
+### Import on demand
+You can also import the component/directive on demand and register them locally in your Vue files. 
+This is useful if want to use [async components](https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components).
+
+#### Component
+```vue
 <template>
-  <input v-model="value" v-currency="{currency}"/>
+  <currency-input :value="1000"/>
 </template>
 
 <script>
+import { CurrencyInput } from 'vue-currency-input'
 export default {
-  data: () => ({
-    value: 1000,
-    currency: 'USD'
-  })
+  components: { CurrencyInput }
 }
 </script>
 ```
 
-## Configuration
+#### Directive
+```vue
+<template>
+  <input v-currency/>
+</template>
 
-Name | Type | Description
---- | --- | --- 
-`value` | Number |  The value of the input. If `v-model` is used with the component, it will always emit the raw number value (see [Live Demo](/demo/))
-`currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`). This prop is required.
-`locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is the runtime's default locale.
-`distraction-free` | Boolean | Whether to hide the formatting and unnecessary fraction digits on focus. Default is `true`.
-`min` | Number | Minimum value. Default is `null` (no limitation). Must be less than `max`.
-`max` | Number | Maximum value. Default is `null` (no limitation). Must be greater than `min`.
-`validate-on-input` | Boolean | Whether to apply the number range validation on input. Default is `false` (validation is applied on blur). **Not recommended** when using both `min` and `max` values for validation.
+<script>
+import { CurrencyDirective } from 'vue-currency-input'
+export default {
+  directives: {
+    currency: CurrencyDirective
+  }
+}
+</script>
+
+```
+
+### Direct download via CDN
+If you don't use a module system you can also download the plugin as UMD bundle via CDN. 
+Include the plugin after Vue and it will install itself automatically:
+
+```html
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/vue-currency-input"></script>
+```
