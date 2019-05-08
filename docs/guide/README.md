@@ -46,7 +46,7 @@ To get the number value you can use the `$parseCurrency` instance method (see [L
 ## Alternative installation methods
 ### Import on demand
 You can also import the component/directive on demand and register them locally in your Vue files. 
-This is useful if want to use [async components](https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components).
+This is useful if you want to use [async components](https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components).
 
 #### Component
 ```vue
