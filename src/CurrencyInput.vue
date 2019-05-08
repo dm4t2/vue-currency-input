@@ -2,7 +2,7 @@
   <input
     v-currency="options"
     :value="formattedValue"
-    @change="handleChange">
+    v-on="listeners()">
 </template>
 
 <script>
@@ -13,6 +13,9 @@ export default {
   name: 'CurrencyInput',
   directives: {
     currency: currencyDirective
+  },
+  model: {
+    event: 'value-change'
   },
   props: {
     value: {
@@ -68,10 +71,13 @@ export default {
     }
   },
   methods: {
-    handleChange ({ detail }) {
-      if (detail) {
-        this.$emit('input', detail.numberValue)
-        this.formattedValue = detail.formattedValue
+    listeners () {
+      return {
+        ...this.$listeners,
+        'value-change': ({ target: el }) => {
+          this.$emit('value-change', el.$ci.numberValue)
+          this.formattedValue = el.value
+        }
       }
     }
   }
