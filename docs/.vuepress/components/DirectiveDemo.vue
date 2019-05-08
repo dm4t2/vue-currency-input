@@ -2,7 +2,7 @@
   <div class="demo">
     <input
       v-model="value"
-      v-currency
+      v-currency="{locale, currency}"
       class="demo__currency-input"/>
     <p>Raw number value: <code>{{ numberValue }}</code></p>
   </div>
@@ -12,11 +12,13 @@
 export default {
   name: 'DirectiveDemo',
   data: () => ({
-    value: 1234.5
+    value: 1234.5,
+    locale: 'en',
+    currency: 'USD'
   }),
   computed: {
     numberValue () {
-      return this.$parseCurrency(this.value)
+      return this.$parseCurrency(this.value, this.locale, this.currency)
     }
   }
 }
