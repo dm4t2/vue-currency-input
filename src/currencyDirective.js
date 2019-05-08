@@ -8,16 +8,13 @@ import { isNumeric, parse } from './utils/formatHelper'
 export default {
   bind (el, binding) {
     const inputElement = init(el, binding.value)
-    applyFixedFractionFormat(inputElement, isNumeric(inputElement.value) ? Number(inputElement.value) : null)
+    Vue.nextTick(() => {
+      applyFixedFractionFormat(inputElement, isNumeric(inputElement.value) ? Number(inputElement.value) : null)
+    })
 
     inputElement.addEventListener('input', ({ detail }) => {
       format(inputElement, detail ? detail.value : inputElement.value)
-      el.dispatchEvent(new CustomEvent('change', {
-        detail: {
-          numberValue: inputElement.$ci.numberValue,
-          formattedValue: inputElement.value
-        }
-      }))
+      el.dispatchEvent(new Event('value-change'))
     }, { capture: true })
 
     inputElement.addEventListener('focus', () => {
@@ -73,12 +70,6 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
   }
   format(el, value)
   el.dispatchEvent(new Event('input'))
-  el.dispatchEvent(new CustomEvent('change', {
-    detail: {
-      numberValue: el.$ci.numberValue,
-      formattedValue: el.value
-    }
-  }))
 }
 
 const format = (el, value = el.value, { options, currencyFormatConfig, textMaskInputElement, focus } = el.$ci) => {
