@@ -12,7 +12,7 @@
 export default {
   name: 'DirectiveDemo',
   data: () => ({
-    value: 1234.55
+    value: 1234.5
   }),
   computed: {
     numberValue () {

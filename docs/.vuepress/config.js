@@ -7,11 +7,17 @@ module.exports = {
   ],
   themeConfig: {
     search: false,
-    nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/guide/' },
-      { text: 'Live Demo', link: '/demo/' },
-    ],
+    nav: [{
+      text: 'Release Notes',
+      link: 'https://github.com/dm4t2/vue-currency-input/releases'
+    }],
+    sidebar: {
+      '/': [
+        '/guide/',
+        '/config/',
+        '/demo/'
+      ]
+    },
     repo: 'dm4t2/vue-currency-input',
     docsDir: 'docs',
     docsBranch: 'gh-pages',
