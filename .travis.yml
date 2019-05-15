@@ -19,6 +19,7 @@ jobs:
         github-token: $GITHUB_TOKEN
         repo: dm4t2/vue-currency-input
     - stage: Publish npm package
+      script: skip
       deploy:
         on:
           branch: master
