@@ -12,10 +12,16 @@ export default {
       applyFixedFractionFormat(inputElement, isNumeric(inputElement.value) ? Number(inputElement.value) : null)
     })
 
-    inputElement.addEventListener('input', ({ detail }) => {
-      format(inputElement, detail ? detail.value : inputElement.value)
-      el.dispatchEvent(new Event('value-change'))
+    inputElement.addEventListener('input', () => {
+      format(inputElement)
     }, { capture: true })
+
+    inputElement.addEventListener('format', ({ detail }) => {
+      if (!inputElement.$ci.focus) {
+        format(inputElement, detail.value)
+        inputElement.dispatchEvent(new Event('format-complete'))
+      }
+    })
 
     inputElement.addEventListener('focus', () => {
       const { options, currencyFormatConfig } = inputElement.$ci

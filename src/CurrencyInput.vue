@@ -8,14 +8,13 @@
 <script>
 import currencyDirective from './currencyDirective'
 import defaultOptions from './defaultOptions'
+import { parse } from './utils/formatHelper'
+import currencyFormatConfig from './utils/currencyFormatConfig'
 
 export default {
   name: 'CurrencyInput',
   directives: {
     currency: currencyDirective
-  },
-  model: {
-    event: 'value-change'
   },
   props: {
     value: {
@@ -61,24 +60,27 @@ export default {
         }
       })
       return options
+    },
+    decimalSymbol () {
+      return currencyFormatConfig(this.options.locale, this.options.currency).decimalSymbol
     }
   },
   watch: {
     value (value) {
-      if (!this.$el.$ci.focus) {
-        this.$el.dispatchEvent(new CustomEvent('input', { detail: { value } }))
-      }
+      this.$el.dispatchEvent(new CustomEvent('format', { detail: { value } }))
     }
   },
   methods: {
     listeners () {
       return {
         ...this.$listeners,
-        'value-change': ({ target: el }) => {
-          this.$emit('value-change', el.$ci.numberValue)
-          this.formattedValue = el.value
-        }
+        input: () => this.emitValue(),
+        'format-complete': () => this.emitValue()
       }
+    },
+    emitValue () {
+      this.$emit('input', parse(this.$el.value, this.decimalSymbol))
+      this.formattedValue = this.$el.value
     }
   }
 }

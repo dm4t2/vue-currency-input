@@ -68,11 +68,11 @@ describe('CurrencyInput', () => {
     })
 
     it('emits the raw number value', () => {
-      const wrapper = mountComponent()
+      const wrapper = mountComponent({ locale: 'en' })
 
       wrapper.setValue('12345')
 
-      expect(wrapper.emitted('value-change')[0][0]).toBe(12345)
+      expect(wrapper.emitted('input')[0][0]).toBe(12345)
     })
 
     describe('when the input is cleared', () => {
@@ -81,7 +81,7 @@ describe('CurrencyInput', () => {
 
         wrapper.setValue('')
 
-        expect(wrapper.emitted('value-change')[0][0]).toBeNull()
+        expect(wrapper.emitted('input')[0][0]).toBeNull()
       })
     })
   })
@@ -100,7 +100,7 @@ describe('CurrencyInput', () => {
 
       wrapper.setProps({ value: 12345 })
 
-      expect(wrapper.emitted('value-change')[0][0]).toBe(12345)
+      expect(wrapper.emitted('input')[0][0]).toBe(12345)
     })
 
     it('ignores changes if focused', () => {
