@@ -37,19 +37,19 @@
     "vue": "^2.6.8"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.4.1",
-    "@vue/cli-plugin-eslint": "^3.4.1",
-    "@vue/cli-plugin-unit-jest": "^3.4.1",
-    "@vue/cli-service": "^3.4.1",
+    "@vue/cli-plugin-babel": "^3.7.0",
+    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-plugin-unit-jest": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
     "@vue/eslint-config-standard": "^4.0.0",
-    "@vue/test-utils": "^1.0.0-beta.27",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^23.0.1",
+    "babel-jest": "^24.8.0",
     "intl": "^1.2.5",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.8",
-    "vuepress": "^0.14.9"
+    "vuepress": "^0.14.11"
   },
   "eslintConfig": {
     "root": true,
@@ -83,7 +83,7 @@
       "vue"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(text-mask-core|text-mask-addons)/)"
+      "node_modules/(?!(text-mask-core)/)"
     ],
     "transform": {
       "^.+\\.vue$": "vue-jest",
