@@ -1,4 +1,4 @@
-import createTextMaskInputElement from 'text-mask-core/src/createTextMaskInputElement'
+import { createTextMaskInputElement } from 'text-mask-core'
 import Vue from 'vue'
 import defaultOptions from './defaultOptions'
 import createCurrencyMask from './utils/createCurrencyMask'

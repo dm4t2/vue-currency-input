@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueCurrencyInput from '../src/'
+import VueCurrencyInput from '../src/plugin'
 import App from './App.vue'
 
 Vue.use(VueCurrencyInput)
