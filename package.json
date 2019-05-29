@@ -59,8 +59,8 @@
     "rollup-plugin-uglify": "^6.0.2",
     "rollup-plugin-vue": "^5.0.0",
     "sass-loader": "^7.1.0",
-    "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10",
+    "vue": "2.6.8",
+    "vue-template-compiler": "2.6.8",
     "vuepress": "^0.14.11"
   },
   "eslintConfig": {
