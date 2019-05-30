@@ -5,7 +5,6 @@
   "license": "MIT",
   "unpkg": "dist/vue-currency-input.js",
   "jsdelivr": "dist/vue-currency-input.js",
-  "browser": "dist/vue-currency-input.js",
   "module": "dist/vue-currency-input.esm.js",
   "main": "dist/vue-currency-input.cjs.js",
   "files": [

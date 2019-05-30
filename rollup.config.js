@@ -44,7 +44,7 @@ export default [
     output: {
       name: 'VueCurrencyInput',
       format: 'iife',
-      file: pkg.browser,
+      file: 'dist/vue-currency-input.js',
       globals: {
         vue: 'Vue'
       }
