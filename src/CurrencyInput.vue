@@ -61,8 +61,8 @@ export default {
       })
       return options
     },
-    decimalSymbol () {
-      return currencyFormatConfig(this.options.locale, this.options.currency).decimalSymbol
+    currencyFormatConfig () {
+      return currencyFormatConfig(this.options.locale, this.options.currency)
     }
   },
   watch: {
@@ -79,7 +79,7 @@ export default {
       }
     },
     emitValue () {
-      this.$emit('input', parse(this.$el.value, this.decimalSymbol))
+      this.$emit('input', parse(this.$el.value, this.currencyFormatConfig))
       this.formattedValue = this.$el.value
     }
   }

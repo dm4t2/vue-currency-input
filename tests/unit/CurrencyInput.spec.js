@@ -8,46 +8,43 @@ jest.useFakeTimers()
 
 const mountComponent = (propsData) => shallowMount(CurrencyInput, { propsData })
 
-const expectInitialValue = (expectedValue, propsData, done) => {
+const expectInitialValue = async (expectedValue, propsData) => {
   const wrapper = mountComponent(propsData)
-  wrapper.vm.$nextTick(() => {
-    expect(wrapper.element.value).toBe(expectedValue)
-    done()
-  })
+  await wrapper.vm.$nextTick()
+  expect(wrapper.element.value).toBe(expectedValue)
 }
 
 describe('CurrencyInput', () => {
   describe('initial value', () => {
     describe('the initial value is a number', () => {
-      it('sets the correct formatted value for configured currency and locale', (done) => {
-        expectInitialValue('1.234,50 €', { locale: 'de', value: 1234.5 }, done)
-        expectInitialValue('€1,234.52', { locale: 'en', value: 1234.523 }, done)
-        expectInitialValue('1 234,00 €', { locale: 'fr', value: 1234 }, done)
+      it('sets the expected formatted value for the configured currency and locale', async () => {
+        await expectInitialValue('1.234,50 €', { locale: 'de', value: 1234.5 })
+        await expectInitialValue('€1,234.52', { locale: 'en', value: 1234.523 })
+        await expectInitialValue('1 234,00 €', { locale: 'fr', value: 1234 })
       })
 
-      it('rounds float numbers if the currency format supports no fraction', (done) => {
-        expectInitialValue('1.235 ¥', { currency: 'JPY', locale: 'de', value: 1234.5 }, done)
+      it('rounds float numbers if the currency format supports no fraction', async () => {
+        await expectInitialValue('1.235 ¥', { currency: 'JPY', locale: 'de', value: 1234.5 })
       })
     })
 
     describe('the initial value is not a number', () => {
-      it('sets a empty value', (done) => {
-        expectInitialValue('', { value: '' }, done)
-        expectInitialValue('', { value: ' ' }, done)
-        expectInitialValue('', { value: 'foo' }, done)
-        expectInitialValue('', { value: '1234,5' }, done)
+      it('sets a empty value', async () => {
+        await expectInitialValue('', { value: '' })
+        await expectInitialValue('', { value: ' ' })
+        await expectInitialValue('', { value: 'foo' })
       })
     })
 
     describe('the initial value is less than the min value', () => {
-      it('sets the min value', (done) => {
-        expectInitialValue('€1,000.00', { locale: 'en', value: 100, min: 1000 }, done)
+      it('sets the min value', async () => {
+        await expectInitialValue('€1,000.00', { locale: 'en', value: 100, min: 1000 })
       })
     })
 
     describe('the initial value is larger than the max value', () => {
-      it('sets the max value', (done) => {
-        expectInitialValue('€1,000.00', { locale: 'en', value: 1500, max: 1000 }, done)
+      it('sets the max value', async () => {
+        await expectInitialValue('€1,000.00', { locale: 'en', value: 1500, max: 1000 })
       })
     })
 

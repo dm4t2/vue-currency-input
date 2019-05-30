@@ -12,7 +12,7 @@
 export default {
   name: 'DirectiveDemo',
   data: () => ({
-    value: 1234.5,
+    value: '$1,234.50',
     locale: 'en',
     currency: 'USD'
   }),

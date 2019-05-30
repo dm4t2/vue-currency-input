@@ -14,7 +14,7 @@ const plugin = {
     Vue.prototype.$CI_DEFAULT_OPTIONS = options
     Vue.component(componentName, component)
     Vue.directive(directiveName, directive)
-    Vue.prototype.$parseCurrency = (str, locale = options.locale, currency = options.currency) => parse(str, currencyFormatConfig(locale, currency).decimalSymbol)
+    Vue.prototype.$parseCurrency = (str, locale = options.locale, currency = options.currency) => parse(str, currencyFormatConfig(locale, currency))
   }
 }
 

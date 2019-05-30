@@ -1,5 +1,3 @@
-export const isNumeric = (str) => !isNaN(parseFloat(str)) && isFinite(str)
-
 export const onlyDigits = (str) => str.replace(/\D+/g, '')
 
 export const removePrefix = (str, prefix) => {
@@ -16,21 +14,37 @@ export const removeSuffix = (str, suffix) => {
   return str
 }
 
-export const parse = (str, decimalSymbol) => {
+export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSymbol } = {}) => {
   if (typeof str === 'number') {
     return str
-  }
-  if (str && typeof str === 'string' && str.trim().length) {
-    const negative = str.startsWith('-')
-    const numberParts = str.split(decimalSymbol)
-    let number = onlyDigits(numberParts[0])
-    if (negative) {
-      number = `-${number}`
+  } else if (str && typeof str === 'string') {
+    if (str.match(/^-?\d+(\.\d+)?$/)) {
+      return Number(str)
     }
+    const negative = str.startsWith('-')
+    str = removePrefix(str, '-')
+    str = removePrefix(str, prefix)
+    str = removeSuffix(str, suffix)
+    const numberParts = str.split(decimalSymbol)
+    if (numberParts.length > 2) {
+      return null
+    }
+    let integer = numberParts[0].replace(new RegExp(thousandsSeparatorSymbol === '.' ? '\\.' : thousandsSeparatorSymbol, 'g'), '')
+    if (integer.length && !integer.match(/^\d+$/g)) {
+      return null
+    }
+    let number = integer
     if (numberParts.length === 2) {
-      number += `.${onlyDigits(numberParts[1])}`
+      const fraction = numberParts[1]
+      if (fraction.length && !fraction.match(/^\d+$/g)) {
+        return null
+      }
+      number += `.${fraction}`
     }
     if (number) {
+      if (negative) {
+        number = `-${number}`
+      }
       number = Number(number)
       return Number.isNaN(number) ? null : number
     }

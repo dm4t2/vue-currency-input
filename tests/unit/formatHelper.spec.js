@@ -1,21 +1,6 @@
-import { isNumeric, parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
+import { parse, removePrefix, removeSuffix } from '../../src/utils/formatHelper'
 
 describe('formatHelper', () => {
-  describe('isNumeric', () => {
-    it('checks if a string is numeric', () => {
-      expect(isNumeric(null)).toBe(false)
-      expect(isNumeric(undefined)).toBe(false)
-      expect(isNumeric('')).toBe(false)
-      expect(isNumeric('.1')).toBe(true)
-      expect(isNumeric('0.01')).toBe(true)
-      expect(isNumeric('0')).toBe(true)
-      expect(isNumeric('-1234')).toBe(true)
-      expect(isNumeric('1234')).toBe(true)
-      expect(isNumeric('1234,5')).toBe(false)
-      expect(isNumeric('1234.5')).toBe(true)
-    })
-  })
-
   describe('removePrefix', () => {
     it('removes a prefix', () => {
       expect(removePrefix('abc', 'a')).toBe('bc')
@@ -39,47 +24,52 @@ describe('formatHelper', () => {
   })
 
   describe('parse', () => {
-    it('parses empty values', () => {
+    it('returns null if the value is empty', () => {
       expect(parse('')).toBeNull()
       expect(parse(' ')).toBeNull()
       expect(parse(null)).toBeNull()
       expect(parse(undefined)).toBeNull()
     })
 
-    it('parses invalid values', () => {
+    it('returns null if the value is invalid', () => {
       expect(parse('-')).toBeNull()
-      expect(parse('abc')).toBeNull()
-      expect(parse('a b c')).toBeNull()
+      expect(parse('123e-1')).toBeNull()
+      expect(parse('0x11')).toBeNull()
+      expect(parse('0b11')).toBeNull()
+      expect(parse('0o11')).toBeNull()
+      expect(parse('1.2e1', { decimalSymbol: '.' })).toBeNull()
+      expect(parse('1.23.4', { decimalSymbol: '.' })).toBeNull()
     })
 
     it('returns a passed number directly', () => {
       expect(parse(1234)).toBe(1234)
+      expect(parse(1.5)).toBe(1.5)
     })
 
-    it('parses positive values', () => {
+    it('returns the parsed number if the value conforms to the currency format config', () => {
       expect(parse('1234')).toBe(1234)
-      expect(parse('$1234')).toBe(1234)
-      expect(parse('1234 €')).toBe(1234)
-    })
-
-    it('parses negative values', () => {
+      expect(parse('1,234,567', { thousandsSeparatorSymbol: ',' })).toBe(1234567)
+      expect(parse('$1,234,567', { prefix: '$', thousandsSeparatorSymbol: ',' })).toBe(1234567)
+      expect(parse('1234 €', { suffix: ' €' })).toBe(1234)
       expect(parse('-1234')).toBe(-1234)
-      expect(parse('-$1234')).toBe(-1234)
-      expect(parse('-1234 €')).toBe(-1234)
+      expect(parse('-$1234', { prefix: '$' })).toBe(-1234)
+      expect(parse('-1234 €', { suffix: ' €' })).toBe(-1234)
+      expect(parse('1234.5', { decimalSymbol: null, thousandsSeparatorSymbol: '.' })).toBe(1234.5)
+      expect(parse('.5', { decimalSymbol: '.' })).toBe(0.5)
+      expect(parse('0.5', { decimalSymbol: '.' })).toBe(0.5)
+      expect(parse('1234.50', { decimalSymbol: '.' })).toBe(1234.5)
+      expect(parse('$1234.50', { decimalSymbol: '.', prefix: '$' })).toBe(1234.5)
+      expect(parse('1234.50 €', { decimalSymbol: '.', suffix: ' €' })).toBe(1234.5)
+      expect(parse('1234.5', { decimalSymbol: '.' })).toBe(1234.5)
+      expect(parse('1234.00', { decimalSymbol: '.' })).toBe(1234)
+      expect(parse('1234.0', { decimalSymbol: '.' })).toBe(1234)
     })
 
-    it('parses values with fraction', () => {
-      expect(parse('1234.50', '.')).toBe(1234.5)
-      expect(parse('$1234.50', '.')).toBe(1234.5)
-      expect(parse('1234.50 €', '.')).toBe(1234.5)
-      expect(parse('1234.5', '.')).toBe(1234.5)
-      expect(parse('1234.00', '.')).toBe(1234)
-      expect(parse('1234.0', '.')).toBe(1234)
-    })
-
-    it('ignores decimal symbols if not configured', () => {
-      expect(parse('1234.5')).toBe(12345)
-      expect(parse('1234,5')).toBe(12345)
+    it('returns null if the value does not conform to the currency format config', () => {
+      expect(parse('1234,5', { decimalSymbol: '.' })).toBeNull()
+      expect(parse('$1234', { suffix: ' €' })).toBeNull()
+      expect(parse('1234 €', { prefix: '$' })).toBeNull()
+      expect(parse('1,234,567', { thousandsSeparatorSymbol: '.' })).toBeNull()
     })
   })
 })

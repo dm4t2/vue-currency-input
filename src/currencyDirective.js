@@ -3,13 +3,15 @@ import Vue from 'vue'
 import defaultOptions from './defaultOptions'
 import createCurrencyMask from './utils/createCurrencyMask'
 import currencyFormatConfig from './utils/currencyFormatConfig'
-import { isNumeric, parse } from './utils/formatHelper'
+import { parse } from './utils/formatHelper'
 
 export default {
   bind (el, binding) {
     const inputElement = init(el, binding.value)
     Vue.nextTick(() => {
-      applyFixedFractionFormat(inputElement, isNumeric(inputElement.value) ? Number(inputElement.value) : null)
+      if (inputElement.value) {
+        applyFixedFractionFormat(inputElement)
+      }
     })
 
     inputElement.addEventListener('input', () => {
@@ -29,7 +31,7 @@ export default {
       if (options.distractionFree) {
         setTimeout(() => {
           const caretPosition = getCaretPosition(inputElement)
-          format(inputElement, parse(inputElement.value, currencyFormatConfig.decimalSymbol))
+          format(inputElement, parse(inputElement.value, currencyFormatConfig))
           inputElement.setSelectionRange(caretPosition, caretPosition)
         }, 0)
       }
@@ -70,7 +72,7 @@ const init = (el, optionsFromBinding) => {
   return inputElement
 }
 
-const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormatConfig.decimalSymbol)) => {
+const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormatConfig)) => {
   if (value != null && !el.$ci.currencyFormatConfig.allowDecimal) {
     value = Math.round(value)
   }
@@ -97,10 +99,10 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
     inputElement: el,
     pipe: (conformedValue, { previousConformedValue }) => {
       if (options.validateOnInput) {
-        if (options.min != null && parse(conformedValue, currencyFormatConfig.decimalSymbol) < options.min) {
+        if (options.min != null && parse(conformedValue, currencyFormatConfig) < options.min) {
           return previousConformedValue
         }
-        if (options.max != null && parse(conformedValue, currencyFormatConfig.decimalSymbol) > options.max) {
+        if (options.max != null && parse(conformedValue, currencyFormatConfig) > options.max) {
           return previousConformedValue
         }
       }
@@ -114,7 +116,7 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
       allowNegative: (options.min === null && options.max === null) || options.min < 0 || options.max < 0
     })
   })
-  el.$ci.numberValue = parse(el.value, currencyFormatConfig.decimalSymbol)
+  el.$ci.numberValue = parse(el.value, currencyFormatConfig)
 }
 
 const getCaretPosition = (el, { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormatConfig) => {
