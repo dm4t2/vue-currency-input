@@ -21,7 +21,6 @@ export default {
     inputElement.addEventListener('format', ({ detail }) => {
       if (!inputElement.$ci.focus) {
         format(inputElement, detail.value)
-        inputElement.dispatchEvent(new Event('format-complete'))
       }
     })
 
@@ -77,7 +76,6 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
     value = Math.round(value)
   }
   format(el, value)
-  el.dispatchEvent(new Event('input'))
 }
 
 const format = (el, value = el.value, { options, currencyFormatConfig, textMaskInputElement, focus } = el.$ci) => {
@@ -116,7 +114,9 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
       allowNegative: (options.min === null && options.max === null) || options.min < 0 || options.max < 0
     })
   })
-  el.$ci.numberValue = parse(el.value, currencyFormatConfig)
+  const numberValue = parse(el.value, currencyFormatConfig)
+  el.$ci.numberValue = numberValue
+  el.dispatchEvent(new CustomEvent('format-complete', { detail: { numberValue } }))
 }
 
 const getCaretPosition = (el, { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormatConfig) => {

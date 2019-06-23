@@ -1,21 +1,23 @@
-<template>
-  <input
-    v-currency="options"
-    :value="formattedValue"
-    v-on="listeners()">
-</template>
-
-<script>
-import currencyDirective from './currencyDirective'
 import defaultOptions from './defaultOptions'
-import { parse } from './utils/formatHelper'
-import currencyFormatConfig from './utils/currencyFormatConfig'
+import currencyDirective from './directive'
 
 export default {
-  name: 'CurrencyInput',
+  render (h) {
+    return h('input', {
+      domProps: {
+        value: this.formattedValue
+      },
+      directives: [{
+        name: 'currency',
+        value: this.options
+      }],
+      on: this.listeners()
+    })
+  },
   directives: {
     currency: currencyDirective
   },
+  name: 'CurrencyInput',
   props: {
     value: {
       type: Number,
@@ -60,9 +62,6 @@ export default {
         }
       })
       return options
-    },
-    currencyFormatConfig () {
-      return currencyFormatConfig(this.options.locale, this.options.currency)
     }
   },
   watch: {
@@ -72,16 +71,14 @@ export default {
   },
   methods: {
     listeners () {
+      const { input, ...listeners } = this.$listeners // all but input event
       return {
-        ...this.$listeners,
-        input: () => this.emitValue(),
-        'format-complete': () => this.emitValue()
+        ...listeners,
+        'format-complete': ({ detail }) => {
+          this.$emit('input', detail.numberValue)
+          this.formattedValue = this.$el.value
+        }
       }
-    },
-    emitValue () {
-      this.$emit('input', parse(this.$el.value, this.currencyFormatConfig))
-      this.formattedValue = this.$el.value
     }
   }
 }
-</script>

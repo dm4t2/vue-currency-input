@@ -1,6 +1,6 @@
-import directive from './currencyDirective'
-import component from './CurrencyInput.vue'
+import component from './component'
 import defaultOptions from './defaultOptions'
+import directive from './directive'
 import currencyFormatConfig from './utils/currencyFormatConfig'
 import { parse } from './utils/formatHelper'
 

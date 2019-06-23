@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import Intl from 'intl'
-import CurrencyInput from '../../src/CurrencyInput'
+import CurrencyInput from '../../src/component'
 
 global.Intl = Intl
 

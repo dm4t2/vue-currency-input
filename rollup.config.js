@@ -1,11 +1,16 @@
-import vue from 'rollup-plugin-vue'
-import commonjs from 'rollup-plugin-commonjs'
-import cleanup from 'rollup-plugin-cleanup'
 import buble from 'rollup-plugin-buble'
-import resolve from 'rollup-plugin-node-resolve'
+import cleanup from 'rollup-plugin-cleanup'
 import clear from 'rollup-plugin-clear'
-import { uglify } from 'rollup-plugin-uglify'
+import commonjs from 'rollup-plugin-commonjs'
+import resolve from 'rollup-plugin-node-resolve'
 import pkg from './package.json'
+
+const banner =
+  `/**
+ * Vue Currency Input ${pkg.version}
+ * (c) ${new Date().getFullYear()} ${pkg.author}
+ * @license ${pkg.license}
+ */`
 
 export default [
   {
@@ -13,28 +18,17 @@ export default [
     output: {
       format: 'esm',
       file: pkg.module,
-      exports: 'named'
+      exports: 'named',
+      banner
     },
     plugins: [
       clear({
         targets: ['./dist']
       }),
       commonjs(),
-      vue(),
-      cleanup()
-    ],
-    external: ['vue', 'text-mask-core']
-  },
-  {
-    input: 'src/plugin.js',
-    output: {
-      format: 'cjs',
-      file: pkg.main,
-      exports: 'named'
-    },
-    plugins: [
-      commonjs(),
-      vue(),
+      buble({
+        objectAssign: true
+      }),
       cleanup()
     ],
     external: ['vue', 'text-mask-core']
@@ -43,11 +37,13 @@ export default [
     input: 'src/index.js',
     output: {
       name: 'VueCurrencyInput',
-      format: 'iife',
-      file: 'dist/vue-currency-input.js',
+      format: 'umd',
+      exports: 'named',
+      file: pkg.main,
       globals: {
         vue: 'Vue'
-      }
+      },
+      banner
     },
     plugins: [
       commonjs({
@@ -56,11 +52,10 @@ export default [
         }
       }),
       resolve(),
-      vue(),
       buble({
         objectAssign: true
       }),
-      uglify()
+      cleanup()
     ],
     external: ['vue']
   }
