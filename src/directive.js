@@ -8,8 +8,8 @@ import elementMatches from './utils/elementMatches'
 import { parse } from './utils/formatHelper'
 
 export default {
-  bind (el, binding) {
-    const inputElement = init(el, binding.value)
+  bind (el, { value: options }, { context }) {
+    const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
     Vue.nextTick(() => {
       if (inputElement.value) {
         applyFixedFractionFormat(inputElement)
@@ -43,9 +43,9 @@ export default {
       applyFixedFractionFormat(inputElement)
     })
   },
-  componentUpdated (el, binding) {
-    if (!!binding.value && optionsChanged(binding.oldValue, binding.value)) {
-      const inputElement = init(el, binding.value)
+  componentUpdated (el, { value, oldValue }, { context }) {
+    if (!!value && optionsChanged(oldValue, value)) {
+      const inputElement = init(el, value, context.$CI_DEFAULT_OPTIONS || defaultOptions)
       applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
     }
   }
@@ -55,12 +55,12 @@ const optionsChanged = (oldOptions, newOptions) => {
   return Object.keys(defaultOptions).some((key) => oldOptions[key] !== newOptions[key])
 }
 
-const init = (el, optionsFromBinding) => {
+const init = (el, optionsFromBinding, defaultOptions) => {
   const inputElement = elementMatches(el, 'input') ? el : el.querySelector('input')
   if (!inputElement) {
     throw new Error('The directive must be applied on an element consists of an input element')
   }
-  const options = { ...(Vue.prototype.$CI_DEFAULT_OPTIONS || defaultOptions), ...optionsFromBinding }
+  const options = { ...defaultOptions, ...optionsFromBinding }
   if (options.min != null && options.max != null && options.min > options.max) {
     throw new Error('Invalid number range')
   }
