@@ -1,14 +1,22 @@
 export const onlyDigits = (str) => str.replace(/\D+/g, '')
 
+export const endsWith = (str, search) => {
+  return str.substring(str.length - search.length, str.length) === search
+}
+
+export const startsWith = (str, search) => {
+  return str.substring(0, search.length) === search
+}
+
 export const removePrefix = (str, prefix) => {
-  if (prefix && str.startsWith(prefix)) {
+  if (prefix && startsWith(str, prefix)) {
     return str.substr(prefix.length)
   }
   return str
 }
 
 export const removeSuffix = (str, suffix) => {
-  if (suffix && str.endsWith(suffix)) {
+  if (suffix && endsWith(str, suffix)) {
     return str.slice(0, suffix.length * -1)
   }
   return str
@@ -21,7 +29,7 @@ export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSy
     if (str.match(/^-?\d+(\.\d+)?$/)) {
       return Number(str)
     }
-    const negative = str.startsWith('-')
+    const negative = startsWith(str, '-')
     str = removePrefix(str, '-')
     str = removePrefix(str, prefix)
     str = removeSuffix(str, suffix)
@@ -45,8 +53,7 @@ export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSy
       if (negative) {
         number = `-${number}`
       }
-      number = Number(number)
-      return Number.isNaN(number) ? null : number
+      return Number(number)
     }
   }
   return null

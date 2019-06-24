@@ -3,6 +3,8 @@ import Vue from 'vue'
 import defaultOptions from './defaultOptions'
 import createCurrencyMask from './utils/createCurrencyMask'
 import currencyFormatConfig from './utils/currencyFormatConfig'
+import dispatchEvent from './utils/dispatchEvent'
+import elementMatches from './utils/elementMatches'
 import { parse } from './utils/formatHelper'
 
 export default {
@@ -54,7 +56,7 @@ const optionsChanged = (oldOptions, newOptions) => {
 }
 
 const init = (el, optionsFromBinding) => {
-  const inputElement = el.matches('input') ? el : el.querySelector('input')
+  const inputElement = elementMatches(el, 'input') ? el : el.querySelector('input')
   if (!inputElement) {
     throw new Error('The directive must be applied on an element consists of an input element')
   }
@@ -76,6 +78,7 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
     value = Math.round(value)
   }
   format(el, value)
+  dispatchEvent(el, 'input')
 }
 
 const format = (el, value = el.value, { options, currencyFormatConfig, textMaskInputElement, focus } = el.$ci) => {
@@ -116,7 +119,7 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
   })
   const numberValue = parse(el.value, currencyFormatConfig)
   el.$ci.numberValue = numberValue
-  el.dispatchEvent(new CustomEvent('format-complete', { detail: { numberValue } }))
+  dispatchEvent(el, 'format-complete', { numberValue })
 }
 
 const getCaretPosition = (el, { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormatConfig) => {

@@ -1,4 +1,4 @@
-import { onlyDigits, removePrefix, removeSuffix } from './formatHelper'
+import { onlyDigits, removePrefix, removeSuffix, startsWith } from './formatHelper'
 
 const digitRegExp = /\d/
 const caretTrap = '[]'
@@ -12,7 +12,7 @@ export default ({ prefix, suffix, thousandsSeparatorSymbol, allowDecimal, allowN
   return (rawValue = '') => {
     const indexOfDecimalSymbol = rawValue.indexOf(decimalSymbol)
     const hasDecimal = indexOfDecimalSymbol !== -1
-    const negative = rawValue.startsWith('-') && allowNegative
+    const negative = startsWith(rawValue, '-') && allowNegative
 
     rawValue = removePrefix(rawValue, '-')
     rawValue = removePrefix(rawValue, prefix)

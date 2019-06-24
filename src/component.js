@@ -1,5 +1,6 @@
 import defaultOptions from './defaultOptions'
 import currencyDirective from './directive'
+import dispatchEvent from './utils/dispatchEvent'
 
 export default {
   render (h) {
@@ -66,7 +67,7 @@ export default {
   },
   watch: {
     value (value) {
-      this.$el.dispatchEvent(new CustomEvent('format', { detail: { value } }))
+      dispatchEvent(this.$el, 'format', { value })
     }
   },
   methods: {
