@@ -82,7 +82,9 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
 }
 
 const format = (el, value = el.value, { options, currencyFormatConfig, textMaskInputElement, focus } = el.$ci) => {
-  const hideFormatting = focus && options.distractionFree
+  const hideNegligibleFractionDigits = focus && (options.distractionFree === true || options.distractionFree.hideNegligibleFractionDigits)
+  const hideCurrencySymbol = focus && (options.distractionFree === true || options.distractionFree.hideCurrencySymbol)
+  const hideThousandsSeparatorSymbol = focus && (options.distractionFree === true || options.distractionFree.hideThousandsSeparatorSymbol)
   if (typeof value === 'number') {
     if (options.min != null && value < options.min) {
       value = options.min
@@ -90,7 +92,7 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
     if (options.max != null && value > options.max) {
       value = options.max
     }
-    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: hideFormatting ? 0 : currencyFormatConfig.decimalLimit }).format(value)
+    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: hideNegligibleFractionDigits ? 0 : currencyFormatConfig.decimalLimit }).format(value)
     if (options.distractionFree) {
       // force invalidation of text mask's previousConformedValue
       value += ' '
@@ -111,9 +113,9 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
     },
     mask: createCurrencyMask({
       ...currencyFormatConfig,
-      prefix: hideFormatting ? '' : currencyFormatConfig.prefix,
-      suffix: hideFormatting ? '' : currencyFormatConfig.suffix,
-      thousandsSeparatorSymbol: hideFormatting ? '' : currencyFormatConfig.thousandsSeparatorSymbol,
+      prefix: hideCurrencySymbol ? '' : currencyFormatConfig.prefix,
+      suffix: hideCurrencySymbol ? '' : currencyFormatConfig.suffix,
+      thousandsSeparatorSymbol: hideThousandsSeparatorSymbol ? '' : currencyFormatConfig.thousandsSeparatorSymbol,
       allowNegative: (options.min === null && options.max === null) || options.min < 0 || options.max < 0
     })
   })
@@ -122,10 +124,19 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
   dispatchEvent(el, 'format-complete', { numberValue })
 }
 
-const getCaretPosition = (el, { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormatConfig) => {
-  return Math.max(0,
-    el.selectionStart -
-    prefix.length -
-    (el.value.substring(0, el.selectionStart).match(new RegExp(thousandsSeparatorSymbol === '.' ? '\\.' : thousandsSeparatorSymbol, 'g')) || []).length
-  )
+const getCaretPosition = (el) => {
+  const { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormatConfig
+  const { distractionFree } = el.$ci.options
+  const hideCurrencySymbol = distractionFree === true || distractionFree.hideCurrencySymbol
+  const hideThousandsSeparatorSymbol = distractionFree === true || distractionFree.hideThousandsSeparatorSymbol
+
+  let position = el.selectionStart
+  if (hideCurrencySymbol) {
+    position -= prefix.length
+  }
+  if (hideThousandsSeparatorSymbol) {
+    const thousandsSeparatorSymbolCount = (el.value.substring(0, el.selectionStart).match(new RegExp(thousandsSeparatorSymbol === '.' ? '\\.' : thousandsSeparatorSymbol, 'g')) || []).length
+    position -= thousandsSeparatorSymbolCount
+  }
+  return Math.max(0, position)
 }

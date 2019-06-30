@@ -33,7 +33,7 @@ export default {
       default: undefined
     },
     distractionFree: {
-      type: Boolean,
+      type: [Boolean, Object],
       default: undefined
     },
     min: {
