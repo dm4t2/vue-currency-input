@@ -29,18 +29,18 @@ This registers the component/directive globally and will provide the Vue instanc
 
 ## Usage
 ### Component
-The `currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the raw number value (see [Live Demo](/demo/)). All other [component props](/config/#component-props) are optional.
+The `currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the raw number value. All other [component props](/config) are optional.
 
-<<< @/docs/.vuepress/components/ComponentExample.vue
+<<< @/docs/guide/ComponentUsage.vue
 
 ### Directive
 The `v-currency` directive is great if you want to decorate existing input components with currency format capabilities (for example like those from [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)).
 
-<<< @/docs/.vuepress/components/DirectiveExample.vue
+<<< @/docs/guide/DirectiveUsage.vue
 
 ::: warning Getting the raw number value
-In comparision to the `<currency-input>` component the `v-currency` directive will emit always the formatted string instead of the raw number value when used with `v-model`. 
-To get the number value you can use the `$parseCurrency` instance method (see [Live Demo](/demo/#directive)).
+In comparision to the `<currency-input>` component the `v-currency` directive will always emit the formatted string instead of the raw number value when used with `v-model`. 
+To get the number value you can use the `$parseCurrency` instance method (see [examples](/examples/#raw-number-value-with-directive)).
 :::
 
 ## Alternative installation methods
@@ -87,3 +87,5 @@ Include the plugin after Vue and it will install itself automatically:
 <script src="https://unpkg.com/vue"></script>
 <script src="https://unpkg.com/vue-currency-input"></script>
 ```
+
+[Try it on CodeSandbox](https://codesandbox.io/s/vue-currency-input-direct-browser-usage-yjtci?fontsize=14)

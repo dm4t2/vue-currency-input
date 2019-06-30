@@ -10,6 +10,6 @@ features:
 - title: i18n Support
   details: Language-dependent, ISO-compliant currency formatting.
 - title: Distraction free
-  details: Automatically hide the formatting and unnecessary fraction digits on focus.
+  details: Automatically hide the formatting and negligible fraction digits on focus.
 footer: MIT Licensed | Copyright © Matthias Stiller 
 ---

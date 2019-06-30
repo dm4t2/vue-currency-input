@@ -4,13 +4,13 @@
       v-model="value"
       v-currency="{locale, currency}"
       class="demo__currency-input"/>
-    <p>Raw number value: <code>{{ numberValue }}</code></p>
+    <p>Raw number value: <code>{{ numberValue != null ? numberValue : 'null' }}</code></p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DirectiveDemo',
+  name: 'RawNumberValueWithDirective',
   data: () => ({
     value: '$1,234.50',
     locale: 'en',
@@ -23,7 +23,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "demo.scss";
-</style>
