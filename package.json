@@ -36,7 +36,7 @@
     "text-mask-core": "^5.1.2"
   },
   "peerDependencies": {
-    "vue": "2.5"
+    "vue": "^2.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",
