@@ -1,8 +1,8 @@
 import { createTextMaskInputElement } from 'text-mask-core'
 import Vue from 'vue'
 import defaultOptions from './defaultOptions'
+import createCurrencyFormat from './utils/createCurrencyFormat'
 import createCurrencyMask from './utils/createCurrencyMask'
-import currencyFormatConfig from './utils/currencyFormatConfig'
 import dispatchEvent from './utils/dispatchEvent'
 import elementMatches from './utils/elementMatches'
 import { parse } from './utils/formatHelper'
@@ -27,12 +27,12 @@ export default {
     })
 
     inputElement.addEventListener('focus', () => {
-      const { options, currencyFormatConfig } = inputElement.$ci
+      const { options, currencyFormat } = inputElement.$ci
       inputElement.$ci.focus = true
       if (options.distractionFree) {
         setTimeout(() => {
           const caretPosition = getCaretPosition(inputElement)
-          format(inputElement, parse(inputElement.value, currencyFormatConfig))
+          format(inputElement, parse(inputElement.value, currencyFormat))
           inputElement.setSelectionRange(caretPosition, caretPosition)
         }, 0)
       }
@@ -67,21 +67,21 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormatConfig: currencyFormatConfig(options.locale, options.currency),
+    currencyFormat: createCurrencyFormat(options),
     textMaskInputElement: createTextMaskInputElement({ inputElement, mask: [] })
   }
   return inputElement
 }
 
-const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormatConfig)) => {
-  if (value != null && !el.$ci.currencyFormatConfig.allowDecimal) {
+const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormat)) => {
+  if (value != null && !el.$ci.currencyFormat.allowDecimal) {
     value = Math.round(value)
   }
   format(el, value)
   dispatchEvent(el, 'input')
 }
 
-const format = (el, value = el.value, { options, currencyFormatConfig, textMaskInputElement, focus } = el.$ci) => {
+const format = (el, value = el.value, { options, currencyFormat, textMaskInputElement, focus } = el.$ci) => {
   const hideNegligibleFractionDigits = focus && (options.distractionFree === true || options.distractionFree.hideNegligibleFractionDigits)
   const hideCurrencySymbol = focus && (options.distractionFree === true || options.distractionFree.hideCurrencySymbol)
   const hideThousandsSeparatorSymbol = focus && (options.distractionFree === true || options.distractionFree.hideThousandsSeparatorSymbol)
@@ -92,7 +92,7 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
     if (options.max != null && value > options.max) {
       value = options.max
     }
-    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: hideNegligibleFractionDigits ? 0 : currencyFormatConfig.decimalLimit }).format(value)
+    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: hideNegligibleFractionDigits ? 0 : currencyFormat.decimalLimit }).format(value)
     if (options.distractionFree) {
       // force invalidation of text mask's previousConformedValue
       value += ' '
@@ -102,30 +102,29 @@ const format = (el, value = el.value, { options, currencyFormatConfig, textMaskI
     inputElement: el,
     pipe: (conformedValue, { previousConformedValue }) => {
       if (options.validateOnInput) {
-        if (options.min != null && parse(conformedValue, currencyFormatConfig) < options.min) {
+        if (options.min != null && parse(conformedValue, currencyFormat) < options.min) {
           return previousConformedValue
         }
-        if (options.max != null && parse(conformedValue, currencyFormatConfig) > options.max) {
+        if (options.max != null && parse(conformedValue, currencyFormat) > options.max) {
           return previousConformedValue
         }
       }
       return conformedValue
     },
     mask: createCurrencyMask({
-      ...currencyFormatConfig,
-      prefix: hideCurrencySymbol ? '' : currencyFormatConfig.prefix,
-      suffix: hideCurrencySymbol ? '' : currencyFormatConfig.suffix,
-      thousandsSeparatorSymbol: hideThousandsSeparatorSymbol ? '' : currencyFormatConfig.thousandsSeparatorSymbol,
-      allowNegative: (options.min === null && options.max === null) || options.min < 0 || options.max < 0
+      ...currencyFormat,
+      prefix: hideCurrencySymbol ? '' : currencyFormat.prefix,
+      suffix: hideCurrencySymbol ? '' : currencyFormat.suffix,
+      thousandsSeparatorSymbol: hideThousandsSeparatorSymbol ? '' : currencyFormat.thousandsSeparatorSymbol
     })
   })
-  const numberValue = parse(el.value, currencyFormatConfig)
+  const numberValue = parse(el.value, currencyFormat)
   el.$ci.numberValue = numberValue
   dispatchEvent(el, 'format-complete', { numberValue })
 }
 
 const getCaretPosition = (el) => {
-  const { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormatConfig
+  const { prefix, thousandsSeparatorSymbol } = el.$ci.currencyFormat
   const { distractionFree } = el.$ci.options
   const hideCurrencySymbol = distractionFree === true || distractionFree.hideCurrencySymbol
   const hideThousandsSeparatorSymbol = distractionFree === true || distractionFree.hideThousandsSeparatorSymbol

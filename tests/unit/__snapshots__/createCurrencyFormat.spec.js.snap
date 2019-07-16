@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createCurrencyFormat returns the expected format config 1`] = `
+Object {
+  "allowDecimal": true,
+  "allowNegative": true,
+  "decimalLimit": 2,
+  "decimalSymbol": ",",
+  "prefix": "",
+  "suffix": " €",
+  "thousandsSeparatorSymbol": ".",
+}
+`;
+
+exports[`createCurrencyFormat returns the expected format config 2`] = `
+Object {
+  "allowDecimal": true,
+  "allowNegative": false,
+  "decimalLimit": 2,
+  "decimalSymbol": ".",
+  "prefix": "$",
+  "suffix": "",
+  "thousandsSeparatorSymbol": ",",
+}
+`;
+
+exports[`createCurrencyFormat returns the expected format config 3`] = `
+Object {
+  "allowDecimal": true,
+  "allowNegative": true,
+  "decimalLimit": 2,
+  "decimalSymbol": ".",
+  "prefix": "￥",
+  "suffix": "",
+  "thousandsSeparatorSymbol": ",",
+}
+`;
+
+exports[`createCurrencyFormat returns the expected format config 4`] = `
+Object {
+  "allowDecimal": true,
+  "allowNegative": true,
+  "decimalLimit": 2,
+  "decimalSymbol": ".",
+  "prefix": "£",
+  "suffix": "",
+  "thousandsSeparatorSymbol": ",",
+}
+`;
+
+exports[`createCurrencyFormat returns the expected format config 5`] = `
+Object {
+  "allowDecimal": true,
+  "allowNegative": true,
+  "decimalLimit": 2,
+  "decimalSymbol": ",",
+  "prefix": "R$",
+  "suffix": "",
+  "thousandsSeparatorSymbol": ".",
+}
+`;
+
+exports[`createCurrencyFormat returns the expected format config 6`] = `
+Object {
+  "allowDecimal": false,
+  "allowNegative": false,
+  "decimalLimit": 0,
+  "decimalSymbol": null,
+  "prefix": "",
+  "suffix": " JPY",
+  "thousandsSeparatorSymbol": " ",
+}
+`;
