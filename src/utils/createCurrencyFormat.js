@@ -15,6 +15,7 @@ export default ({ locale, currency, min }) => {
     decimalSymbol,
     decimalLimit,
     allowDecimal,
-    allowNegative
+    allowNegative,
+    locale
   }
 }

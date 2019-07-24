@@ -58,3 +58,13 @@ export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSy
   }
   return null
 }
+
+export const format = (num, { prefix, suffix, thousandsSeparatorSymbol, decimalSymbol, decimalLimit, locale } = {}) => {
+  if (typeof num === 'string') {
+    return num
+  } else if (num && typeof num === 'number') {
+    let value = new Intl.NumberFormat(locale, { minimumFractionDigits: decimalLimit }).format(num)
+    return prefix + value + suffix
+  }
+  return null
+}
