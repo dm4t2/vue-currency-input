@@ -31,7 +31,7 @@ export default [
       }),
       cleanup()
     ],
-    external: ['vue', 'text-mask-core']
+    external: ['vue']
   },
   {
     input: 'src/index.js',
@@ -46,11 +46,7 @@ export default [
       banner
     },
     plugins: [
-      commonjs({
-        namedExports: {
-          'node_modules/text-mask-core/dist/textMaskCore.js': ['createTextMaskInputElement']
-        }
-      }),
+      commonjs(),
       resolve(),
       buble({
         objectAssign: true

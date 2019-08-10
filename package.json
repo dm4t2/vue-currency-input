@@ -32,9 +32,7 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
-  "dependencies": {
-    "text-mask-core": "^5.1.2"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "vue": "^2.5"
   },

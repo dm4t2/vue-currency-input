@@ -1,5 +1,7 @@
 export const onlyDigits = (str) => str.replace(/\D+/g, '')
 
+export const count = (str, search) => (str.match(new RegExp(`\\${search}`, 'g')) || []).length
+
 export const endsWith = (str, search) => {
   return str.substring(str.length - search.length, str.length) === search
 }
