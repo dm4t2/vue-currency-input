@@ -12,6 +12,12 @@ Usage of a custom currency and locale.
 
 [View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/i18n.vue)
 
+## Decimal length
+Apply a custom decimal length and override the currency's default.
+<DecimalLength/>
+
+[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/DecimalLength.vue)
+
 ## Distraction free mode
 Hide various parts of the formatting on focus.
 <DistractionFree/>
@@ -21,8 +27,6 @@ Hide various parts of the formatting on focus.
 ## Value range
 Limitation of the entered value range.
 <ValueRange/>
-
-[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/ValueRange.vue)
 
 ## Raw number value with directive
 Example, how to get the raw number value when using the `v-currency` directive. 

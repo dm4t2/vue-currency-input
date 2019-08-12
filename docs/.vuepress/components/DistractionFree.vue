@@ -8,9 +8,9 @@
       <p>
         <label>
           <input
-            v-model="hideNegligibleFractionDigits"
+            v-model="hideNegligibleDecimalDigits"
             type="checkbox">
-          <span>Hide negligible fraction digits on focus</span>
+          <span>Hide negligible decimal digits</span>
         </label>
       </p>
       <p>
@@ -18,7 +18,7 @@
           <input
             v-model="hideCurrencySymbol"
             type="checkbox">
-          <span>Hide currency symbol on focus</span>
+          <span>Hide currency symbol</span>
         </label>
       </p>
       <p>
@@ -26,7 +26,7 @@
           <input
             v-model="hideThousandsSeparatorSymbol"
             type="checkbox">
-          <span>Hide thousands separator symbol on focus</span>
+          <span>Hide thousands separator symbol</span>
         </label>
       </p>
     </div>
@@ -39,14 +39,14 @@ export default {
   name: 'DistractionFree',
   data: () => ({
     value: 1234.5,
-    hideNegligibleFractionDigits: false,
+    hideNegligibleDecimalDigits: false,
     hideCurrencySymbol: false,
     hideThousandsSeparatorSymbol: false,
   }),
   computed: {
     distractionFree () {
       return {
-        hideNegligibleFractionDigits: this.hideNegligibleFractionDigits,
+        hideNegligibleDecimalDigits: this.hideNegligibleDecimalDigits,
         hideCurrencySymbol: this.hideCurrencySymbol,
         hideThousandsSeparatorSymbol: this.hideThousandsSeparatorSymbol
       }

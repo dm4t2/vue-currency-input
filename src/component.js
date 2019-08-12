@@ -36,6 +36,10 @@ export default {
       type: [Boolean, Object],
       default: undefined
     },
+    decimalLength: {
+      type: Number,
+      default: undefined
+    },
     min: {
       type: Number,
       default: undefined
@@ -57,7 +61,7 @@ export default {
   computed: {
     options () {
       const options = { ...this.$CI_DEFAULT_OPTIONS || defaultOptions }
-      Object.keys(options).forEach((key) => {
+      Object.keys(defaultOptions).forEach((key) => {
         if (this[key] !== undefined) {
           options[key] = this[key]
         }

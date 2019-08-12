@@ -12,18 +12,18 @@ const isFractionIncomplete = (value, currencyFormat) => {
 }
 
 const checkIncompleteValue = (value, previousConformedValue, currencyFormat) => {
-  const { prefix, suffix, decimalSymbol, maxFractionDigits } = currencyFormat
+  const { prefix, suffix, decimalSymbol, decimalLength } = currencyFormat
   const negative = startsWith(value, '-')
   value = removePrefix(value, '-')
   value = removePrefix(value, prefix)
   value = removeSuffix(value, suffix)
   if (value === '' && negative && previousConformedValue !== `-${prefix}`) {
     return `-${prefix}${suffix}`
-  } else if (maxFractionDigits > 0) {
+  } else if (decimalLength > 0) {
     if (isFractionIncomplete(value, currencyFormat)) {
       return `${negative ? '-' : ''}${prefix}${value}${suffix}`
     } else if (startsWith(value, decimalSymbol)) {
-      return `${negative ? '-' : ''}${prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, maxFractionDigits))}${suffix}`
+      return `${negative ? '-' : ''}${prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, decimalLength))}${suffix}`
     }
   } else {
     return null
@@ -36,20 +36,19 @@ export default (value, currencyFormat, previousConformedValue = '') => {
   if (typeof value === 'number') {
     let [integer, fraction] = value.toString().split('.')
     if (fraction) {
-      fraction = fraction.substr(0, currencyFormat.maxFractionDigits)
+      fraction = fraction.substr(0, currencyFormat.decimalLength)
     }
     return {
       conformedValue: Number(`${integer}.${fraction || ''}`),
-      numberOfFractionDigits: fraction ? fraction.length : 0
+      fractionDigits: fraction || ''
     }
   } else if (typeof value === 'string') {
     value = value.trim()
     const numberParts = value.split(currencyFormat.decimalSymbol)
     const [integer, ...fraction] = numberParts
     const integerDigits = onlyDigits(integer).replace(/^0+(0$|[^0])/, '$1')
-    const fractionDigits = onlyDigits(fraction.join('')).substr(0, currencyFormat.maxFractionDigits)
+    const fractionDigits = onlyDigits(fraction.join('')).substr(0, currencyFormat.decimalLength)
     const numberOfFractionDigits = fractionDigits.length
-
     const incompleteValue = checkIncompleteValue(value, previousConformedValue, currencyFormat)
     if (incompleteValue != null) {
       return { conformedValue: incompleteValue }
@@ -58,7 +57,7 @@ export default (value, currencyFormat, previousConformedValue = '') => {
       return { conformedValue: previousConformedValue }
     }
     let number = integerDigits
-    if (value.startsWith('-')) {
+    if (startsWith(value, '-')) {
       number = `-${number}`
     }
     if (numberOfFractionDigits > 0) {
@@ -67,7 +66,7 @@ export default (value, currencyFormat, previousConformedValue = '') => {
     if (number.match(/^-?\d+(\.\d+)?$/)) {
       return {
         conformedValue: Number(number),
-        numberOfFractionDigits
+        fractionDigits
       }
     } else if (number === '-' && previousConformedValue !== `-${currencyFormat.prefix}`) {
       return { conformedValue: previousConformedValue }

@@ -15,7 +15,7 @@ Numbers are formatted immediately during input.
 Language-dependent, ISO-compliant currency formatting using the native [Intl.NumberFormat](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat).
 
 ### Distraction free
-Automatically hide the formatting and negligible fraction digits on focus.
+Automatically hide the formatting and negligible decimal digits on focus.
 
 ## Support me
 If you find this plugin helpful or you want to support the development, buy me a coffee:

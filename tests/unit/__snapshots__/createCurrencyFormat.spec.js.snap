@@ -2,8 +2,8 @@
 
 exports[`createCurrencyFormat returns the expected format config 1`] = `
 Object {
+  "decimalLength": 2,
   "decimalSymbol": ",",
-  "maxFractionDigits": 2,
   "prefix": "",
   "suffix": " €",
   "thousandsSeparatorSymbol": ".",
@@ -12,8 +12,8 @@ Object {
 
 exports[`createCurrencyFormat returns the expected format config 2`] = `
 Object {
+  "decimalLength": 2,
   "decimalSymbol": ".",
-  "maxFractionDigits": 2,
   "prefix": "$",
   "suffix": "",
   "thousandsSeparatorSymbol": ",",
@@ -22,8 +22,8 @@ Object {
 
 exports[`createCurrencyFormat returns the expected format config 3`] = `
 Object {
+  "decimalLength": 2,
   "decimalSymbol": ".",
-  "maxFractionDigits": 2,
   "prefix": "￥",
   "suffix": "",
   "thousandsSeparatorSymbol": ",",
@@ -32,8 +32,8 @@ Object {
 
 exports[`createCurrencyFormat returns the expected format config 4`] = `
 Object {
+  "decimalLength": 2,
   "decimalSymbol": ".",
-  "maxFractionDigits": 2,
   "prefix": "£",
   "suffix": "",
   "thousandsSeparatorSymbol": ",",
@@ -42,8 +42,8 @@ Object {
 
 exports[`createCurrencyFormat returns the expected format config 5`] = `
 Object {
+  "decimalLength": 2,
   "decimalSymbol": ",",
-  "maxFractionDigits": 2,
   "prefix": "R$",
   "suffix": "",
   "thousandsSeparatorSymbol": ".",
@@ -52,8 +52,8 @@ Object {
 
 exports[`createCurrencyFormat returns the expected format config 6`] = `
 Object {
+  "decimalLength": 0,
   "decimalSymbol": null,
-  "maxFractionDigits": 0,
   "prefix": "",
   "suffix": " JPY",
   "thousandsSeparatorSymbol": " ",

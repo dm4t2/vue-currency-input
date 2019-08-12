@@ -66,15 +66,23 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   }
   const options = { ...defaultOptions, ...optionsFromBinding }
   options.hideCurrencySymbol = options.distractionFree === true || options.distractionFree.hideCurrencySymbol
-  options.hideNegligibleFractionDigits = options.distractionFree === true || options.distractionFree.hideNegligibleFractionDigits
+  options.hideNegligibleDecimalDigits = options.distractionFree === true || options.distractionFree.hideNegligibleDecimalDigits
   options.hideThousandsSeparatorSymbol = options.distractionFree === true || options.distractionFree.hideThousandsSeparatorSymbol
-  if (options.min != null && options.max != null && options.min > options.max) {
+  const { min, max, decimalLength } = options
+  if (min != null && max != null && min > max) {
     throw new Error('Invalid number range')
+  }
+  if (decimalLength < 0 || decimalLength > 20) {
+    throw new Error('Decimal length must be between 0 and 20')
+  }
+  const currencyFormat = createCurrencyFormat(options)
+  if (currencyFormat.decimalLength > 0 && options.decimalLength !== undefined) {
+    currencyFormat.decimalLength = options.decimalLength
   }
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormat: createCurrencyFormat(options)
+    currencyFormat
   }
   return inputElement
 }
@@ -83,7 +91,7 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
   const { options, currencyFormat } = el.$ci
   const { min, max } = options
   if (value != null) {
-    if (currencyFormat.maxFractionDigits === 0) {
+    if (currencyFormat.decimalLength === 0) {
       value = Math.round(value)
     }
     if (min != null && value < min) {
@@ -92,7 +100,7 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
     if (max != null && value > max) {
       value = max
     }
-    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: currencyFormat.maxFractionDigits }).format(value)
+    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: currencyFormat.decimalLength }).format(value)
   }
   format(el, value)
   dispatchEvent(el, 'input')
@@ -102,7 +110,7 @@ const format = (el, value = el.value) => {
   const { options, currencyFormat, focus, previousConformedValue } = el.$ci
   if (value != null) {
     const hideCurrencySymbol = focus && options.hideCurrencySymbol
-    const { conformedValue, numberOfFractionDigits } = conformToMask(value, {
+    const { conformedValue, fractionDigits } = conformToMask(value, {
       ...currencyFormat,
       prefix: hideCurrencySymbol ? '' : currencyFormat.prefix,
       suffix: hideCurrencySymbol ? '' : currencyFormat.suffix
@@ -115,7 +123,7 @@ const format = (el, value = el.value) => {
           style: hideCurrencySymbol ? 'decimal' : 'currency',
           useGrouping: !(focus && options.hideThousandsSeparatorSymbol),
           currency: options.currency,
-          minimumFractionDigits: focus && options.hideNegligibleFractionDigits ? 0 : numberOfFractionDigits
+          minimumFractionDigits: focus && options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : fractionDigits.length
         }).format(conformedValue)
       }
     } else {

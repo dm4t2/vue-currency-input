@@ -23,7 +23,7 @@ describe('CurrencyInput', () => {
         await expectInitialValue('1 234,00 €', { locale: 'fr', value: 1234 })
       })
 
-      it('rounds float numbers if the currency format supports no fraction', async () => {
+      it('rounds float numbers if the currency supports no decimal digits', async () => {
         await expectInitialValue('1.235 ¥', { currency: 'JPY', locale: 'de', value: 1234.5 })
       })
     })
@@ -201,6 +201,27 @@ describe('CurrencyInput', () => {
         wrapper.trigger('blur')
 
         expect(wrapper.element.value).toBe('€1,000.00')
+      })
+    })
+  })
+
+  describe('custom decimal length', () => {
+    describe('when the decimal length is invalid', () => {
+      it('throws an error', () => {
+        expect(() => mountComponent({ decimalLength: -1 })).toThrowError('Decimal length must be between 0 and 20')
+        expect(() => mountComponent({ decimalLength: 21 })).toThrowError('Decimal length must be between 0 and 20')
+      })
+    })
+
+    describe('when the currency supports no decimal digits', () => {
+      it('ignores the configuration', async () => {
+        await expectInitialValue('¥3', { locale: 'en', currency: 'JPY', decimalLength: 5, value: 3.1415926535 })
+      })
+    })
+
+    describe('when the currency supports decimal digits', () => {
+      it('applies the custom decimal length', async () => {
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', decimalLength: 5, value: 3.1415926535 })
       })
     })
   })

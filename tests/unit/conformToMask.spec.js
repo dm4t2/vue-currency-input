@@ -52,7 +52,7 @@ describe('conformToMask', () => {
           thousandsSeparatorSymbol: ',',
           prefix: '',
           suffix: '',
-          maxFractionDigits: 2
+          decimalLength: 2
         }
 
         expect(conformToMask('-', currencyFormat)).toEqual({ conformedValue: '-' })
@@ -78,7 +78,7 @@ describe('conformToMask', () => {
           thousandsSeparatorSymbol: ',',
           prefix: '$',
           suffix: '',
-          maxFractionDigits: 2
+          decimalLength: 2
         }
 
         expect(conformToMask('-', currencyFormat)).toEqual({ conformedValue: '-$' })
@@ -105,7 +105,7 @@ describe('conformToMask', () => {
           thousandsSeparatorSymbol: ',',
           prefix: '',
           suffix: ' $',
-          maxFractionDigits: 2
+          decimalLength: 2
         }
 
         expect(conformToMask('-', currencyFormat)).toEqual({ conformedValue: '- $' })
@@ -124,47 +124,47 @@ describe('conformToMask', () => {
       })
     })
 
-    describe('no fraction digits are allowed', () => {
+    describe('no decimal digits are allowed', () => {
       it('returns the expected value', () => {
         const currencyFormat = {
           decimalSymbol: null,
           thousandsSeparatorSymbol: ',',
           prefix: '',
           suffix: '',
-          maxFractionDigits: 0
+          decimalLength: 0
         }
 
         expect(conformToMask('-', currencyFormat)).toEqual({ conformedValue: '-' })
-        expect(conformToMask('1.', currencyFormat)).toEqual({ conformedValue: 1, numberOfFractionDigits: 0 })
-        expect(conformToMask('1234.', currencyFormat)).toEqual({ conformedValue: 1234, numberOfFractionDigits: 0 })
-        expect(conformToMask('1,234.', currencyFormat)).toEqual({ conformedValue: 1234, numberOfFractionDigits: 0 })
-        expect(conformToMask('-1.', currencyFormat)).toEqual({ conformedValue: -1, numberOfFractionDigits: 0 })
-        expect(conformToMask('-1234.', currencyFormat)).toEqual({ conformedValue: -1234, numberOfFractionDigits: 0 })
-        expect(conformToMask('-1,234.', currencyFormat)).toEqual({ conformedValue: -1234, numberOfFractionDigits: 0 })
+        expect(conformToMask('1.', currencyFormat)).toEqual({ conformedValue: 1, fractionDigits: '' })
+        expect(conformToMask('1234.', currencyFormat)).toEqual({ conformedValue: 1234, fractionDigits: '' })
+        expect(conformToMask('1,234.', currencyFormat)).toEqual({ conformedValue: 1234, fractionDigits: '' })
+        expect(conformToMask('-1.', currencyFormat)).toEqual({ conformedValue: -1, fractionDigits: '' })
+        expect(conformToMask('-1234.', currencyFormat)).toEqual({ conformedValue: -1234, fractionDigits: '' })
+        expect(conformToMask('-1,234.', currencyFormat)).toEqual({ conformedValue: -1234, fractionDigits: '' })
         expect(conformToMask('.', currencyFormat)).toEqual({ conformedValue: '' })
-        expect(conformToMask('.1', currencyFormat)).toEqual({ conformedValue: 1, numberOfFractionDigits: 0 })
-        expect(conformToMask('.1.234', currencyFormat)).toEqual({ conformedValue: 1234, numberOfFractionDigits: 0 })
+        expect(conformToMask('.1', currencyFormat)).toEqual({ conformedValue: 1, fractionDigits: '' })
+        expect(conformToMask('.1.234', currencyFormat)).toEqual({ conformedValue: 1234, fractionDigits: '' })
         expect(conformToMask('-.', currencyFormat)).toEqual({ conformedValue: '' })
-        expect(conformToMask('-.1', currencyFormat)).toEqual({ conformedValue: -1, numberOfFractionDigits: 0 })
-        expect(conformToMask('-.1.234', currencyFormat)).toEqual({ conformedValue: -1234, numberOfFractionDigits: 0 })
+        expect(conformToMask('-.1', currencyFormat)).toEqual({ conformedValue: -1, fractionDigits: '' })
+        expect(conformToMask('-.1.234', currencyFormat)).toEqual({ conformedValue: -1234, fractionDigits: '' })
       })
     })
   })
 
   describe('when value conforms to the mask', () => {
     it('returns the expected result', () => {
-      const currencyFormat = { decimalSymbol: '.', prefix: '$', suffix: '', maxFractionDigits: 4 }
+      const currencyFormat = { decimalSymbol: '.', prefix: '$', suffix: '', decimalLength: 4 }
 
-      expect(conformToMask('1', currencyFormat)).toEqual({ conformedValue: 1, numberOfFractionDigits: 0 })
-      expect(conformToMask('1,2', currencyFormat)).toEqual({ conformedValue: 12, numberOfFractionDigits: 0 })
-      expect(conformToMask('1.2', currencyFormat)).toEqual({ conformedValue: 1.2, numberOfFractionDigits: 1 })
-      expect(conformToMask('1.232323', currencyFormat)).toEqual({ conformedValue: 1.2323, numberOfFractionDigits: 4 })
-      expect(conformToMask(0, currencyFormat)).toEqual({ conformedValue: 0, numberOfFractionDigits: 0 })
-      expect(conformToMask(-1, currencyFormat)).toEqual({ conformedValue: -1, numberOfFractionDigits: 0 })
-      expect(conformToMask(1.2, currencyFormat)).toEqual({ conformedValue: 1.2, numberOfFractionDigits: 1 })
-      expect(conformToMask(1.232323, currencyFormat)).toEqual({ conformedValue: 1.2323, numberOfFractionDigits: 4 })
-      expect(conformToMask('0', currencyFormat)).toEqual({ conformedValue: 0, numberOfFractionDigits: 0 })
-      expect(conformToMask('-0', currencyFormat)).toEqual({ conformedValue: -0, numberOfFractionDigits: 0 })
+      expect(conformToMask('1', currencyFormat)).toEqual({ conformedValue: 1, fractionDigits: '' })
+      expect(conformToMask('1,2', currencyFormat)).toEqual({ conformedValue: 12, fractionDigits: '' })
+      expect(conformToMask('1.2', currencyFormat)).toEqual({ conformedValue: 1.2, fractionDigits: '2' })
+      expect(conformToMask('1.232323', currencyFormat)).toEqual({ conformedValue: 1.2323, fractionDigits: '2323' })
+      expect(conformToMask(0, currencyFormat)).toEqual({ conformedValue: 0, fractionDigits: '' })
+      expect(conformToMask(-1, currencyFormat)).toEqual({ conformedValue: -1, fractionDigits: '' })
+      expect(conformToMask(1.2, currencyFormat)).toEqual({ conformedValue: 1.2, fractionDigits: '2' })
+      expect(conformToMask(1.232323, currencyFormat)).toEqual({ conformedValue: 1.2323, fractionDigits: '2323' })
+      expect(conformToMask('0', currencyFormat)).toEqual({ conformedValue: 0, fractionDigits: '' })
+      expect(conformToMask('-0', currencyFormat)).toEqual({ conformedValue: -0, fractionDigits: '' })
     })
   })
 })
