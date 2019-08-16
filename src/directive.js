@@ -36,7 +36,7 @@ export default {
       if (inputElement.$ci.options.distractionFree) {
         setTimeout(() => {
           const position = getCaretPositionOnFocus(inputElement)
-          format(inputElement)
+          applyDistractionFreeFormat(inputElement)
           setCaretPosition(inputElement, position)
         }, 0)
       }
@@ -106,6 +106,20 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
   dispatchEvent(el, 'input')
 }
 
+const applyDistractionFreeFormat = (el) => {
+  const { options, currencyFormat } = el.$ci
+  const { conformedValue, fractionDigits } = conformToMask(el.value, currencyFormat)
+  if (typeof conformedValue === 'number') {
+    el.value = new Intl.NumberFormat(options.locale, {
+      style: options.hideCurrencySymbol ? 'decimal' : 'currency',
+      useGrouping: !options.hideThousandsSeparatorSymbol,
+      currency: options.currency,
+      minimumFractionDigits: options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : fractionDigits.length
+    }).format(conformedValue)
+  }
+  el.$ci.previousConformedValue = el.value
+}
+
 const format = (el, value = el.value) => {
   const { options, currencyFormat, focus, previousConformedValue } = el.$ci
   if (value != null) {
@@ -116,14 +130,15 @@ const format = (el, value = el.value) => {
       suffix: hideCurrencySymbol ? '' : currencyFormat.suffix
     }, previousConformedValue)
     if (typeof conformedValue === 'number') {
-      if (options.validateOnInput && ((options.min != null && conformedValue < options.min) || (options.max != null && conformedValue > options.max))) {
-        el.value = previousConformedValue
+      const { min, max } = options
+      if (options.validateOnInput && ((min != null && conformedValue < min) || (max != null && conformedValue > max))) {
+        el.value = previousConformedValue || null
       } else {
         el.value = new Intl.NumberFormat(options.locale, {
           style: hideCurrencySymbol ? 'decimal' : 'currency',
           useGrouping: !(focus && options.hideThousandsSeparatorSymbol),
           currency: options.currency,
-          minimumFractionDigits: focus && options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : fractionDigits.length
+          minimumFractionDigits: fractionDigits.length
         }).format(conformedValue)
       }
     } else {

@@ -1,4 +1,4 @@
-import { endsWith, onlyDigits, removePrefix, removeSuffix, startsWith } from './formatHelper'
+import { endsWith, onlyDigits, removeCurrencySymbol, removePrefix, startsWith } from './formatHelper'
 
 const isValidInteger = (integer, { prefix, thousandsSeparatorSymbol }) => integer.replace(prefix, '').match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${thousandsSeparatorSymbol}?\\d{3})*)$`))
 
@@ -15,8 +15,7 @@ const checkIncompleteValue = (value, previousConformedValue, currencyFormat) => 
   const { prefix, suffix, decimalSymbol, decimalLength } = currencyFormat
   const negative = startsWith(value, '-')
   value = removePrefix(value, '-')
-  value = removePrefix(value, prefix)
-  value = removeSuffix(value, suffix)
+  value = removeCurrencySymbol(value, currencyFormat)
   if (value === '' && negative && previousConformedValue !== `-${prefix}`) {
     return `-${prefix}${suffix}`
   } else if (decimalLength > 0) {

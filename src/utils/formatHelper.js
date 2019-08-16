@@ -24,6 +24,10 @@ export const removeSuffix = (str, suffix) => {
   return str
 }
 
+export const removeCurrencySymbol = (str, { prefix, suffix }) => {
+  return removePrefix(removeSuffix(str, suffix), prefix)
+}
+
 export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSymbol } = {}) => {
   if (typeof str === 'number') {
     return str
@@ -33,8 +37,7 @@ export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSy
     }
     const negative = startsWith(str, '-')
     str = removePrefix(str, '-')
-    str = removePrefix(str, prefix)
-    str = removeSuffix(str, suffix)
+    str = removeCurrencySymbol(str, { prefix, suffix })
     const numberParts = str.split(decimalSymbol)
     if (numberParts.length > 2) {
       return null
