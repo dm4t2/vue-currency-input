@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import defaultOptions from './defaultOptions'
+import { getCaretPositionAfterFormat, getCaretPositionOnFocus, setCaretPosition } from './utils/caretPosition'
+import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
 import { parse } from './utils/formatHelper'
-import conformToMask from './utils/conformToMask'
-import { getCaretPositionAfterFormat, getCaretPositionOnFocus, setCaretPosition } from './utils/caretPosition'
 
 export default {
   bind (el, { value: options }, { context }) {
@@ -100,7 +100,7 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
     if (max != null && value > max) {
       value = max
     }
-    value = new Intl.NumberFormat(options.locale, { minimumFractionDigits: currencyFormat.decimalLength }).format(value)
+    value = value.toFixed(currencyFormat.decimalLength)
   }
   format(el, value)
   dispatchEvent(el, 'input')

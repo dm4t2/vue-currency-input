@@ -28,11 +28,13 @@ export const removeCurrencySymbol = (str, { prefix, suffix }) => {
   return removePrefix(removeSuffix(str, suffix), prefix)
 }
 
+export const isNumber = (str) => str.match(/^-?\d+(\.\d+)?$/)
+
 export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSymbol } = {}) => {
   if (typeof str === 'number') {
     return str
   } else if (str && typeof str === 'string') {
-    if (str.match(/^-?\d+(\.\d+)?$/)) {
+    if (isNumber(str)) {
       return Number(str)
     }
     const negative = startsWith(str, '-')
@@ -42,7 +44,7 @@ export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSy
     if (numberParts.length > 2) {
       return null
     }
-    let integer = numberParts[0].replace(new RegExp(thousandsSeparatorSymbol === '.' ? '\\.' : thousandsSeparatorSymbol, 'g'), '')
+    const integer = numberParts[0].replace(new RegExp(`\\${thousandsSeparatorSymbol}`, 'g'), '')
     if (integer.length && !integer.match(/^\d+$/g)) {
       return null
     }

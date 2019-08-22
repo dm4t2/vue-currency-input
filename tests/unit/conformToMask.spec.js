@@ -153,18 +153,17 @@ describe('conformToMask', () => {
 
   describe('when value conforms to the mask', () => {
     it('returns the expected result', () => {
-      const currencyFormat = { decimalSymbol: '.', prefix: '$', suffix: '', decimalLength: 4 }
+      const currencyFormat = { decimalSymbol: ',', prefix: '$', suffix: '', decimalLength: 4 }
 
       expect(conformToMask('1', currencyFormat)).toEqual({ conformedValue: 1, fractionDigits: '' })
-      expect(conformToMask('1,2', currencyFormat)).toEqual({ conformedValue: 12, fractionDigits: '' })
+      expect(conformToMask('1,2', currencyFormat)).toEqual({ conformedValue: 1.2, fractionDigits: '2' })
       expect(conformToMask('1.2', currencyFormat)).toEqual({ conformedValue: 1.2, fractionDigits: '2' })
+      expect(conformToMask('1,232323', currencyFormat)).toEqual({ conformedValue: 1.2323, fractionDigits: '2323' })
       expect(conformToMask('1.232323', currencyFormat)).toEqual({ conformedValue: 1.2323, fractionDigits: '2323' })
-      expect(conformToMask(0, currencyFormat)).toEqual({ conformedValue: 0, fractionDigits: '' })
-      expect(conformToMask(-1, currencyFormat)).toEqual({ conformedValue: -1, fractionDigits: '' })
-      expect(conformToMask(1.2, currencyFormat)).toEqual({ conformedValue: 1.2, fractionDigits: '2' })
-      expect(conformToMask(1.232323, currencyFormat)).toEqual({ conformedValue: 1.2323, fractionDigits: '2323' })
       expect(conformToMask('0', currencyFormat)).toEqual({ conformedValue: 0, fractionDigits: '' })
       expect(conformToMask('-0', currencyFormat)).toEqual({ conformedValue: -0, fractionDigits: '' })
+      expect(conformToMask('0.5', currencyFormat)).toEqual({ conformedValue: 0.5, fractionDigits: '5' })
+      expect(conformToMask('-0,5', currencyFormat)).toEqual({ conformedValue: -0.5, fractionDigits: '5' })
     })
   })
 })
