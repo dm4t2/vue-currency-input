@@ -4,12 +4,35 @@ import createCurrencyFormat from '../../src/utils/createCurrencyFormat'
 global.Intl = Intl
 
 describe('createCurrencyFormat', () => {
-  it('returns the expected format config', () => {
+  it('de_EUR', () => {
     expect(createCurrencyFormat({ locale: 'de', currency: 'EUR' })).toMatchSnapshot()
-    expect(createCurrencyFormat({ locale: 'en', currency: 'USD' })).toMatchSnapshot()
+  })
+
+  it('es_EUR', () => {
+    expect(createCurrencyFormat({ locale: 'es', currency: 'EUR' })).toMatchSnapshot()
+  })
+
+  it('en_USD', () => {
+    expect(createCurrencyFormat({ locale: 'en-US', currency: 'USD' })).toMatchSnapshot()
+  })
+
+  it('zh_CNY', () => {
     expect(createCurrencyFormat({ locale: 'zh', currency: 'CNY' })).toMatchSnapshot()
-    expect(createCurrencyFormat({ locale: 'en', currency: 'GBP' })).toMatchSnapshot()
+  })
+
+  it('en-GB_GBP', () => {
+    expect(createCurrencyFormat({ locale: 'en-GB', currency: 'GBP' })).toMatchSnapshot()
+  })
+
+  it('en-IN_INR', () => {
+    expect(createCurrencyFormat({ locale: 'en-GB', currency: 'INR' })).toMatchSnapshot()
+  })
+
+  it('pt_BRL', () => {
     expect(createCurrencyFormat({ locale: 'pt', currency: 'BRL' })).toMatchSnapshot()
-    expect(createCurrencyFormat({ locale: 'fr', currency: 'JPY' })).toMatchSnapshot()
+  })
+
+  it('ja_JPY', () => {
+    expect(createCurrencyFormat({ locale: 'ja', currency: 'JPY' })).toMatchSnapshot()
   })
 })

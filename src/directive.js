@@ -67,7 +67,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   const options = { ...defaultOptions, ...optionsFromBinding }
   options.hideCurrencySymbol = options.distractionFree === true || options.distractionFree.hideCurrencySymbol
   options.hideNegligibleDecimalDigits = options.distractionFree === true || options.distractionFree.hideNegligibleDecimalDigits
-  options.hideThousandsSeparatorSymbol = options.distractionFree === true || options.distractionFree.hideThousandsSeparatorSymbol
+  options.hideGroupingSymbol = options.distractionFree === true || options.distractionFree.hideGroupingSymbol
   const { min, max, decimalLength } = options
   if (min != null && max != null && min > max) {
     throw new Error('Invalid number range')
@@ -88,19 +88,15 @@ const init = (el, optionsFromBinding, defaultOptions) => {
 }
 
 const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormat)) => {
-  const { options, currencyFormat } = el.$ci
-  const { min, max } = options
+  const { options: { min, max }, currencyFormat: { decimalLength } } = el.$ci
   if (value != null) {
-    if (currencyFormat.decimalLength === 0) {
-      value = Math.round(value)
-    }
     if (min != null && value < min) {
       value = min
     }
     if (max != null && value > max) {
       value = max
     }
-    value = value.toFixed(currencyFormat.decimalLength)
+    value = value.toFixed(decimalLength)
   }
   format(el, value)
   dispatchEvent(el, 'input')
@@ -112,7 +108,7 @@ const applyDistractionFreeFormat = (el) => {
   if (typeof conformedValue === 'number') {
     el.value = new Intl.NumberFormat(options.locale, {
       style: options.hideCurrencySymbol ? 'decimal' : 'currency',
-      useGrouping: !options.hideThousandsSeparatorSymbol,
+      useGrouping: !options.hideGroupingSymbol,
       currency: options.currency,
       minimumFractionDigits: options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : fractionDigits.length
     }).format(conformedValue)
@@ -136,7 +132,7 @@ const format = (el, value = el.value) => {
       } else {
         el.value = new Intl.NumberFormat(options.locale, {
           style: hideCurrencySymbol ? 'decimal' : 'currency',
-          useGrouping: !(focus && options.hideThousandsSeparatorSymbol),
+          useGrouping: !(focus && options.hideGroupingSymbol),
           currency: options.currency,
           minimumFractionDigits: fractionDigits.length
         }).format(conformedValue)

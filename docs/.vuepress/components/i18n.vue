@@ -15,6 +15,8 @@
             <option value="JPY">JPY</option>
             <option value="GBP">GBP</option>
             <option value="BRL">BRL</option>
+            <option value="INR">INR</option>
+            <option value="CNY">CNY</option>
           </select>
         </label>
       </p>
@@ -23,11 +25,13 @@
           <span>Locale</span>
           <select v-model="locale">
             <option :value="undefined">auto</option>
-            <option value="de">de</option>
-            <option value="fr">fr</option>
-            <option value="en">en</option>
-            <option value="pt">pt</option>
-            <option value="zh">zh</option>
+            <option value="de-DE">de-DE</option>
+            <option value="fr-FR">fr-FR</option>
+            <option value="en-US">en-US</option>
+            <option value="en-IN">en-IN</option>
+            <option value="es-ES">es-ES</option>
+            <option value="pt-PT">pt-PT</option>
+            <option value="zh-ZH">zh-ZH</option>
           </select>
         </label>
       </p>

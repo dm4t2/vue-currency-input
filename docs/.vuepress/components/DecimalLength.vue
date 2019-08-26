@@ -3,7 +3,6 @@
     <CurrencyInput
       v-model="value"
       :decimal-length="decimalLength"
-      :validate-on-input="validateOnInput"
       class="demo__currency-input"/>
     <div class="demo__options">
       <p>

@@ -1,61 +1,81 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createCurrencyFormat returns the expected format config 1`] = `
+exports[`createCurrencyFormat de_EUR 1`] = `
 Object {
   "decimalLength": 2,
   "decimalSymbol": ",",
+  "groupingSymbol": ".",
   "prefix": "",
   "suffix": " €",
-  "thousandsSeparatorSymbol": ".",
 }
 `;
 
-exports[`createCurrencyFormat returns the expected format config 2`] = `
+exports[`createCurrencyFormat en_USD 1`] = `
 Object {
   "decimalLength": 2,
   "decimalSymbol": ".",
+  "groupingSymbol": ",",
   "prefix": "$",
   "suffix": "",
-  "thousandsSeparatorSymbol": ",",
 }
 `;
 
-exports[`createCurrencyFormat returns the expected format config 3`] = `
+exports[`createCurrencyFormat en-GB_GBP 1`] = `
 Object {
   "decimalLength": 2,
   "decimalSymbol": ".",
-  "prefix": "￥",
-  "suffix": "",
-  "thousandsSeparatorSymbol": ",",
-}
-`;
-
-exports[`createCurrencyFormat returns the expected format config 4`] = `
-Object {
-  "decimalLength": 2,
-  "decimalSymbol": ".",
+  "groupingSymbol": ",",
   "prefix": "£",
   "suffix": "",
-  "thousandsSeparatorSymbol": ",",
 }
 `;
 
-exports[`createCurrencyFormat returns the expected format config 5`] = `
+exports[`createCurrencyFormat en-IN_INR 1`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ".",
+  "groupingSymbol": ",",
+  "prefix": "₹",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat es_EUR 1`] = `
 Object {
   "decimalLength": 2,
   "decimalSymbol": ",",
-  "prefix": "R$",
-  "suffix": "",
-  "thousandsSeparatorSymbol": ".",
+  "groupingSymbol": ".",
+  "prefix": "",
+  "suffix": " €",
 }
 `;
 
-exports[`createCurrencyFormat returns the expected format config 6`] = `
+exports[`createCurrencyFormat ja_JPY 1`] = `
 Object {
   "decimalLength": 0,
   "decimalSymbol": null,
-  "prefix": "",
-  "suffix": " JPY",
-  "thousandsSeparatorSymbol": " ",
+  "groupingSymbol": ",",
+  "prefix": "￥",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat pt_BRL 1`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "prefix": "R$",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat zh_CNY 1`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ".",
+  "groupingSymbol": ",",
+  "prefix": "￥",
+  "suffix": "",
 }
 `;

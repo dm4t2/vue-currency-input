@@ -49,7 +49,7 @@ describe('conformToMask', () => {
       it('returns the expected value', () => {
         const currencyFormat = {
           decimalSymbol: '.',
-          thousandsSeparatorSymbol: ',',
+          groupingSymbol: ',',
           prefix: '',
           suffix: '',
           decimalLength: 2
@@ -75,7 +75,7 @@ describe('conformToMask', () => {
       it('returns the expected value', () => {
         const currencyFormat = {
           decimalSymbol: '.',
-          thousandsSeparatorSymbol: ',',
+          groupingSymbol: ',',
           prefix: '$',
           suffix: '',
           decimalLength: 2
@@ -102,7 +102,7 @@ describe('conformToMask', () => {
       it('returns the expected value', () => {
         const currencyFormat = {
           decimalSymbol: '.',
-          thousandsSeparatorSymbol: ',',
+          groupingSymbol: ',',
           prefix: '',
           suffix: ' $',
           decimalLength: 2
@@ -128,7 +128,7 @@ describe('conformToMask', () => {
       it('returns the expected value', () => {
         const currencyFormat = {
           decimalSymbol: null,
-          thousandsSeparatorSymbol: ',',
+          groupingSymbol: ',',
           prefix: '',
           suffix: '',
           decimalLength: 0

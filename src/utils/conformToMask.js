@@ -1,11 +1,11 @@
 import { endsWith, isNumber, onlyDigits, removeCurrencySymbol, removePrefix, startsWith } from './formatHelper'
 
-const isValidInteger = (integer, { prefix, thousandsSeparatorSymbol }) => integer.replace(prefix, '').match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${thousandsSeparatorSymbol}?\\d{3})*)$`))
+const isValidInteger = (integer, { prefix, groupingSymbol }) => integer.replace(prefix, '').match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
 
 const isFractionIncomplete = (value, currencyFormat) => {
-  const { prefix, decimalSymbol, thousandsSeparatorSymbol } = currencyFormat
+  const { prefix, decimalSymbol, groupingSymbol } = currencyFormat
   const numberParts = value.split(decimalSymbol)
-  return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(numberParts[0], { prefix, thousandsSeparatorSymbol })
+  return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(numberParts[0], { prefix, groupingSymbol })
 }
 
 const checkIncompleteValue = (value, previousConformedValue, currencyFormat) => {

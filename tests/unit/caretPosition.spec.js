@@ -2,7 +2,7 @@ import { getCaretPositionAfterFormat, getCaretPositionOnFocus } from '../../src/
 
 const currencyFormat = {
   decimalSymbol: '.',
-  thousandsSeparatorSymbol: ',',
+  groupingSymbol: ',',
   decimalLength: 2,
   prefix: '$',
   suffix: ''
@@ -22,13 +22,13 @@ describe('caretPosition', () => {
       })
     })
 
-    describe('a thousands separator symbol has been deleted', () => {
+    describe('a grouping symbol has been deleted', () => {
       /**
        * Original value:  1,|234
        * Modified value:  1|234
        * New value:       1|,234
        */
-      it('returns the position before the thousands separator', () => {
+      it('returns the position before the grouping symbol', () => {
         const el = { value: '1,234', $ci: { currencyFormat } }
         expect(getCaretPositionAfterFormat(el, '1234', 1)).toBe(1)
       })
@@ -130,24 +130,24 @@ describe('caretPosition', () => {
           selectionStart: 7,
           $ci: {
             currencyFormat,
-            options: { hideCurrencySymbol: true, hideThousandsSeparatorSymbol: false }
+            options: { hideCurrencySymbol: true, hideGroupingSymbol: false }
           }
         })).toBe(6)
       })
     })
 
-    describe('only the thousands separator symbol is hidden on focus', () => {
+    describe('only the grouping symbol is hidden on focus', () => {
       /**
        * Original value:  $1|,234,768
        * New value:       $1|234768
        */
-      it('returns the current caret position if before the first thousands separator symbol', () => {
+      it('returns the current caret position if before the first grouping symbol', () => {
         expect(getCaretPositionOnFocus({
           value: '$1,234,768',
           selectionStart: 2,
           $ci: {
             currencyFormat,
-            options: { hideCurrencySymbol: false, hideThousandsSeparatorSymbol: true }
+            options: { hideCurrencySymbol: false, hideGroupingSymbol: true }
           }
         })).toBe(2)
       })
@@ -156,19 +156,19 @@ describe('caretPosition', () => {
        * Original value:  $1,234,|768
        * New value:       $1234|768
        */
-      it('returns the caret position subtracted by the respective number of thousands separator symbols', () => {
+      it('returns the caret position subtracted by the respective number of grouping symbols', () => {
         expect(getCaretPositionOnFocus({
           value: '$1,234,768',
           selectionStart: 7,
           $ci: {
             currencyFormat,
-            options: { hideCurrencySymbol: false, hideThousandsSeparatorSymbol: true }
+            options: { hideCurrencySymbol: false, hideGroupingSymbol: true }
           }
         })).toBe(5)
       })
     })
 
-    describe('the currency symbol and thousands separator symbol are both visible on focus', () => {
+    describe('the currency symbol and grouping symbol are both visible on focus', () => {
       /**
        * Original value:  $1,234,|768
        * New value:       $1,234,|768
@@ -179,13 +179,13 @@ describe('caretPosition', () => {
           selectionStart: 7,
           $ci: {
             currencyFormat,
-            options: { hideCurrencySymbol: false, hideThousandsSeparatorSymbol: false }
+            options: { hideCurrencySymbol: false, hideGroupingSymbol: false }
           }
         })).toBe(7)
       })
     })
 
-    describe('the currency symbol and thousands separator symbol are both hidden on focus', () => {
+    describe('the currency symbol and grouping symbol are both hidden on focus', () => {
       /**
        * Original value:  $1,2|34,768
        * New value:       12|34768
@@ -196,7 +196,7 @@ describe('caretPosition', () => {
           selectionStart: 4,
           $ci: {
             currencyFormat,
-            options: { hideCurrencySymbol: true, hideThousandsSeparatorSymbol: true }
+            options: { hideCurrencySymbol: true, hideGroupingSymbol: true }
           }
         })).toBe(2)
       })

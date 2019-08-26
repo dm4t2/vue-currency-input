@@ -29,7 +29,9 @@
             <option value="USD">USD</option>
             <option value="JPY">JPY</option>
             <option value="GBP">GBP</option>
+            <option value="INR">INR</option>
             <option value="BRL">BRL</option>
+            <option value="CNY">CNY</option>
           </select>
         </label>
       </p>
@@ -41,6 +43,8 @@
             <option value="de">de</option>
             <option value="fr">fr</option>
             <option value="en">en</option>
+            <option value="en-IN">en-IN</option>
+            <option value="es">es</option>
             <option value="pt">pt</option>
             <option value="zh">zh</option>
           </select>

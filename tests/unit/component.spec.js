@@ -146,7 +146,7 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.value).toBe('1234.5')
       })
 
-      it('sets the caret to the right position if the thousands separator is ","', () => {
+      it('sets the caret to the right position if the grouping is ","', () => {
         const wrapper = mountComponent({ locale: 'en', distractionFree: true })
         wrapper.setValue('1234567.89')
 
@@ -157,7 +157,7 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.selectionStart).toBe(5)
       })
 
-      it('sets the caret to the right position if the thousands separator is "."', () => {
+      it('sets the caret to the right position if the grouping is "."', () => {
         const wrapper = mountComponent({ locale: 'de', distractionFree: true })
         wrapper.setValue('1234567.89')
 

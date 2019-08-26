@@ -24,9 +24,9 @@
       <p>
         <label>
           <input
-            v-model="hideThousandsSeparatorSymbol"
+            v-model="hideGroupingSymbol"
             type="checkbox">
-          <span>Hide thousands separator symbol</span>
+          <span>Hide grouping symbol</span>
         </label>
       </p>
     </div>
@@ -41,14 +41,14 @@ export default {
     value: 1234.5,
     hideNegligibleDecimalDigits: false,
     hideCurrencySymbol: false,
-    hideThousandsSeparatorSymbol: false,
+    hideGroupingSymbol: false,
   }),
   computed: {
     distractionFree () {
       return {
         hideNegligibleDecimalDigits: this.hideNegligibleDecimalDigits,
         hideCurrencySymbol: this.hideCurrencySymbol,
-        hideThousandsSeparatorSymbol: this.hideThousandsSeparatorSymbol
+        hideGroupingSymbol: this.hideGroupingSymbol
       }
     }
   }

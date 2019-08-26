@@ -30,7 +30,7 @@ export const removeCurrencySymbol = (str, { prefix, suffix }) => {
 
 export const isNumber = (str) => str.match(/^-?\d+(\.\d+)?$/)
 
-export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSymbol } = {}) => {
+export const parse = (str, { prefix, suffix, groupingSymbol, decimalSymbol } = {}) => {
   if (typeof str === 'number') {
     return str
   } else if (str && typeof str === 'string') {
@@ -44,7 +44,7 @@ export const parse = (str, { prefix, suffix, thousandsSeparatorSymbol, decimalSy
     if (numberParts.length > 2) {
       return null
     }
-    const integer = numberParts[0].replace(new RegExp(`\\${thousandsSeparatorSymbol}`, 'g'), '')
+    const integer = numberParts[0].replace(new RegExp(`\\${groupingSymbol}`, 'g'), '')
     if (integer.length && !integer.match(/^\d+$/g)) {
       return null
     }
