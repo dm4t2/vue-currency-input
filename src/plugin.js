@@ -23,3 +23,4 @@ const plugin = {
 export default plugin
 export { component as CurrencyInput }
 export { directive as CurrencyDirective }
+export { parse, createCurrencyFormat };
