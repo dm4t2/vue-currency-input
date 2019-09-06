@@ -1,22 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createCurrencyFormat de_EUR 1`] = `
+exports[`createCurrencyFormat de-DE_EUR 1`] = `
 Object {
   "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
+  "negativePrefix": "-",
   "prefix": "",
   "suffix": " €",
-}
-`;
-
-exports[`createCurrencyFormat en_USD 1`] = `
-Object {
-  "decimalLength": 2,
-  "decimalSymbol": ".",
-  "groupingSymbol": ",",
-  "prefix": "$",
-  "suffix": "",
 }
 `;
 
@@ -25,6 +16,7 @@ Object {
   "decimalLength": 2,
   "decimalSymbol": ".",
   "groupingSymbol": ",",
+  "negativePrefix": "-£",
   "prefix": "£",
   "suffix": "",
 }
@@ -35,16 +27,29 @@ Object {
   "decimalLength": 2,
   "decimalSymbol": ".",
   "groupingSymbol": ",",
+  "negativePrefix": "-₹",
   "prefix": "₹",
   "suffix": "",
 }
 `;
 
-exports[`createCurrencyFormat es_EUR 1`] = `
+exports[`createCurrencyFormat en-US_USD 1`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ".",
+  "groupingSymbol": ",",
+  "negativePrefix": "-$",
+  "prefix": "$",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat es-ES_EUR 1`] = `
 Object {
   "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
+  "negativePrefix": "-",
   "prefix": "",
   "suffix": " €",
 }
@@ -55,7 +60,19 @@ Object {
   "decimalLength": 0,
   "decimalSymbol": null,
   "groupingSymbol": ",",
+  "negativePrefix": "-￥",
   "prefix": "￥",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat nl-NL_EUR 1`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "negativePrefix": "US$ -",
+  "prefix": "US$ ",
   "suffix": "",
 }
 `;
@@ -65,6 +82,7 @@ Object {
   "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
+  "negativePrefix": "-R$",
   "prefix": "R$",
   "suffix": "",
 }
@@ -75,6 +93,7 @@ Object {
   "decimalLength": 2,
   "decimalSymbol": ".",
   "groupingSymbol": ",",
+  "negativePrefix": "-￥",
   "prefix": "￥",
   "suffix": "",
 }

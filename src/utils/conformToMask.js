@@ -1,25 +1,21 @@
-import { endsWith, isNumber, onlyDigits, removeCurrencySymbol, removePrefix, startsWith } from './formatHelper'
+import { endsWith, isNumber, onlyDigits, startsWith, stripCurrencySymbolAndMinusSign } from './formatHelper'
 
-const isValidInteger = (integer, { prefix, groupingSymbol }) => integer.replace(prefix, '').match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
+const isValidInteger = (integer, groupingSymbol) => integer.match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
 
-const isFractionIncomplete = (value, currencyFormat) => {
-  const { prefix, decimalSymbol, groupingSymbol } = currencyFormat
+const isFractionIncomplete = (value, { decimalSymbol, groupingSymbol }) => {
   const numberParts = value.split(decimalSymbol)
-  return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(numberParts[0], { prefix, groupingSymbol })
+  return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(numberParts[0], groupingSymbol)
 }
 
-const checkIncompleteValue = (value, previousConformedValue, currencyFormat) => {
-  const { prefix, suffix, decimalSymbol, decimalLength } = currencyFormat
-  const negative = startsWith(value, '-')
-  value = removePrefix(value, '-')
-  value = removeCurrencySymbol(value, currencyFormat)
-  if (value === '' && negative && previousConformedValue !== `-${prefix}`) {
-    return `-${prefix}${suffix}`
+const checkIncompleteValue = (value, negative, previousConformedValue, currencyFormat) => {
+  const { prefix, negativePrefix, suffix, decimalSymbol, decimalLength } = currencyFormat
+  if (value === '' && negative && previousConformedValue !== negativePrefix) {
+    return `${negativePrefix}${suffix}`
   } else if (decimalLength > 0) {
     if (isFractionIncomplete(value, currencyFormat)) {
-      return `${negative ? '-' : ''}${prefix}${value}${suffix}`
+      return `${negative ? negativePrefix : prefix}${value}${suffix}`
     } else if (startsWith(value, decimalSymbol)) {
-      return `${negative ? '-' : ''}${prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, decimalLength))}${suffix}`
+      return `${negative ? negativePrefix : prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, decimalLength))}${suffix}`
     }
   }
   return null
@@ -41,16 +37,17 @@ const checkNumberValue = (value, currencyFormat) => {
   return null
 }
 
-export default (value, currencyFormat, previousConformedValue = '') => {
-  if (typeof value === 'string') {
-    value = value.trim()
+export default (str, currencyFormat, previousConformedValue = '') => {
+  if (typeof str === 'string') {
+    str = str.trim()
 
-    const numberValue = checkNumberValue(value, currencyFormat)
+    const numberValue = checkNumberValue(str, currencyFormat)
     if (numberValue != null) {
       return numberValue
     }
 
-    const incompleteValue = checkIncompleteValue(value, previousConformedValue, currencyFormat)
+    const { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
+    const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, currencyFormat)
     if (incompleteValue != null) {
       return { conformedValue: incompleteValue }
     }
@@ -64,7 +61,7 @@ export default (value, currencyFormat, previousConformedValue = '') => {
     }
 
     let number = integerDigits
-    if (startsWith(value, '-')) {
+    if (negative) {
       number = `-${number}`
     }
     if (fractionDigits.length > 0) {
@@ -75,7 +72,7 @@ export default (value, currencyFormat, previousConformedValue = '') => {
         conformedValue: Number(number),
         fractionDigits
       }
-    } else if (number === '-' && previousConformedValue !== `-${currencyFormat.prefix}`) {
+    } else if (number === '-' && previousConformedValue !== currencyFormat.negativePrefix) {
       return { conformedValue: previousConformedValue }
     } else {
       return { conformedValue: '' }

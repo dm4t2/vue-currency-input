@@ -24,8 +24,13 @@ export const removeSuffix = (str, suffix) => {
   return str
 }
 
-export const removeCurrencySymbol = (str, { prefix, suffix }) => {
-  return removePrefix(removeSuffix(str, suffix), prefix)
+export const stripCurrencySymbolAndMinusSign = (str, currencyFormat) => {
+  let { prefix, suffix } = currencyFormat
+  const value = str.replace(prefix, '').replace(suffix, '')
+  return {
+    value: removePrefix(value, '-'),
+    negative: startsWith(value, '-')
+  }
 }
 
 export const isNumber = (str) => str.match(/^-?\d+(\.\d+)?$/)
@@ -37,10 +42,8 @@ export const parse = (str, { prefix, suffix, groupingSymbol, decimalSymbol } = {
     if (isNumber(str)) {
       return Number(str)
     }
-    const negative = startsWith(str, '-')
-    str = removePrefix(str, '-')
-    str = removeCurrencySymbol(str, { prefix, suffix })
-    const numberParts = str.split(decimalSymbol)
+    let { value, negative } = stripCurrencySymbolAndMinusSign(str, { prefix, suffix })
+    const numberParts = value.split(decimalSymbol)
     if (numberParts.length > 2) {
       return null
     }

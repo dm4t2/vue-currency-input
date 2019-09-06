@@ -4,15 +4,19 @@ import createCurrencyFormat from '../../src/utils/createCurrencyFormat'
 global.Intl = Intl
 
 describe('createCurrencyFormat', () => {
-  it('de_EUR', () => {
-    expect(createCurrencyFormat({ locale: 'de', currency: 'EUR' })).toMatchSnapshot()
+  it('de-DE_EUR', () => {
+    expect(createCurrencyFormat({ locale: 'de-DE', currency: 'EUR' })).toMatchSnapshot()
   })
 
-  it('es_EUR', () => {
-    expect(createCurrencyFormat({ locale: 'es', currency: 'EUR' })).toMatchSnapshot()
+  it('es-ES_EUR', () => {
+    expect(createCurrencyFormat({ locale: 'es-ES', currency: 'EUR' })).toMatchSnapshot()
   })
 
-  it('en_USD', () => {
+  it('nl-NL_EUR', () => {
+    expect(createCurrencyFormat({ locale: 'nl-NL', currency: 'USD' })).toMatchSnapshot()
+  })
+
+  it('en-US_USD', () => {
     expect(createCurrencyFormat({ locale: 'en-US', currency: 'USD' })).toMatchSnapshot()
   })
 

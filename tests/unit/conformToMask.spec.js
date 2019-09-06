@@ -40,7 +40,7 @@ describe('conformToMask', () => {
 
   describe('when the value is negative and the prefixed currency symbol is deleted', () => {
     it('returns an empty value', () => {
-      expect(conformToMask('-', { decimalSymbol: '.', prefix: '$', suffix: '' }, '-$')).toEqual({ conformedValue: '' })
+      expect(conformToMask('-', { decimalSymbol: '.', prefix: '$', negativePrefix: '-$', suffix: '' }, '-$')).toEqual({ conformedValue: '' })
     })
   })
 
@@ -51,6 +51,7 @@ describe('conformToMask', () => {
           decimalSymbol: '.',
           groupingSymbol: ',',
           prefix: '',
+          negativePrefix: '-',
           suffix: '',
           decimalLength: 2
         }
@@ -77,6 +78,7 @@ describe('conformToMask', () => {
           decimalSymbol: '.',
           groupingSymbol: ',',
           prefix: '$',
+          negativePrefix: '-$',
           suffix: '',
           decimalLength: 2
         }
@@ -104,6 +106,7 @@ describe('conformToMask', () => {
           decimalSymbol: '.',
           groupingSymbol: ',',
           prefix: '',
+          negativePrefix: '-',
           suffix: ' $',
           decimalLength: 2
         }
@@ -130,6 +133,7 @@ describe('conformToMask', () => {
           decimalSymbol: null,
           groupingSymbol: ',',
           prefix: '',
+          negativePrefix: '-',
           suffix: '',
           decimalLength: 0
         }

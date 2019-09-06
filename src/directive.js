@@ -123,6 +123,7 @@ const format = (el, value = el.value) => {
     const { conformedValue, fractionDigits } = conformToMask(value, {
       ...currencyFormat,
       prefix: hideCurrencySymbol ? '' : currencyFormat.prefix,
+      negativePrefix: hideCurrencySymbol ? '-' : currencyFormat.negativePrefix,
       suffix: hideCurrencySymbol ? '' : currencyFormat.suffix
     }, previousConformedValue)
     if (typeof conformedValue === 'number') {
