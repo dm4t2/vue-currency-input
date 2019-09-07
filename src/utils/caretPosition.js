@@ -8,9 +8,7 @@ export const getCaretPositionAfterFormat = (el, inputtedValue, caretPosition) =>
   const decimalSymbolPosition = inputtedValue.indexOf(decimalSymbol) + 1
   let caretPositionFromLeft = inputtedValue.length - caretPosition
 
-  if (newValue === inputtedValue) {
-    return caretPosition
-  } else if (Math.abs(newValue.length - inputtedValue.length) > 1 && caretPosition <= decimalSymbolPosition) {
+  if (Math.abs(newValue.length - inputtedValue.length) > 1 && caretPosition <= decimalSymbolPosition) {
     return newValue.indexOf(decimalSymbol) + 1
   } else if (newValue.substr(caretPosition, 1) === groupingSymbol && count(newValue, groupingSymbol) === count(inputtedValue, groupingSymbol) + 1) {
     return newValue.length - caretPositionFromLeft - 1
@@ -26,15 +24,13 @@ export const getCaretPositionAfterFormat = (el, inputtedValue, caretPosition) =>
   }
 }
 
-export const getCaretPositionOnFocus = (el) => {
-  let position = el.selectionStart
-  const { prefix, groupingSymbol } = el.$ci.currencyFormat
-  const { hideCurrencySymbol, hideGroupingSymbol } = el.$ci.options
+export const getCaretPositionAfterApplyingDistractionFreeFormat = ({ prefix, groupingSymbol }, { hideCurrencySymbol, hideGroupingSymbol }, value, caretPosition) => {
+  let result = caretPosition
   if (hideCurrencySymbol) {
-    position -= prefix.length
+    result -= prefix.length
   }
   if (hideGroupingSymbol) {
-    position -= count(el.value.substring(0, el.selectionStart), groupingSymbol)
+    result -= count(value.substring(0, caretPosition), groupingSymbol)
   }
-  return Math.max(0, position)
+  return Math.max(0, result)
 }

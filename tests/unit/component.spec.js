@@ -146,7 +146,7 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.value).toBe('1234.5')
       })
 
-      it('sets the caret to the right position if the grouping is ","', () => {
+      it('sets the caret to the right position if no text was selected', () => {
         const wrapper = mountComponent({ locale: 'en', distractionFree: true })
         wrapper.setValue('1234567.89')
 
@@ -157,15 +157,16 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.selectionStart).toBe(5)
       })
 
-      it('sets the caret to the right position if the grouping is "."', () => {
-        const wrapper = mountComponent({ locale: 'de', distractionFree: true })
+      it('preserves the selected text if preset', () => {
+        const wrapper = mountComponent({ locale: 'en', distractionFree: true })
         wrapper.setValue('1234567.89')
 
-        wrapper.element.setSelectionRange(8, 8)
+        wrapper.element.setSelectionRange(0, 10)
         wrapper.trigger('focus')
         jest.runOnlyPendingTimers()
 
-        expect(wrapper.element.selectionStart).toBe(6)
+        expect(wrapper.element.selectionStart).toBe(0)
+        expect(wrapper.element.selectionEnd).toBe(10)
       })
     })
 

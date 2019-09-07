@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import defaultOptions from './defaultOptions'
-import { getCaretPositionAfterFormat, getCaretPositionOnFocus, setCaretPosition } from './utils/caretPosition'
+import { getCaretPositionAfterApplyingDistractionFreeFormat, getCaretPositionAfterFormat, setCaretPosition } from './utils/caretPosition'
 import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
@@ -33,12 +33,18 @@ export default {
 
     inputElement.addEventListener('focus', () => {
       inputElement.$ci.focus = true
-      if (inputElement.$ci.options.distractionFree) {
+      const { currencyFormat, options } = inputElement.$ci
+      const { distractionFree, hideCurrencySymbol, hideGroupingSymbol, hideNegligibleDecimalDigits } = options
+      if (distractionFree === true || hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
         setTimeout(() => {
-          const position = getCaretPositionOnFocus(inputElement)
+          const { value, selectionStart, selectionEnd } = inputElement
           applyDistractionFreeFormat(inputElement)
-          setCaretPosition(inputElement, position)
-        }, 0)
+          if (Math.abs(selectionStart - selectionEnd) > 0) {
+            inputElement.setSelectionRange(0, inputElement.value.length)
+          } else {
+            setCaretPosition(inputElement, getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, options, value, selectionStart))
+          }
+        })
       }
     })
 

@@ -1,4 +1,4 @@
-import { getCaretPositionAfterFormat, getCaretPositionOnFocus } from '../../src/utils/caretPosition'
+import { getCaretPositionAfterFormat, getCaretPositionAfterApplyingDistractionFreeFormat } from '../../src/utils/caretPosition'
 
 const currencyFormat = {
   decimalSymbol: '.',
@@ -118,21 +118,14 @@ describe('caretPosition', () => {
     })
   })
 
-  describe('getCaretPositionOnFocus', () => {
+  describe('getCaretPositionAfterApplyingDistractionFreeFormat', () => {
     describe('only the currency symbol is hidden on focus', () => {
       /**
        * Original value:  $1,234,|768
        * New value:       1,234,|768
        */
       it('returns the caret position subtracted by the prefix length', () => {
-        expect(getCaretPositionOnFocus({
-          value: '$1,234,768',
-          selectionStart: 7,
-          $ci: {
-            currencyFormat,
-            options: { hideCurrencySymbol: true, hideGroupingSymbol: false }
-          }
-        })).toBe(6)
+        expect(getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, { hideCurrencySymbol: true, hideGroupingSymbol: false }, '$1,234,768', 7)).toBe(6)
       })
     })
 
@@ -142,14 +135,7 @@ describe('caretPosition', () => {
        * New value:       $1|234768
        */
       it('returns the current caret position if before the first grouping symbol', () => {
-        expect(getCaretPositionOnFocus({
-          value: '$1,234,768',
-          selectionStart: 2,
-          $ci: {
-            currencyFormat,
-            options: { hideCurrencySymbol: false, hideGroupingSymbol: true }
-          }
-        })).toBe(2)
+        expect(getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, { hideCurrencySymbol: false, hideGroupingSymbol: true }, '$1,234,768', 2)).toBe(2)
       })
 
       /**
@@ -157,14 +143,7 @@ describe('caretPosition', () => {
        * New value:       $1234|768
        */
       it('returns the caret position subtracted by the respective number of grouping symbols', () => {
-        expect(getCaretPositionOnFocus({
-          value: '$1,234,768',
-          selectionStart: 7,
-          $ci: {
-            currencyFormat,
-            options: { hideCurrencySymbol: false, hideGroupingSymbol: true }
-          }
-        })).toBe(5)
+        expect(getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, { hideCurrencySymbol: false, hideGroupingSymbol: true }, '$1,234,768', 7)).toBe(5)
       })
     })
 
@@ -174,14 +153,7 @@ describe('caretPosition', () => {
        * New value:       $1,234,|768
        */
       it('returns the expected caret position', () => {
-        expect(getCaretPositionOnFocus({
-          value: '$1,234,768',
-          selectionStart: 7,
-          $ci: {
-            currencyFormat,
-            options: { hideCurrencySymbol: false, hideGroupingSymbol: false }
-          }
-        })).toBe(7)
+        expect(getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, { hideCurrencySymbol: false, hideGroupingSymbol: false }, '$1,234,768', 7)).toBe(7)
       })
     })
 
@@ -191,14 +163,7 @@ describe('caretPosition', () => {
        * New value:       12|34768
        */
       it('returns the expected caret position', () => {
-        expect(getCaretPositionOnFocus({
-          value: '$1,234,768',
-          selectionStart: 4,
-          $ci: {
-            currencyFormat,
-            options: { hideCurrencySymbol: true, hideGroupingSymbol: true }
-          }
-        })).toBe(2)
+        expect(getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, { hideCurrencySymbol: true, hideGroupingSymbol: true }, '$1,234,768', 4)).toBe(2)
       })
     })
   })
