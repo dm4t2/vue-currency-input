@@ -81,30 +81,6 @@ describe('CurrencyInput', () => {
         expect(wrapper.emitted('input')[0][0]).toBeNull()
       })
     })
-
-    describe('when the value is validated on input', () => {
-      describe('the value is less than the min value', () => {
-        it('falls back to last previous conformed value', () => {
-          const wrapper = mountComponent({ locale: 'en', validateOnInput: true, min: 0 })
-
-          wrapper.setValue('-1')
-
-          expect(wrapper.element.value).toBe('')
-        })
-      })
-
-      describe('the value is larger than the max value', () => {
-        it('falls back to last previous conformed value', () => {
-          const wrapper = mountComponent({ locale: 'en', validateOnInput: true, distractionFree: true, max: 99 })
-
-          wrapper.setValue('1')
-          wrapper.setValue('10')
-          wrapper.setValue('100')
-
-          expect(wrapper.element.value).toBe('€10')
-        })
-      })
-    })
   })
 
   describe('when the input is changed externally', () => {

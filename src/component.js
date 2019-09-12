@@ -47,10 +47,6 @@ export default {
     max: {
       type: Number,
       default: undefined
-    },
-    validateOnInput: {
-      type: Boolean,
-      default: undefined
     }
   },
   data () {

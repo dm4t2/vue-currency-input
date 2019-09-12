@@ -133,17 +133,12 @@ const format = (el, value = el.value) => {
       suffix: hideCurrencySymbol ? '' : currencyFormat.suffix
     }, previousConformedValue)
     if (typeof conformedValue === 'number') {
-      const { min, max } = options
-      if (options.validateOnInput && ((min != null && conformedValue < min) || (max != null && conformedValue > max))) {
-        el.value = previousConformedValue || null
-      } else {
-        el.value = new Intl.NumberFormat(options.locale, {
-          style: hideCurrencySymbol ? 'decimal' : 'currency',
-          useGrouping: !(focus && options.hideGroupingSymbol),
-          currency: options.currency,
-          minimumFractionDigits: fractionDigits.length
-        }).format(conformedValue)
-      }
+      el.value = new Intl.NumberFormat(options.locale, {
+        style: hideCurrencySymbol ? 'decimal' : 'currency',
+        useGrouping: !(focus && options.hideGroupingSymbol),
+        currency: options.currency,
+        minimumFractionDigits: fractionDigits.length
+      }).format(conformedValue)
     } else {
       el.value = conformedValue
     }

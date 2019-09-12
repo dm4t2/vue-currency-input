@@ -4,6 +4,5 @@ export default {
   distractionFree: true,
   decimalLength: undefined,
   min: null,
-  max: null,
-  validateOnInput: false
+  max: null
 }

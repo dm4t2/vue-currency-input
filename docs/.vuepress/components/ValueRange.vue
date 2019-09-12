@@ -4,7 +4,6 @@
       v-model="value"
       :min="min"
       :max="max"
-      :validate-on-input="validateOnInput"
       class="demo__currency-input"/>
     <div class="demo__options">
       <p>
@@ -29,15 +28,6 @@
         </label>
         <code>{{ max != null ? max : 'null' }}</code>
       </p>
-      <p>
-        <label>
-          <input
-            v-model="validateOnInput"
-            :disabled="min == null && max == null"
-            type="checkbox">
-          <span>Validate on input</span>
-        </label>
-      </p>
     </div>
   </div>
 </template>
@@ -49,8 +39,7 @@ export default {
   data: () => ({
     value: 1234.5,
     min: null,
-    max: null,
-    validateOnInput: false
+    max: null
   })
 }
 </script>

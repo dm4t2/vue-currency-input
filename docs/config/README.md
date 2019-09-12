@@ -15,7 +15,6 @@ Name | Type | Description
 `distraction-free` | Boolean/Object | Whether to hide negligible decimal digits, the currency symbol and the grouping symbol on focus. Default is `true`. You can also pass an object of boolean properties to configure each option: `{hideNegligibleDecimalDigits, hideCurrencySymbol, hideGroupingSymbol}` (see [examples](/examples/#distraction-free-mode)). Using `false` will leave the formatted value untouched on focus.
 `min` | Number | Minimum value. Default is `null` (no limitation). Must be less than `max`.
 `max` | Number | Maximum value. Default is `null` (no limitation). Must be greater than `min`.
-`validate-on-input` | Boolean | Whether to apply the number range validation on input. Default is `false` (validation is applied on blur). **Not recommended** when using both `min` and `max` values for validation.
 
 ## Directive options
 The `v-currency` directive supports the same options as the `<currency-input>` component which have to be passed as object:
@@ -28,8 +27,7 @@ The `v-currency` directive supports the same options as the `<currency-input>` c
     decimalLength: undefined,
     distractionFree: true,
     min: null,
-    max: null,
-    validateOnInput: false
+    max: null
   }"/>
 </template>
 ```
