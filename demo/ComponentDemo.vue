@@ -4,6 +4,7 @@
       v-model="value"
       :currency="currency"
       :locale="locale"
+      :auto-decimal-mode="autoDecimalMode"
       :distraction-free="distractionFree"
       :min="min"
       :max="max"
@@ -17,6 +18,14 @@
           <span>Distraction free</span>
           <input
             v-model="distractionFree"
+            type="checkbox">
+        </label>
+      </p>
+      <p>
+        <label>
+          <span>Auto decimal mode</span>
+          <input
+            v-model="autoDecimalMode"
             type="checkbox">
         </label>
       </p>
@@ -84,6 +93,7 @@ export default {
     value: 1234.5,
     currency: 'USD',
     locale: undefined,
+    autoDecimalMode: false,
     distractionFree: true,
     min: null,
     max: null

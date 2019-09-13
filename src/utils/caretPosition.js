@@ -13,7 +13,7 @@ export const getCaretPositionAfterFormat = (el, inputtedValue, caretPosition) =>
   } else if (newValue.substr(caretPosition, 1) === groupingSymbol && count(newValue, groupingSymbol) === count(inputtedValue, groupingSymbol) + 1) {
     return newValue.length - caretPositionFromLeft - 1
   } else {
-    if (decimalSymbolPosition !== 0 && caretPosition > decimalSymbolPosition) {
+    if (!el.$ci.options.autoDecimalMode && decimalSymbolPosition !== 0 && caretPosition > decimalSymbolPosition) {
       if (onlyDigits(removeSuffix(inputtedValue.substr(decimalSymbolPosition), suffix)).length - 1 === decimalLength) {
         caretPositionFromLeft -= 1
       }

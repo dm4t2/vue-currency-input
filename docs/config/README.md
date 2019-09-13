@@ -11,6 +11,7 @@ Name | Type | Description
 `value` | Number |  The value of the input. `v-model` is supported.
 `currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`). Default is `EUR`.
 `locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is `undefined` (use the runtime's default locale).
+`auto-decimal-mode` | Boolean | Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits. Default is `false` (the decimal symbol needs to be inserted manually).
 `decimal-length` | Number | The number of displayed decimal digits. Default is `undefined` (use the currency's default). Must be between 0 and 20 and can only be applied for currencies that support decimal digits.
 `distraction-free` | Boolean/Object | Whether to hide negligible decimal digits, the currency symbol and the grouping symbol on focus. Default is `true`. You can also pass an object of boolean properties to configure each option: `{hideNegligibleDecimalDigits, hideCurrencySymbol, hideGroupingSymbol}` (see [examples](/examples/#distraction-free-mode)). Using `false` will leave the formatted value untouched on focus.
 `min` | Number | Minimum value. Default is `null` (no limitation). Must be less than `max`.
@@ -24,6 +25,7 @@ The `v-currency` directive supports the same options as the `<currency-input>` c
   <input v-currency="{
     currency: 'EUR',
     locale: undefined,
+    autoDecimalMode: false,
     decimalLength: undefined,
     distractionFree: true,
     min: null,

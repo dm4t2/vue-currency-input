@@ -40,6 +40,10 @@ export default {
       type: Number,
       default: undefined
     },
+    autoDecimalMode: {
+      type: Boolean,
+      default: undefined
+    },
     min: {
       type: Number,
       default: undefined

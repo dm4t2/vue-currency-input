@@ -50,7 +50,7 @@ describe('CurrencyInput', () => {
 
     describe('the configured number range is invalid', () => {
       it('throws an error', () => {
-        expect(() => mountComponent({ min: 500, max: 400 })).toThrowError('Invalid number range')
+        expect(() => mountComponent({ min: 500, max: 400 })).toThrowError('Invalid value range')
       })
     })
   })

@@ -12,13 +12,19 @@ Usage of a custom currency and locale.
 
 [View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/i18n.vue)
 
+## Auto decimal mode
+Automatically insert the decimal symbol and use the last inputted digits as decimal digits.
+<AutoDecimalMode/>
+
+[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/AutoDecimalMode.vue)
+
 ## Decimal length
 Apply a custom decimal length and override the currency's default.
 <DecimalLength/>
 
 [View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/DecimalLength.vue)
 
-## Distraction free mode
+## Distraction free
 Hide various parts of the formatting on focus.
 <DistractionFree/>
 

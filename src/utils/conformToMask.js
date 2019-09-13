@@ -1,4 +1,4 @@
-import { endsWith, isNumber, onlyDigits, startsWith, stripCurrencySymbolAndMinusSign } from './formatHelper'
+import { endsWith, isNumber, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbolAndMinusSign } from './formatHelper'
 
 const isValidInteger = (integer, groupingSymbol) => integer.match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
 
@@ -21,13 +21,26 @@ const checkIncompleteValue = (value, negative, previousConformedValue, currencyF
   return null
 }
 
+const getAutoDecimalModeConformedValue = (value, previousConformedValue, { decimalLength }) => {
+  if (value === '') {
+    return { conformedValue: '' }
+  } else {
+    const negative = startsWith(value, '-')
+    const conformedValue = value === '-' ? Number(-0) : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(value))}`) / Math.pow(10, decimalLength)
+    return {
+      conformedValue,
+      fractionDigits: conformedValue.toFixed(decimalLength).slice(-decimalLength)
+    }
+  }
+}
+
 const isFractionInvalid = (fraction, numberOfFractionDigits) => fraction.length > 0 && numberOfFractionDigits === 0
 
-const checkNumberValue = (value, currencyFormat) => {
+const checkNumberValue = (value, { decimalLength }) => {
   if (isNumber(value)) {
     let [integer, fraction] = value.split('.')
     if (fraction) {
-      fraction = fraction.substr(0, currencyFormat.decimalLength)
+      fraction = fraction.substr(0, decimalLength)
     }
     return {
       conformedValue: Number(`${integer}.${fraction || ''}`),
@@ -37,9 +50,13 @@ const checkNumberValue = (value, currencyFormat) => {
   return null
 }
 
-export default (str, currencyFormat, previousConformedValue = '') => {
+export default (str, currencyFormat, autoDecimalMode, previousConformedValue = '') => {
   if (typeof str === 'string') {
     str = str.trim()
+
+    if (autoDecimalMode) {
+      return getAutoDecimalModeConformedValue(str, previousConformedValue, currencyFormat)
+    }
 
     const numberValue = checkNumberValue(str, currencyFormat)
     if (numberValue != null) {
@@ -53,7 +70,7 @@ export default (str, currencyFormat, previousConformedValue = '') => {
     }
 
     const [integer, ...fraction] = value.split(currencyFormat.decimalSymbol)
-    const integerDigits = onlyDigits(integer).replace(/^0+(0$|[^0])/, '$1')
+    const integerDigits = removeLeadingZeros(onlyDigits(integer))
     const fractionDigits = onlyDigits(fraction.join('')).substr(0, currencyFormat.decimalLength)
 
     if (isFractionInvalid(fraction, fractionDigits.length)) {

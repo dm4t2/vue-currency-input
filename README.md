@@ -8,11 +8,18 @@ The Vue Currency Input plugin allows an easy input of currency formatted numbers
 [Read the guide](https://dm4t2.github.io/vue-currency-input/guide/) to getting started or check out the [examples](https://dm4t2.github.io/vue-currency-input/examples/) to see it in action.
 
 ## Features
+
+### Lightweight
+Only [~3 kB bundle size](https://bundlephobia.com/result?p=vue-currency-input) (minified + gzipped) and zero dependencies.
+
 ### Format as you type
 Numbers are formatted immediately during input.
 
-### i18n Support
+### i18n support
 Language-dependent, ISO-compliant currency formatting using the native [Intl.NumberFormat](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat).
+
+### Auto decimal mode
+Automatically insert the decimal symbol and use the last inputted digits as decimal digits.
 
 ### Distraction free
 Automatically hide the formatting and negligible decimal digits on focus.

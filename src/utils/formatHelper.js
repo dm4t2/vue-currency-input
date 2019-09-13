@@ -1,3 +1,5 @@
+export const removeLeadingZeros = (str) => str.replace(/^0+(0$|[^0])/, '$1')
+
 export const onlyDigits = (str) => str.replace(/\D+/g, '')
 
 export const count = (str, search) => (str.match(new RegExp(`\\${search}`, 'g')) || []).length
@@ -24,8 +26,7 @@ export const removeSuffix = (str, suffix) => {
   return str
 }
 
-export const stripCurrencySymbolAndMinusSign = (str, currencyFormat) => {
-  let { prefix, suffix } = currencyFormat
+export const stripCurrencySymbolAndMinusSign = (str, { prefix, suffix }) => {
   const value = str.replace(prefix, '').replace(suffix, '')
   return {
     value: removePrefix(value, '-'),
