@@ -8,6 +8,8 @@ jobs:
   include:
     - stage: Unit Tests
       script: yarn test:unit --coverage && codecov
+    - stage: Lint
+      script: yarn lint
     - stage: Deploy GitHub Pages
       script: yarn docs:build
       deploy:
