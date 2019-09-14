@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/dm4t2/vue-currency-input.svg?branch=master)](https://travis-ci.com/dm4t2/vue-currency-input)
+[![codecov](https://codecov.io/gh/dm4t2/vue-currency-input/branch/master/graph/badge.svg)](https://codecov.io/gh/dm4t2/vue-currency-input)
 [![npm version](https://badge.fury.io/js/vue-currency-input.svg)](https://badge.fury.io/js/vue-currency-input)
 ![](https://img.shields.io/npm/l/vue-currency-input.svg)
 
