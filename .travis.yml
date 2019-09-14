@@ -3,12 +3,12 @@ node_js:
   - "10"
 install:
   - yarn install
+  - yarn global add codecov
 jobs:
   include:
     - stage: Unit Tests
-      script: yarn test:unit
+      script: yarn test:unit --coverage && codecov
     - stage: Deploy GitHub Pages
-      if: branch = master
       script: yarn docs:build
       deploy:
         on:
