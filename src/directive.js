@@ -88,7 +88,13 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormat
+    currencyFormat,
+    decimalFormat: {
+      ...currencyFormat,
+      prefix: '',
+      negativePrefix: '-',
+      suffix: ''
+    }
   }
   return inputElement
 }
@@ -123,12 +129,14 @@ const applyDistractionFreeFormat = (el) => {
 }
 
 const format = (el, value = el.value) => {
-  const { options, currencyFormat, focus, previousConformedValue } = el.$ci
+  const { options, decimalFormat, currencyFormat, focus, previousConformedValue } = el.$ci
   if (value != null) {
-    const { conformedValue, fractionDigits } = conformToMask(value, currencyFormat, options.autoDecimalMode, previousConformedValue)
+    const hideCurrencySymbol = focus && options.hideCurrencySymbol
+    const formatConfig = hideCurrencySymbol ? decimalFormat : currencyFormat
+    const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
     if (typeof conformedValue === 'number') {
       el.value = new Intl.NumberFormat(options.locale, {
-        style: focus && options.hideCurrencySymbol ? 'decimal' : 'currency',
+        style: hideCurrencySymbol ? 'decimal' : 'currency',
         useGrouping: !(focus && options.hideGroupingSymbol),
         currency: options.currency,
         minimumFractionDigits: fractionDigits.length

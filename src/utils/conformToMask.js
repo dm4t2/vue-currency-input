@@ -7,12 +7,12 @@ const isFractionIncomplete = (value, { decimalSymbol, groupingSymbol }) => {
   return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(numberParts[0], groupingSymbol)
 }
 
-const checkIncompleteValue = (value, negative, previousConformedValue, currencyFormat) => {
-  const { prefix, negativePrefix, suffix, decimalSymbol, decimalLength } = currencyFormat
+const checkIncompleteValue = (value, negative, previousConformedValue, formatConfig) => {
+  const { prefix, negativePrefix, suffix, decimalSymbol, decimalLength } = formatConfig
   if (value === '' && negative && previousConformedValue !== negativePrefix) {
     return `${negativePrefix}${suffix}`
   } else if (decimalLength > 0) {
-    if (isFractionIncomplete(value, currencyFormat)) {
+    if (isFractionIncomplete(value, formatConfig)) {
       return `${negative ? negativePrefix : prefix}${value}${suffix}`
     } else if (startsWith(value, decimalSymbol)) {
       return `${negative ? negativePrefix : prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, decimalLength))}${suffix}`
@@ -50,28 +50,28 @@ const checkNumberValue = (value, { decimalLength }) => {
   return null
 }
 
-export default (str, currencyFormat, autoDecimalMode, previousConformedValue = '') => {
+export default (str, formatConfig, options, previousConformedValue = '') => {
   if (typeof str === 'string') {
     str = str.trim()
 
-    if (autoDecimalMode) {
-      return getAutoDecimalModeConformedValue(str, previousConformedValue, currencyFormat)
+    if (options.autoDecimalMode) {
+      return getAutoDecimalModeConformedValue(str, previousConformedValue, formatConfig)
     }
 
-    const numberValue = checkNumberValue(str, currencyFormat)
+    const numberValue = checkNumberValue(str, formatConfig)
     if (numberValue != null) {
       return numberValue
     }
 
-    const { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
-    const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, currencyFormat)
+    const { value, negative } = stripCurrencySymbolAndMinusSign(str, formatConfig)
+    const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, formatConfig)
     if (incompleteValue != null) {
       return { conformedValue: incompleteValue }
     }
 
-    const [integer, ...fraction] = value.split(currencyFormat.decimalSymbol)
+    const [integer, ...fraction] = value.split(formatConfig.decimalSymbol)
     const integerDigits = removeLeadingZeros(onlyDigits(integer))
-    const fractionDigits = onlyDigits(fraction.join('')).substr(0, currencyFormat.decimalLength)
+    const fractionDigits = onlyDigits(fraction.join('')).substr(0, formatConfig.decimalLength)
 
     if (isFractionInvalid(fraction, fractionDigits.length)) {
       return { conformedValue: previousConformedValue }
@@ -89,7 +89,7 @@ export default (str, currencyFormat, autoDecimalMode, previousConformedValue = '
         conformedValue: Number(number),
         fractionDigits
       }
-    } else if (number === '-' && previousConformedValue !== currencyFormat.negativePrefix) {
+    } else if (number === '-' && previousConformedValue !== formatConfig.negativePrefix) {
       return { conformedValue: previousConformedValue }
     } else {
       return { conformedValue: '' }

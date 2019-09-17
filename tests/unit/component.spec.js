@@ -144,6 +144,22 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.selectionStart).toBe(0)
         expect(wrapper.element.selectionEnd).toBe(10)
       })
+
+      it('hides the currency symbol if the value is incomplete', () => {
+        const wrapper = mountComponent({ locale: 'en', distractionFree: { hideCurrencySymbol: true } })
+
+        wrapper.trigger('focus')
+        jest.runOnlyPendingTimers()
+
+        wrapper.setValue('-')
+        expect(wrapper.element.value).toBe('-')
+
+        wrapper.setValue('2.')
+        expect(wrapper.element.value).toBe('2.')
+
+        wrapper.setValue('.')
+        expect(wrapper.element.value).toBe('0.')
+      })
     })
 
     describe('distraction free mode is disabled', () => {
