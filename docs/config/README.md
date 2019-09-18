@@ -14,6 +14,8 @@ Name | Type | Description
 `auto-decimal-mode` | Boolean | Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits. Default is `false` (the decimal symbol needs to be inserted manually).
 `decimal-length` | Number | The number of displayed decimal digits. Default is `undefined` (use the currency's default). Must be between 0 and 20 and can only be applied for currencies that support decimal digits.
 `distraction-free` | Boolean/Object | Whether to hide negligible decimal digits, the currency symbol and the grouping symbol on focus. Default is `true`. You can also pass an object of boolean properties to configure each option: `{hideNegligibleDecimalDigits, hideCurrencySymbol, hideGroupingSymbol}` (see [examples](/examples/#distraction-free-mode)). Using `false` will leave the formatted value untouched on focus.
+`hide-currency-symbol` | Boolean | Always hide currency symbol (doesn't matter if input is focused or not). Default is `false`.
+`hide-grouping-symbol` | Boolean | Alwats Hide grouping symbol (doesn't matter if input is focused or not). Default is `false`.
 `min` | Number | Minimum value. Default is `null` (no limitation). Must be less than `max`.
 `max` | Number | Maximum value. Default is `null` (no limitation). Must be greater than `min`.
 
@@ -28,6 +30,8 @@ The `v-currency` directive supports the same options as the `<currency-input>` c
     autoDecimalMode: false,
     decimalLength: undefined,
     distractionFree: true,
+    hideCurrencySymbol: false,
+    hideGroupingSymbol: false,
     min: null,
     max: null
   }"/>

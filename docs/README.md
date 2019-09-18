@@ -11,5 +11,7 @@ features:
   details: Language-dependent, ISO-compliant currency formatting.
 - title: Distraction free
   details: Automatically hide the formatting and negligible decimal digits on focus.
+- title: Hide Currency and/or Grouping symbols
+  details: Automatically hide currency and or grouping symbols for non-focused mode and on focus as well.
 footer: MIT Licensed | Copyright © Matthias Stiller 
 ---

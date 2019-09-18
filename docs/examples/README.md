@@ -30,6 +30,18 @@ Hide various parts of the formatting on focus.
 
 [View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/DistractionFree.vue)
 
+## Hide currency symbol
+Always hide currency symbol (doesn't matter if input is focused or not).
+<HideCurrencySymbol/>
+
+[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/HideCurrencySymbol.vue)
+
+## Hide grouping symbol
+Alwats hide grouping symbol (doesn't matter if input is focused or not).
+<HideGroupingSymbol/>
+
+[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/HideGroupingSymbol.vue)
+
 ## Value range
 Limitation of the entered value range.
 <ValueRange/>
