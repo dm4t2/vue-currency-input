@@ -18,18 +18,18 @@ export const getCaretPositionAfterFormat = (el, inputtedValue, caretPosition) =>
         caretPositionFromLeft -= 1
       }
     }
-    return el.$ci.options.hideCurrencySymbol
+    return el.$ci.options.hideCurrencySymbolOnFocus
       ? newValue.length - caretPositionFromLeft
       : Math.max(newValue.length - Math.max(caretPositionFromLeft, suffix.length), prefix.length === 0 ? 0 : prefix.length + 1)
   }
 }
 
-export const getCaretPositionAfterApplyingDistractionFreeFormat = ({ prefix, groupingSymbol }, { hideCurrencySymbol, hideGroupingSymbol }, value, caretPosition) => {
+export const getCaretPositionAfterApplyingDistractionFreeFormat = ({ prefix, groupingSymbol }, { hideCurrencySymbolOnFocus, hideGroupingSymbolOnFocus }, value, caretPosition) => {
   let result = caretPosition
-  if (hideCurrencySymbol) {
+  if (hideCurrencySymbolOnFocus) {
     result -= prefix.length
   }
-  if (hideGroupingSymbol) {
+  if (hideGroupingSymbolOnFocus) {
     result -= count(value.substring(0, caretPosition), groupingSymbol)
   }
   return Math.max(0, result)

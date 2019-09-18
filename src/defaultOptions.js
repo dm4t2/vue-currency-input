@@ -4,6 +4,8 @@ export default {
   distractionFree: true,
   decimalLength: undefined,
   autoDecimalMode: false,
+  hideCurrencySymbol: false,
+  hideGroupingSymbol: false,
   min: null,
   max: null
 }

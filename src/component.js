@@ -44,6 +44,14 @@ export default {
       type: Boolean,
       default: undefined
     },
+    hideCurrencySymbol: {
+      type: Boolean,
+      default: false
+    },
+    hideGroupingSymbol: {
+      type: Boolean,
+      default: false
+    },
     min: {
       type: Number,
       default: undefined

@@ -25,6 +25,12 @@ Automatically insert the decimal symbol and use the last inputted digits as deci
 ### Distraction free
 Automatically hide the formatting and negligible decimal digits on focus.
 
+### Hide currency symbol
+Hide currency symbol in non-focused mode and on focus as well.
+
+### Hide grouping symbol
+Hide grouping symbol in non-focused mode and on focus as well.
+
 ## Support me
 If you find this plugin helpful or you want to support the development, buy me a coffee:
 
