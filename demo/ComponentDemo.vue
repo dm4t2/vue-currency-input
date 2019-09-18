@@ -95,6 +95,8 @@ export default {
     locale: undefined,
     autoDecimalMode: false,
     distractionFree: true,
+    hideCurrencySymbol: false,
+    hideGroupingSymbol: false,
     min: null,
     max: null
   })
