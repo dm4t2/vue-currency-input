@@ -183,6 +183,56 @@ describe('CurrencyInput', () => {
 
         expect(wrapper.element.selectionStart).toBe(3)
       })
+
+      describe('hide currency symbol tests', () => {
+        it('shows the currency symbol when focused', () => {
+          const wrapper = mountComponent({ locale: 'en', currency: 'EUR', hideCurrencySymbol: false, distractionFree: false })
+          wrapper.setValue('4242.42')
+          wrapper.trigger('focus')
+          jest.runOnlyPendingTimers()
+          expect(wrapper.element.value).toBe('€4,242.42')
+        })
+
+        it('hide currency symbol is enabled when focused', () => {
+          const wrapper = mountComponent({ locale: 'en', currency: 'EUR', hideCurrencySymbol: true, distractionFree: false })
+          wrapper.setValue('4242.42')
+          wrapper.trigger('focus')
+          jest.runOnlyPendingTimers()
+          expect(wrapper.element.value).toBe('4,242.42')
+        })
+
+        it('hide currency symbol is enabled when blurred', () => {
+          const wrapper = mountComponent({ locale: 'en', currency: 'EUR', hideCurrencySymbol: true, distractionFree: false })
+          wrapper.setValue('4242.42')
+          jest.runOnlyPendingTimers()
+          expect(wrapper.element.value).toBe('4,242.42')
+        })
+      })
+
+      describe('hide grouping symbol tests', () => {
+        it('shows the grouping symbol when focused', () => {
+          const wrapper = mountComponent({ locale: 'en', currency: 'EUR', hideGroupingSymbol: false, distractionFree: false })
+          wrapper.setValue('4242.42')
+          wrapper.trigger('focus')
+          jest.runOnlyPendingTimers()
+          expect(wrapper.element.value).toBe('€4,242.42')
+        })
+
+        it('hide grouping symbol when focused', () => {
+          const wrapper = mountComponent({ locale: 'en', currency: 'EUR', hideGroupingSymbol: true, distractionFree: false })
+          wrapper.setValue('4242.42')
+          wrapper.trigger('focus')
+          jest.runOnlyPendingTimers()
+          expect(wrapper.element.value).toBe('€4242.42')
+        })
+
+        it('hide grouping symbol when blurred', () => {
+          const wrapper = mountComponent({ locale: 'en', currency: 'EUR', hideGroupingSymbol: true, distractionFree: false })
+          wrapper.setValue('4242.42')
+          jest.runOnlyPendingTimers()
+          expect(wrapper.element.value).toBe('€4242.42')
+        })
+      })
     })
   })
 
