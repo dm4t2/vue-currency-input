@@ -38,10 +38,10 @@ The `v-currency` directive is great if you want to decorate existing input compo
 
 <<< @/docs/guide/DirectiveUsage.vue
 
-::: warning Getting the raw number value
+#### Getting the raw number value
 In comparision to the `<currency-input>` component the `v-currency` directive will always emit the formatted string instead of the raw number value when used with `v-model`. 
-To get the number value you can use the `$parseCurrency` instance method (see [examples](/examples/#raw-number-value-with-directive)).
-:::
+To get the number value you can use the `$parseCurrency` instance method (see [examples](/examples/#raw-number-value-with-directive)) or the [`parseCurrency` API method](/api#parsecurrency-formattedvalue-locale-currency) (when using on demand imports).
+
 
 ## Alternative installation methods
 ### Import on demand

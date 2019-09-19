@@ -15,7 +15,8 @@ module.exports = {
       '/': [
         '/guide/',
         '/config/',
-        '/examples/'
+        '/examples/',
+        '/api/'
       ]
     },
     repo: 'dm4t2/vue-currency-input',

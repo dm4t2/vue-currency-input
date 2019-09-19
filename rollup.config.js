@@ -14,7 +14,7 @@ const banner =
 
 export default [
   {
-    input: 'src/plugin.js',
+    input: 'src/index.esm.js',
     output: {
       format: 'esm',
       file: pkg.module,
@@ -34,7 +34,7 @@ export default [
     external: ['vue']
   },
   {
-    input: 'src/index.js',
+    input: 'src/index.umd.js',
     output: {
       name: 'VueCurrencyInput',
       format: 'umd',

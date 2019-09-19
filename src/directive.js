@@ -4,62 +4,7 @@ import { getCaretPositionAfterApplyingDistractionFreeFormat, getCaretPositionAft
 import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
-import { parse } from './utils/formatHelper'
-
-export default {
-  bind (el, { value: options }, { context }) {
-    const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
-    Vue.nextTick(() => {
-      if (inputElement.value) {
-        applyFixedFractionFormat(inputElement)
-      }
-    })
-
-    inputElement.addEventListener('input', () => {
-      if (inputElement.$ci.focus) {
-        const { value, selectionStart } = inputElement
-        format(inputElement)
-        setCaretPosition(inputElement, getCaretPositionAfterFormat(inputElement, value, selectionStart))
-      } else {
-        format(inputElement)
-      }
-    }, { capture: true })
-
-    inputElement.addEventListener('format', ({ detail }) => {
-      if (!inputElement.$ci.focus) {
-        applyFixedFractionFormat(inputElement, detail.value)
-      }
-    })
-
-    inputElement.addEventListener('focus', () => {
-      inputElement.$ci.focus = true
-      const { currencyFormat, options } = inputElement.$ci
-      const { distractionFree, hideCurrencySymbol, hideGroupingSymbol, hideNegligibleDecimalDigits } = options
-      if (distractionFree === true || hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
-        setTimeout(() => {
-          const { value, selectionStart, selectionEnd } = inputElement
-          applyDistractionFreeFormat(inputElement)
-          if (Math.abs(selectionStart - selectionEnd) > 0) {
-            inputElement.setSelectionRange(0, inputElement.value.length)
-          } else {
-            setCaretPosition(inputElement, getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, options, value, selectionStart))
-          }
-        })
-      }
-    })
-
-    inputElement.addEventListener('blur', () => {
-      inputElement.$ci.focus = false
-      applyFixedFractionFormat(inputElement)
-    })
-  },
-  componentUpdated (el, { value, oldValue }, { context }) {
-    if (!!value && optionsChanged(oldValue, value)) {
-      const inputElement = init(el, value, context.$CI_DEFAULT_OPTIONS || defaultOptions)
-      applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
-    }
-  }
-}
+import parse from './utils/parse'
 
 const optionsChanged = (oldOptions, newOptions) => {
   return Object.keys(defaultOptions).some((key) => oldOptions[key] !== newOptions[key])
@@ -151,4 +96,63 @@ const format = (el, value = el.value) => {
   const numberValue = parse(el.value, currencyFormat)
   el.$ci.numberValue = numberValue
   dispatchEvent(el, 'format-complete', { numberValue })
+}
+
+function addEventListener (el) {
+  el.addEventListener('input', () => {
+    if (el.$ci.focus) {
+      const { value, selectionStart } = el
+      format(el)
+      setCaretPosition(el, getCaretPositionAfterFormat(el, value, selectionStart))
+    } else {
+      format(el)
+    }
+  }, { capture: true })
+
+  el.addEventListener('format', ({ detail }) => {
+    if (!el.$ci.focus) {
+      applyFixedFractionFormat(el, detail.value)
+    }
+  })
+
+  el.addEventListener('focus', () => {
+    el.$ci.focus = true
+    const { currencyFormat, options } = el.$ci
+    const { distractionFree, hideCurrencySymbol, hideGroupingSymbol, hideNegligibleDecimalDigits } = options
+    if (distractionFree === true || hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
+      setTimeout(() => {
+        const { value, selectionStart, selectionEnd } = el
+        applyDistractionFreeFormat(el)
+        if (Math.abs(selectionStart - selectionEnd) > 0) {
+          el.setSelectionRange(0, el.value.length)
+        } else {
+          setCaretPosition(el, getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, options, value, selectionStart))
+        }
+      })
+    }
+  })
+
+  el.addEventListener('blur', () => {
+    el.$ci.focus = false
+    applyFixedFractionFormat(el)
+  })
+}
+
+export default {
+  bind (el, { value: options }, { context }) {
+    const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
+    Vue.nextTick(() => {
+      if (inputElement.value) {
+        applyFixedFractionFormat(inputElement)
+      }
+    })
+
+    addEventListener(inputElement)
+  },
+  componentUpdated (el, { value, oldValue }, { context }) {
+    if (!!value && optionsChanged(oldValue, value)) {
+      const inputElement = init(el, value, context.$CI_DEFAULT_OPTIONS || defaultOptions)
+      applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
+    }
+  }
 }
