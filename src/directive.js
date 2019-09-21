@@ -17,7 +17,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   }
   const options = { ...defaultOptions, ...optionsFromBinding }
   const { min, max, decimalLength, distractionFree, autoDecimalMode } = options
-  options.hideCurrencySymbol = distractionFree === true || distractionFree.hideCurrencySymbol
+  options.hideCurrencySymbol = options.currency == null || distractionFree === true || distractionFree.hideCurrencySymbol
   options.hideNegligibleDecimalDigits = !autoDecimalMode && (distractionFree === true || distractionFree.hideNegligibleDecimalDigits)
   options.hideGroupingSymbol = distractionFree === true || distractionFree.hideGroupingSymbol
   if (min != null && max != null && min > max) {
@@ -59,33 +59,20 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
   dispatchEvent(el, 'input')
 }
 
-const applyDistractionFreeFormat = (el) => {
-  const { options, currencyFormat } = el.$ci
-  const { conformedValue, fractionDigits } = conformToMask(el.value, currencyFormat, options.autoDecimalMode)
-  if (typeof conformedValue === 'number') {
-    el.value = new Intl.NumberFormat(options.locale, {
-      style: options.hideCurrencySymbol ? 'decimal' : 'currency',
-      useGrouping: !options.hideGroupingSymbol,
-      currency: options.currency,
-      minimumFractionDigits: options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : currencyFormat.decimalLength
-    }).format(conformedValue)
-  }
-  el.$ci.previousConformedValue = el.value
-}
-
-const format = (el, value = el.value) => {
-  const { options, decimalFormat, currencyFormat, focus, previousConformedValue } = el.$ci
+function updateInputValue (el, value, distractionFree = false) {
   if (value != null) {
+    const { options, decimalFormat, currencyFormat, focus, previousConformedValue } = el.$ci
     const hideCurrencySymbol = focus && options.hideCurrencySymbol
     const formatConfig = hideCurrencySymbol ? decimalFormat : currencyFormat
     const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
     if (typeof conformedValue === 'number') {
-      el.value = new Intl.NumberFormat(options.locale, {
-        style: hideCurrencySymbol ? 'decimal' : 'currency',
+      const formattedValue = new Intl.NumberFormat(options.locale, {
         useGrouping: !(focus && options.hideGroupingSymbol),
-        currency: options.currency,
-        minimumFractionDigits: fractionDigits.length
+        minimumFractionDigits: distractionFree
+          ? (options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : currencyFormat.decimalLength)
+          : fractionDigits.length
       }).format(conformedValue)
+      el.value = `${conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
     } else {
       el.value = conformedValue
     }
@@ -93,7 +80,11 @@ const format = (el, value = el.value) => {
     el.value = null
   }
   el.$ci.previousConformedValue = el.value
-  const numberValue = parse(el.value, currencyFormat)
+}
+
+const format = (el, value = el.value) => {
+  updateInputValue(el, value)
+  const numberValue = parse(el.value, el.$ci.currencyFormat)
   el.$ci.numberValue = numberValue
   dispatchEvent(el, 'format-complete', { numberValue })
 }
@@ -122,7 +113,7 @@ function addEventListener (el) {
     if (distractionFree === true || hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = el
-        applyDistractionFreeFormat(el)
+        updateInputValue(el, el.value, true)
         if (Math.abs(selectionStart - selectionEnd) > 0) {
           el.setSelectionRange(0, el.value.length)
         } else {

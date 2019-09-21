@@ -8,12 +8,21 @@ describe('createCurrencyFormat', () => {
     expect(createCurrencyFormat({ locale: 'de-DE', currency: 'EUR' })).toMatchSnapshot()
   })
 
+  it('de-DE custom', () => {
+    expect(createCurrencyFormat({ locale: 'de-DE', currency: { prefix: '₿ ' } })).toMatchSnapshot()
+    expect(createCurrencyFormat({ locale: 'de-DE', currency: { suffix: ' Euro' } })).toMatchSnapshot()
+  })
+
+  it('de-DE decimal', () => {
+    expect(createCurrencyFormat({ locale: 'de-DE', currency: null })).toMatchSnapshot()
+  })
+
   it('es-ES_EUR', () => {
     expect(createCurrencyFormat({ locale: 'es-ES', currency: 'EUR' })).toMatchSnapshot()
   })
 
   it('nl-NL_EUR', () => {
-    expect(createCurrencyFormat({ locale: 'nl-NL', currency: 'USD' })).toMatchSnapshot()
+    expect(createCurrencyFormat({ locale: 'nl-NL', currency: 'EUR' })).toMatchSnapshot()
   })
 
   it('en-US_USD', () => {

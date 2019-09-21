@@ -12,6 +12,12 @@ Usage of a custom currency and locale.
 
 [View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/i18n.vue)
 
+## Custom currency symbol
+Use any currency symbol and specify its position.
+<CustomCurrencySymbol/>
+
+[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/CustomCurrencySymbol.vue)
+
 ## Auto decimal mode
 Automatically insert the decimal symbol and use the last inputted digits as decimal digits.
 <AutoDecimalMode/>

@@ -9,7 +9,7 @@ The `<currency-input>` component provides the following props:
 Name | Type | Description
 --- | --- | --- 
 `value` | Number |  The value of the input. `v-model` is supported.
-`currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`). Default is `EUR`.
+`currency` | String/Object | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`). Default is `EUR`. You can also pass an object `{prefix, suffix}` for customizing the currency symbol or `null` to hide the currency symbol permanently.
 `locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is `undefined` (use the runtime's default locale).
 `auto-decimal-mode` | Boolean | Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits. Default is `false` (the decimal symbol needs to be inserted manually).
 `decimal-length` | Number | The number of displayed decimal digits. Default is `undefined` (use the currency's default). Must be between 0 and 20 and can only be applied for currencies that support decimal digits.

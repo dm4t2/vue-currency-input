@@ -1,5 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`createCurrencyFormat de-DE custom 1`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "negativePrefix": "-₿ ",
+  "prefix": "₿ ",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat de-DE custom 2`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": " Euro",
+}
+`;
+
+exports[`createCurrencyFormat de-DE decimal 1`] = `
+Object {
+  "decimalLength": 2,
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": "",
+}
+`;
+
 exports[`createCurrencyFormat de-DE_EUR 1`] = `
 Object {
   "decimalLength": 2,
@@ -71,8 +104,8 @@ Object {
   "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
-  "negativePrefix": "US$ -",
-  "prefix": "US$ ",
+  "negativePrefix": "€ -",
+  "prefix": "€ ",
   "suffix": "",
 }
 `;

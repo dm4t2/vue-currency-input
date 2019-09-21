@@ -33,6 +33,9 @@
         <label>
           <span>Currency</span>
           <select v-model="currency">
+            <option :value="null"/>
+            <option :value="{suffix: '💰'}">💰</option>
+            <option :value="{prefix: '₿'}">₿</option>
             <option value="EUR">EUR</option>
             <option value="USD">USD</option>
             <option value="JPY">JPY</option>

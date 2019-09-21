@@ -29,7 +29,7 @@ export default {
       default: undefined
     },
     currency: {
-      type: String,
+      type: [String, Object],
       default: undefined
     },
     distractionFree: {
