@@ -8,9 +8,9 @@ Parses a number from a currency formatted string. This method is also exposed as
 #### `formattedValue` (String)
 The currency formatted string to be parsed, for example `$1,234.50`.
 #### `locale` (String)
-A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`).
+A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`).
 #### `currency` (String/Object)
-A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`), an object `{prefix, suffix}` or `null`.
+A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`), an object `{prefix, suffix}` or `null`.
 
 ### Returns
 The parsed number (for example `1234.5`) or `null` if the formatted string does not conform.
