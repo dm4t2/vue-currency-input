@@ -21,6 +21,7 @@ describe('CurrencyInput', () => {
         await expectInitialValue('1.234,50 €', { locale: 'de', value: 1234.5 })
         await expectInitialValue('€1,234.52', { locale: 'en', value: 1234.523 })
         await expectInitialValue('1 234,00 €', { locale: 'fr', value: 1234 })
+        await expectInitialValue('€ -1,00', { locale: 'nl-NL', value: -1 })
       })
 
       it('rounds float numbers if the currency supports no decimal digits', async () => {
@@ -60,8 +61,13 @@ describe('CurrencyInput', () => {
       const wrapper = mountComponent({ locale: 'en' })
 
       wrapper.setValue('12345')
-
       expect(wrapper.element.value).toBe('€12,345')
+
+      wrapper.setValue('-1')
+      expect(wrapper.element.value).toBe('-€1')
+
+      wrapper.setValue('-0')
+      expect(wrapper.element.value).toBe('-€0')
     })
 
     it('emits the raw number value', () => {
@@ -88,8 +94,10 @@ describe('CurrencyInput', () => {
       const wrapper = mountComponent({ locale: 'en' })
 
       wrapper.setProps({ value: 12345 })
-
       expect(wrapper.element.value).toBe('€12,345.00')
+
+      wrapper.setProps({ value: -1 })
+      expect(wrapper.element.value).toBe('-€1.00')
     })
 
     it('emits the raw number value', () => {
@@ -133,7 +141,7 @@ describe('CurrencyInput', () => {
         expect(wrapper.element.selectionStart).toBe(5)
       })
 
-      it('preserves the selected text if preset', () => {
+      it('preserves the selected text if present', () => {
         const wrapper = mountComponent({ locale: 'en', distractionFree: true })
         wrapper.setValue('1234567.89')
 
@@ -219,6 +227,17 @@ describe('CurrencyInput', () => {
 
         expect(wrapper.element.value).toBe('€1,000.00')
       })
+    })
+  })
+
+  describe('when the component options are changed', () => {
+    it('formats the value according to the new options', () => {
+      const wrapper = mountComponent({ locale: 'en', currency: 'USD' })
+      wrapper.setValue(-1234.56)
+
+      expect(wrapper.element.value).toBe('-$1,234.56')
+      wrapper.setProps({ locale: 'nl-NL' })
+      expect(wrapper.element.value).toBe('US$ -1.234,56')
     })
   })
 

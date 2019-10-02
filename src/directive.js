@@ -6,10 +6,6 @@ import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
 import parse from './utils/parse'
 
-const optionsChanged = (oldOptions, newOptions) => {
-  return Object.keys(defaultOptions).some((key) => oldOptions[key] !== newOptions[key])
-}
-
 const init = (el, optionsFromBinding, defaultOptions) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
   if (!inputElement) {
@@ -59,7 +55,7 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
   dispatchEvent(el, 'input')
 }
 
-function updateInputValue (el, value, distractionFree = false) {
+const updateInputValue = (el, value, distractionFree = false) => {
   if (value != null) {
     const { options, decimalFormat, currencyFormat, focus, previousConformedValue } = el.$ci
     const hideCurrencySymbol = focus && options.hideCurrencySymbol
@@ -71,8 +67,9 @@ function updateInputValue (el, value, distractionFree = false) {
         minimumFractionDigits: distractionFree
           ? (options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : currencyFormat.decimalLength)
           : fractionDigits.length
-      }).format(conformedValue)
-      el.value = `${conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
+      }).format(Math.abs(conformedValue))
+      const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
+      el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
     } else {
       el.value = conformedValue
     }
@@ -89,7 +86,7 @@ const format = (el, value = el.value) => {
   dispatchEvent(el, 'format-complete', { numberValue })
 }
 
-function addEventListener (el) {
+const addEventListener = (el) => {
   el.addEventListener('input', () => {
     if (el.$ci.focus) {
       const { value, selectionStart } = el
@@ -137,11 +134,10 @@ export default {
         applyFixedFractionFormat(inputElement)
       }
     })
-
     addEventListener(inputElement)
   },
   componentUpdated (el, { value, oldValue }, { context }) {
-    if (!!value && optionsChanged(oldValue, value)) {
+    if (!!value && Object.keys(defaultOptions).some((key) => oldValue[key] !== value[key])) {
       const inputElement = init(el, value, context.$CI_DEFAULT_OPTIONS || defaultOptions)
       applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
     }
