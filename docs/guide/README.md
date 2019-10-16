@@ -8,7 +8,7 @@ sidebarDepth: 3
 The Vue Currency Input plugin allows an easy input of currency formatted numbers. 
 It provides both a standalone component (`<currency-input>`) and a custom Vue directive (`v-currency`) for decorating existing input components with currency format capabilities.
 
-## Getting started
+## Installation
 Install the npm package:
 ``` bash
 npm install vue-currency-input 
@@ -17,19 +17,30 @@ yarn add vue-currency-input
 ```
 
 Add the Vue plugin in your `main.js`:
-``` js
-import Vue from 'vue'
-import VueCurrencyInput from 'vue-currency-input'
 
-const pluginOptions = { /* see config reference */ }
-Vue.use(VueCurrencyInput, pluginOptions)
+<<< @/docs/guide/main.js
+
+This registers the component/directive globally and provides the Vue instance method `$parseCurrency`.
+
+### Nuxt
+Add `vue-currency-input/nuxt` to the modules section of `nuxt.config.js`:
+
+<<< @/docs/guide/nuxt.config.js
+
+### Direct download via CDN
+If you don't use a module system you can also download the plugin as UMD bundle via CDN. 
+Include the plugin after Vue and it will install itself automatically:
+
+```html
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/vue-currency-input"></script>
 ```
 
-This registers the component/directive globally and will provide the Vue instance method `$parseCurrency`.
+[Try it on CodeSandbox](https://codesandbox.io/s/vue-currency-input-direct-browser-usage-yjtci?fontsize=14)
 
 ## Usage
 ### Component
-The `currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the raw number value. All other [component props](/config) are optional.
+The `<currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the raw number value. All other [component props](/config) are optional.
 
 <<< @/docs/guide/ComponentUsage.vue
 
@@ -42,13 +53,11 @@ The `v-currency` directive is great if you want to decorate existing input compo
 In comparision to the `<currency-input>` component the `v-currency` directive will always emit the formatted string instead of the raw number value when used with `v-model`. 
 To get the number value you can use the `$parseCurrency` instance method (see [examples](/examples/#raw-number-value-with-directive)) or the [`parseCurrency` API method](/api#parsecurrency-formattedvalue-locale-currency) (when using on demand imports).
 
-
-## Alternative installation methods
-### Import on demand
+## Import on demand
 You can also import the component/directive on demand and register them locally in your Vue files. 
 This is useful if you want to use [async components](https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components).
 
-#### Component
+### Component
 ```vue
 <template>
   <currency-input :value="1000"/>
@@ -62,7 +71,7 @@ export default {
 </script>
 ```
 
-#### Directive
+### Directive
 ```vue
 <template>
   <input v-currency/>
@@ -78,14 +87,3 @@ export default {
 </script>
 
 ```
-
-### Direct download via CDN
-If you don't use a module system you can also download the plugin as UMD bundle via CDN. 
-Include the plugin after Vue and it will install itself automatically:
-
-```html
-<script src="https://unpkg.com/vue"></script>
-<script src="https://unpkg.com/vue-currency-input"></script>
-```
-
-[Try it on CodeSandbox](https://codesandbox.io/s/vue-currency-input-direct-browser-usage-yjtci?fontsize=14)
