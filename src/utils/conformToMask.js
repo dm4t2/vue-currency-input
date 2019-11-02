@@ -36,31 +36,12 @@ const getAutoDecimalModeConformedValue = (value, previousConformedValue, { decim
 
 const isFractionInvalid = (fraction, numberOfFractionDigits) => fraction.length > 0 && numberOfFractionDigits === 0
 
-const checkNumberValue = (value, { decimalLength }) => {
-  if (isNumber(value)) {
-    let [integer, fraction] = value.split('.')
-    if (fraction) {
-      fraction = fraction.substr(0, decimalLength)
-    }
-    return {
-      conformedValue: Number(`${integer}.${fraction || ''}`),
-      fractionDigits: fraction || ''
-    }
-  }
-  return null
-}
-
 export default (str, formatConfig, options, previousConformedValue = '') => {
   if (typeof str === 'string') {
     str = str.trim()
 
     if (options.autoDecimalMode) {
       return getAutoDecimalModeConformedValue(str, previousConformedValue, formatConfig)
-    }
-
-    const numberValue = checkNumberValue(str, formatConfig)
-    if (numberValue != null) {
-      return numberValue
     }
 
     const { value, negative } = stripCurrencySymbolAndMinusSign(str, formatConfig)
@@ -81,12 +62,9 @@ export default (str, formatConfig, options, previousConformedValue = '') => {
     if (negative) {
       number = `-${number}`
     }
-    if (fractionDigits.length > 0) {
-      number += `.${fractionDigits}`
-    }
     if (isNumber(number)) {
       return {
-        conformedValue: Number(number),
+        conformedValue: Number(`${number}.${fractionDigits}`),
         fractionDigits
       }
     } else if (number === '-' && previousConformedValue !== formatConfig.negativePrefix) {

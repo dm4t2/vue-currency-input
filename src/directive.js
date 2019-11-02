@@ -41,7 +41,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
 }
 
 const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormat)) => {
-  const { options: { min, max }, currencyFormat: { decimalLength } } = el.$ci
+  const { options: { min, max, locale }, currencyFormat: { decimalLength } } = el.$ci
   if (value != null) {
     if (min != null && value < min) {
       value = min
@@ -49,7 +49,7 @@ const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFor
     if (max != null && value > max) {
       value = max
     }
-    value = value.toFixed(decimalLength)
+    value = new Intl.NumberFormat(locale, { minimumFractionDigits: decimalLength, maximumFractionDigits: decimalLength }).format(value)
   }
   format(el, value)
   dispatchEvent(el, 'input')
