@@ -40,7 +40,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   return inputElement
 }
 
-const applyFixedFractionFormat = (el, value = parse(el.value, el.$ci.currencyFormat)) => {
+const applyFixedFractionFormat = (el, value) => {
   const { options: { min, max, locale }, currencyFormat: { decimalLength } } = el.$ci
   if (value != null) {
     if (min != null && value < min) {
@@ -70,30 +70,28 @@ const updateInputValue = (el, value, distractionFree = false) => {
       }).format(Math.abs(conformedValue))
       const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
       el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
+      el.$ci.numberValue = conformedValue
     } else {
       el.value = conformedValue
+      el.$ci.numberValue = parse(el.value, formatConfig)
     }
   } else {
-    el.value = null
+    el.value = el.$ci.numberValue = null
   }
   el.$ci.previousConformedValue = el.value
 }
 
-const format = (el, value = el.value) => {
+const format = (el, value) => {
   updateInputValue(el, value)
-  const numberValue = parse(el.value, el.$ci.currencyFormat)
-  el.$ci.numberValue = numberValue
-  dispatchEvent(el, 'format-complete', { numberValue })
+  dispatchEvent(el, 'format-complete', { numberValue: el.$ci.numberValue })
 }
 
 const addEventListener = (el) => {
   el.addEventListener('input', () => {
+    const { value, selectionStart } = el
+    format(el, value)
     if (el.$ci.focus) {
-      const { value, selectionStart } = el
-      format(el)
       setCaretPosition(el, getCaretPositionAfterFormat(el, value, selectionStart))
-    } else {
-      format(el)
     }
   }, { capture: true })
 
@@ -122,7 +120,7 @@ const addEventListener = (el) => {
 
   el.addEventListener('blur', () => {
     el.$ci.focus = false
-    applyFixedFractionFormat(el)
+    applyFixedFractionFormat(el, el.$ci.numberValue)
   })
 }
 
@@ -131,7 +129,7 @@ export default {
     const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
     Vue.nextTick(() => {
       if (inputElement.value) {
-        applyFixedFractionFormat(inputElement)
+        applyFixedFractionFormat(inputElement, parse(inputElement.value, inputElement.$ci.currencyFormat))
       }
     })
     addEventListener(inputElement)

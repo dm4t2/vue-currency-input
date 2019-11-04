@@ -87,6 +87,17 @@ describe('CurrencyInput', () => {
         expect(wrapper.emitted('input')[0][0]).toBeNull()
       })
     })
+
+    describe('the grouping symbol is "." and not hidden on focus', () => {
+      it('emits the expected number', () => {
+        const wrapper = mountComponent({ locale: 'de', distractionFree: { hideCurrencySymbol: true, hideGroupingSymbol: false } })
+
+        wrapper.trigger('focus')
+        wrapper.setValue('1234')
+
+        expect(wrapper.emitted('input')[0][0]).toBe(1234)
+      })
+    })
   })
 
   describe('when the input is changed externally', () => {
