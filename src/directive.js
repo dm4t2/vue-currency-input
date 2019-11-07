@@ -52,7 +52,6 @@ const applyFixedFractionFormat = (el, value) => {
     value = new Intl.NumberFormat(locale, { minimumFractionDigits: decimalLength, maximumFractionDigits: decimalLength }).format(value)
   }
   format(el, value)
-  dispatchEvent(el, 'input')
 }
 
 const updateInputValue = (el, value, distractionFree = false) => {
