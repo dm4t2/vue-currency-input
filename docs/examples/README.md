@@ -18,6 +18,12 @@ Use any currency symbol and specify its position.
 
 [View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/CustomCurrencySymbol.vue)
 
+## Value as integer
+Emit the number value as integer.
+<ValueAsInteger/>
+
+[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/ValueAsInteger.vue)
+
 ## Auto decimal mode
 Automatically insert the decimal symbol and use the last inputted digits as decimal digits.
 <AutoDecimalMode/>
