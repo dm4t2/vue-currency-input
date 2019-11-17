@@ -12,7 +12,7 @@ A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or 
 #### `currency` (String/Object)
 A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`), an object `{prefix, suffix}` or `null`.
 #### `valueAsInteger` (Boolean)
-Use `true` to restore the decimal digits of a formatted value, when using the `valueAsInteger` option of the component/directive.
+Use `true` to restore the decimal digits of a formatted value, when using the `valueAsInteger` option of the `v-currency` directive.
 For example, `"12345"` will be parsed to `123.45` assuming decimal length is 2. Defaults to `false`.
 
 ### Returns

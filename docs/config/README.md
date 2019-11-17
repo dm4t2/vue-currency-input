@@ -29,6 +29,7 @@ The `v-currency` directive supports the same options as the `<currency-input>` c
     autoDecimalMode: false,
     decimalLength: undefined,
     distractionFree: true,
+    valueAsInteger: false,
     min: null,
     max: null
   }"/>
