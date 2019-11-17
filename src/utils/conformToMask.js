@@ -37,6 +37,7 @@ const getAutoDecimalModeConformedValue = (value, previousConformedValue, { decim
 const isFractionInvalid = (fraction, numberOfFractionDigits) => fraction.length > 0 && numberOfFractionDigits === 0
 
 export default (str, formatConfig, options, previousConformedValue = '') => {
+  console.log(str)
   if (typeof str === 'string') {
     str = str.trim()
 
