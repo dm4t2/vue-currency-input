@@ -1,18 +1,20 @@
 import { isNumber, stripCurrencySymbolAndMinusSign } from './formatHelper'
 
-export default (str, { prefix, suffix, groupingSymbol, decimalSymbol } = {}) => {
-  if (typeof str === 'number') {
-    return str
-  } else if (str && typeof str === 'string') {
+export default (str, currencyFormat, valueAsInteger = false) => {
+  if (typeof str === 'string') {
     if (isNumber(str)) {
-      return Number(str)
+      let number = Number(str)
+      if (valueAsInteger) {
+        number /= Math.pow(10, currencyFormat.decimalLength)
+      }
+      return number
     }
-    let { value, negative } = stripCurrencySymbolAndMinusSign(str, { prefix, suffix })
-    const numberParts = value.split(decimalSymbol)
+    let { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
+    const numberParts = value.split(currencyFormat.decimalSymbol)
     if (numberParts.length > 2) {
       return null
     }
-    const integer = numberParts[0].replace(new RegExp(`\\${groupingSymbol}`, 'g'), '')
+    const integer = numberParts[0].replace(new RegExp(`\\${currencyFormat.groupingSymbol}`, 'g'), '')
     if (integer.length && !integer.match(/^\d+$/g)) {
       return null
     }
@@ -27,6 +29,10 @@ export default (str, { prefix, suffix, groupingSymbol, decimalSymbol } = {}) => 
     if (number) {
       if (negative) {
         number = `-${number}`
+      }
+      number = Number(number)
+      if (valueAsInteger) {
+        number /= Math.pow(10, currencyFormat.decimalLength)
       }
       return Number(number)
     }

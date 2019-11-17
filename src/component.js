@@ -44,6 +44,10 @@ export default {
       type: Boolean,
       default: undefined
     },
+    valueAsInteger: {
+      type: Boolean,
+      default: undefined
+    },
     min: {
       type: Number,
       default: undefined
