@@ -280,13 +280,6 @@ describe('CurrencyInput', () => {
   })
 
   describe('custom decimal length', () => {
-    describe('when the decimal length is invalid', () => {
-      it('throws an error', () => {
-        expect(() => mountComponent({ decimalLength: -1 })).toThrowError('Decimal length must be between 0 and 20')
-        expect(() => mountComponent({ decimalLength: 21 })).toThrowError('Decimal length must be between 0 and 20')
-      })
-    })
-
     describe('when the currency supports no decimal digits', () => {
       it('ignores the configuration', async () => {
         await expectInitialValue('¥3', { locale: 'en', currency: 'JPY', decimalLength: 5, value: 3.1415926535 })

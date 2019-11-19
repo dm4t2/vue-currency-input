@@ -4,7 +4,7 @@ import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretP
 import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
-import parse from './utils/parse'
+import parse, { getNumber } from './utils/parse'
 
 const init = (el, optionsFromBinding, defaultOptions) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
@@ -12,7 +12,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
     throw new Error('No input element found')
   }
   const options = { ...defaultOptions, ...optionsFromBinding }
-  const { min, max, decimalLength, distractionFree, autoDecimalMode } = options
+  const { min, max, distractionFree, autoDecimalMode } = options
   if (typeof distractionFree === 'boolean') {
     options.distractionFree = {
       hideCurrencySymbol: distractionFree,
@@ -26,13 +26,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   if (min != null && max != null && min > max) {
     throw new Error('Invalid value range')
   }
-  if (decimalLength < 0 || decimalLength > 20) {
-    throw new Error('Decimal length must be between 0 and 20')
-  }
   const currencyFormat = createCurrencyFormat(options)
-  if (currencyFormat.decimalLength > 0 && decimalLength !== undefined) {
-    currencyFormat.decimalLength = decimalLength
-  }
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
@@ -81,7 +75,7 @@ const updateInputValue = (el, value) => {
       el.$ci.numberValue = conformedValue
     } else {
       el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, formatConfig)
+      el.$ci.numberValue = parse(el.value, formatConfig, options.valueAsInteger)
     }
   } else {
     el.value = el.$ci.numberValue = null
@@ -91,11 +85,15 @@ const updateInputValue = (el, value) => {
 
 const format = (el, value) => {
   updateInputValue(el, value)
-  let numberValue = el.$ci.numberValue
-  if (numberValue != null && el.$ci.options.valueAsInteger) {
-    numberValue *= Math.pow(10, el.$ci.currencyFormat.decimalLength)
-  }
+  const numberValue = getNumber(el.$ci.numberValue, el.$ci.options.valueAsInteger, el.$ci.currencyFormat.decimalLength)
   dispatchEvent(el, 'format-complete', { numberValue })
+}
+
+const toFloat = (number, options, currencyFormat) => {
+  if (options.valueAsInteger) {
+    return number / Math.pow(10, currencyFormat.decimalLength)
+  }
+  return number
 }
 
 const addEventListener = (el) => {
@@ -110,11 +108,7 @@ const addEventListener = (el) => {
   el.addEventListener('format', ({ detail }) => {
     const { focus, currencyFormat, options } = el.$ci
     if (!focus) {
-      let number = detail.value
-      if (options.valueAsInteger) {
-        number /= Math.pow(10, currencyFormat.decimalLength)
-      }
-      applyFixedFractionFormat(el, number)
+      applyFixedFractionFormat(el, toFloat(detail.value, options, currencyFormat))
     }
   })
 
@@ -145,7 +139,7 @@ export default {
     Vue.nextTick(() => {
       const { value, $ci: { currencyFormat, options } } = inputElement
       if (value) {
-        applyFixedFractionFormat(inputElement, parse(value, currencyFormat, options.valueAsInteger))
+        applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options, currencyFormat))
       }
     })
     addEventListener(inputElement)
