@@ -1,5 +1,7 @@
 # Examples
 
+<Playground/>
+
 ## Basic
 Basic component example using the defaults options.
 <Basic/>
