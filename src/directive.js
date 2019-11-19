@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import defaultOptions from './defaultOptions'
-import { getCaretPositionAfterApplyingDistractionFreeFormat, getCaretPositionAfterFormat, setCaretPosition } from './utils/caretPosition'
+import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretPosition } from './utils/caretPosition'
 import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
-import parse from './utils/parse'
+import parse, { getNumber } from './utils/parse'
 
 const init = (el, optionsFromBinding, defaultOptions) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
@@ -12,30 +12,25 @@ const init = (el, optionsFromBinding, defaultOptions) => {
     throw new Error('No input element found')
   }
   const options = { ...defaultOptions, ...optionsFromBinding }
-  const { min, max, decimalLength, distractionFree, autoDecimalMode } = options
-  options.hideCurrencySymbol = options.currency == null || distractionFree === true || distractionFree.hideCurrencySymbol
-  options.hideNegligibleDecimalDigits = !autoDecimalMode && (distractionFree === true || distractionFree.hideNegligibleDecimalDigits)
-  options.hideGroupingSymbol = distractionFree === true || distractionFree.hideGroupingSymbol
+  const { min, max, distractionFree, autoDecimalMode } = options
+  if (typeof distractionFree === 'boolean') {
+    options.distractionFree = {
+      hideCurrencySymbol: distractionFree,
+      hideNegligibleDecimalDigits: distractionFree,
+      hideGroupingSymbol: distractionFree
+    }
+  }
+  if (autoDecimalMode) {
+    options.distractionFree.hideNegligibleDecimalDigits = false
+  }
   if (min != null && max != null && min > max) {
     throw new Error('Invalid value range')
   }
-  if (decimalLength < 0 || decimalLength > 20) {
-    throw new Error('Decimal length must be between 0 and 20')
-  }
   const currencyFormat = createCurrencyFormat(options)
-  if (currencyFormat.decimalLength > 0 && decimalLength !== undefined) {
-    currencyFormat.decimalLength = decimalLength
-  }
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormat,
-    decimalFormat: {
-      ...currencyFormat,
-      prefix: '',
-      negativePrefix: '-',
-      suffix: ''
-    }
+    currencyFormat
   }
   return inputElement
 }
@@ -54,25 +49,33 @@ const applyFixedFractionFormat = (el, value) => {
   format(el, value)
 }
 
-const updateInputValue = (el, value, distractionFree = false) => {
+const hideCurrencySymbolOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideCurrencySymbol
+
+const hideGroupingSymbolOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideGroupingSymbol
+
+const hideNegligibleDecimalDigitsOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideNegligibleDecimalDigits
+
+const updateInputValue = (el, value) => {
   if (value != null) {
-    const { options, decimalFormat, currencyFormat, focus, previousConformedValue } = el.$ci
-    const hideCurrencySymbol = focus && options.hideCurrencySymbol
-    const formatConfig = hideCurrencySymbol ? decimalFormat : currencyFormat
+    const { options, currencyFormat, previousConformedValue } = el.$ci
+    const formatConfig = { ...currencyFormat }
+    if (hideCurrencySymbolOnFocus(el)) {
+      formatConfig.prefix = ''
+      formatConfig.negativePrefix = '-'
+      formatConfig.suffix = ''
+    }
     const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
     if (typeof conformedValue === 'number') {
       const formattedValue = new Intl.NumberFormat(options.locale, {
-        useGrouping: !(focus && options.hideGroupingSymbol),
-        minimumFractionDigits: distractionFree
-          ? (options.hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : currencyFormat.decimalLength)
-          : fractionDigits.length
+        useGrouping: !hideGroupingSymbolOnFocus(el),
+        minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.decimalLength, fractionDigits.length)
       }).format(Math.abs(conformedValue))
       const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
       el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
       el.$ci.numberValue = conformedValue
     } else {
       el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, formatConfig)
+      el.$ci.numberValue = parse(el.value, formatConfig, options.valueAsInteger)
     }
   } else {
     el.value = el.$ci.numberValue = null
@@ -82,36 +85,43 @@ const updateInputValue = (el, value, distractionFree = false) => {
 
 const format = (el, value) => {
   updateInputValue(el, value)
-  dispatchEvent(el, 'format-complete', { numberValue: el.$ci.numberValue })
+  const numberValue = getNumber(el.$ci.numberValue, el.$ci.options.valueAsInteger, el.$ci.currencyFormat.decimalLength)
+  dispatchEvent(el, 'format-complete', { numberValue })
+}
+
+const toFloat = (number, options, currencyFormat) => {
+  if (options.valueAsInteger) {
+    return number / Math.pow(10, currencyFormat.decimalLength)
+  }
+  return number
 }
 
 const addEventListener = (el) => {
   el.addEventListener('input', () => {
-    const { value, selectionStart } = el
+    const { value, selectionStart, $ci: { currencyFormat, options } } = el
     format(el, value)
     if (el.$ci.focus) {
-      setCaretPosition(el, getCaretPositionAfterFormat(el, value, selectionStart))
+      setCaretPosition(el, getCaretPositionAfterFormat(el.value, value, selectionStart, currencyFormat, options))
     }
   }, { capture: true })
 
   el.addEventListener('format', ({ detail }) => {
-    if (!el.$ci.focus) {
-      applyFixedFractionFormat(el, detail.value)
+    const { focus, currencyFormat, options } = el.$ci
+    if (!focus) {
+      applyFixedFractionFormat(el, toFloat(detail.value, options, currencyFormat))
     }
   })
 
   el.addEventListener('focus', () => {
     el.$ci.focus = true
-    const { currencyFormat, options } = el.$ci
-    const { distractionFree, hideCurrencySymbol, hideGroupingSymbol, hideNegligibleDecimalDigits } = options
-    if (distractionFree === true || hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
+    if (hideCurrencySymbolOnFocus(el) || hideGroupingSymbolOnFocus(el) || hideNegligibleDecimalDigitsOnFocus(el)) {
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = el
-        updateInputValue(el, el.value, true)
+        updateInputValue(el, el.value)
         if (Math.abs(selectionStart - selectionEnd) > 0) {
           el.setSelectionRange(0, el.value.length)
         } else {
-          setCaretPosition(el, getCaretPositionAfterApplyingDistractionFreeFormat(currencyFormat, options, value, selectionStart))
+          setCaretPosition(el, getDistractionFreeCaretPosition(el.$ci.currencyFormat, el.$ci.options, value, selectionStart))
         }
       })
     }
@@ -127,8 +137,9 @@ export default {
   bind (el, { value: options }, { context }) {
     const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
     Vue.nextTick(() => {
-      if (inputElement.value) {
-        applyFixedFractionFormat(inputElement, parse(inputElement.value, inputElement.$ci.currencyFormat))
+      const { value, $ci: { currencyFormat, options } } = inputElement
+      if (value) {
+        applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options, currencyFormat))
       }
     })
     addEventListener(inputElement)

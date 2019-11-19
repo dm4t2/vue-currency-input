@@ -49,9 +49,9 @@ The `v-currency` directive is great if you want to decorate existing input compo
 
 <<< @/docs/guide/DirectiveUsage.vue
 
-#### Getting the raw number value
+#### Getting the number value
 In comparision to the `<currency-input>` component the `v-currency` directive will always emit the formatted string instead of the raw number value when used with `v-model`. 
-To get the number value you can use the `$parseCurrency` instance method (see [examples](/examples/#raw-number-value-with-directive)) or the [`parseCurrency` API method](/api#parsecurrency-formattedvalue-locale-currency) (when using on demand imports).
+To get the number value you can use the [`parseCurrency` method](/api/#parsecurrency-formattedvalue-options).
 
 ## Import on demand
 You can also import the component/directive on demand and register them locally in your Vue files. 

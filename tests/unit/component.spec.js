@@ -27,6 +27,13 @@ describe('CurrencyInput', () => {
       it('rounds float numbers if the currency supports no decimal digits', async () => {
         await expectInitialValue('1.235 ¥', { currency: 'JPY', locale: 'de', value: 1234.5 })
       })
+
+      it('sets the expected formatted value if the value is handled as integer', async () => {
+        await expectInitialValue('1.234,56 €', { locale: 'de', valueAsInteger: true, value: 123456 })
+        await expectInitialValue('12,35 €', { locale: 'de', valueAsInteger: true, value: 1234.5 })
+        await expectInitialValue('0,01 €', { locale: 'de', valueAsInteger: true, value: 1 })
+        await expectInitialValue('0,00001 €', { locale: 'de', decimalLength: 5, valueAsInteger: true, value: 1 })
+      })
     })
 
     describe('the initial value is not a number', () => {
@@ -111,6 +118,16 @@ describe('CurrencyInput', () => {
       expect(wrapper.element.value).toBe('-€1.00')
     })
 
+    it('sets the expected formatted value if the value is handled as integer', () => {
+      const wrapper = mountComponent({ locale: 'en', valueAsInteger: true })
+
+      wrapper.setProps({ value: 12345 })
+      expect(wrapper.element.value).toBe('€123.45')
+
+      wrapper.setProps({ value: -1 })
+      expect(wrapper.element.value).toBe('-€0.01')
+    })
+
     it('emits the raw number value', () => {
       const wrapper = mountComponent()
 
@@ -139,6 +156,16 @@ describe('CurrencyInput', () => {
         jest.runOnlyPendingTimers()
 
         expect(wrapper.element.value).toBe('1234.5')
+      })
+
+      it('displays negligible decimal digits if auto decimal mode is enabled', () => {
+        const wrapper = mountComponent({ locale: 'en', distractionFree: true, autoDecimalMode: true })
+        wrapper.setValue('1234.50')
+
+        wrapper.trigger('focus')
+        jest.runOnlyPendingTimers()
+
+        expect(wrapper.element.value).toBe('1234.50')
       })
 
       it('sets the caret to the right position if no text was selected', () => {
@@ -253,13 +280,6 @@ describe('CurrencyInput', () => {
   })
 
   describe('custom decimal length', () => {
-    describe('when the decimal length is invalid', () => {
-      it('throws an error', () => {
-        expect(() => mountComponent({ decimalLength: -1 })).toThrowError('Decimal length must be between 0 and 20')
-        expect(() => mountComponent({ decimalLength: 21 })).toThrowError('Decimal length must be between 0 and 20')
-      })
-    })
-
     describe('when the currency supports no decimal digits', () => {
       it('ignores the configuration', async () => {
         await expectInitialValue('¥3', { locale: 'en', currency: 'JPY', decimalLength: 5, value: 3.1415926535 })

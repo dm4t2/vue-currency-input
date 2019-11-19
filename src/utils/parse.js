@@ -1,18 +1,20 @@
 import { isNumber, stripCurrencySymbolAndMinusSign } from './formatHelper'
 
-export default (str, { prefix, suffix, groupingSymbol, decimalSymbol } = {}) => {
-  if (typeof str === 'number') {
-    return str
-  } else if (str && typeof str === 'string') {
+export const getNumber = (number, valueAsInteger, decimalLength) => {
+  return number != null && valueAsInteger ? Number(number.toFixed(decimalLength).split('.').join('')) : number
+}
+
+export default (str, currencyFormat, valueAsInteger = false) => {
+  if (typeof str === 'string') {
     if (isNumber(str)) {
-      return Number(str)
+      return getNumber(Number(str), valueAsInteger, currencyFormat.decimalLength)
     }
-    let { value, negative } = stripCurrencySymbolAndMinusSign(str, { prefix, suffix })
-    const numberParts = value.split(decimalSymbol)
+    let { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
+    const numberParts = value.split(currencyFormat.decimalSymbol)
     if (numberParts.length > 2) {
       return null
     }
-    const integer = numberParts[0].replace(new RegExp(`\\${groupingSymbol}`, 'g'), '')
+    const integer = numberParts[0].replace(new RegExp(`\\${currencyFormat.groupingSymbol}`, 'g'), '')
     if (integer.length && !integer.match(/^\d+$/g)) {
       return null
     }
@@ -28,7 +30,7 @@ export default (str, { prefix, suffix, groupingSymbol, decimalSymbol } = {}) => 
       if (negative) {
         number = `-${number}`
       }
-      return Number(number)
+      return getNumber(Number(number), valueAsInteger, currencyFormat.decimalLength)
     }
   }
   return null

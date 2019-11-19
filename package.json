@@ -7,6 +7,7 @@
   "jsdelivr": "dist/vue-currency-input.umd.js",
   "module": "dist/vue-currency-input.esm.js",
   "main": "dist/vue-currency-input.umd.js",
+  "types": "src/index.d.ts",
   "files": [
     "dist/*.js",
     "src",
@@ -38,14 +39,16 @@
     "vue": "^2.5"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-plugin-unit-jest": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
+    "@vue/cli-plugin-babel": "^4.0.5",
+    "@vue/cli-plugin-eslint": "^4.0.5",
+    "@vue/cli-plugin-unit-jest": "^4.0.5",
+    "@vue/cli-service": "^4.0.5",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "^1.0.0-beta.29",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^24.9.0",
+    "babel-eslint": "^10.0.3",
+    "core-js": "^3.3.2",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
     "intl": "^1.2.5",
     "node-sass": "^4.12.0",
     "rollup": "^1.21.3",
@@ -71,7 +74,18 @@
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "postcss": {
     "plugins": {
@@ -80,30 +94,9 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
+    "last 2 versions"
   ],
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "snapshotSerializers": [
-      "jest-serializer-vue"
-    ],
-    "testMatch": [
-      "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
-    ],
-    "testURL": "http://localhost/"
+    "preset": "@vue/cli-plugin-unit-jest"
   }
 }

@@ -11,7 +11,7 @@ describe('parseCurrency', () => {
     const locale = 'en'
     const currency = 'USD'
 
-    parseCurrency(formattedValue, locale, currency)
+    parseCurrency(formattedValue, { locale, currency })
 
     expect(parse).toHaveBeenCalled()
     expect(parse.mock.calls[0][0]).toBe(formattedValue)

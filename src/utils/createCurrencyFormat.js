@@ -18,17 +18,25 @@ const createCurrencyFormat = (numberFormat) => {
   }
 }
 
-export default ({ locale, currency }) => {
+export default ({ locale, currency, decimalLength }) => {
+  let minimumFractionDigits = 2
+  if (decimalLength !== undefined) {
+    minimumFractionDigits = decimalLength
+  }
   if (currency == null) {
-    return createCurrencyFormat(new Intl.NumberFormat(locale, { minimumFractionDigits: 2 }))
+    return createCurrencyFormat(new Intl.NumberFormat(locale, { minimumFractionDigits }))
   } else if (typeof currency === 'object') {
     return {
-      ...createCurrencyFormat(new Intl.NumberFormat(locale, { minimumFractionDigits: 2 })),
+      ...createCurrencyFormat(new Intl.NumberFormat(locale, { minimumFractionDigits })),
       prefix: currency.prefix || '',
       negativePrefix: `-${currency.prefix || ''}`,
       suffix: currency.suffix || ''
     }
   } else {
-    return createCurrencyFormat(new Intl.NumberFormat(locale, { style: 'currency', currency }))
+    const currencyFormat = createCurrencyFormat(new Intl.NumberFormat(locale, { style: 'currency', currency }))
+    if (currencyFormat.decimalLength > 0 && decimalLength !== undefined) {
+      currencyFormat.decimalLength = decimalLength
+    }
+    return currencyFormat
   }
 }
