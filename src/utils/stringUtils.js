@@ -12,24 +12,10 @@ export const startsWith = (str, search) => {
   return str.substring(0, search.length) === search
 }
 
-export const removePrefix = (str, prefix) => {
-  if (prefix && startsWith(str, prefix)) {
-    return str.substr(prefix.length)
-  }
-  return str
-}
-
-export const removeSuffix = (str, suffix) => {
-  if (suffix && endsWith(str, suffix)) {
-    return str.slice(0, suffix.length * -1)
-  }
-  return str
-}
-
 export const stripCurrencySymbolAndMinusSign = (str, { prefix, suffix }) => {
   const value = str.replace(prefix, '').replace(suffix, '')
   return {
-    value: removePrefix(value, '-'),
+    value: value.replace('-', ''),
     negative: startsWith(value, '-')
   }
 }

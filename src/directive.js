@@ -4,7 +4,9 @@ import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretP
 import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
-import parse, { getNumber } from './utils/parse'
+import parse from './utils/parse'
+import equal from './utils/equal'
+import { toFloat, toInteger } from './utils/numberUtils'
 
 const init = (el, optionsFromBinding, defaultOptions) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
@@ -36,7 +38,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
 }
 
 const applyFixedFractionFormat = (el, value) => {
-  const { options: { min, max, locale }, currencyFormat: { decimalLength } } = el.$ci
+  const { options: { min, max, locale }, currencyFormat: { minimumFractionDigits, maximumFractionDigits } } = el.$ci
   if (value != null) {
     if (min != null && value < min) {
       value = min
@@ -44,7 +46,7 @@ const applyFixedFractionFormat = (el, value) => {
     if (max != null && value > max) {
       value = max
     }
-    value = new Intl.NumberFormat(locale, { minimumFractionDigits: decimalLength, maximumFractionDigits: decimalLength }).format(value)
+    value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
   }
   format(el, value)
 }
@@ -68,7 +70,8 @@ const updateInputValue = (el, value) => {
     if (typeof conformedValue === 'number') {
       const formattedValue = new Intl.NumberFormat(options.locale, {
         useGrouping: !hideGroupingSymbolOnFocus(el),
-        minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.decimalLength, fractionDigits.length)
+        minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
+        maximumFractionDigits: formatConfig.maximumFractionDigits
       }).format(Math.abs(conformedValue))
       const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
       el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
@@ -85,15 +88,11 @@ const updateInputValue = (el, value) => {
 
 const format = (el, value) => {
   updateInputValue(el, value)
-  const numberValue = getNumber(el.$ci.numberValue, el.$ci.options.valueAsInteger, el.$ci.currencyFormat.decimalLength)
-  dispatchEvent(el, 'format-complete', { numberValue })
-}
-
-const toFloat = (number, options, currencyFormat) => {
-  if (options.valueAsInteger) {
-    return number / Math.pow(10, currencyFormat.decimalLength)
+  let { numberValue, currencyFormat, options } = el.$ci
+  if (numberValue != null) {
+    numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
   }
-  return number
+  dispatchEvent(el, 'format-complete', { numberValue })
 }
 
 const addEventListener = (el) => {
@@ -108,7 +107,7 @@ const addEventListener = (el) => {
   el.addEventListener('format', ({ detail }) => {
     const { focus, currencyFormat, options } = el.$ci
     if (!focus) {
-      applyFixedFractionFormat(el, toFloat(detail.value, options, currencyFormat))
+      applyFixedFractionFormat(el, toFloat(detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits))
     }
   })
 
@@ -139,13 +138,13 @@ export default {
     Vue.nextTick(() => {
       const { value, $ci: { currencyFormat, options } } = inputElement
       if (value) {
-        applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options, currencyFormat))
+        applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options.valueAsInteger, currencyFormat.maximumFractionDigits))
       }
     })
     addEventListener(inputElement)
   },
   componentUpdated (el, { value, oldValue }, { context }) {
-    if (!!value && Object.keys(defaultOptions).some((key) => oldValue[key] !== value[key])) {
+    if (!equal(value, oldValue)) {
       const inputElement = init(el, value, context.$CI_DEFAULT_OPTIONS || defaultOptions)
       applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
     }

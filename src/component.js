@@ -36,8 +36,8 @@ export default {
       type: [Boolean, Object],
       default: undefined
     },
-    decimalLength: {
-      type: Number,
+    precision: {
+      type: [Number, Object],
       default: undefined
     },
     autoDecimalMode: {

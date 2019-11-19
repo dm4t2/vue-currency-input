@@ -30,11 +30,11 @@ Automatically insert the decimal symbol and use the last inputted digits as deci
 
 [View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/AutoDecimalMode.vue)
 
-## Decimal length
-Apply a custom decimal length and override the currency's default.
-<DecimalLength/>
+## Precision
+Apply a custom precision range and override the currency's default.
+<Precision/>
 
-[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/DecimalLength.vue)
+[View source](https://github.com/dm4t2/vue-currency-input/blob/master/docs/.vuepress/components/Precision.vue)
 
 ## Distraction free
 Hide various parts of the formatting on focus.
