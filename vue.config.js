@@ -3,6 +3,5 @@ module.exports = {
     entry: {
       app: './demo/main.js'
     }
-  },
-  productionSourceMap: false
+  }
 }
