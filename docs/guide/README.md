@@ -40,7 +40,7 @@ Include the plugin after Vue and it will install itself automatically:
 
 ## Usage
 ### Component
-The `<currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the raw number value. All other [component props](/config) are optional.
+The `<currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the raw number value. All other [component props](/config/) are optional.
 
 <<< @/docs/guide/ComponentUsage.vue
 
