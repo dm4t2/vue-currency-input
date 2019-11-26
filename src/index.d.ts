@@ -34,7 +34,7 @@ export const CurrencyInput: Component
 
 export function parseCurrency (formattedValue: string, options: CurrencyInputOptions): number
 
-export function install (vue: typeof Vue, options: PluginOptions): void
+export default function install (vue: typeof Vue, options: PluginOptions): void
 
 declare module 'vue/types/vue' {
   interface Vue {
