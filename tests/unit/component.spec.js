@@ -15,6 +15,15 @@ const expectInitialValue = async (expectedValue, propsData) => {
 }
 
 describe('CurrencyInput', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error')
+    console.error.mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    console.error.mockRestore()
+  })
+
   describe('initial value', () => {
     describe('the initial value is a number', () => {
       it('sets the expected formatted value for the configured currency and locale', async () => {
@@ -36,17 +45,10 @@ describe('CurrencyInput', () => {
       })
     })
 
-    describe('the initial value is not a number', () => {
-      it('sets a empty value', async () => {
-        await expectInitialValue('', { value: '' })
-        await expectInitialValue('', { value: ' ' })
-        await expectInitialValue('', { value: 'foo' })
-      })
-    })
-
     describe('the initial value is less than the min value', () => {
       it('sets the min value', async () => {
         await expectInitialValue('€1,000.00', { locale: 'en', value: 100, min: 1000 })
+        await expectInitialValue('€0.00', { locale: 'en', value: null, min: 0 })
       })
     })
 
@@ -64,35 +66,19 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is changed by the user', () => {
-    it('formats the value correctly', () => {
-      const wrapper = mountComponent({ locale: 'en' })
+    it('formats the value and emits the parsed number', () => {
+      const expectValue = (value, formattedValue, emittedValue, propsData) => {
+        const wrapper = mountComponent(propsData)
+        wrapper.setValue(value)
+        expect(wrapper.element.value).toBe(formattedValue)
+        expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
+      }
 
-      wrapper.setValue('12345')
-      expect(wrapper.element.value).toBe('€12,345')
-
-      wrapper.setValue('-1')
-      expect(wrapper.element.value).toBe('-€1')
-
-      wrapper.setValue('-0')
-      expect(wrapper.element.value).toBe('-€0')
-    })
-
-    it('emits the raw number value', () => {
-      const wrapper = mountComponent({ locale: 'en' })
-
-      wrapper.setValue('12345')
-
-      expect(wrapper.emitted('input')[0][0]).toBe(12345)
-    })
-
-    describe('when the input is cleared', () => {
-      it('emits a null value', () => {
-        const wrapper = mountComponent()
-
-        wrapper.setValue('')
-
-        expect(wrapper.emitted('input')[0][0]).toBeNull()
-      })
+      expectValue('12345', '€12,345', 12345, { locale: 'en' })
+      expectValue('-1', '-€1', -1, { locale: 'en' })
+      expectValue('-0', '-€0', -0, { locale: 'en' })
+      expectValue('', '', null, { locale: 'en' })
+      expectValue('1.', '€1.', 100, { locale: 'en', valueAsInteger: true })
     })
 
     describe('the grouping symbol is "." and not hidden on focus', () => {
@@ -243,8 +229,18 @@ describe('CurrencyInput', () => {
       expect(wrapper.element.value).toBe('€1.34')
     })
 
-    describe('the current value is less than the min value', () => {
-      it('sets the min value', () => {
+    describe('when a min value is present', () => {
+      it('sets the current value to the min value if empty', () => {
+        const wrapper = mountComponent({ locale: 'en', min: 0 })
+
+        wrapper.trigger('focus')
+        wrapper.setValue('')
+        wrapper.trigger('blur')
+
+        expect(wrapper.element.value).toBe('€0.00')
+      })
+
+      it('sets the current value to the min value if smaller', () => {
         const wrapper = mountComponent({ locale: 'en', min: 1000 })
 
         wrapper.trigger('focus')
@@ -255,8 +251,8 @@ describe('CurrencyInput', () => {
       })
     })
 
-    describe('the current value is larger than the max value', () => {
-      it('sets the max value', () => {
+    describe('when a max value is present', () => {
+      it('sets the current value to the max value if larger', () => {
         const wrapper = mountComponent({ locale: 'en', max: 1000 })
 
         wrapper.trigger('focus')

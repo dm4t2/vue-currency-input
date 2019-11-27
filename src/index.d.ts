@@ -14,9 +14,10 @@ interface DistractionFreeOptions {
 interface CurrencyInputOptions {
   locale: string,
   currency: string | CurrencyOptions,
-  autoDecimalMode: boolean,
-  distractionFree: boolean | DistractionFreeOptions,
   valueAsInteger: boolean,
+  distractionFree: boolean | DistractionFreeOptions,
+  decimalLength: number,
+  autoDecimalMode: boolean,
   min: number,
   max: number
 }
@@ -31,12 +32,12 @@ export const CurrencyDirective: DirectiveOptions
 
 export const CurrencyInput: Component
 
-export function parseCurrency (formattedValue: string, locale: string, currency: string | CurrencyOptions, valueAsInteger: boolean): number
+export function parseCurrency (formattedValue: string, options: CurrencyInputOptions): number
 
 export function install (vue: typeof Vue, options: PluginOptions): void
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $parseCurrency (formattedValue: string, locale: string, currency: string | CurrencyOptions, valueAsInteger: boolean): number
+    $parseCurrency (formattedValue: string, options: CurrencyInputOptions): number
   }
 }

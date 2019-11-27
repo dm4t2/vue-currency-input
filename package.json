@@ -1,7 +1,7 @@
 {
   "name": "vue-currency-input",
   "description": "Easy input of currency formatted numbers for Vue.js.",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "license": "MIT",
   "unpkg": "dist/vue-currency-input.umd.js",
   "jsdelivr": "dist/vue-currency-input.umd.js",
@@ -28,9 +28,9 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "rollup -c --environment BUILD:production",
+    "build": "rollup -c",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit --silent",
+    "test:unit": "vue-cli-service test:unit",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
@@ -61,42 +61,5 @@
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "vuepress": "^1.1.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/recommended",
-      "@vue/standard"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/__tests__/*.{j,t}s?(x)",
-          "**/tests/unit/**/*.spec.{j,t}s?(x)"
-        ],
-        "env": {
-          "jest": true
-        }
-      }
-    ]
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ],
-  "jest": {
-    "preset": "@vue/cli-plugin-unit-jest"
   }
 }
