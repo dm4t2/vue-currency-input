@@ -16,7 +16,7 @@ interface CurrencyInputOptions {
   currency: string | CurrencyOptions,
   valueAsInteger: boolean,
   distractionFree: boolean | DistractionFreeOptions,
-  decimalLength: number,
+  precision: number,
   autoDecimalMode: boolean,
   min: number,
   max: number
