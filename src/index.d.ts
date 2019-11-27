@@ -11,12 +11,17 @@ interface DistractionFreeOptions {
   hideNegligibleDecimalDigits: boolean
 }
 
+interface PrecisionOptions {
+  min: number,
+  max: number
+}
+
 interface CurrencyInputOptions {
   locale: string,
   currency: string | CurrencyOptions,
   valueAsInteger: boolean,
   distractionFree: boolean | DistractionFreeOptions,
-  precision: number,
+  precision: number | PrecisionOptions,
   autoDecimalMode: boolean,
   min: number,
   max: number
