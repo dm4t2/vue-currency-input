@@ -15,6 +15,15 @@ const expectInitialValue = async (expectedValue, propsData) => {
 }
 
 describe('CurrencyInput', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error')
+    console.error.mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    console.error.mockRestore()
+  })
+
   describe('initial value', () => {
     describe('the initial value is a number', () => {
       it('sets the expected formatted value for the configured currency and locale', async () => {
@@ -36,17 +45,10 @@ describe('CurrencyInput', () => {
       })
     })
 
-    describe('the initial value is not a number', () => {
-      it('sets a empty value', async () => {
-        await expectInitialValue('', { value: '' })
-        await expectInitialValue('', { value: ' ' })
-        await expectInitialValue('', { value: 'foo' })
-      })
-    })
-
     describe('the initial value is less than the min value', () => {
       it('sets the min value', async () => {
         await expectInitialValue('€1,000.00', { locale: 'en', value: 100, min: 1000 })
+        await expectInitialValue('€0.00', { locale: 'en', value: null, min: 0 })
       })
     })
 
@@ -227,8 +229,18 @@ describe('CurrencyInput', () => {
       expect(wrapper.element.value).toBe('€1.34')
     })
 
-    describe('the current value is less than the min value', () => {
-      it('sets the min value', () => {
+    describe('when a min value is present', () => {
+      it('sets the current value to the min value if empty', () => {
+        const wrapper = mountComponent({ locale: 'en', min: 0 })
+
+        wrapper.trigger('focus')
+        wrapper.setValue('')
+        wrapper.trigger('blur')
+
+        expect(wrapper.element.value).toBe('€0.00')
+      })
+
+      it('sets the current value to the min value if smaller', () => {
         const wrapper = mountComponent({ locale: 'en', min: 1000 })
 
         wrapper.trigger('focus')
@@ -239,8 +251,8 @@ describe('CurrencyInput', () => {
       })
     })
 
-    describe('the current value is larger than the max value', () => {
-      it('sets the max value', () => {
+    describe('when a max value is present', () => {
+      it('sets the current value to the max value if larger', () => {
         const wrapper = mountComponent({ locale: 'en', max: 1000 })
 
         wrapper.trigger('focus')

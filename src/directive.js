@@ -37,13 +37,13 @@ const init = (el, optionsFromBinding, defaultOptions) => {
 
 const applyFixedFractionFormat = (el, value) => {
   const { options: { min, max, locale }, currencyFormat: { decimalLength } } = el.$ci
+  if (min != null && (value == null || value < min)) {
+    value = min
+  }
+  if (max != null && value > max) {
+    value = max
+  }
   if (value != null) {
-    if (min != null && value < min) {
-      value = min
-    }
-    if (max != null && value > max) {
-      value = max
-    }
     value = new Intl.NumberFormat(locale, { minimumFractionDigits: decimalLength, maximumFractionDigits: decimalLength }).format(value)
   }
   format(el, value)
@@ -138,9 +138,7 @@ export default {
     const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
     Vue.nextTick(() => {
       const { value, $ci: { currencyFormat, options } } = inputElement
-      if (value) {
-        applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options, currencyFormat))
-      }
+      applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options, currencyFormat))
     })
     addEventListener(inputElement)
   },

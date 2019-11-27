@@ -30,7 +30,7 @@
     "serve": "vue-cli-service serve",
     "build": "rollup -c",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit --silent",
+    "test:unit": "vue-cli-service test:unit",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
