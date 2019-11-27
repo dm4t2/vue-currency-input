@@ -64,35 +64,19 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is changed by the user', () => {
-    it('formats the value correctly', () => {
-      const wrapper = mountComponent({ locale: 'en' })
+    it('formats the value and emits the parsed number', () => {
+      const expectValue = (value, formattedValue, emittedValue, propsData) => {
+        const wrapper = mountComponent(propsData)
+        wrapper.setValue(value)
+        expect(wrapper.element.value).toBe(formattedValue)
+        expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
+      }
 
-      wrapper.setValue('12345')
-      expect(wrapper.element.value).toBe('€12,345')
-
-      wrapper.setValue('-1')
-      expect(wrapper.element.value).toBe('-€1')
-
-      wrapper.setValue('-0')
-      expect(wrapper.element.value).toBe('-€0')
-    })
-
-    it('emits the raw number value', () => {
-      const wrapper = mountComponent({ locale: 'en' })
-
-      wrapper.setValue('12345')
-
-      expect(wrapper.emitted('input')[0][0]).toBe(12345)
-    })
-
-    describe('when the input is cleared', () => {
-      it('emits a null value', () => {
-        const wrapper = mountComponent()
-
-        wrapper.setValue('')
-
-        expect(wrapper.emitted('input')[0][0]).toBeNull()
-      })
+      expectValue('12345', '€12,345', 12345, { locale: 'en' })
+      expectValue('-1', '-€1', -1, { locale: 'en' })
+      expectValue('-0', '-€0', -0, { locale: 'en' })
+      expectValue('', '', null, { locale: 'en' })
+      expectValue('1.', '€1.', 100, { locale: 'en', valueAsInteger: true })
     })
 
     describe('the grouping symbol is "." and not hidden on focus', () => {

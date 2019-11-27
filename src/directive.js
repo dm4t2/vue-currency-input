@@ -75,7 +75,7 @@ const updateInputValue = (el, value) => {
       el.$ci.numberValue = conformedValue
     } else {
       el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, formatConfig, options.valueAsInteger)
+      el.$ci.numberValue = parse(el.value, formatConfig, false)
     }
   } else {
     el.value = el.$ci.numberValue = null
