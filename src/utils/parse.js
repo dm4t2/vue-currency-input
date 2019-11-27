@@ -1,13 +1,10 @@
-import { isNumber, stripCurrencySymbolAndMinusSign } from './formatHelper'
-
-export const getNumber = (number, valueAsInteger, decimalLength) => {
-  return number != null && valueAsInteger ? Number(number.toFixed(decimalLength).split('.').join('')) : number
-}
+import { isNumber, stripCurrencySymbolAndMinusSign } from './stringUtils'
+import { toInteger } from './numberUtils'
 
 export default (str, currencyFormat, valueAsInteger = false) => {
   if (typeof str === 'string') {
     if (isNumber(str)) {
-      return getNumber(Number(str), valueAsInteger, currencyFormat.decimalLength)
+      return toInteger(Number(str), valueAsInteger, currencyFormat.minimumFractionDigits)
     }
     let { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
     const numberParts = value.split(currencyFormat.decimalSymbol)
@@ -30,7 +27,7 @@ export default (str, currencyFormat, valueAsInteger = false) => {
       if (negative) {
         number = `-${number}`
       }
-      return getNumber(Number(number), valueAsInteger, currencyFormat.decimalLength)
+      return toInteger(Number(number), valueAsInteger, currencyFormat.minimumFractionDigits)
     }
   }
   return null

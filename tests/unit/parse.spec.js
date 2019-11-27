@@ -20,7 +20,7 @@ describe('parse', () => {
 
   it('returns the parsed number if the value conforms to the currency format config', () => {
     expect(parse('1234', { decimalSymbol: '.' })).toBe(1234)
-    expect(parse('1234', { decimalLength: 3 }, true)).toBe(1234000)
+    expect(parse('1234', { minimumFractionDigits: 3 }, true)).toBe(1234000)
     expect(parse('1,234,567', { groupingSymbol: ',' })).toBe(1234567)
     expect(parse('$1,234,567', { prefix: '$', groupingSymbol: ',' })).toBe(1234567)
     expect(parse('1234 €', { suffix: ' €' })).toBe(1234)
@@ -36,7 +36,7 @@ describe('parse', () => {
     expect(parse('1234.5', { decimalSymbol: '.' })).toBe(1234.5)
     expect(parse('1234.00', { decimalSymbol: '.' })).toBe(1234)
     expect(parse('1234.0', { decimalSymbol: '.' })).toBe(1234)
-    expect(parse('1234.50 €', { decimalSymbol: '.', suffix: ' €', decimalLength: 2 }, true)).toBe(123450)
+    expect(parse('1234.50 €', { decimalSymbol: '.', suffix: ' €', minimumFractionDigits: 2 }, true)).toBe(123450)
   })
 
   it('returns null if the value does not conform to the currency format config', () => {

@@ -41,7 +41,7 @@ describe('CurrencyInput', () => {
         await expectInitialValue('1.234,56 €', { locale: 'de', valueAsInteger: true, value: 123456 })
         await expectInitialValue('12,35 €', { locale: 'de', valueAsInteger: true, value: 1234.5 })
         await expectInitialValue('0,01 €', { locale: 'de', valueAsInteger: true, value: 1 })
-        await expectInitialValue('0,00001 €', { locale: 'de', decimalLength: 5, valueAsInteger: true, value: 1 })
+        await expectInitialValue('0,00001 €', { locale: 'de', precision: 5, valueAsInteger: true, value: 1 })
       })
     })
 
@@ -275,16 +275,35 @@ describe('CurrencyInput', () => {
     })
   })
 
-  describe('custom decimal length', () => {
-    describe('when the currency supports no decimal digits', () => {
+  describe('when a custom precision is used', () => {
+    describe('the currency supports no decimal digits', () => {
       it('ignores the configuration', async () => {
-        await expectInitialValue('¥3', { locale: 'en', currency: 'JPY', decimalLength: 5, value: 3.1415926535 })
+        await expectInitialValue('¥3', { locale: 'en', currency: 'JPY', precision: { min: 5, max: 5 }, value: 3.1415926535 })
       })
     })
 
-    describe('when the currency supports decimal digits', () => {
+    describe('the currency supports decimal digits', () => {
       it('applies the custom decimal length', async () => {
-        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', decimalLength: 5, value: 3.1415926535 })
+        await expectInitialValue('€3', { locale: 'en', currency: 'EUR', precision: 0, value: 3.1415926535 })
+        await expectInitialValue('€3', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 0 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', precision: 5, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', precision: { min: 5, max: 5 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 5 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14000', { locale: 'en', currency: 'EUR', precision: { min: 5, max: 5 }, value: 3.14 })
+        await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 5 }, value: 3.14 })
+        await expectInitialValue('€3.1415926534999998464', { locale: 'en', currency: 'EUR', precision: { min: 0 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', precision: { max: 5 }, value: 3.14 })
+      })
+    })
+
+    describe('auto decimal mode is enabled', () => {
+      it('applies the custom decimal length', async () => {
+        await expectInitialValue('€3', { locale: 'en', currency: 'EUR', autoDecimalMode: true, precision: 0, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', autoDecimalMode: true, precision: 5, value: 3.1415926535 })
+      })
+
+      it('ignores precision ranges', async () => {
+        await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', autoDecimalMode: true, precision: { min: 5, max: 5 }, value: 3.1415926535 })
       })
     })
   })
