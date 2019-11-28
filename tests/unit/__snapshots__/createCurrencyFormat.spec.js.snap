@@ -1,131 +1,179 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createCurrencyFormat de-DE custom 1`] = `
+exports[`createCurrencyFormat custom precision 1`] = `
 Object {
-  "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
-  "negativePrefix": "-₿ ",
-  "prefix": "₿ ",
-  "suffix": "",
-}
-`;
-
-exports[`createCurrencyFormat de-DE custom 2`] = `
-Object {
-  "decimalLength": 2,
-  "decimalSymbol": ",",
-  "groupingSymbol": ".",
-  "negativePrefix": "-",
-  "prefix": "",
-  "suffix": " Euro",
-}
-`;
-
-exports[`createCurrencyFormat de-DE decimal 1`] = `
-Object {
-  "decimalLength": 2,
-  "decimalSymbol": ",",
-  "groupingSymbol": ".",
-  "negativePrefix": "-",
-  "prefix": "",
-  "suffix": "",
-}
-`;
-
-exports[`createCurrencyFormat de-DE_EUR 1`] = `
-Object {
-  "decimalLength": 2,
-  "decimalSymbol": ",",
-  "groupingSymbol": ".",
+  "maximumFractionDigits": 0,
+  "minimumFractionDigits": 0,
   "negativePrefix": "-",
   "prefix": "",
   "suffix": " €",
 }
 `;
 
-exports[`createCurrencyFormat en-GB_GBP 1`] = `
+exports[`createCurrencyFormat custom precision 2`] = `
 Object {
-  "decimalLength": 2,
-  "decimalSymbol": ".",
-  "groupingSymbol": ",",
-  "negativePrefix": "-£",
-  "prefix": "£",
-  "suffix": "",
-}
-`;
-
-exports[`createCurrencyFormat en-IN_INR 1`] = `
-Object {
-  "decimalLength": 2,
-  "decimalSymbol": ".",
-  "groupingSymbol": ",",
-  "negativePrefix": "-₹",
-  "prefix": "₹",
-  "suffix": "",
-}
-`;
-
-exports[`createCurrencyFormat en-US_USD 1`] = `
-Object {
-  "decimalLength": 2,
-  "decimalSymbol": ".",
-  "groupingSymbol": ",",
-  "negativePrefix": "-$",
-  "prefix": "$",
-  "suffix": "",
-}
-`;
-
-exports[`createCurrencyFormat es-ES_EUR 1`] = `
-Object {
-  "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
+  "maximumFractionDigits": 0,
+  "minimumFractionDigits": 0,
   "negativePrefix": "-",
   "prefix": "",
   "suffix": " €",
 }
 `;
 
-exports[`createCurrencyFormat ja_JPY 1`] = `
+exports[`createCurrencyFormat custom precision 3`] = `
 Object {
-  "decimalLength": 0,
   "decimalSymbol": null,
   "groupingSymbol": ",",
+  "maximumFractionDigits": 0,
+  "minimumFractionDigits": 0,
   "negativePrefix": "-￥",
   "prefix": "￥",
   "suffix": "",
 }
 `;
 
-exports[`createCurrencyFormat nl-NL_EUR 1`] = `
+exports[`createCurrencyFormat custom prefix/suffix 1`] = `
 Object {
-  "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-₿ ",
+  "prefix": "₿ ",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat custom prefix/suffix 2`] = `
+Object {
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": " Euro",
+}
+`;
+
+exports[`createCurrencyFormat custom prefix/suffix 3`] = `
+Object {
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat i18n de-DE_EUR 1`] = `
+Object {
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": " €",
+}
+`;
+
+exports[`createCurrencyFormat i18n en-GB_GBP 1`] = `
+Object {
+  "decimalSymbol": ".",
+  "groupingSymbol": ",",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-£",
+  "prefix": "£",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat i18n en-IN_INR 1`] = `
+Object {
+  "decimalSymbol": ".",
+  "groupingSymbol": ",",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-₹",
+  "prefix": "₹",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat i18n en-US_USD 1`] = `
+Object {
+  "decimalSymbol": ".",
+  "groupingSymbol": ",",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-$",
+  "prefix": "$",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat i18n es-ES_EUR 1`] = `
+Object {
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": " €",
+}
+`;
+
+exports[`createCurrencyFormat i18n ja_JPY 1`] = `
+Object {
+  "decimalSymbol": null,
+  "groupingSymbol": ",",
+  "maximumFractionDigits": 0,
+  "minimumFractionDigits": 0,
+  "negativePrefix": "-￥",
+  "prefix": "￥",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat i18n nl-NL_EUR 1`] = `
+Object {
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
   "negativePrefix": "€ -",
   "prefix": "€ ",
   "suffix": "",
 }
 `;
 
-exports[`createCurrencyFormat pt_BRL 1`] = `
+exports[`createCurrencyFormat i18n pt_BRL 1`] = `
 Object {
-  "decimalLength": 2,
   "decimalSymbol": ",",
   "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
   "negativePrefix": "-R$",
   "prefix": "R$",
   "suffix": "",
 }
 `;
 
-exports[`createCurrencyFormat zh_CNY 1`] = `
+exports[`createCurrencyFormat i18n zh_CNY 1`] = `
 Object {
-  "decimalLength": 2,
   "decimalSymbol": ".",
   "groupingSymbol": ",",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
   "negativePrefix": "-￥",
   "prefix": "￥",
   "suffix": "",

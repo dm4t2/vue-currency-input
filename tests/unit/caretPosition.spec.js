@@ -3,7 +3,7 @@ import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition } from '..
 const currencyFormat = {
   decimalSymbol: '.',
   groupingSymbol: ',',
-  decimalLength: 2,
+  maximumFractionDigits: 2,
   prefix: '$',
   suffix: ''
 }

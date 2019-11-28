@@ -1,4 +1,4 @@
-import { endsWith, isNumber, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbolAndMinusSign } from './formatHelper'
+import { endsWith, isNumber, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbolAndMinusSign } from './stringUtils'
 
 const isValidInteger = (integer, groupingSymbol) => integer.match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
 
@@ -8,28 +8,28 @@ const isFractionIncomplete = (value, { decimalSymbol, groupingSymbol }) => {
 }
 
 const checkIncompleteValue = (value, negative, previousConformedValue, formatConfig) => {
-  const { prefix, negativePrefix, suffix, decimalSymbol, decimalLength } = formatConfig
+  const { prefix, negativePrefix, suffix, decimalSymbol, maximumFractionDigits } = formatConfig
   if (value === '' && negative && previousConformedValue !== negativePrefix) {
     return `${negativePrefix}${suffix}`
-  } else if (decimalLength > 0) {
+  } else if (maximumFractionDigits > 0) {
     if (isFractionIncomplete(value, formatConfig)) {
       return `${negative ? negativePrefix : prefix}${value}${suffix}`
     } else if (startsWith(value, decimalSymbol)) {
-      return `${negative ? negativePrefix : prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, decimalLength))}${suffix}`
+      return `${negative ? negativePrefix : prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, maximumFractionDigits))}${suffix}`
     }
   }
   return null
 }
 
-const getAutoDecimalModeConformedValue = (value, previousConformedValue, { decimalLength }) => {
+const getAutoDecimalModeConformedValue = (value, previousConformedValue, { minimumFractionDigits }) => {
   if (value === '') {
     return { conformedValue: '' }
   } else {
     const negative = startsWith(value, '-')
-    const conformedValue = value === '-' ? Number(-0) : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(value))}`) / Math.pow(10, decimalLength)
+    const conformedValue = value === '-' ? Number(-0) : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(value))}`) / Math.pow(10, minimumFractionDigits)
     return {
       conformedValue,
-      fractionDigits: conformedValue.toFixed(decimalLength).slice(-decimalLength)
+      fractionDigits: conformedValue.toFixed(minimumFractionDigits).slice(-minimumFractionDigits)
     }
   }
 }
@@ -40,7 +40,7 @@ export default (str, formatConfig, options, previousConformedValue = '') => {
   if (typeof str === 'string') {
     str = str.trim()
 
-    if (options.autoDecimalMode) {
+    if (formatConfig.minimumFractionDigits > 0 && options.autoDecimalMode) {
       return getAutoDecimalModeConformedValue(str, previousConformedValue, formatConfig)
     }
 
@@ -52,7 +52,7 @@ export default (str, formatConfig, options, previousConformedValue = '') => {
 
     const [integer, ...fraction] = value.split(formatConfig.decimalSymbol)
     const integerDigits = removeLeadingZeros(onlyDigits(integer))
-    const fractionDigits = onlyDigits(fraction.join('')).substr(0, formatConfig.decimalLength)
+    const fractionDigits = onlyDigits(fraction.join('')).substr(0, formatConfig.maximumFractionDigits)
 
     if (isFractionInvalid(fraction, fractionDigits.length)) {
       return { conformedValue: previousConformedValue }

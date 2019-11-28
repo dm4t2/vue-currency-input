@@ -3,7 +3,7 @@ export default {
   currency: 'EUR',
   valueAsInteger: false,
   distractionFree: true,
-  decimalLength: undefined,
+  precision: undefined,
   autoDecimalMode: false,
   min: null,
   max: null

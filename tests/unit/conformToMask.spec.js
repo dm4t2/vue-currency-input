@@ -3,7 +3,7 @@ import conformToMask from '../../src/utils/conformToMask'
 describe('conformToMask', () => {
   describe('when the value is null or undefined', () => {
     it('returns the previous conformed value', () => {
-      const formatConfig = { decimalSymbol: '.', prefix: '$', suffix: '' }
+      const formatConfig = { decimalSymbol: '.', prefix: '$', suffix: '', maximumFractionDigits: 2 }
 
       expect(conformToMask(undefined, formatConfig, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
       expect(conformToMask(null, formatConfig, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
@@ -12,7 +12,7 @@ describe('conformToMask', () => {
 
   describe('when the value is invalid', () => {
     it('returns an empty value', () => {
-      const formatConfig = { decimalSymbol: '.', prefix: '$', suffix: '' }
+      const formatConfig = { decimalSymbol: '.', prefix: '$', suffix: '', maximumFractionDigits: 2 }
 
       expect(conformToMask('', formatConfig, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '' })
       expect(conformToMask(' ', formatConfig, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '' })
@@ -24,9 +24,8 @@ describe('conformToMask', () => {
 
   describe('when the fraction is invalid', () => {
     it('returns the previous conformed value', () => {
-      const formatConfig = { decimalSymbol: '.', prefix: '$', suffix: '' }
+      const formatConfig = { decimalSymbol: '.', prefix: '$', suffix: '', maximumFractionDigits: 2 }
 
-      expect(conformToMask('1.', formatConfig, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
       expect(conformToMask('1..', formatConfig, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
       expect(conformToMask('1.a', formatConfig, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
     })
@@ -34,14 +33,20 @@ describe('conformToMask', () => {
 
   describe('when a invalid negative value is about to being entered', () => {
     it('returns the previous conformed value', () => {
-      expect(conformToMask('-$a', { decimalSymbol: '.', prefix: '$', suffix: '' }, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
-      expect(conformToMask('-a $', { decimalSymbol: '.', prefix: '', suffix: ' $' }, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
+      expect(conformToMask('-$a', { decimalSymbol: '.', prefix: '$', suffix: '', maximumFractionDigits: 2 }, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
+      expect(conformToMask('-a $', { decimalSymbol: '.', prefix: '', suffix: ' $', maximumFractionDigits: 2 }, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
     })
   })
 
   describe('when the value is negative and the prefixed currency symbol is deleted', () => {
     it('returns an empty value', () => {
-      expect(conformToMask('-', { decimalSymbol: '.', prefix: '$', negativePrefix: '-$', suffix: '' }, { autoDecimalMode: false }, '-$')).toEqual({ conformedValue: '' })
+      expect(conformToMask('-', {
+        decimalSymbol: '.',
+        prefix: '$',
+        negativePrefix: '-$',
+        suffix: '',
+        maximumFractionDigits: 2
+      }, { autoDecimalMode: false }, '-$')).toEqual({ conformedValue: '' })
     })
   })
 
@@ -54,7 +59,7 @@ describe('conformToMask', () => {
           prefix: '',
           negativePrefix: '-',
           suffix: '',
-          decimalLength: 2
+          maximumFractionDigits: 2
         }
 
         expect(conformToMask('-', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-' })
@@ -81,7 +86,7 @@ describe('conformToMask', () => {
           prefix: '$',
           negativePrefix: '-$',
           suffix: '',
-          decimalLength: 2
+          maximumFractionDigits: 2
         }
 
         expect(conformToMask('-', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$' })
@@ -109,7 +114,7 @@ describe('conformToMask', () => {
           prefix: '',
           negativePrefix: '-',
           suffix: ' $',
-          decimalLength: 2
+          maximumFractionDigits: 2
         }
 
         expect(conformToMask('-', currencyFormat, { autoDecimalMode: false })).toEqual({ conformedValue: '- $' })
@@ -136,7 +141,7 @@ describe('conformToMask', () => {
           prefix: '',
           negativePrefix: '-',
           suffix: '',
-          decimalLength: 0
+          maximumFractionDigits: 0
         }
 
         expect(conformToMask('-', currencyFormat, { autoDecimalMode: false })).toEqual({ conformedValue: '-' })
@@ -158,7 +163,7 @@ describe('conformToMask', () => {
 
   describe('when the value conforms to the mask', () => {
     it('returns the expected result', () => {
-      const currencyFormat = { decimalSymbol: ',', prefix: '$', suffix: '', decimalLength: 4 }
+      const currencyFormat = { decimalSymbol: ',', prefix: '$', suffix: '', maximumFractionDigits: 4 }
 
       expect(conformToMask('1', currencyFormat, { autoDecimalMode: false })).toEqual({ conformedValue: 1, fractionDigits: '' })
       expect(conformToMask('1,2', currencyFormat, { autoDecimalMode: false })).toEqual({ conformedValue: 1.2, fractionDigits: '2' })
@@ -172,7 +177,7 @@ describe('conformToMask', () => {
 
   describe('when auto decimal mode is enabled', () => {
     it('returns the expected result', () => {
-      const currencyFormat = { decimalSymbol: ',', prefix: '$', suffix: '', decimalLength: 2 }
+      const currencyFormat = { decimalSymbol: ',', prefix: '$', suffix: '', minimumFractionDigits: 2 }
 
       expect(conformToMask('', currencyFormat, { autoDecimalMode: true })).toEqual({ conformedValue: '' })
       expect(conformToMask('-', currencyFormat, { autoDecimalMode: true })).toEqual({ conformedValue: -0, fractionDigits: '00' })

@@ -1,9 +1,9 @@
-import { count, onlyDigits, removeSuffix } from './formatHelper'
+import { count, onlyDigits } from './stringUtils'
 
 export const setCaretPosition = (el, position) => el.setSelectionRange(position, position)
 
 export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPosition, currencyFormat, options) => {
-  const { prefix, suffix, decimalSymbol, decimalLength, groupingSymbol } = currencyFormat
+  const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = currencyFormat
   const decimalSymbolPosition = inputtedValue.indexOf(decimalSymbol) + 1
   let caretPositionFromLeft = inputtedValue.length - caretPosition
 
@@ -13,7 +13,7 @@ export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPositi
     return newValue.length - caretPositionFromLeft - 1
   } else {
     if (!options.autoDecimalMode && decimalSymbolPosition !== 0 && caretPosition > decimalSymbolPosition) {
-      if (onlyDigits(removeSuffix(inputtedValue.substr(decimalSymbolPosition), suffix)).length - 1 === decimalLength) {
+      if (onlyDigits(inputtedValue.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
         caretPositionFromLeft -= 1
       }
     }

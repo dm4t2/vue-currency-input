@@ -15,6 +15,15 @@ const expectInitialValue = async (expectedValue, propsData) => {
 }
 
 describe('CurrencyInput', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error')
+    console.error.mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    console.error.mockRestore()
+  })
+
   describe('initial value', () => {
     describe('the initial value is a number', () => {
       it('sets the expected formatted value for the configured currency and locale', async () => {
@@ -32,21 +41,14 @@ describe('CurrencyInput', () => {
         await expectInitialValue('1.234,56 €', { locale: 'de', valueAsInteger: true, value: 123456 })
         await expectInitialValue('12,35 €', { locale: 'de', valueAsInteger: true, value: 1234.5 })
         await expectInitialValue('0,01 €', { locale: 'de', valueAsInteger: true, value: 1 })
-        await expectInitialValue('0,00001 €', { locale: 'de', decimalLength: 5, valueAsInteger: true, value: 1 })
-      })
-    })
-
-    describe('the initial value is not a number', () => {
-      it('sets a empty value', async () => {
-        await expectInitialValue('', { value: '' })
-        await expectInitialValue('', { value: ' ' })
-        await expectInitialValue('', { value: 'foo' })
+        await expectInitialValue('0,00001 €', { locale: 'de', precision: 5, valueAsInteger: true, value: 1 })
       })
     })
 
     describe('the initial value is less than the min value', () => {
       it('sets the min value', async () => {
         await expectInitialValue('€1,000.00', { locale: 'en', value: 100, min: 1000 })
+        await expectInitialValue('€0.00', { locale: 'en', value: null, min: 0 })
       })
     })
 
@@ -64,35 +66,19 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is changed by the user', () => {
-    it('formats the value correctly', () => {
-      const wrapper = mountComponent({ locale: 'en' })
+    it('formats the value and emits the parsed number', () => {
+      const expectValue = (value, formattedValue, emittedValue, propsData) => {
+        const wrapper = mountComponent(propsData)
+        wrapper.setValue(value)
+        expect(wrapper.element.value).toBe(formattedValue)
+        expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
+      }
 
-      wrapper.setValue('12345')
-      expect(wrapper.element.value).toBe('€12,345')
-
-      wrapper.setValue('-1')
-      expect(wrapper.element.value).toBe('-€1')
-
-      wrapper.setValue('-0')
-      expect(wrapper.element.value).toBe('-€0')
-    })
-
-    it('emits the raw number value', () => {
-      const wrapper = mountComponent({ locale: 'en' })
-
-      wrapper.setValue('12345')
-
-      expect(wrapper.emitted('input')[0][0]).toBe(12345)
-    })
-
-    describe('when the input is cleared', () => {
-      it('emits a null value', () => {
-        const wrapper = mountComponent()
-
-        wrapper.setValue('')
-
-        expect(wrapper.emitted('input')[0][0]).toBeNull()
-      })
+      expectValue('12345', '€12,345', 12345, { locale: 'en' })
+      expectValue('-1', '-€1', -1, { locale: 'en' })
+      expectValue('-0', '-€0', -0, { locale: 'en' })
+      expectValue('', '', null, { locale: 'en' })
+      expectValue('1.', '€1.', 100, { locale: 'en', valueAsInteger: true })
     })
 
     describe('the grouping symbol is "." and not hidden on focus', () => {
@@ -243,8 +229,18 @@ describe('CurrencyInput', () => {
       expect(wrapper.element.value).toBe('€1.34')
     })
 
-    describe('the current value is less than the min value', () => {
-      it('sets the min value', () => {
+    describe('when a min value is present', () => {
+      it('sets the current value to the min value if empty', () => {
+        const wrapper = mountComponent({ locale: 'en', min: 0 })
+
+        wrapper.trigger('focus')
+        wrapper.setValue('')
+        wrapper.trigger('blur')
+
+        expect(wrapper.element.value).toBe('€0.00')
+      })
+
+      it('sets the current value to the min value if smaller', () => {
         const wrapper = mountComponent({ locale: 'en', min: 1000 })
 
         wrapper.trigger('focus')
@@ -255,8 +251,8 @@ describe('CurrencyInput', () => {
       })
     })
 
-    describe('the current value is larger than the max value', () => {
-      it('sets the max value', () => {
+    describe('when a max value is present', () => {
+      it('sets the current value to the max value if larger', () => {
         const wrapper = mountComponent({ locale: 'en', max: 1000 })
 
         wrapper.trigger('focus')
@@ -279,16 +275,35 @@ describe('CurrencyInput', () => {
     })
   })
 
-  describe('custom decimal length', () => {
-    describe('when the currency supports no decimal digits', () => {
+  describe('when a custom precision is used', () => {
+    describe('the currency supports no decimal digits', () => {
       it('ignores the configuration', async () => {
-        await expectInitialValue('¥3', { locale: 'en', currency: 'JPY', decimalLength: 5, value: 3.1415926535 })
+        await expectInitialValue('¥3', { locale: 'en', currency: 'JPY', precision: { min: 5, max: 5 }, value: 3.1415926535 })
       })
     })
 
-    describe('when the currency supports decimal digits', () => {
+    describe('the currency supports decimal digits', () => {
       it('applies the custom decimal length', async () => {
-        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', decimalLength: 5, value: 3.1415926535 })
+        await expectInitialValue('€3', { locale: 'en', currency: 'EUR', precision: 0, value: 3.1415926535 })
+        await expectInitialValue('€3', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 0 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', precision: 5, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', precision: { min: 5, max: 5 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 5 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14000', { locale: 'en', currency: 'EUR', precision: { min: 5, max: 5 }, value: 3.14 })
+        await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 5 }, value: 3.14 })
+        await expectInitialValue('€3.1415926534999998464', { locale: 'en', currency: 'EUR', precision: { min: 0 }, value: 3.1415926535 })
+        await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', precision: { max: 5 }, value: 3.14 })
+      })
+    })
+
+    describe('auto decimal mode is enabled', () => {
+      it('applies the custom decimal length', async () => {
+        await expectInitialValue('€3', { locale: 'en', currency: 'EUR', autoDecimalMode: true, precision: 0, value: 3.1415926535 })
+        await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', autoDecimalMode: true, precision: 5, value: 3.1415926535 })
+      })
+
+      it('ignores precision ranges', async () => {
+        await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', autoDecimalMode: true, precision: { min: 5, max: 5 }, value: 3.1415926535 })
       })
     })
   })
