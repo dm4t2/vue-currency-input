@@ -39,13 +39,13 @@ const init = (el, optionsFromBinding, defaultOptions) => {
 
 const applyFixedFractionFormat = (el, value) => {
   const { options: { min, max, locale }, currencyFormat: { minimumFractionDigits, maximumFractionDigits } } = el.$ci
-  if (min != null && (value == null || value < min)) {
-    value = min
-  }
-  if (max != null && value > max) {
-    value = max
-  }
   if (value != null) {
+    if (min != null && value < min) {
+      value = min
+    }
+    if (max != null && value > max) {
+      value = max
+    }
     value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
   }
   format(el, value)
@@ -58,30 +58,26 @@ const hideGroupingSymbolOnFocus = el => el.$ci.focus && el.$ci.options.distracti
 const hideNegligibleDecimalDigitsOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideNegligibleDecimalDigits
 
 const updateInputValue = (el, value) => {
-  if (value != null) {
-    const { options, currencyFormat, previousConformedValue } = el.$ci
-    const formatConfig = { ...currencyFormat }
-    if (hideCurrencySymbolOnFocus(el)) {
-      formatConfig.prefix = ''
-      formatConfig.negativePrefix = '-'
-      formatConfig.suffix = ''
-    }
-    const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
-    if (typeof conformedValue === 'number') {
-      const formattedValue = new Intl.NumberFormat(options.locale, {
-        useGrouping: !hideGroupingSymbolOnFocus(el),
-        minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
-        maximumFractionDigits: formatConfig.maximumFractionDigits
-      }).format(Math.abs(conformedValue))
-      const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
-      el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
-      el.$ci.numberValue = conformedValue
-    } else {
-      el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, formatConfig, false)
-    }
+  const { options, currencyFormat, previousConformedValue } = el.$ci
+  const formatConfig = { ...currencyFormat }
+  if (hideCurrencySymbolOnFocus(el)) {
+    formatConfig.prefix = ''
+    formatConfig.negativePrefix = '-'
+    formatConfig.suffix = ''
+  }
+  const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
+  if (typeof conformedValue === 'number') {
+    const formattedValue = new Intl.NumberFormat(options.locale, {
+      useGrouping: !hideGroupingSymbolOnFocus(el),
+      minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
+      maximumFractionDigits: formatConfig.maximumFractionDigits
+    }).format(Math.abs(conformedValue))
+    const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
+    el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
+    el.$ci.numberValue = conformedValue
   } else {
-    el.value = el.$ci.numberValue = null
+    el.value = conformedValue
+    el.$ci.numberValue = parse(el.value, formatConfig, false)
   }
   el.$ci.previousConformedValue = el.value
 }
@@ -104,13 +100,12 @@ const addEventListener = (el) => {
     }
   }, { capture: true })
 
-  el.addEventListener('format', ({ detail }) => {
-    const { focus, currencyFormat, options } = el.$ci
-    if (!focus) {
-      applyFixedFractionFormat(el, toFloat(detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits))
+  el.addEventListener('format', (e) => {
+    if (!e.isTrusted) {
+      const { currencyFormat, options } = el.$ci
+      applyFixedFractionFormat(el, toFloat(e.detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits))
     }
   })
-
   el.addEventListener('focus', () => {
     el.$ci.focus = true
     if (hideCurrencySymbolOnFocus(el) || hideGroupingSymbolOnFocus(el) || hideNegligibleDecimalDigitsOnFocus(el)) {
@@ -137,7 +132,9 @@ export default {
     const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
     Vue.nextTick(() => {
       const { value, $ci: { currencyFormat, options } } = inputElement
-      applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options.valueAsInteger, currencyFormat.maximumFractionDigits))
+      if (value) {
+        applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options.valueAsInteger, currencyFormat.maximumFractionDigits))
+      }
     })
     addEventListener(inputElement)
   },
