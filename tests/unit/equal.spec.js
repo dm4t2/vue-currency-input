@@ -15,6 +15,9 @@ describe('equal', () => {
   it('returns false if "a" not deeply equals "b"', () => {
     expect(equal('a', 'b')).toBe(false)
     expect(equal(1, 2)).toBe(false)
+    expect(equal(1, null)).toBe(false)
+    expect(equal(null, {})).toBe(false)
+    expect(equal('foo', {})).toBe(false)
     expect(equal(true, false)).toBe(false)
     expect(equal(false, true)).toBe(false)
     expect(equal({ a: 1 }, { b: 2 })).toBe(false)
