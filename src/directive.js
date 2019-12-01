@@ -8,12 +8,12 @@ import parse from './utils/parse'
 import equal from './utils/equal'
 import { toFloat, toInteger } from './utils/numberUtils'
 
-const init = (el, optionsFromBinding, defaultOptions) => {
+const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
   if (!inputElement) {
     throw new Error('No input element found')
   }
-  const options = { ...defaultOptions, ...optionsFromBinding }
+  const options = { ...($CI_DEFAULT_OPTIONS || defaultOptions), ...optionsFromBinding }
   const { min, max, distractionFree, autoDecimalMode } = options
   if (typeof distractionFree === 'boolean') {
     options.distractionFree = {
@@ -32,6 +32,7 @@ const init = (el, optionsFromBinding, defaultOptions) => {
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
+    inputEvent,
     currencyFormat
   }
   return inputElement
@@ -49,6 +50,9 @@ const applyFixedFractionFormat = (el, value) => {
     value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
   }
   format(el, value)
+  if (!el.$ci.inputEvent) {
+    dispatchEvent(el, 'input')
+  }
 }
 
 const hideCurrencySymbolOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideCurrencySymbol
@@ -84,11 +88,13 @@ const updateInputValue = (el, value) => {
 
 const format = (el, value) => {
   updateInputValue(el, value)
-  let { numberValue, currencyFormat, options } = el.$ci
+  let { numberValue, currencyFormat, options, inputEvent } = el.$ci
   if (numberValue != null) {
     numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
   }
-  dispatchEvent(el, 'format-complete', { numberValue })
+  if (inputEvent) {
+    dispatchEvent(el, inputEvent, { numberValue })
+  }
 }
 
 const addEventListener = (el) => {
@@ -101,11 +107,13 @@ const addEventListener = (el) => {
   }, { capture: true })
 
   el.addEventListener('format', (e) => {
-    if (!e.isTrusted) {
-      const { currencyFormat, options } = el.$ci
-      applyFixedFractionFormat(el, toFloat(e.detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits))
+    const { currencyFormat, options, numberValue } = el.$ci
+    const value = toFloat(e.detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits)
+    if (value !== numberValue) {
+      applyFixedFractionFormat(el, value)
     }
   })
+
   el.addEventListener('focus', () => {
     el.$ci.focus = true
     if (hideCurrencySymbolOnFocus(el) || hideGroupingSymbolOnFocus(el) || hideNegligibleDecimalDigitsOnFocus(el)) {
@@ -128,8 +136,8 @@ const addEventListener = (el) => {
 }
 
 export default {
-  bind (el, { value: options }, { context }) {
-    const inputElement = init(el, options, context.$CI_DEFAULT_OPTIONS || defaultOptions)
+  bind (el, { value: options, modifiers }, { context }) {
+    const inputElement = init(el, options, modifiers, context)
     Vue.nextTick(() => {
       const { value, $ci: { currencyFormat, options } } = inputElement
       if (value) {
@@ -138,9 +146,9 @@ export default {
     })
     addEventListener(inputElement)
   },
-  componentUpdated (el, { value, oldValue }, { context }) {
+  componentUpdated (el, { value, oldValue, modifiers }, { context }) {
     if (!equal(value, oldValue)) {
-      const inputElement = init(el, value, context.$CI_DEFAULT_OPTIONS || defaultOptions)
+      const inputElement = init(el, value, modifiers, context)
       applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue)
     }
   }

@@ -10,7 +10,10 @@ export default {
       },
       directives: [{
         name: 'currency',
-        value: this.options
+        value: this.options,
+        modifiers: {
+          inputEvent: 'format-complete'
+        }
       }],
       on: this.listeners()
     })
