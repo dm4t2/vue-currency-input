@@ -2,8 +2,8 @@ const equal = (a, b) => {
   if (a === b) {
     return true
   }
-  if (a.valueOf !== Object.prototype.valueOf) {
-    return a.valueOf() === b.valueOf()
+  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') {
+    return false
   }
   const keys = Object.keys(a)
   if (keys.length !== Object.keys(b).length) {

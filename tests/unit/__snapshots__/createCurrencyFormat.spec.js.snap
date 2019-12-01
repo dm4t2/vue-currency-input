@@ -26,6 +26,30 @@ Object {
 
 exports[`createCurrencyFormat custom precision 3`] = `
 Object {
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 0,
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": "",
+}
+`;
+
+exports[`createCurrencyFormat custom precision 4`] = `
+Object {
+  "decimalSymbol": ",",
+  "groupingSymbol": ".",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 0,
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": " €",
+}
+`;
+
+exports[`createCurrencyFormat custom precision 5`] = `
+Object {
   "decimalSymbol": null,
   "groupingSymbol": ",",
   "maximumFractionDigits": 0,

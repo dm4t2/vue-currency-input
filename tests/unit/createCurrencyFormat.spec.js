@@ -51,6 +51,8 @@ describe('createCurrencyFormat', () => {
   it('custom precision', () => {
     expect(createCurrencyFormat({ locale: 'de-DE', currency: 'EUR', precision: 0 })).toMatchSnapshot()
     expect(createCurrencyFormat({ locale: 'de-DE', currency: 'EUR', precision: { min: 0, max: 0 } })).toMatchSnapshot()
+    expect(createCurrencyFormat({ locale: 'de-DE', currency: null, precision: { min: 0, max: 2 } })).toMatchSnapshot()
+    expect(createCurrencyFormat({ locale: 'de-DE', currency: { suffix: ' €' }, precision: { min: 0, max: 2 } })).toMatchSnapshot()
     expect(createCurrencyFormat({ locale: 'ja', currency: 'JPY', precision: { min: 2, max: 2 } })).toMatchSnapshot()
   })
 })

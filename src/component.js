@@ -10,7 +10,10 @@ export default {
       },
       directives: [{
         name: 'currency',
-        value: this.options
+        value: this.options,
+        modifiers: {
+          inputEvent: 'format-complete'
+        }
       }],
       on: this.listeners()
     })
@@ -74,11 +77,12 @@ export default {
     }
   },
   watch: {
-    value (value) {
-      dispatchEvent(this.$el, 'format', { value })
-    }
+    value: 'setValue'
   },
   methods: {
+    setValue (value) {
+      dispatchEvent(this.$el, 'format', { value })
+    },
     listeners () {
       const { input, ...listeners } = this.$listeners // all but input event
       return {

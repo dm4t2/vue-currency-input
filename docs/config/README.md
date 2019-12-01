@@ -4,7 +4,8 @@
 You can override the shipped defaults with the [plugin options](#plugin-options) so you don't have configure each component instance separately.
 :::
 
-## Component props
+## Component
+### Props
 The `<currency-input>` component provides the following props:
 Name | Type | Description
 --- | --- | --- 
@@ -17,6 +18,11 @@ Name | Type | Description
 `value-as-integer` | Boolean | Whether the number value should be handled as integer value. Default is `false`.
 `min` | Number | Minimum value. Default is `null` (no limitation). Must be less than `max`.
 `max` | Number | Maximum value. Default is `null` (no limitation). Must be greater than `min`.
+
+### Methods
+Name | Arguments | Description
+--- | --- | --- 
+`setValue` | `value` (Number) | Sets a custom value programmatically
 
 ## Directive options
 The `v-currency` directive supports the same options as the `<currency-input>` component which have to be passed as object:
