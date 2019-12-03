@@ -62,26 +62,30 @@ const hideGroupingSymbolOnFocus = el => el.$ci.focus && el.$ci.options.distracti
 const hideNegligibleDecimalDigitsOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideNegligibleDecimalDigits
 
 const updateInputValue = (el, value) => {
-  const { options, currencyFormat, previousConformedValue } = el.$ci
-  const formatConfig = { ...currencyFormat }
-  if (hideCurrencySymbolOnFocus(el)) {
-    formatConfig.prefix = ''
-    formatConfig.negativePrefix = '-'
-    formatConfig.suffix = ''
-  }
-  const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
-  if (typeof conformedValue === 'number') {
-    const formattedValue = new Intl.NumberFormat(options.locale, {
-      useGrouping: !hideGroupingSymbolOnFocus(el),
-      minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
-      maximumFractionDigits: formatConfig.maximumFractionDigits
-    }).format(Math.abs(conformedValue))
-    const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
-    el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
-    el.$ci.numberValue = conformedValue
+  if (value != null) {
+    const { options, currencyFormat, previousConformedValue } = el.$ci
+    const formatConfig = { ...currencyFormat }
+    if (hideCurrencySymbolOnFocus(el)) {
+      formatConfig.prefix = ''
+      formatConfig.negativePrefix = '-'
+      formatConfig.suffix = ''
+    }
+    const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
+    if (typeof conformedValue === 'number') {
+      const formattedValue = new Intl.NumberFormat(options.locale, {
+        useGrouping: !hideGroupingSymbolOnFocus(el),
+        minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
+        maximumFractionDigits: formatConfig.maximumFractionDigits
+      }).format(Math.abs(conformedValue))
+      const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
+      el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
+      el.$ci.numberValue = conformedValue
+    } else {
+      el.value = conformedValue
+      el.$ci.numberValue = parse(el.value, formatConfig, false)
+    }
   } else {
-    el.value = conformedValue
-    el.$ci.numberValue = parse(el.value, formatConfig, false)
+    el.value = el.$ci.numberValue = null
   }
   el.$ci.previousConformedValue = el.value
 }

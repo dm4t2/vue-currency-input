@@ -99,32 +99,20 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is changed externally', () => {
-    it('formats the value correctly', () => {
-      const wrapper = mountComponent({ locale: 'en' })
+    it('formats the value and emits the parsed number', () => {
+      const expectValue = (value, formattedValue, emittedValue, propsData) => {
+        const wrapper = mountComponent(propsData)
+        wrapper.setProps({ value })
+        expect(wrapper.element.value).toBe(formattedValue)
+        expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
+      }
 
-      wrapper.setProps({ value: 12345 })
-      expect(wrapper.element.value).toBe('€12,345.00')
-
-      wrapper.setProps({ value: -1 })
-      expect(wrapper.element.value).toBe('-€1.00')
-    })
-
-    it('sets the expected formatted value if the value is handled as integer', () => {
-      const wrapper = mountComponent({ locale: 'en', valueAsInteger: true })
-
-      wrapper.setProps({ value: 12345 })
-      expect(wrapper.element.value).toBe('€123.45')
-
-      wrapper.setProps({ value: -1 })
-      expect(wrapper.element.value).toBe('-€0.01')
-    })
-
-    it('emits the parsed number value', () => {
-      const wrapper = mountComponent()
-
-      wrapper.setProps({ value: 12345 })
-
-      expect(wrapper.emitted('input')[0][0]).toBe(12345)
+      expectValue(12345, '€12,345.00', 12345, { locale: 'en' })
+      expectValue(-1, '-€1.00', -1, { locale: 'en' })
+      expectValue(0, '€0.00', 0, { locale: 'en' })
+      expectValue(null, '', null, { locale: 'en', value: 0 })
+      expectValue(12345, '€123.45', 12345, { locale: 'en', valueAsInteger: true })
+      expectValue(-1, '-€0.01', -1, { locale: 'en', valueAsInteger: true })
     })
   })
 
