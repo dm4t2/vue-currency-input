@@ -38,8 +38,6 @@ const isFractionInvalid = (fraction, numberOfFractionDigits) => fraction.length 
 
 export default (str, formatConfig, options, previousConformedValue = '') => {
   if (typeof str === 'string') {
-    str = str.trim()
-
     if (formatConfig.minimumFractionDigits > 0 && options.autoDecimalMode) {
       return getAutoDecimalModeConformedValue(str, previousConformedValue, formatConfig)
     }
@@ -67,7 +65,7 @@ export default (str, formatConfig, options, previousConformedValue = '') => {
         conformedValue: Number(`${number}.${fractionDigits}`),
         fractionDigits
       }
-    } else if (number === '-' && previousConformedValue !== formatConfig.negativePrefix) {
+    } else if (number === '-' && (previousConformedValue === str.slice(0, -1) || previousConformedValue !== formatConfig.negativePrefix)) {
       return { conformedValue: previousConformedValue }
     } else {
       return { conformedValue: '' }

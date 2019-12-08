@@ -32,9 +32,20 @@ describe('conformToMask', () => {
   })
 
   describe('when a invalid negative value is about to being entered', () => {
-    it('returns the previous conformed value', () => {
-      expect(conformToMask('-$a', { decimalSymbol: '.', prefix: '$', suffix: '', maximumFractionDigits: 2 }, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
-      expect(conformToMask('-a $', { decimalSymbol: '.', prefix: '', suffix: ' $', maximumFractionDigits: 2 }, { autoDecimalMode: false }, '$1')).toEqual({ conformedValue: '$1' })
+    describe('the currency symbol is prefixed', () => {
+      it('returns the previous conformed value', () => {
+        const formatConfig = { decimalSymbol: '.', prefix: '$ ', suffix: '', maximumFractionDigits: 2 }
+        expect(conformToMask('-$ a', formatConfig, { autoDecimalMode: false }, '-$ ')).toEqual({ conformedValue: '-$ ' })
+        expect(conformToMask('-$ -', formatConfig, { autoDecimalMode: false }, '-$ ')).toEqual({ conformedValue: '-$ ' })
+      })
+    })
+
+    describe('the currency symbol is suffixed', () => {
+      it('returns the previous conformed value', () => {
+        const formatConfig = { decimalSymbol: '.', prefix: '', suffix: ' $', maximumFractionDigits: 2 }
+        expect(conformToMask('-a $', formatConfig, { autoDecimalMode: false }, '- $')).toEqual({ conformedValue: '- $' })
+        expect(conformToMask('-- $', formatConfig, { autoDecimalMode: false }, '- $')).toEqual({ conformedValue: '- $' })
+      })
     })
   })
 
@@ -83,26 +94,27 @@ describe('conformToMask', () => {
         const formatConfig = {
           decimalSymbol: '.',
           groupingSymbol: ',',
-          prefix: '$',
-          negativePrefix: '-$',
+          prefix: '$ ',
+          negativePrefix: '-$ ',
           suffix: '',
           maximumFractionDigits: 2
         }
 
-        expect(conformToMask('-', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$' })
-        expect(conformToMask('-', formatConfig, { autoDecimalMode: false }, '-$')).toEqual({ conformedValue: '' })
-        expect(conformToMask('1.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$1.' })
-        expect(conformToMask('1234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$1234.' })
-        expect(conformToMask('1,234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$1,234.' })
-        expect(conformToMask('-1.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$1.' })
-        expect(conformToMask('-1234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$1234.' })
-        expect(conformToMask('-1,234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$1,234.' })
-        expect(conformToMask('.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$0.' })
-        expect(conformToMask('.1', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$0.1' })
-        expect(conformToMask('.1.234', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$0.12' })
-        expect(conformToMask('-.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$0.' })
-        expect(conformToMask('-.1', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$0.1' })
-        expect(conformToMask('-.1.234', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$0.12' })
+        expect(conformToMask('-', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$ ' })
+        expect(conformToMask('-$ ', formatConfig, { autoDecimalMode: false }, '-$ 5')).toEqual({ conformedValue: '-$ ' })
+        expect(conformToMask('-', formatConfig, { autoDecimalMode: false }, '-$ ')).toEqual({ conformedValue: '' })
+        expect(conformToMask('1.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$ 1.' })
+        expect(conformToMask('1234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$ 1234.' })
+        expect(conformToMask('1,234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$ 1,234.' })
+        expect(conformToMask('-1.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$ 1.' })
+        expect(conformToMask('-1234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$ 1234.' })
+        expect(conformToMask('-1,234.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$ 1,234.' })
+        expect(conformToMask('.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$ 0.' })
+        expect(conformToMask('.1', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$ 0.1' })
+        expect(conformToMask('.1.234', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '$ 0.12' })
+        expect(conformToMask('-.', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$ 0.' })
+        expect(conformToMask('-.1', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$ 0.1' })
+        expect(conformToMask('-.1.234', formatConfig, { autoDecimalMode: false })).toEqual({ conformedValue: '-$ 0.12' })
       })
     })
 
