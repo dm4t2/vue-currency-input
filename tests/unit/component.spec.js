@@ -1,8 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Intl from 'intl'
 import CurrencyInput from '../../src/component'
-
-global.Intl = Intl
 
 jest.useFakeTimers()
 
@@ -29,7 +26,7 @@ describe('CurrencyInput', () => {
       it('sets the expected formatted value for the configured currency and locale', async () => {
         await expectInitialValue('1.234,50 €', { locale: 'de', value: 1234.5 })
         await expectInitialValue('€1,234.52', { locale: 'en', value: 1234.523 })
-        await expectInitialValue('1 234,00 €', { locale: 'fr', value: 1234 })
+        await expectInitialValue('1 234,00 €', { locale: 'fr', value: 1234 })
         await expectInitialValue('€ -1,00', { locale: 'nl-NL', value: -1 })
       })
 
@@ -265,7 +262,7 @@ describe('CurrencyInput', () => {
         await expectInitialValue('€3.14159', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 5 }, value: 3.1415926535 })
         await expectInitialValue('€3.14000', { locale: 'en', currency: 'EUR', precision: { min: 5, max: 5 }, value: 3.14 })
         await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', precision: { min: 0, max: 5 }, value: 3.14 })
-        await expectInitialValue('€3.1415926534999998464', { locale: 'en', currency: 'EUR', precision: { min: 0 }, value: 3.1415926535 })
+        await expectInitialValue('€3.1415926535', { locale: 'en', currency: 'EUR', precision: { min: 0 }, value: 3.1415926535 })
         await expectInitialValue('€3.14', { locale: 'en', currency: 'EUR', precision: { max: 5 }, value: 3.14 })
       })
     })

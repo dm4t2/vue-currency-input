@@ -186,8 +186,8 @@ Object {
   "groupingSymbol": ".",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "negativePrefix": "-R$",
-  "prefix": "R$",
+  "negativePrefix": "-R$ ",
+  "prefix": "R$ ",
   "suffix": "",
 }
 `;

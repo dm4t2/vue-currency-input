@@ -1,7 +1,4 @@
-import Intl from 'intl'
 import createCurrencyFormat from '../../src/utils/createCurrencyFormat'
-
-global.Intl = Intl
 
 describe('createCurrencyFormat', () => {
   describe('i18n', () => {

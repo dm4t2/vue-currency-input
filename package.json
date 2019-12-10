@@ -49,7 +49,6 @@
     "core-js": "^3.3.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "intl": "^1.2.5",
     "node-sass": "^4.12.0",
     "rollup": "^1.21.3",
     "rollup-plugin-buble": "^0.19.8",
