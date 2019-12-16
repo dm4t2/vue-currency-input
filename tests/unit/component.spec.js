@@ -68,29 +68,38 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is changed by the user', () => {
-    it('formats the value and emits the parsed number', () => {
-      const expectValue = (value, formattedValue, emittedValue, propsData) => {
-        const wrapper = mountComponent(propsData)
-        wrapper.setValue(value)
-        expect(wrapper.element.value).toBe(formattedValue)
-        expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
-      }
+    const expectValue = (value, formattedValue, emittedValue, propsData) => {
+      const wrapper = mountComponent(propsData)
+      wrapper.trigger('focus')
+      wrapper.setValue(value)
+      expect(wrapper.element.value).toBe(formattedValue)
+      expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
+    }
 
-      expectValue('12345', '€12,345', 12345, { locale: 'en' })
-      expectValue('-1', '-€1', -1, { locale: 'en' })
-      expectValue('-0', '-€0', -0, { locale: 'en' })
-      expectValue('', '', null, { locale: 'en' })
-      expectValue('1.', '€1.', 100, { locale: 'en', valueAsInteger: true })
+    it('formats the value and emits the parsed number', () => {
+      const propsData = { locale: 'en', distractionFree: false }
+
+      expectValue('12345', '€12,345', 12345, propsData)
+      expectValue('-1', '-€1', -1, propsData)
+      expectValue('-0', '-€0', -0, propsData)
+      expectValue('', '', null, propsData)
+      expectValue('1.', '€1.', 100, { ...propsData, valueAsInteger: true })
+    })
+
+    describe('negligible decimal digits are hidden on focus', () => {
+      it('allows the input of decimal zeros', () => {
+        const propsData = { locale: 'de', distractionFree: { hideNegligibleDecimalDigits: true } }
+
+        expectValue('1,0', '1,0 €', 1, propsData)
+        expectValue('-2000,10', '-2.000,10 €', -2000.1, propsData)
+      })
     })
 
     describe('the grouping symbol is "." and not hidden on focus', () => {
       it('emits the expected number', () => {
-        const wrapper = mountComponent({ locale: 'de', distractionFree: { hideCurrencySymbol: true, hideGroupingSymbol: false } })
+        const propsData = { locale: 'de', distractionFree: { hideCurrencySymbol: true, hideGroupingSymbol: false } }
 
-        wrapper.trigger('focus')
-        wrapper.setValue('1234')
-
-        expect(wrapper.emitted('input')[0][0]).toBe(1234)
+        expectValue('1234', '1.234', 1234, propsData)
       })
     })
   })

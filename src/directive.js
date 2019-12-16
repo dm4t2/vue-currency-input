@@ -39,14 +39,15 @@ const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) =
 }
 
 const applyFixedFractionFormat = (el, value) => {
-  const { options: { min, max, locale }, currencyFormat: { minimumFractionDigits, maximumFractionDigits } } = el.$ci
   if (value != null) {
+    const { min, max, locale } = el.$ci.options
     if (min != null && value < min) {
       value = min
     }
     if (max != null && value > max) {
       value = max
     }
+    const { maximumFractionDigits, minimumFractionDigits } = el.$ci.currencyFormat
     value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
   }
   format(el, value)
@@ -55,17 +56,12 @@ const applyFixedFractionFormat = (el, value) => {
   }
 }
 
-const hideCurrencySymbolOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideCurrencySymbol
-
-const hideGroupingSymbolOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideGroupingSymbol
-
-const hideNegligibleDecimalDigitsOnFocus = el => el.$ci.focus && el.$ci.options.distractionFree.hideNegligibleDecimalDigits
-
-const updateInputValue = (el, value) => {
+const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
   if (value != null) {
-    const { options, currencyFormat, previousConformedValue } = el.$ci
+    const { focus, options, currencyFormat, previousConformedValue } = el.$ci
+    const { hideCurrencySymbol, hideGroupingSymbol } = options.distractionFree
     const formatConfig = { ...currencyFormat }
-    if (hideCurrencySymbolOnFocus(el)) {
+    if (focus && hideCurrencySymbol) {
       formatConfig.prefix = ''
       formatConfig.negativePrefix = '-'
       formatConfig.suffix = ''
@@ -73,8 +69,8 @@ const updateInputValue = (el, value) => {
     const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
     if (typeof conformedValue === 'number') {
       const formattedValue = new Intl.NumberFormat(options.locale, {
-        useGrouping: !hideGroupingSymbolOnFocus(el),
-        minimumFractionDigits: hideNegligibleDecimalDigitsOnFocus(el) ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
+        useGrouping: !(focus && hideGroupingSymbol),
+        minimumFractionDigits: hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
         maximumFractionDigits: formatConfig.maximumFractionDigits
       }).format(Math.abs(conformedValue))
       const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
@@ -120,10 +116,11 @@ const addEventListener = (el) => {
 
   el.addEventListener('focus', () => {
     el.$ci.focus = true
-    if (hideCurrencySymbolOnFocus(el) || hideGroupingSymbolOnFocus(el) || hideNegligibleDecimalDigitsOnFocus(el)) {
+    const { hideCurrencySymbol, hideGroupingSymbol, hideNegligibleDecimalDigits } = el.$ci.options.distractionFree
+    if (hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = el
-        updateInputValue(el, el.value)
+        updateInputValue(el, el.value, hideNegligibleDecimalDigits)
         if (Math.abs(selectionStart - selectionEnd) > 0) {
           el.setSelectionRange(0, el.value.length)
         } else {
