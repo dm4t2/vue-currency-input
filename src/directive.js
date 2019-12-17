@@ -39,6 +39,7 @@ const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) =
 }
 
 const applyFixedFractionFormat = (el, value) => {
+  const oldValue = el.value
   if (value != null) {
     const { min, max, locale } = el.$ci.options
     if (min != null && value < min) {
@@ -51,7 +52,7 @@ const applyFixedFractionFormat = (el, value) => {
     value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
   }
   format(el, value)
-  if (!el.$ci.inputEvent) {
+  if (!el.$ci.inputEvent && oldValue !== el.value) {
     dispatchEvent(el, 'input')
   }
 }
@@ -87,13 +88,14 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
 }
 
 const format = (el, value) => {
+  const oldValue = el.$ci.numberValue
   updateInputValue(el, value)
-  let { numberValue, currencyFormat, options, inputEvent } = el.$ci
-  if (numberValue != null) {
-    numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
+  let { numberValue: newValue, currencyFormat, options, inputEvent } = el.$ci
+  if (newValue != null) {
+    newValue = toInteger(newValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
   }
   if (inputEvent) {
-    dispatchEvent(el, inputEvent, { numberValue })
+    dispatchEvent(el, inputEvent, { oldValue, newValue })
   }
 }
 

@@ -2,6 +2,8 @@ import defaultOptions from './defaultOptions'
 import currencyDirective from './directive'
 import dispatchEvent from './utils/dispatchEvent'
 
+const inputEvent = 'format-complete'
+
 export default {
   render (h) {
     return h('input', {
@@ -11,9 +13,7 @@ export default {
       directives: [{
         name: 'currency',
         value: this.options,
-        modifiers: {
-          inputEvent: 'format-complete'
-        }
+        modifiers: { inputEvent }
       }],
       on: this.listeners()
     })
@@ -87,8 +87,11 @@ export default {
       const { input, ...listeners } = this.$listeners // all but input event
       return {
         ...listeners,
-        'format-complete': ({ detail }) => {
-          this.$emit('input', detail.numberValue)
+        [inputEvent]: (e) => {
+          const { oldValue, newValue } = e.detail
+          if (oldValue !== newValue) {
+            this.$emit('input', newValue)
+          }
           this.formattedValue = this.$el.value
         }
       }
