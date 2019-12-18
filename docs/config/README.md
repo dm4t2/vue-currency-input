@@ -22,7 +22,7 @@ Name | Type | Description
 ### Methods
 Name | Arguments | Description
 --- | --- | --- 
-`setValue` | `value` (Number) | Sets a custom value programmatically
+`setValue` | `value` (Number) | Sets a value programmatically.
 
 ## Directive options
 The `v-currency` directive supports the same options as the `<currency-input>` component which have to be passed as object:

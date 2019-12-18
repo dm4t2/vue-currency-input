@@ -1,6 +1,6 @@
 import defaultOptions from './defaultOptions'
 import currencyDirective from './directive'
-import dispatchEvent from './utils/dispatchEvent'
+import { setValue } from './api'
 
 const inputEvent = 'format-complete'
 
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     setValue (value) {
-      dispatchEvent(this.$el, 'format', { value })
+      setValue(this.$el, value)
     },
     listeners () {
       const { input, ...listeners } = this.$listeners // all but input event
