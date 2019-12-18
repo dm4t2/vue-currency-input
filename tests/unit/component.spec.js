@@ -11,16 +11,7 @@ const expectInitialValue = async (expectedValue, propsData) => {
   expect(wrapper.element.value).toBe(expectedValue)
 }
 
-describe('CurrencyInput', () => {
-  beforeEach(() => {
-    jest.spyOn(console, 'error')
-    console.error.mockImplementation(() => {})
-  })
-
-  afterEach(() => {
-    console.error.mockRestore()
-  })
-
+describe('currency input component', () => {
   describe('initial value', () => {
     describe('the initial value is a number', () => {
       it('sets the expected formatted value for the configured currency and locale', async () => {
@@ -62,6 +53,9 @@ describe('CurrencyInput', () => {
 
     describe('the configured number range is invalid', () => {
       it('throws an error', () => {
+        jest.spyOn(console, 'error')
+        console.error.mockImplementation(() => {})
+
         expect(() => mountComponent({ min: 500, max: 400 })).toThrowError('Invalid value range')
       })
     })
@@ -105,20 +99,21 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the input is changed externally', () => {
-    it('formats the value and emits the parsed number', () => {
-      const expectValue = (value, formattedValue, emittedValue, propsData) => {
+    it('formats the value and emits the parsed number', async () => {
+      const expectValue = async (value, formattedValue, emittedValue, propsData) => {
         const wrapper = mountComponent(propsData)
         wrapper.setProps({ value })
+        await wrapper.vm.$nextTick()
         expect(wrapper.element.value).toBe(formattedValue)
-        expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
+        expect(wrapper.emitted('input')[propsData.value !== undefined ? 1 : 0][0]).toBe(emittedValue)
       }
 
-      expectValue(12345, '€12,345.00', 12345, { locale: 'en' })
-      expectValue(-1, '-€1.00', -1, { locale: 'en' })
-      expectValue(0, '€0.00', 0, { locale: 'en' })
-      expectValue(null, '', null, { locale: 'en', value: 0 })
-      expectValue(12345, '€123.45', 12345, { locale: 'en', valueAsInteger: true })
-      expectValue(-1, '-€0.01', -1, { locale: 'en', valueAsInteger: true })
+      await expectValue(12345, '€12,345.00', 12345, { locale: 'en' })
+      await expectValue(-1, '-€1.00', -1, { locale: 'en' })
+      await expectValue(0, '€0.00', 0, { locale: 'en' })
+      await expectValue(null, '', null, { locale: 'en', value: 0 })
+      await expectValue(12345, '€123.45', 12345, { locale: 'en', valueAsInteger: true })
+      await expectValue(-1, '-€0.01', -1, { locale: 'en', valueAsInteger: true })
     })
   })
 
@@ -245,12 +240,13 @@ describe('CurrencyInput', () => {
   })
 
   describe('when the component options are changed', () => {
-    it('formats the value according to the new options', () => {
+    it('formats the value according to the new options', async () => {
       const wrapper = mountComponent({ locale: 'en', currency: 'USD' })
       wrapper.setValue(-1234.56)
 
       expect(wrapper.element.value).toBe('-$1,234.56')
       wrapper.setProps({ locale: 'nl-NL' })
+      await wrapper.vm.$nextTick()
       expect(wrapper.element.value).toBe('US$ -1.234,56')
     })
   })
