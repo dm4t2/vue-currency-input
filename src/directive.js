@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import defaultOptions from './defaultOptions'
 import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretPosition } from './utils/caretPosition'
 import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
@@ -7,13 +6,14 @@ import dispatchEvent from './utils/dispatchEvent'
 import parse from './utils/parse'
 import equal from './utils/equal'
 import { toFloat, toInteger } from './utils/numberUtils'
+import { DEFAULT_OPTIONS } from './api'
 
 const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
   if (!inputElement) {
     throw new Error('No input element found')
   }
-  const options = { ...($CI_DEFAULT_OPTIONS || defaultOptions), ...optionsFromBinding }
+  const options = { ...($CI_DEFAULT_OPTIONS || DEFAULT_OPTIONS), ...optionsFromBinding }
   const { min, max, distractionFree, autoDecimalMode } = options
   if (typeof distractionFree === 'boolean') {
     options.distractionFree = {

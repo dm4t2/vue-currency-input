@@ -1,4 +1,4 @@
-import { parseCurrency, setValue } from '../../src/api'
+import { DEFAULT_OPTIONS, parseCurrency, setValue } from '../../src/api'
 import createCurrencyFormat from '../../src/utils/createCurrencyFormat'
 import parse from '../../src/utils/parse'
 import dispatchEvent from '../../src/utils/dispatchEvent'
@@ -17,7 +17,7 @@ describe('parseCurrency', () => {
 
     expect(parse).toHaveBeenCalled()
     expect(parse.mock.calls[0][0]).toBe(formattedValue)
-    expect(createCurrencyFormat).toHaveBeenCalledWith({ locale, currency })
+    expect(createCurrencyFormat).toHaveBeenCalledWith({ ...DEFAULT_OPTIONS, locale, currency })
   })
 })
 

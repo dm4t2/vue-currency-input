@@ -2,6 +2,17 @@ import createCurrencyFormat from './utils/createCurrencyFormat'
 import parse from './utils/parse'
 import dispatchEvent from './utils/dispatchEvent'
 
+export const DEFAULT_OPTIONS = {
+  locale: undefined,
+  currency: 'EUR',
+  valueAsInteger: false,
+  distractionFree: true,
+  precision: undefined,
+  autoDecimalMode: false,
+  min: null,
+  max: null
+}
+
 /**
  * Parses a number from a currency formatted string.
  *
@@ -9,7 +20,7 @@ import dispatchEvent from './utils/dispatchEvent'
  * @param {Object} options The configured options of the respective `v-currency` directive.
  * @returns {number | null} The parsed number or `null` if the formatted string does not match.
  */
-export const parseCurrency = (formattedValue, options) => parse(formattedValue, createCurrencyFormat(options), options.valueAsInteger)
+export const parseCurrency = (formattedValue, options) => parse(formattedValue, createCurrencyFormat({ ...DEFAULT_OPTIONS, ...options }), options.valueAsInteger)
 
 /**
  * Sets a value of a input programmatically.

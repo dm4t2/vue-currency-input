@@ -1,6 +1,5 @@
-import defaultOptions from './defaultOptions'
 import currencyDirective from './directive'
-import { setValue } from './api'
+import { DEFAULT_OPTIONS, setValue } from './api'
 
 const inputEvent = 'format-complete'
 
@@ -67,8 +66,8 @@ export default {
   },
   computed: {
     options () {
-      const options = { ...this.$CI_DEFAULT_OPTIONS || defaultOptions }
-      Object.keys(defaultOptions).forEach((key) => {
+      const options = { ...this.$CI_DEFAULT_OPTIONS || DEFAULT_OPTIONS }
+      Object.keys(DEFAULT_OPTIONS).forEach(key => {
         if (this[key] !== undefined) {
           options[key] = this[key]
         }
