@@ -16,8 +16,7 @@ Name | Type | Description
 `precision` | Number | The number of displayed decimal digits. Default is `undefined` (use the currency's default). Must be between 0 and 20 and can only be applied for currencies that support decimal digits. You can also pass an object `{min, max}` to use a precision range (ranges are not available when using `auto-decimal-mode` or `value-as-integer`).
 `distraction-free` | Boolean/Object | Whether to hide negligible decimal digits, the currency symbol and the grouping symbol on focus. Default is `true`. You can also pass an object of boolean properties to configure each option: `{hideNegligibleDecimalDigits, hideCurrencySymbol, hideGroupingSymbol}` (see [examples](/examples/#distraction-free-mode)). Using `false` will leave the formatted value untouched on focus.
 `value-as-integer` | Boolean | Whether the number value should be handled as integer value. Default is `false`.
-`min` | Number | Minimum value. Default is `null` (no limitation). Must be less than `max`.
-`max` | Number | Maximum value. Default is `null` (no limitation). Must be greater than `min`.
+`value-range` | Object | The range of accepted values as object `{min, max}`. The validation is triggered on blur and sets the respective threshold if out of range.
 
 ### Methods
 Name | Arguments | Description
@@ -30,14 +29,8 @@ The `v-currency` directive supports the same options as the `<currency-input>` c
 ```vue
 <template>
   <input v-currency="{
-    currency: 'EUR',
-    locale: undefined,
-    autoDecimalMode: false,
-    precision: undefined,
-    distractionFree: true,
-    valueAsInteger: false,
-    min: null,
-    max: null
+    currency: 'USD',
+    locale: 'en-US'
   }"/>
 </template>
 ```

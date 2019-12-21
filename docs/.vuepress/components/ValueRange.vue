@@ -2,8 +2,7 @@
   <div class="demo">
     <CurrencyInput
       v-model="value"
-      :min="min"
-      :max="max"
+      :value-range="{min, max}"
       class="demo__currency-input"/>
     <div class="demo__options">
       <p>
@@ -15,7 +14,7 @@
             v-model.number="min"
             type="range">
         </label>
-        <code>{{ min != null ? min : 'null' }}</code>
+        <code>{{ min !== undefined ? min : 'null' }}</code>
       </p>
       <p>
         <label>
@@ -26,7 +25,7 @@
             v-model.number="max"
             type="range">
         </label>
-        <code>{{ max != null ? max : 'null' }}</code>
+        <code>{{ max !== undefined ? max : 'null' }}</code>
       </p>
     </div>
   </div>
@@ -38,8 +37,8 @@ export default {
   name: 'ValueRange',
   data: () => ({
     value: 1234.5,
-    min: null,
-    max: null
+    min: undefined,
+    max: undefined
   })
 }
 </script>

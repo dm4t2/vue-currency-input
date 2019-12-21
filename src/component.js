@@ -50,12 +50,8 @@ export default {
       type: Boolean,
       default: undefined
     },
-    min: {
-      type: Number,
-      default: undefined
-    },
-    max: {
-      type: Number,
+    valueRange: {
+      type: Object,
       default: undefined
     }
   },

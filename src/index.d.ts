@@ -11,7 +11,7 @@ export interface DistractionFreeOptions {
   hideNegligibleDecimalDigits?: boolean
 }
 
-export interface PrecisionOptions {
+export interface NumberRange {
   min?: number,
   max?: number
 }
@@ -21,10 +21,9 @@ export interface CurrencyInputOptions {
   currency?: string | CurrencyOptions,
   valueAsInteger?: boolean,
   distractionFree?: boolean | DistractionFreeOptions,
-  precision?: number | PrecisionOptions,
+  precision?: number | NumberRange,
   autoDecimalMode?: boolean,
-  min?: number,
-  max?: number
+  valueRange?: | NumberRange,
 }
 
 export interface PluginOptions {

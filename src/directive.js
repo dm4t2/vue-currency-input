@@ -15,7 +15,7 @@ const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) =
     throw new Error('No input element found')
   }
   const options = { ...($CI_DEFAULT_OPTIONS || DEFAULT_OPTIONS), ...optionsFromBinding }
-  const { min, max, distractionFree, autoDecimalMode } = options
+  const { distractionFree, autoDecimalMode } = options
   if (typeof distractionFree === 'boolean') {
     options.distractionFree = {
       hideCurrencySymbol: distractionFree,
@@ -25,9 +25,6 @@ const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) =
   }
   if (autoDecimalMode) {
     options.distractionFree.hideNegligibleDecimalDigits = false
-  }
-  if (min != null && max != null && min > max) {
-    throw new Error('Invalid value range')
   }
   const currencyFormat = createCurrencyFormat(options)
   inputElement.$ci = {
@@ -39,17 +36,25 @@ const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) =
   return inputElement
 }
 
+const validateValueRange = (value, valueRange) => {
+  if (valueRange) {
+    const { min, max } = valueRange
+    if (min !== undefined && value < min) {
+      value = min
+    }
+    if (max !== undefined && value > max) {
+      value = max
+    }
+  }
+  return value
+}
+
 const applyFixedFractionFormat = (el, value) => {
   const oldValue = el.value
   if (value != null) {
-    const { min, max, locale } = el.$ci.options
-    if (min != null && value < min) {
-      value = min
-    }
-    if (max != null && value > max) {
-      value = max
-    }
+    const { valueRange, locale } = el.$ci.options
     const { maximumFractionDigits, minimumFractionDigits } = el.$ci.currencyFormat
+    value = validateValueRange(value, valueRange)
     value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
   }
   format(el, value)

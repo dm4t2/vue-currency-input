@@ -6,9 +6,9 @@
       :locale="locale"
       :auto-decimal-mode="autoDecimalMode"
       :distraction-free="distractionFree"
-      :min="min"
-      :max="max"
-      class="demo__currency-input"/>
+      :value-range="{min, max}"
+      class="demo__currency-input"
+    />
     <p>Raw number value: <code>{{ value != null ? value : 'null' }}</code></p>
     <hr>
     <h3>Options</h3>
@@ -18,7 +18,8 @@
           <span>Distraction free</span>
           <input
             v-model="distractionFree"
-            type="checkbox">
+            type="checkbox"
+          >
         </label>
       </p>
       <p>
@@ -26,14 +27,15 @@
           <span>Auto decimal mode</span>
           <input
             v-model="autoDecimalMode"
-            type="checkbox">
+            type="checkbox"
+          >
         </label>
       </p>
       <p>
         <label>
           <span>Currency</span>
           <select v-model="currency">
-            <option :value="null"/>
+            <option :value="null" />
             <option :value="{suffix: '💰'}">💰</option>
             <option :value="{prefix: '₿'}">₿</option>
             <option value="EUR">EUR</option>
@@ -66,23 +68,25 @@
         <label>
           <span>Min value</span>
           <input
-            :max="max ? max : 10000"
             v-model.number="min"
+            :max="max !== undefined ? max : 10000"
             min="-10000"
-            type="range">
+            type="range"
+          >
         </label>
-        <code v-if="min">{{ min }}</code>
+        <code v-if="min !== undefined">{{ min }}</code>
       </p>
       <p>
         <label>
           <span>Max value</span>
           <input
-            :min="min ? min : -10000"
             v-model.number="max"
+            :min="min !== undefined ? min : -10000"
             max="10000"
-            type="range">
+            type="range"
+          >
         </label>
-        <code v-if="max">{{ max }}</code>
+        <code v-if="max !== undefined">{{ max }}</code>
       </p>
     </div>
   </div>
@@ -98,8 +102,8 @@ export default {
     locale: undefined,
     autoDecimalMode: false,
     distractionFree: true,
-    min: null,
-    max: null
+    min: undefined,
+    max: undefined
   })
 }
 </script>
