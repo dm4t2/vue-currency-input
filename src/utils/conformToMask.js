@@ -1,4 +1,4 @@
-import { endsWith, isNumber, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbolAndMinusSign } from './stringUtils'
+import { endsWith, insertCurrencySymbol, isNumber, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbolAndMinusSign } from './stringUtils'
 
 const isValidInteger = (integer, groupingSymbol) => integer.match(new RegExp(`^-?(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
 
@@ -7,15 +7,15 @@ const isFractionIncomplete = (value, { decimalSymbol, groupingSymbol }) => {
   return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(numberParts[0], groupingSymbol)
 }
 
-const checkIncompleteValue = (value, negative, previousConformedValue, formatConfig) => {
-  const { prefix, negativePrefix, suffix, decimalSymbol, maximumFractionDigits } = formatConfig
-  if (value === '' && negative && previousConformedValue !== negativePrefix) {
-    return `${negativePrefix}${suffix}`
+const checkIncompleteValue = (value, negative, previousConformedValue, currencyFormat, hideCurrencySymbol) => {
+  let { negativePrefix, decimalSymbol, maximumFractionDigits } = currencyFormat
+  if (value === '' && negative && previousConformedValue !== (hideCurrencySymbol ? '-' : negativePrefix)) {
+    return insertCurrencySymbol('', currencyFormat, negative, hideCurrencySymbol)
   } else if (maximumFractionDigits > 0) {
-    if (isFractionIncomplete(value, formatConfig)) {
-      return `${negative ? negativePrefix : prefix}${value}${suffix}`
+    if (isFractionIncomplete(value, currencyFormat)) {
+      return insertCurrencySymbol(value, currencyFormat, negative, hideCurrencySymbol)
     } else if (startsWith(value, decimalSymbol)) {
-      return `${negative ? negativePrefix : prefix}0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, maximumFractionDigits))}${suffix}`
+      return insertCurrencySymbol(`0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, maximumFractionDigits))}`, currencyFormat, negative, hideCurrencySymbol)
     }
   }
   return null
@@ -26,7 +26,7 @@ const getAutoDecimalModeConformedValue = (value, previousConformedValue, { minim
     return { conformedValue: '' }
   } else {
     const negative = startsWith(value, '-')
-    const conformedValue = value === '-' ? Number(-0) : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(value))}`) / Math.pow(10, minimumFractionDigits)
+    const conformedValue = value === '-' ? -0 : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(value))}`) / Math.pow(10, minimumFractionDigits)
     return {
       conformedValue,
       fractionDigits: conformedValue.toFixed(minimumFractionDigits).slice(-minimumFractionDigits)
@@ -34,39 +34,31 @@ const getAutoDecimalModeConformedValue = (value, previousConformedValue, { minim
   }
 }
 
-const isFractionInvalid = (fraction, numberOfFractionDigits) => fraction.length > 0 && numberOfFractionDigits === 0
-
-export default (str, formatConfig, options, previousConformedValue = '') => {
+export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol = false, autoDecimalMode = false) => {
   if (typeof str === 'string') {
-    if (formatConfig.minimumFractionDigits > 0 && options.autoDecimalMode) {
-      return getAutoDecimalModeConformedValue(str, previousConformedValue, formatConfig)
+    if (currencyFormat.minimumFractionDigits > 0 && autoDecimalMode) {
+      return getAutoDecimalModeConformedValue(str, previousConformedValue, currencyFormat)
     }
 
-    const { value, negative } = stripCurrencySymbolAndMinusSign(str, formatConfig)
-    const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, formatConfig)
+    const { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
+    const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, currencyFormat, hideCurrencySymbol)
     if (incompleteValue != null) {
       return { conformedValue: incompleteValue }
     }
 
-    const [integer, ...fraction] = value.split(formatConfig.decimalSymbol)
+    const [integer, ...fraction] = value.split(currencyFormat.decimalSymbol)
     const integerDigits = removeLeadingZeros(onlyDigits(integer))
-    const fractionDigits = onlyDigits(fraction.join('')).substr(0, formatConfig.maximumFractionDigits)
+    const fractionDigits = onlyDigits(fraction.join('')).substr(0, currencyFormat.maximumFractionDigits)
+    const invalidFraction = fraction.length > 0 && fractionDigits.length === 0
+    const invalidNegativeValue = integerDigits === '' && negative && (previousConformedValue === str.slice(0, -1) || previousConformedValue !== currencyFormat.negativePrefix)
 
-    if (isFractionInvalid(fraction, fractionDigits.length)) {
+    if (invalidFraction || invalidNegativeValue) {
       return { conformedValue: previousConformedValue }
-    }
-
-    let number = integerDigits
-    if (negative) {
-      number = `-${number}`
-    }
-    if (isNumber(number)) {
+    } else if (isNumber(integerDigits)) {
       return {
-        conformedValue: Number(`${number}.${fractionDigits}`),
+        conformedValue: Number(`${negative ? '-' : ''}${integerDigits}.${fractionDigits}`),
         fractionDigits
       }
-    } else if (number === '-' && (previousConformedValue === str.slice(0, -1) || previousConformedValue !== formatConfig.negativePrefix)) {
-      return { conformedValue: previousConformedValue }
     } else {
       return { conformedValue: '' }
     }

@@ -23,13 +23,13 @@ export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPositi
   }
 }
 
-export const getDistractionFreeCaretPosition = (formatConfig, options, value, caretPosition) => {
+export const getDistractionFreeCaretPosition = (currencyFormat, options, value, caretPosition) => {
   let result = caretPosition
   if (options.distractionFree.hideCurrencySymbol) {
-    result -= formatConfig.prefix.length
+    result -= currencyFormat.prefix.length
   }
   if (options.distractionFree.hideGroupingSymbol) {
-    result -= count(value.substring(0, caretPosition), formatConfig.groupingSymbol)
+    result -= count(value.substring(0, caretPosition), currencyFormat.groupingSymbol)
   }
   return Math.max(0, result)
 }

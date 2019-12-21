@@ -12,6 +12,15 @@ export const startsWith = (str, search) => {
   return str.substring(0, search.length) === search
 }
 
+export const insertCurrencySymbol = (value, currencyFormat, negative, hideCurrencySymbol) => {
+  let { prefix, negativePrefix, suffix } = currencyFormat
+  if (hideCurrencySymbol) {
+    prefix = suffix = ''
+    negativePrefix = '-'
+  }
+  return `${negative ? negativePrefix : prefix}${value}${suffix}`
+}
+
 export const stripCurrencySymbolAndMinusSign = (str, { prefix, suffix }) => {
   const value = str.replace(prefix, '').replace(suffix, '')
   return {

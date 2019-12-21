@@ -7,6 +7,7 @@ import parse from './utils/parse'
 import equal from './utils/equal'
 import { toFloat, toInteger } from './utils/numberUtils'
 import { DEFAULT_OPTIONS } from './api'
+import { insertCurrencySymbol } from './utils/stringUtils'
 
 const init = (el, optionsFromBinding, { inputEvent }, { $CI_DEFAULT_OPTIONS }) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
@@ -59,27 +60,21 @@ const applyFixedFractionFormat = (el, value) => {
 
 const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
   if (value != null) {
-    const { focus, options, currencyFormat, previousConformedValue } = el.$ci
-    const { hideCurrencySymbol, hideGroupingSymbol } = options.distractionFree
-    const formatConfig = { ...currencyFormat }
-    if (focus && hideCurrencySymbol) {
-      formatConfig.prefix = ''
-      formatConfig.negativePrefix = '-'
-      formatConfig.suffix = ''
-    }
-    const { conformedValue, fractionDigits } = conformToMask(value, formatConfig, options, previousConformedValue)
+    const { focus, options: { autoDecimalMode, distractionFree, locale }, currencyFormat, previousConformedValue } = el.$ci
+    const hideCurrencySymbol = focus && distractionFree.hideCurrencySymbol
+    const { conformedValue, fractionDigits } = conformToMask(value, currencyFormat, previousConformedValue, hideCurrencySymbol, autoDecimalMode)
     if (typeof conformedValue === 'number') {
-      const formattedValue = new Intl.NumberFormat(options.locale, {
-        useGrouping: !(focus && hideGroupingSymbol),
-        minimumFractionDigits: hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : Math.min(formatConfig.minimumFractionDigits, fractionDigits.length),
-        maximumFractionDigits: formatConfig.maximumFractionDigits
+      const formattedValue = new Intl.NumberFormat(locale, {
+        useGrouping: !(focus && distractionFree.hideGroupingSymbol),
+        minimumFractionDigits: hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : Math.min(currencyFormat.minimumFractionDigits, fractionDigits.length),
+        maximumFractionDigits: currencyFormat.maximumFractionDigits
       }).format(Math.abs(conformedValue))
       const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
-      el.value = `${isNegativeZero || conformedValue < 0 ? formatConfig.negativePrefix : formatConfig.prefix}${formattedValue}${formatConfig.suffix}`
+      el.value = insertCurrencySymbol(formattedValue, currencyFormat, isNegativeZero || conformedValue < 0, hideCurrencySymbol)
       el.$ci.numberValue = conformedValue
     } else {
       el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, formatConfig, false)
+      el.$ci.numberValue = parse(el.value, currencyFormat, false)
     }
   } else {
     el.value = el.$ci.numberValue = null
