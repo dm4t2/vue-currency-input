@@ -19,12 +19,16 @@
     "type": "git",
     "url": "https://github.com/dm4t2/vue-currency-input.git"
   },
-  "homepage": "https://dm4t2.github.io/vue-currency-input/",
+  "homepage": "https://dm4t2.github.io/vue-currency-input",
   "keywords": [
     "vue",
+    "text mask",
     "input mask",
-    "currency format",
-    "i18n"
+    "currency input",
+    "money input",
+    "format",
+    "i18n",
+    "ISO 4217"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
