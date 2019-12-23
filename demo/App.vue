@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <Playground/>
+    <Playground />
   </div>
 </template>
 
 <script>
-import ComponentDemo from './ComponentDemo'
 import Playground from '../docs/.vuepress/components/Playground'
 
 export default {
   name: 'App',
-  components: { Playground, ComponentDemo }
+  components: { Playground }
 }
 </script>
 
