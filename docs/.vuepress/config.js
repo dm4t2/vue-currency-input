@@ -6,6 +6,7 @@ module.exports = {
     ['link', { rel: 'icon', href: '/favicon.png' }],
   ],
   themeConfig: {
+    smoothScroll: true,
     search: false,
     nav: [{
       text: 'Release Notes',
@@ -15,13 +16,13 @@ module.exports = {
       '/': [
         '/guide/',
         '/config/',
-        '/examples/',
+        '/playground/',
         '/api/'
       ]
     },
     repo: 'dm4t2/vue-currency-input',
     docsDir: 'docs',
     docsBranch: 'gh-pages',
-    editLinks: false
+    editLinks: true
   }
 }

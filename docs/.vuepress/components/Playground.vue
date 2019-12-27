@@ -2,75 +2,172 @@
   <v-app>
     <v-container fluid>
       <v-row>
-        <v-col class="d-flex" cols="12" sm="6">
+        <v-col
+          class="d-flex"
+          cols="12"
+          sm="6"
+        >
           <currency-input
             v-model="value"
             v-bind="options"
-            class="demo__currency-input"/>
+            class="demo__currency-input"
+          />
         </v-col>
-        <v-col class="d-flex align-center" cols="12" sm="6">
+        <v-col
+          class="d-flex align-center"
+          cols="12"
+          sm="6"
+        >
           Number value: <code class="ml-2">{{ value }}</code>
         </v-col>
       </v-row>
-
-      <v-divider class="my-4"/>
+      <v-divider class="my-4" />
       <v-row>
-        <v-col cols=6 sm="6">
+        <v-col
+          cols=12
+          sm="6"
+        >
           <span class="title">Locale</span>
           <v-select
             v-model="locale"
-            :items="['de', 'en']"
+            :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH']"
+            class="mb-12"
+            hide-details
           />
           <span class="title">Currency</span>
-          <v-radio-group v-model="selectedCurrencyOption" column class="full-width">
-            <v-radio label="Use ISO code"/>
+          <v-radio-group
+            class="full-width mb-12"
+            column
+            hide-details
+            v-model="selectedCurrencyOption"
+          >
+            <v-radio label="Use ISO code" />
             <v-select
+              :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY']"
               :disabled="selectedCurrencyOption !== 0"
-              class="pl-8"
-              dense
-              v-model="currency"
-              :items="['EUR', 'USD']"
+              class="pl-8 mb-6 py-0"
+              hide-details
+              v-model="currencyCode"
             />
-            <v-radio label="Hide currency symbol"/>
-            <v-radio label="Use custom currency symbol"/>
+            <v-radio label="Hide currency symbol" />
+            <v-radio label="Use custom currency symbol" />
             <div class="pl-8">
-              <v-text-field dense placeholder="Prefix" :disabled="selectedCurrencyOption !== 2" v-model="prefix"/>
-              <v-text-field dense placeholder="Suffix" :disabled="selectedCurrencyOption !== 2" v-model="suffix"/>
+              <v-text-field
+                :disabled="selectedCurrencyOption !== 2"
+                class="py-0"
+                hide-details
+                placeholder="Prefix"
+                v-model="prefix"
+              />
+              <v-text-field
+                :disabled="selectedCurrencyOption !== 2"
+                hide-details
+                placeholder="Suffix"
+                v-model="suffix"
+              />
             </div>
           </v-radio-group>
+
+          <div class="d-flex align-center justify-space-between">
+            <span class="title">Distraction Free</span>
+            <v-switch
+              class="my-0"
+              hide-details
+              v-model="distractionFree"
+            />
+          </div>
+          <div class="my-4">
+            Enables easier input by hiding various parts of the formatting on focus.
+          </div>
+          <v-checkbox
+            :disabled="!distractionFree"
+            class="my-0"
+            hide-details
+            label="Hide currency symbol"
+            v-model="hideCurrencySymbol"
+          />
+          <v-checkbox
+            :disabled="!distractionFree"
+            class="my-0"
+            hide-details
+            label="Hide grouping symbol"
+            v-model="hideGroupingSymbol"
+          />
+          <v-checkbox
+            :disabled="!distractionFree"
+            class="my-0"
+            hide-details
+            label="Hide negligible decimal digits"
+            v-model="hideNegligibleDecimalDigits"
+          />
         </v-col>
-        <v-col cols=6 sm="6">
-          <span class="title">Value Range</span>
+        <v-col
+          cols=12
+          sm="6"
+        >
+          <div class="d-flex align-center justify-space-between mb-4">
+            <span class="title">Precision</span>
+            <v-switch
+              class="my-0"
+              hide-details
+              v-model="precisionEnabled"
+            />
+          </div>
+          <div class="mb-6">
+            Override the number of displayed decimal digits. Can only be applied for currencies that support decimal digits.
+          </div>
+          <v-switch
+            :disabled="!precisionEnabled"
+            class="mb-8"
+            hide-details
+            label="Range"
+            v-model="precisionRangeEnabled"
+          />
+          <v-range-slider
+            :disabled="!precisionEnabled"
+            :max="20"
+            thumb-label="always"
+            thumb-size="24"
+            v-if="precisionRangeEnabled"
+            v-model="precisionRange"
+          />
+          <v-slider
+            :disabled="!precisionEnabled"
+            :max="20"
+            thumb-label="always"
+            thumb-size="24"
+            v-else
+            v-model="precisionFixed"
+          />
 
-          <div class="d-flex align-center mt-6">
-            <v-checkbox hide-details label="Min" class="my-0 py-0 mr-4" v-model="minActive"/>
-            <v-slider hide-details class="align-center" v-model="valueRange.min" :disabled="!minActive" :max="maxActive && valueRange.max ? valueRange.max : 1000" thumb-label="always">
+          <div class="d-flex align-center justify-space-between">
+            <span class="title">Value Range</span>
+            <v-switch v-model="valueRangeEnabled" />
+          </div>
+          <div class="mb-8">The validation is triggered on blur and automatically sets the respective threshold if out of range.</div>
+          <v-range-slider
+            :disabled="!valueRangeEnabled"
+            :max="999"
+            thumb-label="always"
+            thumb-size="24"
+            v-model="valueRange"
+          />
 
-            </v-slider>
+          <div class="d-flex align-center justify-space-between">
+            <span class="title">Auto Decimal Mode</span>
+            <v-switch v-model="autoDecimalMode" />
+          </div>
+          <div class="mb-6">
+            Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits.
           </div>
 
-          <div class="d-flex align-center mt-6">
-            <v-checkbox hide-details label="Max" class="my-0 py-0 mr-4" v-model="maxActive"/>
-            <v-slider hide-details class="align-center" v-model="valueRange.max" :disabled="!maxActive" :min="maxActive && valueRange.min ? valueRange.min : 0" :max="1000" thumb-label="always">
-
-            </v-slider>
+          <div class="d-flex align-center justify-space-between">
+            <span class="title">Value As Integer</span>
+            <v-switch v-model="valueAsInteger" />
           </div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="6" sm="6">
-          <span class="title">Distraction free</span>
-          <v-switch v-model="distractionFree" :label="distractionFree ? 'Enabled' : 'Disabled'">
-            <v-tooltip slot="append" top>
-              <template v-slot:activator="data">
-                <v-icon v-on="data.on">mdi-help-circle-outline</v-icon>
-              </template>
-              <span>Tooltip</span>
-            </v-tooltip>
-          </v-switch>
-          <v-checkbox :disabled="!distractionFree" hide-details class="my-0" v-model="hideCurrencySymbol" label="Hide currency symbol"/>
-          <v-checkbox :disabled="!distractionFree" hide-details class="my-0" v-model="hideGroupingSymbol" label="Hide grouping symbol"/>
-          <v-checkbox :disabled="!distractionFree" hide-details class="my-0" v-model="hideNegligibleDecimalDigits" label="Hide negligible decimal digits"/>
+          <div class="mb-6">
+            Whether the number value should be handled as integer instead of a float value.
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -83,46 +180,57 @@ export default {
   data () {
     return {
       value: 1234,
-      locale: 'en',
+      locale: 'de-DE',
       selectedCurrencyOption: 0,
       currencyCode: 'EUR',
-      distractionFree: false,
+      distractionFree: true,
       hideCurrencySymbol: true,
       hideGroupingSymbol: true,
       hideNegligibleDecimalDigits: true,
       prefix: null,
       suffix: null,
-      valueRange: {
-        min: null,
-        max: null
-      },
+      precisionEnabled: false,
+      precisionRangeEnabled: false,
+      precisionFixed: 2,
+      precisionRange: [0, 20],
+      valueRangeEnabled: false,
+      valueRange: [0, 9999],
       minActive: false,
-      maxActive: false
+      maxActive: false,
+      autoDecimalMode: false,
+      valueAsInteger: false
     }
   },
   computed: {
-    currency () {
-      return [this.currencyCode, null, { prefix: this.prefix, suffix: this.suffix }][this.selectedCurrencyOption]
-    },
     options () {
       return {
         locale: this.locale,
-        currency: this.currency,
-        min: this.minActive && Number.isInteger(this.valueRange.min) ? this.valueRange.min : null,
-        max: this.maxActive && Number.isInteger(this.valueRange.max) ? this.valueRange.max : null,
+        currency: [this.currencyCode, null, { prefix: this.prefix, suffix: this.suffix }][this.selectedCurrencyOption],
+        valueRange: this.valueRangeEnabled
+          ? { min: this.valueRange[0], max: this.valueRange[1] }
+          : undefined,
+        precision: this.precisionRangeEnabled
+          ? { min: this.precisionRange[0], max: this.precisionRange[1] }
+          : this.precisionFixed,
         distractionFree: this.distractionFree
           ? {
             hideNegligibleDecimalDigits: this.hideNegligibleDecimalDigits,
             hideCurrencySymbol: this.hideCurrencySymbol,
             hideGroupingSymbol: this.hideGroupingSymbol
-          } : false
+          } : false,
+        autoDecimalMode: this.autoDecimalMode,
+        valueAsInteger: this.valueAsInteger
       }
     }
   },
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '~@mdi/font/css/materialdesignicons.css';
+@import '~vuetify/dist/vuetify.min.css';
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");
+
 .demo__currency-input {
   background-color: #fff;
   font-size: 20px;
