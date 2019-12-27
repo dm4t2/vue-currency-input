@@ -10,12 +10,11 @@ The Vue Currency Input plugin allows an easy input of currency formatted numbers
 [Read the guide](https://dm4t2.github.io/vue-currency-input/guide/) to getting started or check out the [playground](https://dm4t2.github.io/vue-currency-input/playgound/) to see it in action.
 
 ## Features
-
-  * **Lightweight:** [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input) and zero dependencies.
-  * **Format as you type:** Numbers are formatted immediately during input.
-  * **i18n support:** Language-dependent, ISO-compliant currency formatting using the native [Intl.NumberFormat](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat).
-  * **Distraction free:** Enables easier input by hiding various parts of the formatting on focus.
-  * **Fully customizable:** Use custom currency symbols, precision ranges and [much more](https://dm4t2.github.io/vue-currency-input/config/).
+* **Lightweight:** [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input) and zero dependencies.
+* **Format as you type:** Numbers are formatted immediately during input.
+* **i18n support:** Language-dependent, ISO-compliant currency formatting using the native [Intl.NumberFormat](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat).
+* **Distraction free:** Enables easier input by hiding various parts of the formatting on focus.
+* **Fully customizable:** Use custom currency symbols, precision ranges and [much more](https://dm4t2.github.io/vue-currency-input/config/).
 
 ## Support me
 If you find this plugin helpful or you want to support the development, buy me a coffee:
