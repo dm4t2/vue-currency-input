@@ -7,7 +7,7 @@
 # Vue Currency Input
 The Vue Currency Input plugin allows an easy input of currency formatted numbers. It provides both a standalone component (`<currency-input>`) and a custom Vue directive (`v-currency`) for decorating existing input components with currency format capabilities.
 
-[Read the guide](https://dm4t2.github.io/vue-currency-input/guide/) to getting started or check out the [playground](https://dm4t2.github.io/vue-currency-input/playgound/) to see it in action.
+[Read the guide](https://dm4t2.github.io/vue-currency-input/guide/) to getting started or check out the [playground](https://dm4t2.github.io/vue-currency-input/playground/) to see it in action.
 
 ## Features
 - **Lightweight:** [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input) and zero dependencies.
