@@ -18,7 +18,7 @@
           cols="12"
           sm="6"
         >
-          Number value: <code class="ml-2">{{ value }}</code>
+          Number value: <code class="ml-2">{{ value != null ? value : 'null' }}</code>
         </v-col>
       </v-row>
       <v-divider class="my-4" />
