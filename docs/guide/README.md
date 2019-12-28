@@ -40,7 +40,7 @@ Include the plugin after Vue and it will install itself automatically:
 
 ## Usage
 ### Component
-The `<currency-input>` component only needs a number value binding. If used with `v-model`, it will always emit the number value. All other [component props](/config/) are optional.
+The `<currency-input>` component only needs a number value binding. All other [component props](/config/) are optional.
 
 <<< @/docs/guide/ComponentUsage.vue
 
@@ -50,7 +50,7 @@ The `v-currency` directive is great if you want to decorate existing input compo
 <<< @/docs/guide/DirectiveUsage.vue
 
 #### Getting the number value
-In comparision to the `<currency-input>` component the `v-currency` directive will always emit the formatted string instead of the number value when used with `v-model`. 
+In comparision to the `<currency-input>` component the `v-currency` directive always emits the formatted string instead of the number value when used with `v-model`. 
 To get the number value you can use the [`parseCurrency` method](/api/#parsecurrency).
 
 ## Import on demand
