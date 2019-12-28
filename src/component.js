@@ -82,10 +82,9 @@ export default {
       const { input, ...listeners } = this.$listeners // all but input event
       return {
         ...listeners,
-        [inputEvent]: (e) => {
-          const { oldValue, newValue } = e.detail
-          if (oldValue !== newValue) {
-            this.$emit('input', newValue)
+        [inputEvent]: ({ detail }) => {
+          if (this.value !== detail.numberValue) {
+            this.$emit('input', detail.numberValue)
           }
           this.formattedValue = this.$el.value
         }

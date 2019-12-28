@@ -84,13 +84,13 @@ describe('when the input is changed by the user', () => {
     expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
   }
 
-  it('formats the value and emits the parsed number', () => {
+  it('should update the displayed value and emit the parsed number', () => {
     const propsData = { locale: 'en', distractionFree: false }
 
     expectValue('12345', '€12,345', 12345, propsData)
     expectValue('-1', '-€1', -1, propsData)
     expectValue('-0', '-€0', -0, propsData)
-    expectValue('', '', null, propsData)
+    expectValue('', '', null, { ...propsData, value: 0 })
     expectValue('1.', '€1.', 100, { ...propsData, valueAsInteger: true })
   })
 
@@ -113,21 +113,37 @@ describe('when the input is changed by the user', () => {
 })
 
 describe('when the input is changed externally', () => {
-  it('formats the value and emits the parsed number', async () => {
-    const expectValue = async (value, formattedValue, emittedValue, propsData) => {
+  it('should update the displayed value', async () => {
+    const expectValue = async (value, formattedValue, propsData) => {
       const wrapper = mountComponent(propsData)
       wrapper.setProps({ value })
       await wrapper.vm.$nextTick()
       expect(wrapper.element.value).toBe(formattedValue)
-      expect(wrapper.emitted('input')[propsData.value !== undefined ? 1 : 0][0]).toBe(emittedValue)
     }
 
-    await expectValue(12345, '€12,345.00', 12345, { locale: 'en' })
-    await expectValue(-1, '-€1.00', -1, { locale: 'en' })
-    await expectValue(0, '€0.00', 0, { locale: 'en' })
-    await expectValue(null, '', null, { locale: 'en', value: 0 })
-    await expectValue(12345, '€123.45', 12345, { locale: 'en', valueAsInteger: true })
-    await expectValue(-1, '-€0.01', -1, { locale: 'en', valueAsInteger: true })
+    await expectValue(12345, '€12,345.00', { locale: 'en' })
+    await expectValue(-1, '-€1.00', { locale: 'en' })
+    await expectValue(0, '€0.00', { locale: 'en' })
+    await expectValue(null, '', { locale: 'en', value: 0 })
+    await expectValue(12345, '€123.45', { locale: 'en', valueAsInteger: true })
+    await expectValue(-1, '-€0.01', { locale: 'en', valueAsInteger: true })
+  })
+
+  it('should never emit an input event unless the original value has been changed', async () => {
+    const expectValue = async (value, emittedValue, propsData) => {
+      const wrapper = mountComponent(propsData)
+      wrapper.setProps({ value })
+      await wrapper.vm.$nextTick()
+      if (emittedValue === false) {
+        expect(wrapper.emitted('input')).toBeFalsy()
+      } else {
+        expect(wrapper.emitted('input')[0][0]).toBe(emittedValue)
+      }
+    }
+
+    await expectValue(12345, false, { locale: 'en' })
+    await expectValue(1000, 100, { locale: 'en', valueRange: { max: 100 } })
+    await expectValue(10, 100, { locale: 'en', valueRange: { min: 100 } })
   })
 })
 

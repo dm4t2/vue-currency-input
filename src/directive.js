@@ -88,14 +88,13 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
 }
 
 const format = (el, value) => {
-  const oldValue = el.$ci.numberValue
   updateInputValue(el, value)
-  let { numberValue: newValue, currencyFormat, options, inputEvent } = el.$ci
-  if (newValue != null) {
-    newValue = toInteger(newValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
+  let { numberValue, currencyFormat, options, inputEvent } = el.$ci
+  if (numberValue != null) {
+    numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
   }
   if (inputEvent) {
-    dispatchEvent(el, inputEvent, { oldValue, newValue })
+    dispatchEvent(el, inputEvent, { numberValue })
   }
 }
 
