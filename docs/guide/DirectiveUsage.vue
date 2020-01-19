@@ -1,7 +1,8 @@
 <template>
   <input
+    v-model="value"
     v-currency="{currency: 'USD', locale: 'en'}"
-    v-model="value">
+  >
 </template>
 
 <script>

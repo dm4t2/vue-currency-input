@@ -44,6 +44,11 @@ The `<currency-input>` component only needs a number value binding. All other [c
 
 <<< @/docs/guide/ComponentUsage.vue
 
+#### Lazy value binding
+Sometimes you might want to update the bound value only when the input loses its focus. In this case, listen to the `change` event instead of using `v-model`.
+
+<<< @/docs/guide/LazyValueBinding.vue
+
 ### Directive
 The `v-currency` directive is great if you want to decorate existing input components with currency format capabilities (for example like those from [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)).
 

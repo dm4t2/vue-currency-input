@@ -1,8 +1,7 @@
 <template>
   <currency-input
-    v-model="value"
-    currency="EUR"
-    locale="de"
+    :value="value"
+    @change="value = $event"
   />
 </template>
 

@@ -1,7 +1,5 @@
-import currencyDirective from './directive'
 import { DEFAULT_OPTIONS, setValue } from './api'
-
-const inputEvent = 'format-complete'
+import currencyDirective from './directive'
 
 export default {
   render (h) {
@@ -11,8 +9,7 @@ export default {
       },
       directives: [{
         name: 'currency',
-        value: this.options,
-        modifiers: { inputEvent }
+        value: this.options
       }],
       on: this.listeners()
     })
@@ -82,7 +79,13 @@ export default {
       const { input, ...listeners } = this.$listeners // all but input event
       return {
         ...listeners,
-        [inputEvent]: ({ detail }) => {
+        change: ({ detail }) => {
+          if (detail) {
+            this.$emit('change', detail.numberValue)
+          }
+          this.formattedValue = this.$el.value
+        },
+        'format-complete': ({ detail }) => {
           if (this.value !== detail.numberValue) {
             this.$emit('input', detail.numberValue)
           }

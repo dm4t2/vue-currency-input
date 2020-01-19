@@ -1,6 +1,6 @@
 import { config, shallowMount } from '@vue/test-utils'
-import CurrencyInput from '../../src/component'
 import { DEFAULT_OPTIONS } from '../../src/api'
+import CurrencyInput from '../../src/component'
 
 jest.useFakeTimers()
 
@@ -73,6 +73,15 @@ describe('component options', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.element.value).toBe('US$ -1.234,56')
   })
+
+  it('should emit a change event if the valueAsInteger option is toggled', async () => {
+    const wrapper = mountComponent({ locale: 'en', currency: 'USD', valueAsInteger: true })
+    wrapper.setValue(1234)
+
+    wrapper.setProps({ valueAsInteger: false })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('change')).toEqual([[1234], [12.34]])
+  })
 })
 
 describe('when the input is changed by the user', () => {
@@ -92,6 +101,7 @@ describe('when the input is changed by the user', () => {
     expectValue('-0', '-€0', -0, propsData)
     expectValue('', '', null, { ...propsData, value: 0 })
     expectValue('1.', '€1.', 100, { ...propsData, valueAsInteger: true })
+    expectValue('1', '€1', 100, { ...propsData, valueAsInteger: true })
   })
 
   describe('negligible decimal digits are hidden on focus', () => {
@@ -142,6 +152,7 @@ describe('when the input is changed externally', () => {
     }
 
     await expectValue(12345, false, { locale: 'en' })
+    await expectValue(12345, false, { locale: 'en', value: 12345 })
     await expectValue(1000, 100, { locale: 'en', valueRange: { max: 100 } })
     await expectValue(10, 100, { locale: 'en', valueRange: { min: 100 } })
   })
@@ -242,6 +253,35 @@ describe('when the input is blurred', () => {
     wrapper.trigger('blur')
 
     expect(wrapper.element.value).toBe('€1.34')
+  })
+
+  it('should never emit an change event unless the original value has been changed', async () => {
+    const expectValue = async (value, emittedValue, propsData) => {
+      const wrapper = mountComponent(propsData)
+      await wrapper.vm.$nextTick()
+
+      wrapper.trigger('focus')
+      wrapper.setValue(value)
+      wrapper.trigger('blur')
+
+      if (emittedValue === false) {
+        expect(wrapper.emitted('change')).toBeFalsy()
+      } else {
+        expect(wrapper.emitted('change')).toEqual(emittedValue)
+      }
+    }
+
+    await expectValue('100', [[100]], { locale: 'en' })
+    await expectValue('100', [[0], [100]], { locale: 'en', value: 0 })
+    await expectValue('100', [[100]], { locale: 'en', value: 100 })
+  })
+
+  it('should ignore native change events of the input', () => {
+    const wrapper = mountComponent()
+
+    wrapper.trigger('change')
+
+    expect(wrapper.emitted('change')).toBeFalsy()
   })
 
   describe('when a min value is present', () => {
