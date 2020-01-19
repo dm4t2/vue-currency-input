@@ -86,6 +86,7 @@ describe('conformToMask', () => {
         expect(conformToMask('1234.', currencyFormat, '', true)).toEqual({ conformedValue: '1234.' })
         expect(conformToMask('1,234.', currencyFormat, '', true)).toEqual({ conformedValue: '1,234.' })
         expect(conformToMask('-1.', currencyFormat, '', true)).toEqual({ conformedValue: '-1.' })
+        expect(conformToMask('-1.', currencyFormat, '', true, false, false)).toEqual({ conformedValue: '1.' })
         expect(conformToMask('-1234.', currencyFormat, '', true)).toEqual({ conformedValue: '-1234.' })
         expect(conformToMask('-1,234.', currencyFormat, '', true)).toEqual({ conformedValue: '-1,234.' })
         expect(conformToMask('.', currencyFormat, '', true)).toEqual({ conformedValue: '0.' })
@@ -115,6 +116,7 @@ describe('conformToMask', () => {
         expect(conformToMask('1234.', currencyFormat)).toEqual({ conformedValue: '$ 1234.' })
         expect(conformToMask('1,234.', currencyFormat)).toEqual({ conformedValue: '$ 1,234.' })
         expect(conformToMask('-1.', currencyFormat)).toEqual({ conformedValue: '-$ 1.' })
+        expect(conformToMask('-1.', currencyFormat, '', false, false, false)).toEqual({ conformedValue: '$ 1.' })
         expect(conformToMask('-1234.', currencyFormat)).toEqual({ conformedValue: '-$ 1234.' })
         expect(conformToMask('-1,234.', currencyFormat)).toEqual({ conformedValue: '-$ 1,234.' })
         expect(conformToMask('.', currencyFormat)).toEqual({ conformedValue: '$ 0.' })
@@ -142,6 +144,7 @@ describe('conformToMask', () => {
         expect(conformToMask('1234.', currencyFormat)).toEqual({ conformedValue: '1234. $' })
         expect(conformToMask('1,234.', currencyFormat)).toEqual({ conformedValue: '1,234. $' })
         expect(conformToMask('-1.', currencyFormat)).toEqual({ conformedValue: '-1. $' })
+        expect(conformToMask('-1.', currencyFormat, '', false, false, false)).toEqual({ conformedValue: '1. $' })
         expect(conformToMask('-1234.', currencyFormat)).toEqual({ conformedValue: '-1234. $' })
         expect(conformToMask('-1,234.', currencyFormat)).toEqual({ conformedValue: '-1,234. $' })
         expect(conformToMask('.', currencyFormat)).toEqual({ conformedValue: '0. $' })
@@ -186,6 +189,7 @@ describe('conformToMask', () => {
       const currencyFormat = { decimalSymbol: ',', prefix: '$', suffix: '', maximumFractionDigits: 4 }
 
       expect(conformToMask('1', currencyFormat)).toEqual({ conformedValue: 1, fractionDigits: '' })
+      expect(conformToMask('-1', currencyFormat, '', false, false, false)).toEqual({ conformedValue: 1, fractionDigits: '' })
       expect(conformToMask('1,2', currencyFormat)).toEqual({ conformedValue: 1.2, fractionDigits: '2' })
       expect(conformToMask('1,232323', currencyFormat)).toEqual({ conformedValue: 1.2323, fractionDigits: '2323' })
       expect(conformToMask('0', currencyFormat)).toEqual({ conformedValue: 0, fractionDigits: '' })
@@ -201,9 +205,11 @@ describe('conformToMask', () => {
 
       expect(conformToMask('', currencyFormat, '', false, true)).toEqual({ conformedValue: '' })
       expect(conformToMask('-', currencyFormat, '', false, true)).toEqual({ conformedValue: -0, fractionDigits: '00' })
+      expect(conformToMask('-', currencyFormat, '', false, true, false)).toEqual({ conformedValue: 0, fractionDigits: '00' })
       expect(conformToMask('1', currencyFormat, '', false, true)).toEqual({ conformedValue: 0.01, fractionDigits: '01' })
       expect(conformToMask('12345', currencyFormat, '', false, true)).toEqual({ conformedValue: 123.45, fractionDigits: '45' })
       expect(conformToMask('-12345', currencyFormat, '', false, true)).toEqual({ conformedValue: -123.45, fractionDigits: '45' })
+      expect(conformToMask('-12345', currencyFormat, '', false, true, false)).toEqual({ conformedValue: 123.45, fractionDigits: '45' })
       expect(conformToMask('00012345', currencyFormat, '', false, true)).toEqual({ conformedValue: 123.45, fractionDigits: '45' })
     })
   })

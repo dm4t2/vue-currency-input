@@ -21,12 +21,14 @@ const checkIncompleteValue = (value, negative, previousConformedValue, currencyF
   return null
 }
 
-const getAutoDecimalModeConformedValue = (value, previousConformedValue, { minimumFractionDigits }) => {
+const getAutoDecimalModeConformedValue = (value, previousConformedValue, minimumFractionDigits, allowNegative = true) => {
   if (value === '') {
     return { conformedValue: '' }
   } else {
-    const negative = startsWith(value, '-')
-    const conformedValue = value === '-' ? -0 : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(value))}`) / Math.pow(10, minimumFractionDigits)
+    const negative = startsWith(value, '-') && allowNegative
+    const conformedValue = (allowNegative && value === '-')
+      ? -0
+      : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(value))}`) / Math.pow(10, minimumFractionDigits)
     return {
       conformedValue,
       fractionDigits: conformedValue.toFixed(minimumFractionDigits).slice(-minimumFractionDigits)
@@ -34,13 +36,14 @@ const getAutoDecimalModeConformedValue = (value, previousConformedValue, { minim
   }
 }
 
-export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol = false, autoDecimalMode = false) => {
+export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol = false, autoDecimalMode = false, allowNegative = true) => {
   if (typeof str === 'string') {
     if (currencyFormat.minimumFractionDigits > 0 && autoDecimalMode) {
-      return getAutoDecimalModeConformedValue(str, previousConformedValue, currencyFormat)
+      return getAutoDecimalModeConformedValue(str, previousConformedValue, currencyFormat.minimumFractionDigits, allowNegative)
     }
 
-    const { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
+    let { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
+    negative &= allowNegative
     const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, currencyFormat, hideCurrencySymbol)
     if (incompleteValue != null) {
       return { conformedValue: incompleteValue }

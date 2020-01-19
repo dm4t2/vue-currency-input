@@ -120,7 +120,7 @@
             :disabled="!precisionEnabled"
             class="mb-8"
             hide-details
-            label="Range"
+            label="Use range"
             v-model="precisionRangeEnabled"
           />
           <v-range-slider
@@ -141,8 +141,16 @@
           />
 
           <div class="d-flex align-center justify-space-between">
+            <span class="title">Allow Negative</span>
+            <v-switch v-model="allowNegative"/>
+          </div>
+          <div class="mb-6">
+            Whether the input of negative values is allowed.
+          </div>
+
+          <div class="d-flex align-center justify-space-between">
             <span class="title">Value Range</span>
-            <v-switch v-model="valueRangeEnabled" />
+            <v-switch v-model="valueRangeEnabled"/>
           </div>
           <div class="mb-8">The validation is triggered on blur and automatically sets the respective threshold if out of range.</div>
           <v-range-slider
@@ -198,7 +206,8 @@ export default {
       minActive: false,
       maxActive: false,
       autoDecimalMode: false,
-      valueAsInteger: false
+      valueAsInteger: false,
+      allowNegative: true
     }
   },
   computed: {
@@ -219,10 +228,11 @@ export default {
             hideGroupingSymbol: this.hideGroupingSymbol
           } : false,
         autoDecimalMode: this.autoDecimalMode,
-        valueAsInteger: this.valueAsInteger
+        valueAsInteger: this.valueAsInteger,
+        allowNegative: this.allowNegative
       }
     }
-  },
+  }
 }
 </script>
 

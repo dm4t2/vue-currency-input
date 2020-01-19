@@ -66,9 +66,9 @@ const applyFixedFractionFormat = (el, value, forcedChange) => {
 
 const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
   if (value != null) {
-    const { focus, options: { autoDecimalMode, distractionFree, locale }, currencyFormat, previousConformedValue } = el.$ci
+    const { focus, options: { allowNegative, autoDecimalMode, distractionFree, locale }, currencyFormat, previousConformedValue } = el.$ci
     const hideCurrencySymbol = focus && distractionFree.hideCurrencySymbol
-    const { conformedValue, fractionDigits } = conformToMask(value, currencyFormat, previousConformedValue, hideCurrencySymbol, autoDecimalMode)
+    const { conformedValue, fractionDigits } = conformToMask(value, currencyFormat, previousConformedValue, hideCurrencySymbol, autoDecimalMode, allowNegative)
     if (typeof conformedValue === 'number') {
       const formattedValue = new Intl.NumberFormat(locale, {
         useGrouping: !(focus && distractionFree.hideGroupingSymbol),

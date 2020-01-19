@@ -50,6 +50,10 @@ export default {
     valueRange: {
       type: Object,
       default: undefined
+    },
+    allowNegative: {
+      type: Boolean,
+      default: undefined
     }
   },
   data () {

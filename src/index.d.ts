@@ -24,6 +24,7 @@ export interface CurrencyInputOptions {
   precision?: number | NumberRange,
   autoDecimalMode?: boolean,
   valueRange?: | NumberRange,
+  allowNegative?: boolean
 }
 
 export interface PluginOptions {

@@ -9,7 +9,8 @@ export const DEFAULT_OPTIONS = {
   distractionFree: true,
   precision: undefined,
   autoDecimalMode: false,
-  valueRange: undefined
+  valueRange: undefined,
+  allowNegative: true
 }
 
 /**

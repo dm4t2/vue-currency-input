@@ -35,6 +35,10 @@ describe('initial value', () => {
       await expectInitialValue('0,01 €', { locale: 'de', valueAsInteger: true, value: 1 })
       await expectInitialValue('0,00001 €', { locale: 'de', precision: 5, valueAsInteger: true, value: 1 })
     })
+
+    it('should ignore negative values if not allowed', async () => {
+      await expectInitialValue('1.234,00 €', { locale: 'de', allowNegative: false, value: -1234 })
+    })
   })
 
   describe('the initial value is null', () => {
@@ -102,6 +106,7 @@ describe('when the input is changed by the user', () => {
     expectValue('', '', null, { ...propsData, value: 0 })
     expectValue('1.', '€1.', 100, { ...propsData, valueAsInteger: true })
     expectValue('1', '€1', 100, { ...propsData, valueAsInteger: true })
+    expectValue('-1', '€1', 1, { ...propsData, allowNegative: false })
   })
 
   describe('negligible decimal digits are hidden on focus', () => {
@@ -133,6 +138,7 @@ describe('when the input is changed externally', () => {
 
     await expectValue(12345, '€12,345.00', { locale: 'en' })
     await expectValue(-1, '-€1.00', { locale: 'en' })
+    await expectValue(1, '€1.00', { locale: 'en', allowNegative: false })
     await expectValue(0, '€0.00', { locale: 'en' })
     await expectValue(null, '', { locale: 'en', value: 0 })
     await expectValue(12345, '€123.45', { locale: 'en', valueAsInteger: true })
