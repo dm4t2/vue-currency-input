@@ -218,9 +218,9 @@ export default {
         valueRange: this.valueRangeEnabled
           ? { min: this.valueRange[0], max: this.valueRange[1] }
           : undefined,
-        precision: this.precisionRangeEnabled
-          ? { min: this.precisionRange[0], max: this.precisionRange[1] }
-          : this.precisionFixed,
+        precision: this.precisionEnabled
+          ? (this.precisionRangeEnabled ? { min: this.precisionRange[0], max: this.precisionRange[1] } : this.precisionFixed)
+          : undefined,
         distractionFree: this.distractionFree
           ? {
             hideNegligibleDecimalDigits: this.hideNegligibleDecimalDigits,
