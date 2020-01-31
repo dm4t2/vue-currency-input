@@ -71,10 +71,17 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
     const hideCurrencySymbol = focus && distractionFree.hideCurrencySymbol
     const { conformedValue, fractionDigits } = conformToMask(value, currencyFormat, previousConformedValue, hideCurrencySymbol, autoDecimalMode, allowNegative)
     if (typeof conformedValue === 'number') {
+      let { maximumFractionDigits, minimumFractionDigits } = currencyFormat
+      if (focus) {
+        minimumFractionDigits = maximumFractionDigits
+      }
+      minimumFractionDigits = hideNegligibleDecimalDigits
+        ? fractionDigits.replace(/0+$/, '').length
+        : Math.min(minimumFractionDigits, fractionDigits.length)
       const formattedValue = new Intl.NumberFormat(locale, {
         useGrouping: !(focus && distractionFree.hideGroupingSymbol),
-        minimumFractionDigits: hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : Math.min(currencyFormat.minimumFractionDigits, fractionDigits.length),
-        maximumFractionDigits: currencyFormat.maximumFractionDigits
+        minimumFractionDigits,
+        maximumFractionDigits
       }).format(Math.abs(conformedValue))
       const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
       el.value = insertCurrencySymbol(formattedValue, currencyFormat, isNegativeZero || conformedValue < 0, hideCurrencySymbol)

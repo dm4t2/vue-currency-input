@@ -108,6 +108,7 @@ describe('when the input is changed by the user', () => {
     expectValue('1.', '€1.', 100, { ...propsData, valueAsInteger: true })
     expectValue('1', '€1', 100, { ...propsData, valueAsInteger: true })
     expectValue('-1', '€1', 1, { ...propsData, allowNegative: false })
+    expectValue('1.0', '€1.0', 1, { ...propsData, precision: { min: 0, max: 2 } })
   })
 
   describe('negligible decimal digits are hidden on focus', () => {
