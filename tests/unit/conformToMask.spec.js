@@ -34,7 +34,7 @@ describe('conformToMask', () => {
   describe('when a invalid negative value is about to being entered', () => {
     describe('the currency symbol is hidden', () => {
       it('returns the previous conformed value', () => {
-        const currencyFormat = { decimalSymbol: '.', prefix: '$ ', negativePrefix: '-$ ', suffix: '', maximumFractionDigits: 2 }
+        const currencyFormat = { decimalSymbol: '.', minusSymbol: '-', prefix: '$ ', negativePrefix: '-$ ', suffix: '', maximumFractionDigits: 2 }
         expect(conformToMask('-a', currencyFormat, '-', true)).toEqual({ conformedValue: '-' })
         expect(conformToMask('--', currencyFormat, '-', true)).toEqual({ conformedValue: '-' })
       })
@@ -75,6 +75,7 @@ describe('conformToMask', () => {
         const currencyFormat = {
           decimalSymbol: '.',
           groupingSymbol: ',',
+          minusSymbol: '-',
           prefix: '$',
           negativePrefix: '-$',
           suffix: '',
@@ -201,7 +202,7 @@ describe('conformToMask', () => {
 
   describe('when auto decimal mode is enabled', () => {
     it('returns the expected result', () => {
-      const currencyFormat = { minimumFractionDigits: 2 }
+      const currencyFormat = { prefix: '€ ', minimumFractionDigits: 2 }
 
       expect(conformToMask('', currencyFormat, '', false, true)).toEqual({ conformedValue: '' })
       expect(conformToMask('-', currencyFormat, '', false, true)).toEqual({ conformedValue: -0, fractionDigits: '00' })
@@ -209,7 +210,9 @@ describe('conformToMask', () => {
       expect(conformToMask('1', currencyFormat, '', false, true)).toEqual({ conformedValue: 0.01, fractionDigits: '01' })
       expect(conformToMask('12345', currencyFormat, '', false, true)).toEqual({ conformedValue: 123.45, fractionDigits: '45' })
       expect(conformToMask('-12345', currencyFormat, '', false, true)).toEqual({ conformedValue: -123.45, fractionDigits: '45' })
+      expect(conformToMask('€ -12345', currencyFormat, '', false, true)).toEqual({ conformedValue: -123.45, fractionDigits: '45' })
       expect(conformToMask('-12345', currencyFormat, '', false, true, false)).toEqual({ conformedValue: 123.45, fractionDigits: '45' })
+      expect(conformToMask('€ -12345', currencyFormat, '', false, true, false)).toEqual({ conformedValue: 123.45, fractionDigits: '45' })
       expect(conformToMask('00012345', currencyFormat, '', false, true)).toEqual({ conformedValue: 123.45, fractionDigits: '45' })
     })
   })

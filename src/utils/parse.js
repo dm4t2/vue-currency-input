@@ -1,18 +1,18 @@
-import { isNumber, stripCurrencySymbolAndMinusSign } from './stringUtils'
 import { toInteger } from './numberUtils'
+import { isNumber, normalizeMinusSymbol, stripCurrencySymbol } from './stringUtils'
 
 export default (str, currencyFormat, valueAsInteger = false) => {
   if (typeof str === 'string') {
     if (isNumber(str)) {
       return toInteger(Number(str), valueAsInteger, currencyFormat.minimumFractionDigits)
     }
-    let { value, negative } = stripCurrencySymbolAndMinusSign(str, currencyFormat)
+    let value = stripCurrencySymbol(str, currencyFormat)
     const numberParts = value.split(currencyFormat.decimalSymbol)
     if (numberParts.length > 2) {
       return null
     }
     const integer = numberParts[0].replace(new RegExp(`\\${currencyFormat.groupingSymbol}`, 'g'), '')
-    if (integer.length && !integer.match(/^\d+$/g)) {
+    if (!isNumber(integer)) {
       return null
     }
     let number = integer
@@ -23,12 +23,7 @@ export default (str, currencyFormat, valueAsInteger = false) => {
       }
       number += `.${fraction}`
     }
-    if (number) {
-      if (negative) {
-        number = `-${number}`
-      }
-      return toInteger(Number(number), valueAsInteger, currencyFormat.minimumFractionDigits)
-    }
+    return toInteger(Number(normalizeMinusSymbol(number)), valueAsInteger, currencyFormat.minimumFractionDigits)
   }
   return null
 }

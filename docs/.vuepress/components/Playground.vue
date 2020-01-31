@@ -30,7 +30,7 @@
           <span class="title">Locale</span>
           <v-select
             v-model="locale"
-            :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH']"
+            :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH']"
             class="mb-12"
             hide-details
           />
