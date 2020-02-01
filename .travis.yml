@@ -21,10 +21,11 @@ jobs:
         github-token: $GITHUB_TOKEN
         repo: dm4t2/vue-currency-input
     - stage: Publish npm package
+      if: branch = master
       script: yarn build
       deploy:
+        edge: true
         on:
-          branch: master
           tags: true
         provider: npm
         skip_cleanup: true
