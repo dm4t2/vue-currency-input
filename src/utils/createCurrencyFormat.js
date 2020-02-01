@@ -27,13 +27,14 @@ export default ({ locale, currency, precision, autoDecimalMode, valueAsInteger }
     minimumFractionDigits = precision.min || 0
     maximumFractionDigits = precision.max !== undefined ? precision.max : 20
   }
+  const minusSymbol = new Intl.NumberFormat(locale).format(-1).charAt(0)
   if (currency == null) {
     currencyFormat = createCurrencyFormat(new Intl.NumberFormat(locale, { minimumFractionDigits: 1 }))
   } else if (typeof currency === 'object') {
     currencyFormat = {
       ...createCurrencyFormat(new Intl.NumberFormat(locale, { minimumFractionDigits: 1 })),
       prefix: currency.prefix || '',
-      negativePrefix: `-${currency.prefix || ''}`,
+      negativePrefix: `${minusSymbol}${currency.prefix || ''}`,
       suffix: currency.suffix || ''
     }
   } else {
@@ -49,6 +50,7 @@ export default ({ locale, currency, precision, autoDecimalMode, valueAsInteger }
   return {
     ...currencyFormat,
     minimumFractionDigits,
-    maximumFractionDigits
+    maximumFractionDigits,
+    minusSymbol
   }
 }

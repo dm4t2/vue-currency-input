@@ -16,17 +16,19 @@ export const insertCurrencySymbol = (value, currencyFormat, negative, hideCurren
   let { prefix, negativePrefix, suffix } = currencyFormat
   if (hideCurrencySymbol) {
     prefix = suffix = ''
-    negativePrefix = '-'
+    negativePrefix = currencyFormat.minusSymbol
   }
   return `${negative ? negativePrefix : prefix}${value}${suffix}`
 }
 
-export const stripCurrencySymbolAndMinusSign = (str, { prefix, suffix }) => {
-  const value = str.replace(prefix, '').replace(suffix, '')
-  return {
-    value: value.replace('-', ''),
-    negative: startsWith(value, '-')
-  }
+export const stripCurrencySymbol = (str, { prefix, suffix }) => {
+  return str.replace(prefix, '').replace(suffix, '')
 }
 
-export const isNumber = (str) => str.match(/^-?\d+(\.\d+)?$/)
+export const normalizeMinusSymbol = (str) => {
+  return str.replace(new RegExp(`^${['−', '-', '‐'].join('|')}`, 'g'), '-')
+}
+
+export const isNegative = (str) => normalizeMinusSymbol(str).charAt(0) === '-'
+
+export const isNumber = (str) => normalizeMinusSymbol(str).match(new RegExp(`^-?\\d+(\\.\\d+)?$`))

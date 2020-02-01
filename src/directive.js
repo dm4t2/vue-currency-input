@@ -59,8 +59,9 @@ const applyFixedFractionFormat = (el, value, forcedChange) => {
   format(el, value)
   const newValue = el.$ci.numberValue
   if (oldValue !== newValue || forcedChange) {
-    dispatchEvent(el, 'input')
-    dispatchEvent(el, 'change', { numberValue: toInteger(newValue, valueAsInteger, maximumFractionDigits) })
+    const numberValue = toInteger(newValue, valueAsInteger, maximumFractionDigits)
+    dispatchEvent(el, 'input', { numberValue })
+    dispatchEvent(el, 'change', { numberValue })
   }
 }
 
@@ -70,17 +71,24 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
     const hideCurrencySymbol = focus && distractionFree.hideCurrencySymbol
     const { conformedValue, fractionDigits } = conformToMask(value, currencyFormat, previousConformedValue, hideCurrencySymbol, autoDecimalMode, allowNegative)
     if (typeof conformedValue === 'number') {
+      let { maximumFractionDigits, minimumFractionDigits } = currencyFormat
+      if (focus) {
+        minimumFractionDigits = maximumFractionDigits
+      }
+      minimumFractionDigits = hideNegligibleDecimalDigits
+        ? fractionDigits.replace(/0+$/, '').length
+        : Math.min(minimumFractionDigits, fractionDigits.length)
       const formattedValue = new Intl.NumberFormat(locale, {
         useGrouping: !(focus && distractionFree.hideGroupingSymbol),
-        minimumFractionDigits: hideNegligibleDecimalDigits ? fractionDigits.replace(/0+$/, '').length : Math.min(currencyFormat.minimumFractionDigits, fractionDigits.length),
-        maximumFractionDigits: currencyFormat.maximumFractionDigits
+        minimumFractionDigits,
+        maximumFractionDigits
       }).format(Math.abs(conformedValue))
       const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
       el.value = insertCurrencySymbol(formattedValue, currencyFormat, isNegativeZero || conformedValue < 0, hideCurrencySymbol)
       el.$ci.numberValue = conformedValue
     } else {
       el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, currencyFormat, false)
+      el.$ci.numberValue = parse(el.value, currencyFormat)
     }
   } else {
     el.value = el.$ci.numberValue = null
@@ -91,18 +99,18 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
 const format = (el, value) => {
   updateInputValue(el, value)
   let { numberValue, currencyFormat, options } = el.$ci
-  if (numberValue != null) {
-    numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
-  }
+  numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
   dispatchEvent(el, 'format-complete', { numberValue })
 }
 
 const addEventListener = (el) => {
-  el.addEventListener('input', () => {
-    const { value, selectionStart, $ci: { currencyFormat, options } } = el
-    format(el, value)
-    if (el.$ci.focus) {
-      setCaretPosition(el, getCaretPositionAfterFormat(el.value, value, selectionStart, currencyFormat, options))
+  el.addEventListener('input', (e) => {
+    if (!e.detail) {
+      const { value, selectionStart, $ci: { currencyFormat, options } } = el
+      format(el, value)
+      if (el.$ci.focus) {
+        setCaretPosition(el, getCaretPositionAfterFormat(el.value, value, selectionStart, currencyFormat, options))
+      }
     }
   }, { capture: true })
 
