@@ -10,9 +10,9 @@ features:
 - title: Format as you type
   details: Numbers are formatted immediately during input.
 - title: i18n Support
-  details: Language-dependent, ISO-compliant currency formatting.
+  details: Locale dependent, ISO-compliant currency formatting.
 - title: Distraction free
-  details: Enables easier input by hiding various parts of the formatting on focus.
+  details: Hides the formatting on focus for easier input.
 - title: Fully customizable
   details: Use custom currency symbols, precision ranges and much more.
 - title: Built-in validation

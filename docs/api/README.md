@@ -9,6 +9,9 @@ Name | Type | Description
 `el` | HTMLInputElement | The input element the `v-currency` directive is bound to.
 `value` | Number | The number to be set. 
 
+::: warning
+If you use `v-currency` on a Vue component (for example Vuetify's `v-text-field`), make sure the `el` argument points to underlying input element and **not** to the component's root element.
+:::
 
 ## parseCurrency
 Parses a currency formatted string emitted by the `v-currency` directive to a number. This method is also exposed as Vue instance method `$parseCurrency` when [installed as Vue plugin](/guide/#installation).

@@ -10,7 +10,50 @@ The Vue Currency Input plugin allows an easy input of currency formatted numbers
 
 [![](docs/vue-currency-input.gif)](https://dm4t2.github.io/vue-currency-input)
 
-[Read the guide](https://dm4t2.github.io/vue-currency-input/guide/) to getting started or check out the [playground](https://dm4t2.github.io/vue-currency-input/playground/) to see it in action.
+## Features
+* [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input) and zero dependencies
+* Format as you type
+* Locale dependent, ISO-compliant currency formatting
+* Distraction free (hides the formatting on focus for easier input)
+* Customizable currency symbols and precision ranges
+* Built-in value range validation
+* Works with input components of popular frameworks like [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input))
+* Supports IE 11 (sadly it's not a feature 🤮)
+
+## Live Demo
+Check out the [playground](https://dm4t2.github.io/vue-currency-input/playground/) to see it in action.
+
+## Quick Start
+Install the npm package:
+``` bash
+npm install vue-currency-input 
+# OR 
+yarn add vue-currency-input
+```
+
+Add the Vue plugin in your `main.js`:
+``` js
+import Vue from 'vue'
+import VueCurrencyInput from 'vue-currency-input'
+
+Vue.use(VueCurrencyInput)
+```
+
+Use the `<currency-input`> component:
+``` vue
+<template>
+  <currency-input v-model="value" />
+</template>
+
+<script>
+export default {
+  data: () => ({ value: 1000 })
+}
+</script>
+```
+
+## Documentation
+Please refer to the [project home page](https://dm4t2.github.io/vue-currency-input) for a detailed documentation.
 
 ## Support me
 If you find this plugin helpful or you want to support the development, buy me a coffee:
