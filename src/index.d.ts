@@ -23,7 +23,7 @@ export interface CurrencyInputOptions {
   distractionFree?: boolean | DistractionFreeOptions,
   precision?: number | NumberRange,
   autoDecimalMode?: boolean,
-  valueRange?: | NumberRange,
+  valueRange?: NumberRange,
   allowNegative?: boolean
 }
 
