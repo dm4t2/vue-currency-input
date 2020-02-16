@@ -25,6 +25,9 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   }
   if (autoDecimalMode) {
     options.distractionFree.hideNegligibleDecimalDigits = false
+    inputElement.setAttribute('inputmode', 'numeric')
+  } else {
+    inputElement.setAttribute('inputmode', 'decimal')
   }
   const currencyFormat = createCurrencyFormat(options)
   inputElement.$ci = {
