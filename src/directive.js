@@ -51,17 +51,13 @@ const validateValueRange = (value, valueRange) => {
 const applyFixedFractionFormat = (el, value, forcedChange) => {
   const { valueRange, locale, valueAsInteger } = el.$ci.options
   const { maximumFractionDigits, minimumFractionDigits } = el.$ci.currencyFormat
-  const oldValue = el.$ci.numberValue
   if (value != null) {
     value = validateValueRange(value, valueRange)
     value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
   }
   format(el, value)
-  const newValue = el.$ci.numberValue
-  if (oldValue !== newValue || forcedChange) {
-    const numberValue = toInteger(newValue, valueAsInteger, maximumFractionDigits)
-    dispatchEvent(el, 'input', { numberValue })
-    dispatchEvent(el, 'change', { numberValue })
+  if (forcedChange) {
+    dispatchEvent(el, 'change', { numberValue: toInteger(el.$ci.numberValue, valueAsInteger, maximumFractionDigits) })
   }
 }
 
@@ -96,11 +92,11 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
   el.$ci.previousConformedValue = el.value
 }
 
-const format = (el, value) => {
-  updateInputValue(el, value)
+const format = (el, value, hideNegligibleDecimalDigits = false) => {
+  updateInputValue(el, value, hideNegligibleDecimalDigits)
   let { numberValue, currencyFormat, options } = el.$ci
   numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
-  dispatchEvent(el, 'format-complete', { numberValue })
+  dispatchEvent(el, 'input', { numberValue })
 }
 
 const addEventListener = (el) => {
@@ -129,7 +125,7 @@ const addEventListener = (el) => {
     if (hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = el
-        updateInputValue(el, el.value, hideNegligibleDecimalDigits)
+        format(el, el.value, hideNegligibleDecimalDigits)
         if (Math.abs(selectionStart - selectionEnd) > 0) {
           el.setSelectionRange(0, el.value.length)
         } else {

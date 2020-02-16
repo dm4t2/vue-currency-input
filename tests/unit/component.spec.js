@@ -84,7 +84,10 @@ describe('component options', () => {
 
     wrapper.setProps({ valueAsInteger: false })
     await wrapper.vm.$nextTick()
-    expect(wrapper.emitted('change')).toEqual([[1234], [12.34]])
+    wrapper.setProps({ valueAsInteger: true })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted('change')).toEqual([[12.34], [1234]])
   })
 })
 
@@ -280,8 +283,8 @@ describe('when the input is blurred', () => {
     }
 
     await expectValue('100', [[100]], { locale: 'en' })
-    await expectValue('100', [[0], [100]], { locale: 'en', value: 0 })
-    await expectValue('100', [[100]], { locale: 'en', value: 100 })
+    await expectValue('100', [[100]], { locale: 'en', value: 0 })
+    await expectValue('100', false, { locale: 'en', value: 100 })
   })
 
   it('should ignore native change events of the input', () => {

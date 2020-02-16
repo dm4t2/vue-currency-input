@@ -11,7 +11,11 @@ export default {
         name: 'currency',
         value: this.options
       }],
-      on: this.listeners()
+      on: {
+        ...this.$listeners,
+        change: e => this.emit('change', e),
+        input: e => this.emit('input', e)
+      }
     })
   },
   directives: {
@@ -79,23 +83,11 @@ export default {
     setValue (value) {
       setValue(this.$el, value)
     },
-    listeners () {
-      const { input, ...listeners } = this.$listeners // all but input event
-      return {
-        ...listeners,
-        change: ({ detail }) => {
-          if (detail) {
-            this.$emit('change', detail.numberValue)
-          }
-          this.formattedValue = this.$el.value
-        },
-        'format-complete': ({ detail }) => {
-          if (this.value !== detail.numberValue) {
-            this.$emit('input', detail.numberValue)
-          }
-          this.formattedValue = this.$el.value
-        }
+    emit (event, { detail }) {
+      if (detail && this.value !== detail.numberValue) {
+        this.$emit(event, detail.numberValue)
       }
+      this.formattedValue = this.$el.value
     }
   }
 }

@@ -36,7 +36,7 @@ it('should throw an error if not used on a appreciate element', () => {
 })
 
 describe('when the formatted value is applied on the input', () => {
-  it('should only emit an input event if the input is dirty', async () => {
+  it('should emit an input event each time the value changes', async () => {
     const wrapper = createMockComponent('input', { value: 10 }, { valueRange: { min: 100 }, locale: 'en', distractionFree: false })
     await wrapper.vm.$nextTick()
 
@@ -44,7 +44,7 @@ describe('when the formatted value is applied on the input', () => {
     jest.runOnlyPendingTimers()
     wrapper.find('input').trigger('blur')
 
-    expect(wrapper.emitted('input')).toEqual([['€100.00']])
+    expect(wrapper.emitted('input')).toEqual([['€100.00'], ['€100.00']])
   })
 })
 
