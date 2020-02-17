@@ -13,8 +13,18 @@ export default {
       }],
       on: {
         ...this.$listeners,
-        change: e => this.emit('change', e),
-        input: e => this.emit('input', e)
+        change: e => {
+          if (e.detail) {
+            this.$emit('change', e.detail.numberValue)
+          }
+          this.formattedValue = this.$el.value
+        },
+        input: e => {
+          if (e.detail && this.value !== e.detail.numberValue) {
+            this.$emit('input', e.detail.numberValue)
+          }
+          this.formattedValue = this.$el.value
+        }
       }
     })
   },
@@ -82,12 +92,6 @@ export default {
   methods: {
     setValue (value) {
       setValue(this.$el, value)
-    },
-    emit (event, { detail }) {
-      if (detail && this.value !== detail.numberValue) {
-        this.$emit(event, detail.numberValue)
-      }
-      this.formattedValue = this.$el.value
     }
   }
 }

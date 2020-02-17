@@ -304,6 +304,7 @@ describe('when the input is blurred', () => {
       wrapper.trigger('blur')
 
       expect(wrapper.element.value).toBe('€1,000.00')
+      expect(wrapper.emitted('change')[0][0]).toBe(1000)
     })
   })
 
@@ -316,6 +317,7 @@ describe('when the input is blurred', () => {
       wrapper.trigger('blur')
 
       expect(wrapper.element.value).toBe('€1,000.00')
+      expect(wrapper.emitted('change')[0][0]).toBe(1000)
     })
   })
 })
