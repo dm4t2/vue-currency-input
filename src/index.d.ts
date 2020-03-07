@@ -51,6 +51,6 @@ export function setValue (el: HTMLInputElement, value: Number): void
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $parseCurrency (formattedValue: string, options: CurrencyInputOptions): number
+    $parseCurrency (formattedValue: string, options?: CurrencyInputOptions): number
   }
 }

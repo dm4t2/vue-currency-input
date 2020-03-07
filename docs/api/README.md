@@ -20,7 +20,7 @@ Parses a currency formatted string emitted by the `v-currency` directive to a nu
 Name | Type | Description
 --- | --- | --- 
 `formattedValue` | String | The currency formatted string to be parsed, for example `"$1,234.50"`.
-`options` | Object | The configured options of the respective `v-currency` directive. When using `$parseCurrency` this argument is optional und defaults to the `globalOptions` of the [plugin options](/config/#plugin-options).
+`options` | Object | The configured options of the respective `v-currency` directive. When using `$parseCurrency` this argument is optional and defaults to the `globalOptions` of the [plugin options](/config/#plugin-options).
 
 #### Returns
 The parsed number (for example `1234.5`) or `null` if the formatted string does not conform.
