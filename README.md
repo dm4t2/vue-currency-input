@@ -13,12 +13,13 @@ The Vue Currency Input plugin allows an easy input of currency formatted numbers
 ## Features
 * [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input) and zero dependencies
 * Format as you type
-* Locale dependent, ISO-compliant currency formatting
+* Locale dependent, ISO-compliant currency formatting based on [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
 * Distraction free (hides the formatting on focus for easier input)
-* Customizable currency symbols and precision ranges
+* Allows handling values as integer numbers for full precision
+* Auto decimal mode (automatically inserts the decimal symbol, using the last inputted digits as decimal digits)
 * Built-in value range validation
-* Works with input components of popular frameworks like [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input))
-* Supports IE 11 (sadly it's not a feature 🤮)
+* Works with input components of popular frameworks like [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)
+* Supports all major browsers (including IE 11)
 
 ## Live Demo
 Check out the [playground](https://dm4t2.github.io/vue-currency-input/playground/) to see it in action.
