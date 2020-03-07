@@ -36,14 +36,14 @@ const getAutoDecimalModeConformedValue = (str, previousConformedValue, minimumFr
   }
 }
 
-export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol = false, autoDecimalMode = false, allowNegative = true) => {
+export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol, autoDecimalMode, allowNegative = true) => {
   if (typeof str === 'string') {
     let value = stripCurrencySymbol(str, currencyFormat)
     if (currencyFormat.minimumFractionDigits > 0 && autoDecimalMode) {
       return getAutoDecimalModeConformedValue(value, previousConformedValue, currencyFormat.minimumFractionDigits, allowNegative)
     }
 
-    let negative = isNegative(value)
+    let negative = startsWith(str, currencyFormat.negativePrefix) || isNegative(value)
     if (negative) {
       value = value.substring(1)
       negative &= allowNegative

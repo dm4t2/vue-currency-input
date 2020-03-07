@@ -104,6 +104,19 @@ Object {
 }
 `;
 
+exports[`createCurrencyFormat i18n de-CH_EUR 1`] = `
+Object {
+  "decimalSymbol": ".",
+  "groupingSymbol": "’",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "minusSymbol": "-",
+  "negativePrefix": "$-",
+  "prefix": "$ ",
+  "suffix": "",
+}
+`;
+
 exports[`createCurrencyFormat i18n de-DE_EUR 1`] = `
 Object {
   "decimalSymbol": ",",

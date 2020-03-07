@@ -6,6 +6,10 @@ describe('createCurrencyFormat', () => {
       expect(createCurrencyFormat({ locale: 'de-DE', currency: 'EUR' })).toMatchSnapshot()
     })
 
+    it('de-CH_EUR', () => {
+      expect(createCurrencyFormat({ locale: 'de-CH', currency: 'USD' })).toMatchSnapshot()
+    })
+
     it('es-ES_EUR', () => {
       expect(createCurrencyFormat({ locale: 'es-ES', currency: 'EUR' })).toMatchSnapshot()
     })
