@@ -228,9 +228,8 @@ describe('conformToMask', () => {
 
   describe('when the negative/positive prefixes have different white spaces', () => {
     it('returns the expected result', () => {
-      const currencyFormat = { decimalSymbol: '.', prefix: '$ ', negativePrefix: '$-', suffix: '' }
-
-      expect(conformToMask('$-123.45', currencyFormat)).toEqual({ conformedValue: -123.45, fractionDigits: '45' })
+      expect(conformToMask('$-123.45', { decimalSymbol: '.', prefix: '$ ', negativePrefix: '$-', suffix: '' })).toEqual({ conformedValue: -123.45, fractionDigits: '45' })
+      expect(conformToMask('EUR-123.45', { decimalSymbol: '.', prefix: 'EUR ', negativePrefix: 'EUR-', suffix: '' })).toEqual({ conformedValue: -123.45, fractionDigits: '45' })
     })
   })
 })

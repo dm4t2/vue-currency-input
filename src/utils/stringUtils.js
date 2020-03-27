@@ -22,7 +22,13 @@ export const insertCurrencySymbol = (value, currencyFormat, negative, hideCurren
 }
 
 export const stripCurrencySymbol = (str, { prefix, suffix }) => {
-  return str.replace(prefix, '').replace(suffix, '')
+  if (prefix) {
+    str = str.replace(prefix, '').replace(prefix.trim(), '')
+  }
+  if (suffix) {
+    str = str.replace(suffix, '').replace(suffix.trim(), '')
+  }
+  return str
 }
 
 export const normalizeMinusSymbol = (str) => {

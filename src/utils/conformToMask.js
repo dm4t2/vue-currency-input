@@ -43,7 +43,7 @@ export default (str, currencyFormat, previousConformedValue = '', hideCurrencySy
       return getAutoDecimalModeConformedValue(value, previousConformedValue, currencyFormat.minimumFractionDigits, allowNegative)
     }
 
-    let negative = startsWith(str, currencyFormat.negativePrefix) || isNegative(value)
+    let negative = isNegative(value)
     if (negative) {
       value = value.substring(1)
       negative &= allowNegative
