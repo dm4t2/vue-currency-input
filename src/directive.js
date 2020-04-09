@@ -64,7 +64,7 @@ const applyFixedFractionFormat = (el, value, forcedChange) => {
   }
 }
 
-const updateInputValue = (el, value, hideNegligibleDecimalDigits = false) => {
+const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
   if (value != null) {
     const { focus, options: { allowNegative, autoDecimalMode, distractionFree, locale }, currencyFormat, previousConformedValue } = el.$ci
     const hideCurrencySymbol = focus && distractionFree.hideCurrencySymbol

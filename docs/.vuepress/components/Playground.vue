@@ -30,7 +30,7 @@
           <span class="title">Locale</span>
           <v-select
             v-model="locale"
-            :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH']"
+            :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH', 'ja', 'ar-SA']"
             class="mb-12"
             hide-details
           />
@@ -43,7 +43,7 @@
           >
             <v-radio label="Use ISO code" />
             <v-select
-              :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY']"
+              :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY','SAR']"
               :disabled="selectedCurrencyOption !== 0"
               class="pl-8 mb-6 py-0"
               hide-details
@@ -142,7 +142,7 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Allow Negative</span>
-            <v-switch v-model="allowNegative"/>
+            <v-switch v-model="allowNegative" />
           </div>
           <div class="mb-6">
             Whether the input of negative values is allowed.
@@ -150,7 +150,7 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Value Range</span>
-            <v-switch v-model="valueRangeEnabled"/>
+            <v-switch v-model="valueRangeEnabled" />
           </div>
           <div class="mb-8">The validation is triggered on blur and automatically sets the respective threshold if out of range.</div>
           <v-range-slider
@@ -236,7 +236,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style
+  lang="scss"
+  scoped
+>
 @import '~@mdi/font/css/materialdesignicons.css';
 @import '~vuetify/dist/vuetify.min.css';
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");

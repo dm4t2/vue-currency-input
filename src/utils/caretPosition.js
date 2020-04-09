@@ -3,7 +3,7 @@ import { count, onlyDigits } from './stringUtils'
 export const setCaretPosition = (el, position) => el.setSelectionRange(position, position)
 
 export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPosition, currencyFormat, options) => {
-  const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = currencyFormat
+  const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol, digits } = currencyFormat
   const decimalSymbolPosition = inputtedValue.indexOf(decimalSymbol) + 1
   let caretPositionFromLeft = inputtedValue.length - caretPosition
 
@@ -13,7 +13,7 @@ export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPositi
     return newValue.length - caretPositionFromLeft - 1
   } else {
     if (!options.autoDecimalMode && decimalSymbolPosition !== 0 && caretPosition > decimalSymbolPosition) {
-      if (onlyDigits(inputtedValue.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
+      if (onlyDigits(inputtedValue.substr(decimalSymbolPosition), digits).length - 1 === maximumFractionDigits) {
         caretPositionFromLeft -= 1
       }
     }

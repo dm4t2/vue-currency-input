@@ -1,8 +1,9 @@
 import { toInteger } from './numberUtils'
-import { isNumber, normalizeMinusSymbol, stripCurrencySymbol } from './stringUtils'
+import { isNumber, normalizeDigits, normalizeMinusSymbol, stripCurrencySymbol } from './stringUtils'
 
 export default (str, currencyFormat, valueAsInteger = false) => {
   if (typeof str === 'string') {
+    str = normalizeDigits(str, currencyFormat.digits)
     if (isNumber(str)) {
       return toInteger(Number(str), valueAsInteger, currencyFormat.minimumFractionDigits)
     }

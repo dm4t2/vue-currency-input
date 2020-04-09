@@ -1,34 +1,34 @@
-import { endsWith, insertCurrencySymbol, isNegative, isNumber, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbol } from './stringUtils'
+import { endsWith, insertCurrencySymbol, isNegative, isNumber, normalizeDigits, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbol } from './stringUtils'
 
 const isValidInteger = (integer, groupingSymbol) => integer.match(new RegExp(`^(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
 
-const isFractionIncomplete = (value, { decimalSymbol, groupingSymbol }) => {
+const isFractionIncomplete = (value, { digits, decimalSymbol, groupingSymbol }) => {
   const numberParts = value.split(decimalSymbol)
-  return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(numberParts[0], groupingSymbol)
+  return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(normalizeDigits(numberParts[0], digits), groupingSymbol)
 }
 
 const checkIncompleteValue = (value, negative, previousConformedValue, currencyFormat, hideCurrencySymbol) => {
-  let { negativePrefix, decimalSymbol, maximumFractionDigits } = currencyFormat
+  let { digits, negativePrefix, decimalSymbol, maximumFractionDigits } = currencyFormat
   if (value === '' && negative && previousConformedValue !== (hideCurrencySymbol ? currencyFormat.minusSymbol : negativePrefix)) {
     return insertCurrencySymbol('', currencyFormat, negative, hideCurrencySymbol)
   } else if (maximumFractionDigits > 0) {
     if (isFractionIncomplete(value, currencyFormat)) {
       return insertCurrencySymbol(value, currencyFormat, negative, hideCurrencySymbol)
     } else if (startsWith(value, decimalSymbol)) {
-      return insertCurrencySymbol(`0${decimalSymbol}${(onlyDigits(value.substr(1)).substr(0, maximumFractionDigits))}`, currencyFormat, negative, hideCurrencySymbol)
+      return insertCurrencySymbol(`${digits[0]}${decimalSymbol}${(onlyDigits(value.substr(1), digits).substr(0, maximumFractionDigits))}`, currencyFormat, negative, hideCurrencySymbol)
     }
   }
   return null
 }
 
-const getAutoDecimalModeConformedValue = (str, previousConformedValue, minimumFractionDigits, allowNegative = true) => {
+const getAutoDecimalModeConformedValue = (str, { minimumFractionDigits, digits }, allowNegative) => {
   if (str === '') {
     return { conformedValue: '' }
   } else {
     const negative = isNegative(str) && allowNegative
     const conformedValue = (allowNegative && str === '-')
       ? -0
-      : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(str))}`) / Math.pow(10, minimumFractionDigits)
+      : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(str, digits))}`) / Math.pow(10, minimumFractionDigits)
     return {
       conformedValue,
       fractionDigits: conformedValue.toFixed(minimumFractionDigits).slice(-minimumFractionDigits)
@@ -36,11 +36,11 @@ const getAutoDecimalModeConformedValue = (str, previousConformedValue, minimumFr
   }
 }
 
-export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol, autoDecimalMode, allowNegative = true) => {
+export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol, autoDecimalMode, allowNegative) => {
   if (typeof str === 'string') {
     let value = stripCurrencySymbol(str, currencyFormat)
     if (currencyFormat.minimumFractionDigits > 0 && autoDecimalMode) {
-      return getAutoDecimalModeConformedValue(value, previousConformedValue, currencyFormat.minimumFractionDigits, allowNegative)
+      return getAutoDecimalModeConformedValue(value, currencyFormat, allowNegative)
     }
 
     let negative = isNegative(value)
@@ -54,8 +54,8 @@ export default (str, currencyFormat, previousConformedValue = '', hideCurrencySy
     }
 
     const [integer, ...fraction] = value.split(currencyFormat.decimalSymbol)
-    const integerDigits = removeLeadingZeros(onlyDigits(integer))
-    const fractionDigits = onlyDigits(fraction.join('')).substr(0, currencyFormat.maximumFractionDigits)
+    const integerDigits = removeLeadingZeros(onlyDigits(integer, currencyFormat.digits))
+    const fractionDigits = onlyDigits(fraction.join(''), currencyFormat.digits).substr(0, currencyFormat.maximumFractionDigits)
     const invalidFraction = fraction.length > 0 && fractionDigits.length === 0
     const invalidNegativeValue = integerDigits === '' && negative && (previousConformedValue === str.slice(0, -1) || previousConformedValue !== currencyFormat.negativePrefix)
 

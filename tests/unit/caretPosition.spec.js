@@ -5,7 +5,8 @@ const currencyFormat = {
   groupingSymbol: ',',
   maximumFractionDigits: 2,
   prefix: '$',
-  suffix: ''
+  suffix: '',
+  digits: []
 }
 
 describe('caretPosition', () => {

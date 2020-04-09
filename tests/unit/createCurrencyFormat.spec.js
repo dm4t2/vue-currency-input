@@ -41,6 +41,10 @@ describe('createCurrencyFormat', () => {
     it('ja_JPY', () => {
       expect(createCurrencyFormat({ locale: 'ja', currency: 'JPY' })).toMatchSnapshot()
     })
+
+    it('ar-SA_SAR', () => {
+      expect(createCurrencyFormat({ locale: 'ar-SA', currency: 'SAR' })).toMatchSnapshot()
+    })
   })
 
   it('custom prefix/suffix', () => {

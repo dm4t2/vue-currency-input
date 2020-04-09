@@ -1,6 +1,6 @@
 export const removeLeadingZeros = (str) => str.replace(/^0+(0$|[^0])/, '$1')
 
-export const onlyDigits = (str) => str.replace(/\D+/g, '')
+export const onlyDigits = (str, digits) => normalizeDigits(str, digits).replace(/\D+/g, '')
 
 export const count = (str, search) => (str.match(new RegExp(`\\${search}`, 'g')) || []).length
 
@@ -28,7 +28,7 @@ export const stripCurrencySymbol = (str, { prefix, suffix }) => {
   if (suffix) {
     str = str.replace(suffix, '').replace(suffix.trim(), '')
   }
-  return str
+  return str.trim()
 }
 
 export const normalizeMinusSymbol = (str) => {
@@ -38,3 +38,10 @@ export const normalizeMinusSymbol = (str) => {
 export const isNegative = (str) => normalizeMinusSymbol(str).charAt(0) === '-'
 
 export const isNumber = (str) => normalizeMinusSymbol(str).match(new RegExp(`^-?\\d+(\\.\\d+)?$`))
+
+export const normalizeDigits = (str, digits) => {
+  digits.forEach((digit, index) => {
+    str = str.replace(new RegExp(digit, 'g'), index)
+  })
+  return str
+}
