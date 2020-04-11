@@ -21,16 +21,16 @@
           Number value: <code class="ml-2">{{ value != null ? value : 'null' }}</code>
         </v-col>
       </v-row>
-      <v-divider class="my-4" />
+      <v-divider class="my-4"/>
       <v-row>
         <v-col
-          cols=12
+          cols="12"
           sm="6"
         >
           <span class="title">Locale</span>
           <v-select
             v-model="locale"
-            :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH', 'ja', 'ar-SA']"
+            :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR']"
             class="mb-12"
             hide-details
           />
@@ -41,16 +41,16 @@
             hide-details
             v-model="selectedCurrencyOption"
           >
-            <v-radio label="Use ISO code" />
+            <v-radio label="Use ISO code"/>
             <v-select
-              :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY','SAR']"
+              :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR']"
               :disabled="selectedCurrencyOption !== 0"
               class="pl-8 mb-6 py-0"
               hide-details
               v-model="currencyCode"
             />
-            <v-radio label="Hide currency symbol" />
-            <v-radio label="Use custom currency symbol" />
+            <v-radio label="Hide currency symbol"/>
+            <v-radio label="Use custom currency symbol"/>
             <div class="pl-8">
               <v-text-field
                 :disabled="selectedCurrencyOption !== 2"
@@ -142,7 +142,7 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Allow Negative</span>
-            <v-switch v-model="allowNegative" />
+            <v-switch v-model="allowNegative"/>
           </div>
           <div class="mb-6">
             Whether the input of negative values is allowed.
@@ -150,7 +150,7 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Value Range</span>
-            <v-switch v-model="valueRangeEnabled" />
+            <v-switch v-model="valueRangeEnabled"/>
           </div>
           <div class="mb-8">The validation is triggered on blur and automatically sets the respective threshold if out of range.</div>
           <v-range-slider
@@ -163,7 +163,7 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Auto Decimal Mode</span>
-            <v-switch v-model="autoDecimalMode" />
+            <v-switch v-model="autoDecimalMode"/>
           </div>
           <div class="mb-6">
             Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits.
@@ -171,7 +171,7 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Value As Integer</span>
-            <v-switch v-model="valueAsInteger" />
+            <v-switch v-model="valueAsInteger"/>
           </div>
           <div class="mb-6">
             Whether the number value should be handled as integer instead of a float value.
