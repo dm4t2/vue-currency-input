@@ -4,9 +4,6 @@ import { isNumber, normalizeDigits, normalizeMinusSymbol, stripCurrencySymbol } 
 export default (str, currencyFormat, valueAsInteger = false) => {
   if (typeof str === 'string') {
     str = normalizeDigits(str, currencyFormat.digits)
-    if (isNumber(str)) {
-      return toInteger(Number(str), valueAsInteger, currencyFormat.minimumFractionDigits)
-    }
     let value = stripCurrencySymbol(str, currencyFormat)
     const numberParts = value.split(currencyFormat.decimalSymbol)
     if (numberParts.length > 2) {

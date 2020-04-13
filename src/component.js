@@ -1,5 +1,6 @@
 import { DEFAULT_OPTIONS, setValue } from './api'
 import currencyDirective from './directive'
+import createCurrencyFormat from './utils/createCurrencyFormat'
 
 export default {
   render (h) {
@@ -72,8 +73,12 @@ export default {
   },
   data () {
     return {
-      formattedValue: this.value
+      formattedValue: null
     }
+  },
+  created () {
+    const { minimumFractionDigits, maximumFractionDigits } = createCurrencyFormat(this.options)
+    this.formattedValue = this.value != null ? this.value.toLocaleString(this.locale, { minimumFractionDigits, maximumFractionDigits }) : null
   },
   computed: {
     options () {

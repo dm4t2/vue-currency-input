@@ -29,7 +29,7 @@ describe('parse', () => {
     expect(parse('-1234', { digits: [], decimalSymbol: '.' })).toBe(-1234)
     expect(parse('-$1234', { digits: [], prefix: '$' })).toBe(-1234)
     expect(parse('-1234 €', { digits: [], suffix: ' €' })).toBe(-1234)
-    expect(parse('1234.5', { digits: [], decimalSymbol: null, groupingSymbol: '.' })).toBe(1234.5)
+    expect(parse('123.456', { digits: [], groupingSymbol: '.' })).toBe(123456)
     expect(parse('.5', { digits: [], decimalSymbol: '.' })).toBe(null)
     expect(parse('0.5', { digits: [], decimalSymbol: '.' })).toBe(0.5)
     expect(parse('1234.50', { digits: [], decimalSymbol: '.' })).toBe(1234.5)
