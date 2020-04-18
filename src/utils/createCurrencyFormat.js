@@ -2,7 +2,7 @@ const formatToParts = (number, numberFormat) => {
   const parts = numberFormat.formatToParts(number)
   const types = parts.map(p => p.type)
 
-  const digits = [...Array(10).keys()].map(i => i.toLocaleString(numberFormat.resolvedOptions().locale))
+  const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => i.toLocaleString(numberFormat.resolvedOptions().locale))
   const prefix = parts.slice(0, types.indexOf('integer')).map(p => p.value).join('')
   const suffix = parts.slice(Math.max(types.lastIndexOf('integer'), types.indexOf('fraction')) + 1).map(p => p.value).join('')
   const groupingSymbol = types.indexOf('group') !== -1 ? parts[types.indexOf('group')].value : undefined
