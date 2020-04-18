@@ -19,7 +19,6 @@ The Vue Currency Input plugin allows an easy input of currency formatted numbers
 * Auto decimal mode (automatically inserts the decimal symbol, using the last inputted digits as decimal digits)
 * Built-in value range validation
 * Works with input components of popular frameworks like [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)
-* Supports all major browsers (including IE 11)
 
 ## Live Demo
 Check out the [playground](https://dm4t2.github.io/vue-currency-input/playground/) to see it in action.
