@@ -18,18 +18,24 @@ beforeEach(() => {
 
 describe('initial value', () => {
   describe('the initial value is a number', () => {
-    it('sets the expected formatted value for the configured currency and locale', async () => {
+    it('should set the expected formatted value for the configured currency and locale', async () => {
       await expectInitialValue('1.234,50 €', { locale: 'de', value: 1234.5 })
       await expectInitialValue('€1,234.52', { locale: 'en', value: 1234.523 })
       await expectInitialValue('1 234,00 €', { locale: 'fr', value: 1234 })
       await expectInitialValue('€ -1,00', { locale: 'nl-NL', value: -1 })
     })
 
-    it('rounds float numbers if the currency supports no decimal digits', async () => {
+    it('should respect the global options if present', async () => {
+      config.mocks.$CI_DEFAULT_OPTIONS = { ...DEFAULT_OPTIONS, locale: 'uk', currency: 'UAH' }
+
+      await expectInitialValue('1 234,50 ₴', { value: 1234.5 })
+    })
+
+    it('should round float numbers if the currency supports no decimal digits', async () => {
       await expectInitialValue('1.235 ¥', { currency: 'JPY', locale: 'de', value: 1234.5 })
     })
 
-    it('sets the expected formatted value if the value is handled as integer', async () => {
+    it('should set the expected formatted value if the value is handled as integer', async () => {
       await expectInitialValue('1.234,56 €', { locale: 'de', valueAsInteger: true, value: 123456 })
       await expectInitialValue('12,35 €', { locale: 'de', valueAsInteger: true, value: 1234.5 })
       await expectInitialValue('0,01 €', { locale: 'de', valueAsInteger: true, value: 1 })
@@ -41,8 +47,17 @@ describe('initial value', () => {
     })
   })
 
+  describe('the initial value is not a number', () => {
+    it('should set an empty value', async () => {
+      jest.spyOn(console, 'error')
+      console.error.mockImplementation(() => {})
+
+      await expectInitialValue('', { locale: 'en', value: '1234' })
+    })
+  })
+
   describe('the initial value is null', () => {
-    it('sets the an empty null', async () => {
+    it('should set an empty value', async () => {
       await expectInitialValue('', { locale: 'en', value: null })
     })
   })
@@ -61,11 +76,17 @@ describe('initial value', () => {
 })
 
 describe('component options', () => {
-  it('should use the default options if no props are set', () => {
-    config.mocks.$CI_DEFAULT_OPTIONS = { ...DEFAULT_OPTIONS, distractionFree: true }
-    const wrapper = mountComponent()
+  it('should fallback to the default options values for the props which are not set', () => {
+    const wrapper = mountComponent({ locale: 'de' })
 
-    expect(wrapper.vm.options).toEqual(config.mocks.$CI_DEFAULT_OPTIONS)
+    expect(wrapper.vm.options).toEqual({ ...DEFAULT_OPTIONS, locale: 'de' })
+  })
+
+  it('should fallback to the global options values for the props which are not set', () => {
+    config.mocks.$CI_DEFAULT_OPTIONS = { ...DEFAULT_OPTIONS, distractionFree: false, currency: 'USD' }
+    const wrapper = mountComponent({ locale: 'de' })
+
+    expect(wrapper.vm.options).toEqual({ ...config.mocks.$CI_DEFAULT_OPTIONS, locale: 'de' })
   })
 
   it('should reformat the value if the options get changed', async () => {

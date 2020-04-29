@@ -78,7 +78,7 @@ export default {
   },
   created () {
     const { minimumFractionDigits, maximumFractionDigits } = createCurrencyFormat(this.options)
-    this.formattedValue = this.value != null ? this.value.toLocaleString(this.locale, { minimumFractionDigits, maximumFractionDigits }) : null
+    this.formattedValue = typeof this.value === 'number' ? this.value.toLocaleString(this.options.locale, { minimumFractionDigits, maximumFractionDigits }) : null
   },
   computed: {
     options () {
