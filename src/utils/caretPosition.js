@@ -1,4 +1,4 @@
-import { count, onlyDigits } from './stringUtils'
+import { count, normalizeDigits, onlyDigits } from './stringUtils'
 
 export const setCaretPosition = (el, position) => el.setSelectionRange(position, position)
 
@@ -13,7 +13,7 @@ export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPositi
     return newValue.length - caretPositionFromLeft - 1
   } else {
     if (!options.autoDecimalMode && decimalSymbolPosition !== 0 && caretPosition > decimalSymbolPosition) {
-      if (onlyDigits(inputtedValue.substr(decimalSymbolPosition), digits).length - 1 === maximumFractionDigits) {
+      if (onlyDigits(normalizeDigits(inputtedValue, digits).substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
         caretPositionFromLeft -= 1
       }
     }

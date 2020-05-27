@@ -12,12 +12,16 @@ describe('parseCurrency', () => {
     const formattedValue = '$1,234.50'
     const locale = 'en'
     const currency = 'USD'
+    const valueAsInteger = true
+    const currencyFormat = { maximumFractionDigits: 2 }
+    createCurrencyFormat.mockReturnValueOnce(currencyFormat)
 
-    parseCurrency(formattedValue, { locale, currency })
+    parseCurrency(formattedValue, { locale, currency, valueAsInteger })
 
     expect(parse).toHaveBeenCalled()
     expect(parse.mock.calls[0][0]).toBe(formattedValue)
-    expect(createCurrencyFormat).toHaveBeenCalledWith({ ...DEFAULT_OPTIONS, locale, currency })
+    expect(parse.mock.calls[0][1]).toBe(currencyFormat)
+    expect(createCurrencyFormat).toHaveBeenCalledWith({ ...DEFAULT_OPTIONS, locale, currency, valueAsInteger })
   })
 })
 

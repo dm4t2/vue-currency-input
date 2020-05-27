@@ -1,43 +1,24 @@
+export const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 export const removeLeadingZeros = (str) => str.replace(/^0+(0$|[^0])/, '$1')
 
-export const onlyDigits = (str, digits) => normalizeDigits(str, digits).replace(/\D+/g, '')
+export const onlyLocaleDigits = (str, digits) => str.replace(new RegExp(`[^${digits.join('')}]*`, 'g'), '')
 
-export const count = (str, search) => (str.match(new RegExp(`\\${search}`, 'g')) || []).length
+export const onlyDigits = str => str.replace(/\D+/g, '')
 
-export const endsWith = (str, search) => {
-  return str.substring(str.length - search.length, str.length) === search
-}
+export const count = (str, search) => (str.match(new RegExp(escapeRegExp(search), 'g')) || []).length
 
-export const startsWith = (str, search) => {
-  return str.substring(0, search.length) === search
-}
+export const endsWith = (str, search) => str.substring(str.length - search.length, str.length) === search
 
-export const insertCurrencySymbol = (value, currencyFormat, negative, hideCurrencySymbol) => {
-  let { prefix, negativePrefix, suffix } = currencyFormat
-  if (hideCurrencySymbol) {
-    prefix = suffix = ''
-    negativePrefix = currencyFormat.minusSymbol
-  }
-  return `${negative ? negativePrefix : prefix}${value}${suffix}`
-}
+export const startsWith = (str, search) => str.substring(0, search.length) === search
 
-export const stripCurrencySymbol = (str, { prefix, suffix }) => {
-  if (prefix) {
-    str = str.replace(prefix, '').replace(prefix.trim(), '')
-  }
-  if (suffix) {
-    str = str.replace(suffix, '').replace(suffix.trim(), '')
-  }
-  return str.trim()
-}
+export const insertCurrencySymbol = (value, { prefix, negativePrefix, suffix }, negative) => `${negative ? negativePrefix : prefix}${value}${suffix}`
 
-export const normalizeMinusSymbol = (str) => {
-  return str.replace(new RegExp(`^${['−', '-', '‐'].join('|')}`, 'g'), '-')
-}
+export const stripMinusSymbol = (str, minusSymbol) => str.replace('-', minusSymbol).replace(minusSymbol, '')
 
-export const isNegative = (str) => normalizeMinusSymbol(str).charAt(0) === '-'
+export const stripCurrencySymbol = (str, { prefix, negativePrefix, suffix }) => str.replace(negativePrefix, '').replace(prefix, '').replace(suffix, '')
 
-export const isNumber = (str) => normalizeMinusSymbol(str).match(new RegExp(`^-?\\d+(\\.\\d+)?$`))
+export const isNegative = (str, { minusSymbol, negativePrefix }) => startsWith(str, negativePrefix) || startsWith(str.replace('-', minusSymbol), minusSymbol)
 
 export const normalizeDigits = (str, digits) => {
   digits.forEach((digit, index) => {

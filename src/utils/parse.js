@@ -1,27 +1,18 @@
-import { toInteger } from './numberUtils'
-import { isNumber, normalizeDigits, normalizeMinusSymbol, stripCurrencySymbol } from './stringUtils'
+import { escapeRegExp, isNegative, normalizeDigits, onlyDigits, stripCurrencySymbol, stripMinusSymbol } from './stringUtils'
 
-export default (str, currencyFormat, valueAsInteger = false) => {
+export default (str, currencyFormat) => {
   if (typeof str === 'string') {
+    const negative = isNegative(str, currencyFormat)
     str = normalizeDigits(str, currencyFormat.digits)
-    let value = stripCurrencySymbol(str, currencyFormat)
-    const numberParts = value.split(currencyFormat.decimalSymbol)
-    if (numberParts.length > 2) {
-      return null
+    str = stripCurrencySymbol(str, currencyFormat)
+    str = stripMinusSymbol(str, currencyFormat.minusSymbol)
+
+    const grouping = `${escapeRegExp(currencyFormat.groupingSymbol)}?`
+    const fraction = currencyFormat.decimalSymbol ? `(${escapeRegExp(currencyFormat.decimalSymbol)}\\d*)?` : ''
+    const match = str.match(new RegExp(`^(0|[1-9]\\d{0,2}(${grouping}\\d{3})*)${fraction}$`))
+    if (match) {
+      return Number(`${negative ? '-' : ''}${(onlyDigits(match[1]))}.${(onlyDigits(match[3] || ''))}`)
     }
-    const integer = numberParts[0].replace(new RegExp(`\\${currencyFormat.groupingSymbol}`, 'g'), '')
-    if (!isNumber(integer)) {
-      return null
-    }
-    let number = integer
-    if (numberParts.length === 2) {
-      const fraction = numberParts[1]
-      if (fraction.length && !fraction.match(/^\d+$/g)) {
-        return null
-      }
-      number += `.${fraction}`
-    }
-    return toInteger(Number(normalizeMinusSymbol(number)), valueAsInteger, currencyFormat.minimumFractionDigits)
   }
   return null
 }

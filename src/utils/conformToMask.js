@@ -1,74 +1,90 @@
-import { endsWith, insertCurrencySymbol, isNegative, isNumber, normalizeDigits, onlyDigits, removeLeadingZeros, startsWith, stripCurrencySymbol } from './stringUtils'
+import {
+  endsWith,
+  escapeRegExp,
+  insertCurrencySymbol,
+  isNegative,
+  normalizeDigits,
+  onlyDigits,
+  onlyLocaleDigits,
+  removeLeadingZeros,
+  startsWith,
+  stripCurrencySymbol,
+  stripMinusSymbol
+} from './stringUtils'
 
-const isValidInteger = (integer, groupingSymbol) => integer.match(new RegExp(`^(0|[1-9]\\d{0,2}(\\${groupingSymbol}?\\d{3})*)$`))
+const isValidInteger = (integer, groupingSymbol) => integer.match(new RegExp(`^(0|[1-9]\\d{0,2}(${escapeRegExp(groupingSymbol)}?\\d{3})*)$`))
 
 const isFractionIncomplete = (value, { digits, decimalSymbol, groupingSymbol }) => {
   const numberParts = value.split(decimalSymbol)
   return endsWith(value, decimalSymbol) && numberParts.length === 2 && isValidInteger(normalizeDigits(numberParts[0], digits), groupingSymbol)
 }
 
-const checkIncompleteValue = (value, negative, previousConformedValue, currencyFormat, hideCurrencySymbol) => {
-  let { digits, negativePrefix, decimalSymbol, maximumFractionDigits } = currencyFormat
-  if (value === '' && negative && previousConformedValue !== (hideCurrencySymbol ? currencyFormat.minusSymbol : negativePrefix)) {
-    return insertCurrencySymbol('', currencyFormat, negative, hideCurrencySymbol)
+const checkIncompleteValue = (value, negative, previousConformedValue, currencyFormat) => {
+  let { digits, negativePrefix, minusSymbol, decimalSymbol, maximumFractionDigits } = currencyFormat
+  if (value === '' && negative && (previousConformedValue !== negativePrefix || previousConformedValue !== minusSymbol)) {
+    return ''
   } else if (maximumFractionDigits > 0) {
     if (isFractionIncomplete(value, currencyFormat)) {
-      return insertCurrencySymbol(value, currencyFormat, negative, hideCurrencySymbol)
+      return value
     } else if (startsWith(value, decimalSymbol)) {
-      return insertCurrencySymbol(`${digits[0]}${decimalSymbol}${(onlyDigits(value.substr(1), digits).substr(0, maximumFractionDigits))}`, currencyFormat, negative, hideCurrencySymbol)
+      return `${digits[0]}${decimalSymbol}${(onlyLocaleDigits(value.substr(1), digits).substr(0, maximumFractionDigits))}`
     }
   }
   return null
 }
 
-const getAutoDecimalModeConformedValue = (str, { minimumFractionDigits, digits }, allowNegative) => {
+const getAutoDecimalModeConformedValue = (str, { minimumFractionDigits, digits }, negative, allowNegative) => {
   if (str === '') {
-    return { conformedValue: '' }
+    if (negative) {
+      return {
+        numberValue: allowNegative ? -0 : 0,
+        fractionDigits: Number(-0).toFixed(minimumFractionDigits).slice(-minimumFractionDigits)
+      }
+    } else {
+      return ''
+    }
   } else {
-    const negative = isNegative(str) && allowNegative
-    const conformedValue = (allowNegative && str === '-')
-      ? -0
-      : Number(`${negative ? '-' : ''}${removeLeadingZeros(onlyDigits(str, digits))}`) / Math.pow(10, minimumFractionDigits)
+    const numberValue = Number(`${negative && allowNegative ? '-' : ''}${removeLeadingZeros(onlyDigits(normalizeDigits(str, digits)))}`) / Math.pow(10, minimumFractionDigits)
     return {
-      conformedValue,
-      fractionDigits: conformedValue.toFixed(minimumFractionDigits).slice(-minimumFractionDigits)
+      numberValue,
+      fractionDigits: numberValue.toFixed(minimumFractionDigits).slice(-minimumFractionDigits)
     }
   }
 }
 
-export default (str, currencyFormat, previousConformedValue = '', hideCurrencySymbol, autoDecimalMode, allowNegative) => {
+export default (str, currencyFormat, previousConformedValue = '', autoDecimalMode, allowNegative) => {
   if (typeof str === 'string') {
+    let negative = isNegative(str, currencyFormat)
     let value = stripCurrencySymbol(str, currencyFormat)
+    value = stripMinusSymbol(value, currencyFormat.minusSymbol)
+
     if (currencyFormat.minimumFractionDigits > 0 && autoDecimalMode) {
-      return getAutoDecimalModeConformedValue(value, currencyFormat, allowNegative)
+      return getAutoDecimalModeConformedValue(value, currencyFormat, negative, allowNegative)
     }
 
-    let negative = isNegative(value)
-    if (negative) {
-      value = value.substring(1)
-      negative &= allowNegative
-    }
-    const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, currencyFormat, hideCurrencySymbol)
+    negative = negative && allowNegative
+    const incompleteValue = checkIncompleteValue(value, negative, previousConformedValue, currencyFormat)
     if (incompleteValue != null) {
-      return { conformedValue: incompleteValue }
+      return insertCurrencySymbol(incompleteValue, currencyFormat, negative)
     }
 
+    value = normalizeDigits(value, currencyFormat.digits)
     const [integer, ...fraction] = value.split(currencyFormat.decimalSymbol)
-    const integerDigits = removeLeadingZeros(onlyDigits(integer, currencyFormat.digits))
-    const fractionDigits = onlyDigits(fraction.join(''), currencyFormat.digits).substr(0, currencyFormat.maximumFractionDigits)
+    const integerDigits = removeLeadingZeros(onlyDigits(integer))
+    const fractionDigits = onlyDigits(fraction.join('')).substr(0, currencyFormat.maximumFractionDigits)
     const invalidFraction = fraction.length > 0 && fractionDigits.length === 0
     const invalidNegativeValue = integerDigits === '' && negative && (previousConformedValue === str.slice(0, -1) || previousConformedValue !== currencyFormat.negativePrefix)
 
     if (invalidFraction || invalidNegativeValue) {
-      return { conformedValue: previousConformedValue }
-    } else if (isNumber(integerDigits)) {
+      return previousConformedValue
+    } else if (integerDigits.match(/\d+/)) {
       return {
-        conformedValue: Number(`${negative ? '-' : ''}${integerDigits}.${fractionDigits}`),
+        numberValue: Number(`${negative ? '-' : ''}${integerDigits}.${fractionDigits}`),
         fractionDigits
       }
     } else {
-      return { conformedValue: '' }
+      return ''
     }
   }
-  return { conformedValue: previousConformedValue }
+  return previousConformedValue
 }

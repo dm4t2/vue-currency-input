@@ -29,11 +29,11 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   } else {
     inputElement.setAttribute('inputmode', 'decimal')
   }
-  const currencyFormat = createCurrencyFormat(options)
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormat
+    currencyFormat: createCurrencyFormat(options),
+    decimalFormat: createCurrencyFormat({ ...options, currency: null })
   }
   return inputElement
 }
@@ -66,28 +66,30 @@ const applyFixedFractionFormat = (el, value, forcedChange) => {
 
 const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
   if (value != null) {
-    const { focus, options: { allowNegative, autoDecimalMode, distractionFree, locale }, currencyFormat, previousConformedValue } = el.$ci
-    const hideCurrencySymbol = focus && distractionFree.hideCurrencySymbol
-    const { conformedValue, fractionDigits } = conformToMask(value, currencyFormat, previousConformedValue, hideCurrencySymbol, autoDecimalMode, allowNegative)
-    if (typeof conformedValue === 'number') {
-      let { maximumFractionDigits, minimumFractionDigits } = currencyFormat
+    const { focus, options, currencyFormat, decimalFormat, previousConformedValue } = el.$ci
+    const { allowNegative, autoDecimalMode, distractionFree, locale } = options
+    const format = focus && distractionFree.hideCurrencySymbol ? decimalFormat : currencyFormat
+    const conformedValue = conformToMask(value, format, previousConformedValue, autoDecimalMode, allowNegative)
+    if (typeof conformedValue === 'object') {
+      const { numberValue, fractionDigits } = conformedValue
+      let { maximumFractionDigits, minimumFractionDigits } = format
       if (focus) {
         minimumFractionDigits = maximumFractionDigits
       }
       minimumFractionDigits = hideNegligibleDecimalDigits
         ? fractionDigits.replace(/0+$/, '').length
         : Math.min(minimumFractionDigits, fractionDigits.length)
-      const formattedValue = new Intl.NumberFormat(locale, {
+      const formattedValue = Math.abs(numberValue).toLocaleString(locale, {
         useGrouping: !(focus && distractionFree.hideGroupingSymbol),
         minimumFractionDigits,
         maximumFractionDigits
-      }).format(Math.abs(conformedValue))
-      const isNegativeZero = conformedValue === 0 && (1 / conformedValue < 0)
-      el.value = insertCurrencySymbol(formattedValue, currencyFormat, isNegativeZero || conformedValue < 0, hideCurrencySymbol)
-      el.$ci.numberValue = conformedValue
+      })
+      const isNegativeZero = numberValue === 0 && (1 / numberValue < 0)
+      el.value = insertCurrencySymbol(formattedValue, format, isNegativeZero || numberValue < 0)
+      el.$ci.numberValue = numberValue
     } else {
       el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, currencyFormat)
+      el.$ci.numberValue = parse(el.value, format)
     }
   } else {
     el.value = el.$ci.numberValue = null
