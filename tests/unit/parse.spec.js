@@ -38,6 +38,7 @@ describe('parse', () => {
     expect(parse('1234.5', currencyFormat)).toBe(1234.5)
     expect(parse('1234.00', currencyFormat)).toBe(1234)
     expect(parse('1234.0', currencyFormat)).toBe(1234)
+    expect(parse('1234', createCurrencyFormat({ locale: 'jp', currency: 'JPY' }))).toBe(1234)
   })
 
   it('returns null if the value does not conform to the currency format config', () => {
