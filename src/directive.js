@@ -1,11 +1,10 @@
-import Vue from 'vue'
 import { DEFAULT_OPTIONS } from './api'
 import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretPosition } from './utils/caretPosition'
 import conformToMask from './utils/conformToMask'
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
 import equal from './utils/equal'
-import { toFloat, toInteger } from './utils/numberUtils'
+import { toInternalNumberModel, toExternalNumberModel } from './utils/numberUtils'
 import parse from './utils/parse'
 import { insertCurrencySymbol } from './utils/stringUtils'
 
@@ -60,7 +59,7 @@ const applyFixedFractionFormat = (el, value, forcedChange) => {
   }
   format(el, value)
   if (forcedChange) {
-    dispatchEvent(el, 'change', { numberValue: toInteger(el.$ci.numberValue, valueAsInteger, maximumFractionDigits) })
+    dispatchEvent(el, 'change', { numberValue: toExternalNumberModel(el.$ci.numberValue, valueAsInteger, maximumFractionDigits) })
   }
 }
 
@@ -100,7 +99,7 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
 const format = (el, value, hideNegligibleDecimalDigits = false) => {
   updateInputValue(el, value, hideNegligibleDecimalDigits)
   let { numberValue, currencyFormat, options } = el.$ci
-  numberValue = toInteger(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
+  numberValue = toExternalNumberModel(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
   dispatchEvent(el, 'input', { numberValue })
 }
 
@@ -117,7 +116,7 @@ const addEventListener = (el) => {
 
   el.addEventListener('format', (e) => {
     const { currencyFormat, options, numberValue } = el.$ci
-    const value = toFloat(e.detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits)
+    const value = toInternalNumberModel(e.detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits)
     if (value !== numberValue) {
       applyFixedFractionFormat(el, value)
     }
@@ -149,12 +148,10 @@ const addEventListener = (el) => {
 export default {
   bind (el, { value: options }, { context }) {
     const inputElement = init(el, options, context)
-    Vue.nextTick(() => {
-      const { value, $ci: { currencyFormat, options } } = inputElement
-      if (value) {
-        applyFixedFractionFormat(inputElement, toFloat(parse(value, currencyFormat), options.valueAsInteger, currencyFormat.maximumFractionDigits))
-      }
-    })
+    const { value, $ci: { currencyFormat } } = inputElement
+    if (value) {
+      applyFixedFractionFormat(inputElement, toInternalNumberModel(parse(value, currencyFormat), options.valueAsInteger, currencyFormat.maximumFractionDigits))
+    }
     addEventListener(inputElement)
   },
   componentUpdated (el, { value, oldValue }, { context }) {

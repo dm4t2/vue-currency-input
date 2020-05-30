@@ -1,7 +1,7 @@
 import createCurrencyFormat from './utils/createCurrencyFormat'
 import parse from './utils/parse'
 import dispatchEvent from './utils/dispatchEvent'
-import { toInteger } from './utils/numberUtils'
+import { toExternalNumberModel } from './utils/numberUtils'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
@@ -19,12 +19,12 @@ export const DEFAULT_OPTIONS = {
  *
  * @param {String} formattedValue The currency formatted string to be parsed, for example `$1,234.50`.
  * @param {Object} options The configured options of the respective `v-currency` directive.
- * @returns {number | null} The parsed number or `null` if the formatted string does not match.
+ * @returns {Number | null} The parsed number or `null` if the formatted string does not match.
  */
 export const parseCurrency = (formattedValue, options) => {
   const mergedOptions = { ...DEFAULT_OPTIONS, ...options }
   const currencyFormat = createCurrencyFormat(mergedOptions)
-  return toInteger(parse(formattedValue, currencyFormat), mergedOptions.valueAsInteger, currencyFormat.maximumFractionDigits)
+  return toExternalNumberModel(parse(formattedValue, currencyFormat), mergedOptions.valueAsInteger, currencyFormat.maximumFractionDigits)
 }
 
 /**

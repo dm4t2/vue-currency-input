@@ -47,15 +47,6 @@ describe('initial value', () => {
     })
   })
 
-  describe('the initial value is not a number', () => {
-    it('should set an empty value', async () => {
-      jest.spyOn(console, 'error')
-      console.error.mockImplementation(() => {})
-
-      await expectInitialValue('', { locale: 'en', value: '1234' })
-    })
-  })
-
   describe('the initial value is null', () => {
     it('should set an empty value', async () => {
       await expectInitialValue('', { locale: 'en', value: null })
@@ -100,8 +91,7 @@ describe('component options', () => {
   })
 
   it('should emit a change event if the valueAsInteger option is toggled', async () => {
-    const wrapper = mountComponent({ locale: 'en', currency: 'USD', valueAsInteger: true })
-    wrapper.setValue(1234)
+    const wrapper = mountComponent({ locale: 'en', currency: 'USD', valueAsInteger: true, value: 1234 })
 
     wrapper.setProps({ valueAsInteger: false })
     await wrapper.vm.$nextTick()
