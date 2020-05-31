@@ -1,7 +1,7 @@
 # API
 
 ## setValue
-Sets the value of a input programmatically.
+Sets the value of an input programmatically.
 
 #### Arguments
 Name | Type | Description
@@ -12,6 +12,39 @@ Name | Type | Description
 ::: warning
 If you use `v-currency` on a Vue component (for example Vuetify's `v-text-field`), make sure the `el` argument points to underlying input element and **not** to the component's root element.
 :::
+
+#### Example
+``` vue
+<template>
+  <div>
+    <input
+      ref="input"
+      v-model="value"
+      v-currency
+    >
+    <button @click="onClick">Set value to 100</button>
+  </div>
+</template>
+
+<script>
+import { CurrencyDirective, setValue } from 'vue-currency-input'
+
+export default {
+  directives: {
+    currency: CurrencyDirective
+  },
+  data: () => ({
+    value: '$1,234.50'
+  }),
+  methods: {
+    onClick() {
+      setValue(this.$refs.input, 100)
+    }
+  }
+}
+</script>
+```
+[Try it on CodeSandbox](https://codesandbox.io/s/vue-currency-input-set-value-programmatically-rv95r?file=/src/App.vue)
 
 ## parseCurrency
 Parses a currency formatted string emitted by the `v-currency` directive to a number. This method is also exposed as Vue instance method `$parseCurrency` when [installed as Vue plugin](/guide/#installation).
