@@ -1,9 +1,9 @@
-import { count, normalizeDigits, onlyDigits } from './stringUtils'
+import { count } from './stringUtils'
 
 export const setCaretPosition = (el, position) => el.setSelectionRange(position, position)
 
-export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPosition, currencyFormat, options) => {
-  const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol, digits } = currencyFormat
+export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPosition, numberFormat, options) => {
+  const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = numberFormat
   const decimalSymbolPosition = inputtedValue.indexOf(decimalSymbol) + 1
   let caretPositionFromLeft = inputtedValue.length - caretPosition
 
@@ -13,7 +13,7 @@ export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPositi
     return newValue.length - caretPositionFromLeft - 1
   } else {
     if (!options.autoDecimalMode && decimalSymbolPosition !== 0 && caretPosition > decimalSymbolPosition) {
-      if (onlyDigits(normalizeDigits(inputtedValue, digits).substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
+      if (numberFormat.onlyDigits(inputtedValue.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
         caretPositionFromLeft -= 1
       }
     }
@@ -23,13 +23,13 @@ export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPositi
   }
 }
 
-export const getDistractionFreeCaretPosition = (currencyFormat, options, value, caretPosition) => {
+export const getDistractionFreeCaretPosition = (numberFormat, options, value, caretPosition) => {
   let result = caretPosition
   if (options.distractionFree.hideCurrencySymbol) {
-    result -= currencyFormat.prefix.length
+    result -= numberFormat.prefix.length
   }
   if (options.distractionFree.hideGroupingSymbol) {
-    result -= count(value.substring(0, caretPosition), currencyFormat.groupingSymbol)
+    result -= count(value.substring(0, caretPosition), numberFormat.groupingSymbol)
   }
   return Math.max(0, result)
 }

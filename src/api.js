@@ -1,7 +1,6 @@
-import createCurrencyFormat from './utils/createCurrencyFormat'
-import parse from './utils/parse'
 import dispatchEvent from './utils/dispatchEvent'
 import { toExternalNumberModel } from './utils/numberUtils'
+import NumberFormat from './numberFormat'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
@@ -23,8 +22,8 @@ export const DEFAULT_OPTIONS = {
  */
 export const parseCurrency = (formattedValue, options) => {
   const mergedOptions = { ...DEFAULT_OPTIONS, ...options }
-  const currencyFormat = createCurrencyFormat(mergedOptions)
-  return toExternalNumberModel(parse(formattedValue, currencyFormat), mergedOptions.valueAsInteger, currencyFormat.maximumFractionDigits)
+  const numberFormat = new NumberFormat(mergedOptions)
+  return toExternalNumberModel(numberFormat.parse(formattedValue), mergedOptions.valueAsInteger, numberFormat.maximumFractionDigits)
 }
 
 /**

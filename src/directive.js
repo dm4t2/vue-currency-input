@@ -1,12 +1,10 @@
 import { DEFAULT_OPTIONS } from './api'
 import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretPosition } from './utils/caretPosition'
 import conformToMask from './utils/conformToMask'
-import createCurrencyFormat from './utils/createCurrencyFormat'
 import dispatchEvent from './utils/dispatchEvent'
 import equal from './utils/equal'
-import { toInternalNumberModel, toExternalNumberModel } from './utils/numberUtils'
-import parse from './utils/parse'
-import { insertCurrencySymbol } from './utils/stringUtils'
+import { toExternalNumberModel, toInternalNumberModel } from './utils/numberUtils'
+import NumberFormat from './numberFormat'
 
 const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
@@ -31,8 +29,8 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormat: createCurrencyFormat(options),
-    decimalFormat: createCurrencyFormat({ ...options, currency: null })
+    currencyFormat: new NumberFormat(options),
+    decimalFormat: new NumberFormat({ ...options, currency: null })
   }
   return inputElement
 }
@@ -67,11 +65,11 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
   if (value != null) {
     const { focus, options, currencyFormat, decimalFormat, previousConformedValue } = el.$ci
     const { allowNegative, autoDecimalMode, distractionFree, locale } = options
-    const format = focus && distractionFree.hideCurrencySymbol ? decimalFormat : currencyFormat
-    const conformedValue = conformToMask(value, format, previousConformedValue, autoDecimalMode, allowNegative)
+    const numberFormat = focus && distractionFree.hideCurrencySymbol ? decimalFormat : currencyFormat
+    const conformedValue = conformToMask(value, numberFormat, previousConformedValue, autoDecimalMode, allowNegative)
     if (typeof conformedValue === 'object') {
       const { numberValue, fractionDigits } = conformedValue
-      let { maximumFractionDigits, minimumFractionDigits } = format
+      let { maximumFractionDigits, minimumFractionDigits } = numberFormat
       if (focus) {
         minimumFractionDigits = maximumFractionDigits
       }
@@ -84,11 +82,11 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
         maximumFractionDigits
       })
       const isNegativeZero = numberValue === 0 && (1 / numberValue < 0)
-      el.value = insertCurrencySymbol(formattedValue, format, isNegativeZero || numberValue < 0)
+      el.value = numberFormat.insertCurrencySymbol(formattedValue, isNegativeZero || numberValue < 0)
       el.$ci.numberValue = numberValue
     } else {
       el.value = conformedValue
-      el.$ci.numberValue = parse(el.value, format)
+      el.$ci.numberValue = numberFormat.parse(el.value)
     }
   } else {
     el.value = el.$ci.numberValue = null
@@ -150,7 +148,7 @@ export default {
     const inputElement = init(el, options, context)
     const { value, $ci: { currencyFormat } } = inputElement
     if (value) {
-      applyFixedFractionFormat(inputElement, toInternalNumberModel(parse(value, currencyFormat), options.valueAsInteger, currencyFormat.maximumFractionDigits))
+      applyFixedFractionFormat(inputElement, toInternalNumberModel(currencyFormat.parse(value), options.valueAsInteger, currencyFormat.maximumFractionDigits))
     }
     addEventListener(inputElement)
   },

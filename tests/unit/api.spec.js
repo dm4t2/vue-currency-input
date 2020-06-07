@@ -1,10 +1,8 @@
 import { DEFAULT_OPTIONS, parseCurrency, setValue } from '../../src/api'
-import createCurrencyFormat from '../../src/utils/createCurrencyFormat'
-import parse from '../../src/utils/parse'
+import NumberFormat from '../../src/numberFormat'
 import dispatchEvent from '../../src/utils/dispatchEvent'
 
-jest.mock('../../src/utils/parse')
-jest.mock('../../src/utils/createCurrencyFormat')
+jest.mock('../../src/numberFormat')
 jest.mock('../../src/utils/dispatchEvent')
 
 describe('parseCurrency', () => {
@@ -12,16 +10,11 @@ describe('parseCurrency', () => {
     const formattedValue = '$1,234.50'
     const locale = 'en'
     const currency = 'USD'
-    const valueAsInteger = true
-    const currencyFormat = { maximumFractionDigits: 2 }
-    createCurrencyFormat.mockReturnValueOnce(currencyFormat)
 
-    parseCurrency(formattedValue, { locale, currency, valueAsInteger })
+    parseCurrency(formattedValue, { locale, currency })
 
-    expect(parse).toHaveBeenCalled()
-    expect(parse.mock.calls[0][0]).toBe(formattedValue)
-    expect(parse.mock.calls[0][1]).toBe(currencyFormat)
-    expect(createCurrencyFormat).toHaveBeenCalledWith({ ...DEFAULT_OPTIONS, locale, currency, valueAsInteger })
+    expect(NumberFormat).toHaveBeenCalledWith({ ...DEFAULT_OPTIONS, locale, currency })
+    expect(NumberFormat.mock.instances[0].parse).toHaveBeenCalledWith(formattedValue)
   })
 })
 

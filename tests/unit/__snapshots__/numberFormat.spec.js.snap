@@ -1,132 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createCurrencyFormat custom precision 1`] = `
-Object {
-  "decimalSymbol": ",",
-  "digits": Array [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ],
-  "groupingSymbol": ".",
-  "maximumFractionDigits": 0,
-  "minimumFractionDigits": 0,
-  "minusSymbol": "-",
-  "negativePrefix": "-",
-  "prefix": "",
-  "suffix": " €",
-}
-`;
-
-exports[`createCurrencyFormat custom precision 2`] = `
-Object {
-  "decimalSymbol": ",",
-  "digits": Array [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ],
-  "groupingSymbol": ".",
-  "maximumFractionDigits": 0,
-  "minimumFractionDigits": 0,
-  "minusSymbol": "-",
-  "negativePrefix": "-",
-  "prefix": "",
-  "suffix": " €",
-}
-`;
-
-exports[`createCurrencyFormat custom precision 3`] = `
-Object {
-  "decimalSymbol": ",",
-  "digits": Array [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ],
-  "groupingSymbol": ".",
-  "maximumFractionDigits": 2,
-  "minimumFractionDigits": 0,
-  "minusSymbol": "-",
-  "negativePrefix": "-",
-  "prefix": "",
-  "suffix": "",
-}
-`;
-
-exports[`createCurrencyFormat custom precision 4`] = `
-Object {
-  "decimalSymbol": ",",
-  "digits": Array [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ],
-  "groupingSymbol": ".",
-  "maximumFractionDigits": 2,
-  "minimumFractionDigits": 0,
-  "minusSymbol": "-",
-  "negativePrefix": "-",
-  "prefix": "",
-  "suffix": " €",
-}
-`;
-
-exports[`createCurrencyFormat custom precision 5`] = `
-Object {
-  "decimalSymbol": undefined,
-  "digits": Array [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ],
-  "groupingSymbol": ",",
-  "maximumFractionDigits": 0,
-  "minimumFractionDigits": 0,
-  "minusSymbol": "-",
-  "negativePrefix": "-￥",
-  "prefix": "￥",
-  "suffix": "",
-}
-`;
-
-exports[`createCurrencyFormat custom prefix/suffix 1`] = `
-Object {
+exports[`NumberFormat constructing number formats custom currency symbol should work if the currency symbol is hidden 1`] = `
+NumberFormat {
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -144,14 +19,14 @@ Object {
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
-  "negativePrefix": "-₿ ",
-  "prefix": "₿ ",
+  "negativePrefix": "-",
+  "prefix": "",
   "suffix": "",
 }
 `;
 
-exports[`createCurrencyFormat custom prefix/suffix 2`] = `
-Object {
+exports[`NumberFormat constructing number formats custom currency symbol should work wit a custom suffix 1`] = `
+NumberFormat {
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -175,8 +50,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat custom prefix/suffix 3`] = `
-Object {
+exports[`NumberFormat constructing number formats custom currency symbol should work with a custom prefix 1`] = `
+NumberFormat {
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -194,14 +69,14 @@ Object {
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
-  "negativePrefix": "-",
-  "prefix": "",
+  "negativePrefix": "-₿ ",
+  "prefix": "₿ ",
   "suffix": "",
 }
 `;
 
-exports[`createCurrencyFormat i18n ar-SA_SAR 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: ar-SA_SAR 1`] = `
+NumberFormat {
   "decimalSymbol": "٫",
   "digits": Array [
     "٠",
@@ -218,15 +93,15 @@ Object {
   "groupingSymbol": "٬",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSymbol": "؜-",
   "negativePrefix": "؜-",
   "prefix": "",
   "suffix": " ر.س.‏",
 }
 `;
 
-exports[`createCurrencyFormat i18n de-CH_EUR 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: de-CH_EUR 1`] = `
+NumberFormat {
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -244,14 +119,14 @@ Object {
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
-  "negativePrefix": "$-",
-  "prefix": "$ ",
+  "negativePrefix": "EUR-",
+  "prefix": "EUR ",
   "suffix": "",
 }
 `;
 
-exports[`createCurrencyFormat i18n de-DE_EUR 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: de-DE_EUR 1`] = `
+NumberFormat {
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -275,8 +150,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n en-GB_GBP 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: en-GB_GBP 1`] = `
+NumberFormat {
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -300,8 +175,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n en-IN_INR 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: en-IN_INR 1`] = `
+NumberFormat {
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -325,8 +200,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n en-US_USD 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: en-US_USD 1`] = `
+NumberFormat {
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -350,8 +225,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n es-ES_EUR 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: es-ES_EUR 1`] = `
+NumberFormat {
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -375,8 +250,33 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n ja_JPY 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: fa-IR_IRR 1`] = `
+NumberFormat {
+  "decimalSymbol": undefined,
+  "digits": Array [
+    "۰",
+    "۱",
+    "۲",
+    "۳",
+    "۴",
+    "۵",
+    "۶",
+    "۷",
+    "۸",
+    "۹",
+  ],
+  "groupingSymbol": "٬",
+  "maximumFractionDigits": 0,
+  "minimumFractionDigits": 0,
+  "minusSymbol": "‎−",
+  "negativePrefix": "‎−‎ریال ",
+  "prefix": "‎ریال ",
+  "suffix": "",
+}
+`;
+
+exports[`NumberFormat constructing number formats should work for respective locale and currency: ja_JPY 1`] = `
+NumberFormat {
   "decimalSymbol": undefined,
   "digits": Array [
     "0",
@@ -400,8 +300,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n nl-NL_EUR 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: nl-NL_EUR 1`] = `
+NumberFormat {
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -425,8 +325,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n pt_BRL 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: pt_BRL 1`] = `
+NumberFormat {
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -450,8 +350,8 @@ Object {
 }
 `;
 
-exports[`createCurrencyFormat i18n zh_CNY 1`] = `
-Object {
+exports[`NumberFormat constructing number formats should work for respective locale and currency: zh_CNY 1`] = `
+NumberFormat {
   "decimalSymbol": ".",
   "digits": Array [
     "0",
