@@ -4,9 +4,6 @@ import currencyDirective from './directive'
 export default {
   render (h) {
     return h('input', {
-      domProps: {
-        value: this.formattedValue
-      },
       directives: [{
         name: 'currency',
         value: this.options
@@ -17,13 +14,11 @@ export default {
           if (e.detail) {
             this.$emit('change', e.detail.numberValue)
           }
-          this.formattedValue = this.$el.value
         },
         input: e => {
           if (e.detail && this.value !== e.detail.numberValue) {
             this.$emit('input', e.detail.numberValue)
           }
-          this.formattedValue = this.$el.value
         }
       }
     })
@@ -68,11 +63,6 @@ export default {
     allowNegative: {
       type: Boolean,
       default: undefined
-    }
-  },
-  data () {
-    return {
-      formattedValue: null
     }
   },
   mounted () {

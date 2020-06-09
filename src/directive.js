@@ -48,16 +48,18 @@ const validateValueRange = (value, valueRange) => {
   return value
 }
 
-const applyFixedFractionFormat = (el, value, forcedChange) => {
-  const { valueRange, locale, valueAsInteger } = el.$ci.options
+const triggerEvent = (el, eventName) => {
+  let { numberValue, currencyFormat, options } = el.$ci
+  numberValue = toExternalNumberModel(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
+  dispatchEvent(el, eventName, { numberValue })
+}
+
+const applyFixedFractionFormat = (el, value, forcedChange = false) => {
+  const { valueRange, locale } = el.$ci.options
   const { maximumFractionDigits, minimumFractionDigits } = el.$ci.currencyFormat
-  if (value != null) {
-    value = validateValueRange(value, valueRange)
-    value = new Intl.NumberFormat(locale, { minimumFractionDigits, maximumFractionDigits }).format(value)
-  }
-  format(el, value)
-  if (forcedChange) {
-    dispatchEvent(el, 'change', { numberValue: toExternalNumberModel(el.$ci.numberValue, valueAsInteger, maximumFractionDigits) })
+  format(el, value != null ? validateValueRange(value, valueRange).toLocaleString(locale, { minimumFractionDigits, maximumFractionDigits }) : null)
+  if (value !== el.$ci.numberValue || forcedChange) {
+    triggerEvent(el, 'change')
   }
 }
 
@@ -96,9 +98,7 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
 
 const format = (el, value, hideNegligibleDecimalDigits = false) => {
   updateInputValue(el, value, hideNegligibleDecimalDigits)
-  let { numberValue, currencyFormat, options } = el.$ci
-  numberValue = toExternalNumberModel(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
-  dispatchEvent(el, 'input', { numberValue })
+  triggerEvent(el, 'input')
 }
 
 const addEventListener = (el) => {
@@ -155,7 +155,7 @@ export default {
   componentUpdated (el, { value, oldValue }, { context }) {
     if (!equal(value, oldValue)) {
       const inputElement = init(el, value, context)
-      applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue, value.valueAsInteger !== oldValue.valueAsInteger)
+      applyFixedFractionFormat(inputElement, inputElement.$ci.numberValue, true)
     }
   }
 }

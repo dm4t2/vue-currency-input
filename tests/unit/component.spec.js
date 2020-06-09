@@ -45,6 +45,14 @@ describe('initial value', () => {
     it('should ignore negative values if not allowed', async () => {
       await expectInitialValue('1.234,00 €', { locale: 'de', allowNegative: false, value: -1234 })
     })
+
+    it('should respect the value range if preset', async () => {
+      const wrapper = mountComponent({ locale: 'de', valueRange: { min: 0 }, value: -1 })
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.element.value).toBe('0,00 €')
+      expect(wrapper.emitted('change')[0][0]).toBe(0)
+    })
   })
 
   describe('the initial value is null', () => {
@@ -90,7 +98,7 @@ describe('component options', () => {
     expect(wrapper.element.value).toBe('US$ -1.234,56')
   })
 
-  it('should emit a change event if the valueAsInteger option is toggled', async () => {
+  it('should emit a change event if the options get changed', async () => {
     const wrapper = mountComponent({ locale: 'en', currency: 'USD', valueAsInteger: true, value: 1234 })
 
     wrapper.setProps({ valueAsInteger: false })
