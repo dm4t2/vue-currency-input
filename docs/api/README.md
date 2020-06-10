@@ -1,7 +1,7 @@
 # API
 
 ## setValue
-Sets the value of an input programmatically.
+Sets the value of an input programmatically. This method is also exposed as Vue instance method `$setValue` when [installed as Vue plugin](/guide/#installation).
 
 #### Arguments
 Name | Type | Description
