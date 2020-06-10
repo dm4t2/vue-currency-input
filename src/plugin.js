@@ -1,4 +1,4 @@
-import { DEFAULT_OPTIONS, parseCurrency } from './api'
+import { DEFAULT_OPTIONS, parseCurrency, setValue } from './api'
 import component from './component'
 import directive from './directive'
 
@@ -12,5 +12,6 @@ export default {
     Vue.component(componentName, component)
     Vue.directive(directiveName, directive)
     Vue.prototype.$parseCurrency = (str, options = {}) => parseCurrency(str, { ...globalOptions, ...options })
+    Vue.prototype.$setValue = (el, value) => setValue(el, value)
   }
 }
