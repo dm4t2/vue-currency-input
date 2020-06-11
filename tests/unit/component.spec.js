@@ -190,14 +190,15 @@ describe('when the input is changed externally', () => {
 
 describe('when the input is focused', () => {
   describe('distraction free mode is enabled', () => {
-    it('applies the distraction free format', () => {
-      const wrapper = mountComponent({ locale: 'en', distractionFree: true })
-      wrapper.setValue('1234.5')
+    it('should apply the distraction free format', () => {
+      const wrapper = mountComponent({ locale: 'nl', distractionFree: true, value: -1234.5 })
+
+      expect(wrapper.element.value).toBe('€ -1.234,50')
 
       wrapper.trigger('focus')
       jest.runOnlyPendingTimers()
 
-      expect(wrapper.element.value).toBe('1234.5')
+      expect(wrapper.element.value).toBe('-1234,5')
     })
 
     it('displays negligible decimal digits if auto decimal mode is enabled', () => {

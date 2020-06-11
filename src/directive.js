@@ -1,10 +1,10 @@
 import { DEFAULT_OPTIONS } from './api'
 import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretPosition } from './utils/caretPosition'
-import conformToMask from './utils/conformToMask'
 import dispatchEvent from './utils/dispatchEvent'
 import equal from './utils/equal'
 import { toExternalNumberModel, toInternalNumberModel } from './utils/numberUtils'
 import NumberFormat from './numberFormat'
+import { AutoDecimalModeNumberMask, DefaultNumberMask } from './numberMask'
 
 const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
@@ -26,10 +26,12 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   } else {
     inputElement.setAttribute('inputmode', 'decimal')
   }
+  const currencyFormat = new NumberFormat(options)
   inputElement.$ci = {
     ...inputElement.$ci || {},
     options,
-    currencyFormat: new NumberFormat(options),
+    numberMask: options.autoDecimalMode ? new AutoDecimalModeNumberMask(currencyFormat) : new DefaultNumberMask(currencyFormat),
+    currencyFormat,
     decimalFormat: new NumberFormat({ ...options, currency: null })
   }
   return inputElement
@@ -65,31 +67,40 @@ const applyFixedFractionFormat = (el, value, forcedChange = false) => {
 
 const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
   if (value != null) {
-    const { focus, options, currencyFormat, decimalFormat, previousConformedValue } = el.$ci
-    const { allowNegative, autoDecimalMode, distractionFree, locale } = options
-    const numberFormat = focus && distractionFree.hideCurrencySymbol ? decimalFormat : currencyFormat
-    const conformedValue = conformToMask(value, numberFormat, previousConformedValue, autoDecimalMode, allowNegative)
+    const { focus, options, numberMask, currencyFormat, decimalFormat, previousConformedValue } = el.$ci
+    const { allowNegative, distractionFree, locale } = options
+    const conformedValue = numberMask.conformToMask(value, previousConformedValue)
+    let formattedValue
     if (typeof conformedValue === 'object') {
       const { numberValue, fractionDigits } = conformedValue
-      let { maximumFractionDigits, minimumFractionDigits } = numberFormat
+      let { maximumFractionDigits, minimumFractionDigits } = currencyFormat
       if (focus) {
         minimumFractionDigits = maximumFractionDigits
       }
       minimumFractionDigits = hideNegligibleDecimalDigits
         ? fractionDigits.replace(/0+$/, '').length
         : Math.min(minimumFractionDigits, fractionDigits.length)
-      const formattedValue = Math.abs(numberValue).toLocaleString(locale, {
+      formattedValue = Math.abs(numberValue).toLocaleString(locale, {
         useGrouping: !(focus && distractionFree.hideGroupingSymbol),
         minimumFractionDigits,
         maximumFractionDigits
       })
-      const isNegativeZero = numberValue === 0 && (1 / numberValue < 0)
-      el.value = numberFormat.insertCurrencySymbol(formattedValue, isNegativeZero || numberValue < 0)
-      el.$ci.numberValue = numberValue
+      formattedValue = currencyFormat.insertCurrencySymbol(formattedValue, currencyFormat.isNegative(value))
     } else {
-      el.value = conformedValue
-      el.$ci.numberValue = numberFormat.parse(el.value)
+      formattedValue = conformedValue
     }
+    if (!allowNegative) {
+      formattedValue = formattedValue.replace(currencyFormat.negativePrefix, currencyFormat.prefix)
+    }
+    if (focus && distractionFree.hideCurrencySymbol) {
+      formattedValue = formattedValue
+        .replace(currencyFormat.negativePrefix, decimalFormat.negativePrefix)
+        .replace(currencyFormat.prefix, decimalFormat.prefix)
+        .replace(currencyFormat.suffix, decimalFormat.suffix)
+    }
+
+    el.value = formattedValue
+    el.$ci.numberValue = currencyFormat.parse(el.value)
   } else {
     el.value = el.$ci.numberValue = null
   }
