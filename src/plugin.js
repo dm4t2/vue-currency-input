@@ -11,7 +11,13 @@ export default {
     Vue.prototype.$CI_DEFAULT_OPTIONS = { ...DEFAULT_OPTIONS, ...globalOptions }
     Vue.component(componentName, component)
     Vue.directive(directiveName, directive)
-    Vue.prototype.$parseCurrency = (str, options = {}) => parseCurrency(str, { ...globalOptions, ...options })
-    Vue.prototype.$setValue = (el, value) => setValue(el, value)
+    Vue.prototype.$currencyInput = {
+      parseCurrency: (str, options = {}) => {
+        return parseCurrency(str, { ...globalOptions, ...options })
+      },
+      setValue: (el, value) => {
+        return setValue(el, value)
+      }
+    }
   }
 }

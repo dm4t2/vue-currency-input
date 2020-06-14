@@ -1,7 +1,7 @@
 # API
 
 ## setValue
-Sets the value of an input programmatically. This method is also exposed as Vue instance method `$setValue` when [installed as Vue plugin](/guide/#installation).
+Sets the value of an input programmatically. This method is also exposed as Vue instance method `$currencyInput.setValue` when [installed as Vue plugin](/guide/#installation).
 
 #### Arguments
 Name | Type | Description
@@ -47,7 +47,7 @@ export default {
 [Try it on CodeSandbox](https://codesandbox.io/s/vue-currency-input-set-value-programmatically-rv95r?file=/src/App.vue)
 
 ## parseCurrency
-Parses a currency formatted string emitted by the `v-currency` directive to a number. This method is also exposed as Vue instance method `$parseCurrency` when [installed as Vue plugin](/guide/#installation).
+Parses a currency formatted string emitted by the `v-currency` directive to a number. This method is also exposed as Vue instance method `$currencyInput.parseCurrency` when [installed as Vue plugin](/guide/#installation).
 
 #### Arguments
 Name | Type | Description
