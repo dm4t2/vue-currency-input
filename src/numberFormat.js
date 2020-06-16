@@ -4,8 +4,10 @@ export default class NumberFormat {
   constructor (options) {
     const { currency, locale, precision, autoDecimalMode, valueAsInteger } = options
     const numberFormat = new Intl.NumberFormat(locale, typeof currency === 'string' ? { currency, style: 'currency' } : { minimumFractionDigits: 1 })
-
     const ps = numberFormat.format(123456)
+
+    this.locale = locale
+    this.currency = currency
     this.digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => i.toLocaleString(locale))
     this.decimalSymbol = count(ps, this.digits[0]) ? ps.substr(ps.indexOf(this.digits[6]) + 1, 1) : undefined
     this.groupingSymbol = ps.substr(ps.indexOf(this.digits[3]) + 1, 1)
@@ -47,6 +49,21 @@ export default class NumberFormat {
       return Number(`${negative ? '-' : ''}${(this.onlyDigits(match[1]))}.${(this.onlyDigits(match[3] || ''))}`)
     }
     return null
+  }
+
+  format (number, options = {
+    minimumFractionDigits: this.minimumFractionDigits,
+    maximumFractionDigits: this.maximumFractionDigits
+  }) {
+    if (typeof this.currency === 'string') {
+      return number.toLocaleString(this.locale, {
+        style: 'currency',
+        currency: this.currency,
+        ...options
+      })
+    } else {
+      return this.insertCurrencySymbol(Math.abs(number).toLocaleString(this.locale, options), number < 0 || (number === 0 && (1 / number < 0)))
+    }
   }
 
   integerPattern () {

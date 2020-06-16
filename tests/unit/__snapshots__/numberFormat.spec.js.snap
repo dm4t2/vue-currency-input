@@ -2,6 +2,7 @@
 
 exports[`NumberFormat constructing number formats custom currency symbol should work if the currency symbol is hidden 1`] = `
 NumberFormat {
+  "currency": undefined,
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -16,6 +17,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ".",
+  "locale": "de-DE",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -27,6 +29,9 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats custom currency symbol should work wit a custom suffix 1`] = `
 NumberFormat {
+  "currency": Object {
+    "suffix": " Euro",
+  },
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -41,6 +46,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ".",
+  "locale": "de-DE",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -52,6 +58,9 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats custom currency symbol should work with a custom prefix 1`] = `
 NumberFormat {
+  "currency": Object {
+    "prefix": "₿ ",
+  },
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -66,6 +75,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ".",
+  "locale": "de-DE",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -77,6 +87,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: ar-SA_SAR 1`] = `
 NumberFormat {
+  "currency": "SAR",
   "decimalSymbol": "٫",
   "digits": Array [
     "٠",
@@ -91,6 +102,7 @@ NumberFormat {
     "٩",
   ],
   "groupingSymbol": "٬",
+  "locale": "ar-SA",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "؜-",
@@ -102,6 +114,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: de-CH_EUR 1`] = `
 NumberFormat {
+  "currency": "EUR",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -116,6 +129,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": "’",
+  "locale": "de-CH",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -127,6 +141,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: de-DE_EUR 1`] = `
 NumberFormat {
+  "currency": "EUR",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -141,6 +156,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ".",
+  "locale": "de-DE",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -152,6 +168,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: en-GB_GBP 1`] = `
 NumberFormat {
+  "currency": "GBP",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -166,6 +183,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ",",
+  "locale": "en-GB",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -177,6 +195,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: en-IN_INR 1`] = `
 NumberFormat {
+  "currency": "INR",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -191,6 +210,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ",",
+  "locale": "en-GB",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -202,6 +222,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: en-US_USD 1`] = `
 NumberFormat {
+  "currency": "USD",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -216,6 +237,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ",",
+  "locale": "en-US",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -227,6 +249,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: es-ES_EUR 1`] = `
 NumberFormat {
+  "currency": "EUR",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -241,6 +264,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ".",
+  "locale": "es-ES",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -252,6 +276,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: fa-IR_IRR 1`] = `
 NumberFormat {
+  "currency": "IRR",
   "decimalSymbol": undefined,
   "digits": Array [
     "۰",
@@ -266,6 +291,7 @@ NumberFormat {
     "۹",
   ],
   "groupingSymbol": "٬",
+  "locale": "fa-IR",
   "maximumFractionDigits": 0,
   "minimumFractionDigits": 0,
   "minusSymbol": "‎−",
@@ -275,8 +301,36 @@ NumberFormat {
 }
 `;
 
+exports[`NumberFormat constructing number formats should work for respective locale and currency: fr-CH_CHF 1`] = `
+NumberFormat {
+  "currency": "CHF",
+  "decimalSymbol": ".",
+  "digits": Array [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+  ],
+  "groupingSymbol": " ",
+  "locale": "fr-CH",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "minusSymbol": "-",
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": " CHF",
+}
+`;
+
 exports[`NumberFormat constructing number formats should work for respective locale and currency: ja_JPY 1`] = `
 NumberFormat {
+  "currency": "JPY",
   "decimalSymbol": undefined,
   "digits": Array [
     "0",
@@ -291,6 +345,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ",",
+  "locale": "ja",
   "maximumFractionDigits": 0,
   "minimumFractionDigits": 0,
   "minusSymbol": "-",
@@ -302,6 +357,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: nl-NL_EUR 1`] = `
 NumberFormat {
+  "currency": "EUR",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -316,6 +372,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ".",
+  "locale": "nl-NL",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -327,6 +384,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: pt_BRL 1`] = `
 NumberFormat {
+  "currency": "BRL",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -341,6 +399,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ".",
+  "locale": "pt",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
@@ -352,6 +411,7 @@ NumberFormat {
 
 exports[`NumberFormat constructing number formats should work for respective locale and currency: zh_CNY 1`] = `
 NumberFormat {
+  "currency": "CNY",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -366,6 +426,7 @@ NumberFormat {
     "9",
   ],
   "groupingSymbol": ",",
+  "locale": "zh",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSymbol": "-",
