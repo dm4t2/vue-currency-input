@@ -129,7 +129,6 @@ const addEventListener = (el) => {
   })
 
   el.addEventListener('focus', () => {
-    el.$ci.oldValue = el.$ci.numberValue
     el.$ci.focus = true
     const { hideCurrencySymbol, hideGroupingSymbol, hideNegligibleDecimalDigits } = el.$ci.options.distractionFree
     if (hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
@@ -147,7 +146,13 @@ const addEventListener = (el) => {
 
   el.addEventListener('blur', () => {
     el.$ci.focus = false
-    applyFixedFractionFormat(el, el.$ci.numberValue, el.$ci.oldValue !== el.$ci.numberValue)
+    applyFixedFractionFormat(el, el.$ci.numberValue)
+  })
+
+  el.addEventListener('change', (e) => {
+    if (!e.detail) {
+      triggerEvent(el, 'change')
+    }
   })
 }
 

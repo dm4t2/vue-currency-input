@@ -286,35 +286,6 @@ describe('when the input is blurred', () => {
     expect(wrapper.element.value).toBe('€1.34')
   })
 
-  it('should never emit an change event unless the original value has been changed', async () => {
-    const expectValue = async (value, emittedValue, propsData) => {
-      const wrapper = mountComponent(propsData)
-      await wrapper.vm.$nextTick()
-
-      wrapper.trigger('focus')
-      wrapper.setValue(value)
-      wrapper.trigger('blur')
-
-      if (emittedValue === false) {
-        expect(wrapper.emitted('change')).toBeFalsy()
-      } else {
-        expect(wrapper.emitted('change')).toEqual(emittedValue)
-      }
-    }
-
-    await expectValue('100', [[100]], { locale: 'en' })
-    await expectValue('100', [[100]], { locale: 'en', value: 0 })
-    await expectValue('100', false, { locale: 'en', value: 100 })
-  })
-
-  it('should ignore native change events of the input', () => {
-    const wrapper = mountComponent()
-
-    wrapper.trigger('change')
-
-    expect(wrapper.emitted('change')).toBeFalsy()
-  })
-
   describe('when a min value is present', () => {
     it('sets the current value to the min value if smaller', () => {
       const wrapper = mountComponent({ locale: 'en', valueRange: { min: 1000 } })
