@@ -275,6 +275,17 @@ describe('when the input is focused', () => {
   })
 })
 
+describe('when the input is changed', () => {
+  it('should emit a change event', () => {
+    const wrapper = mountComponent({ locale: 'en' })
+
+    wrapper.setValue('100')
+    wrapper.trigger('change')
+
+    expect(wrapper.emitted('change')).toEqual([[100]])
+  })
+})
+
 describe('when the input is blurred', () => {
   it('applies the fixed fraction format', () => {
     const wrapper = mountComponent({ locale: 'en' })
