@@ -46,6 +46,16 @@ describe('initial value', () => {
       await expectInitialValue('1.234,00 €', { locale: 'de', allowNegative: false, value: -1234 })
     })
 
+    it('should fallback to -Number.MAX_SAFE_INTEGER if the value is smaller', async () => {
+      await expectInitialValue('-€9,007,199,254,740,991.00', { locale: 'en', value: -(Number.MAX_SAFE_INTEGER + 1) })
+      await expectInitialValue('-€9,007,199,254,740,991.00', { locale: 'en', valueRange: { min: -(Number.MAX_SAFE_INTEGER + 1) }, value: -(Number.MAX_SAFE_INTEGER + 1) })
+    })
+
+    it('should fallback to Number.MAX_SAFE_INTEGER if the value is greater', async () => {
+      await expectInitialValue('€9,007,199,254,740,991.00', { locale: 'en', value: Number.MAX_SAFE_INTEGER + 1 })
+      await expectInitialValue('€9,007,199,254,740,991.00', { locale: 'en', valueRange: { max: Number.MAX_SAFE_INTEGER + 1 }, value: Number.MAX_SAFE_INTEGER + 1 })
+    })
+
     it('should respect the value range if preset', async () => {
       const wrapper = mountComponent({ locale: 'de', valueRange: { min: 0 }, value: -1 })
       await wrapper.vm.$nextTick()
@@ -147,6 +157,18 @@ describe('when the input is changed by the user', () => {
       const propsData = { locale: 'de', distractionFree: { hideCurrencySymbol: true, hideGroupingSymbol: false } }
 
       expectValue('1234', '1.234', 1234, propsData)
+    })
+  })
+
+  describe('a value greater than Number.MAX_SAFE_INTEGER is entered', () => {
+    it('should fallback to the previously entered value', async () => {
+      const wrapper = mountComponent({ locale: 'en' })
+
+      wrapper.trigger('focus')
+      wrapper.setValue(Number.MAX_SAFE_INTEGER)
+      wrapper.setValue(Number.MAX_SAFE_INTEGER + 1)
+
+      expect(wrapper.element.value).toBe(Number.MAX_SAFE_INTEGER.toString())
     })
   })
 })

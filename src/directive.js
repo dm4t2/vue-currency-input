@@ -6,13 +6,15 @@ import { toExternalNumberModel, toInternalNumberModel } from './utils/numberUtil
 import NumberFormat from './numberFormat'
 import { AutoDecimalModeNumberMask, DefaultNumberMask } from './numberMask'
 
+const MAX_SAFE_INTEGER = Math.pow(2, 53) - 1
+
 const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
   if (!inputElement) {
     throw new Error('No input element found')
   }
   const options = { ...($CI_DEFAULT_OPTIONS || DEFAULT_OPTIONS), ...optionsFromBinding }
-  const { distractionFree, autoDecimalMode } = options
+  const { distractionFree, autoDecimalMode, valueRange } = options
   if (typeof distractionFree === 'boolean') {
     options.distractionFree = {
       hideCurrencySymbol: distractionFree,
@@ -20,6 +22,18 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
       hideGroupingSymbol: distractionFree
     }
   }
+  if (valueRange) {
+    options.valueRange = {
+      min: valueRange.min !== undefined ? Math.max(valueRange.min, -MAX_SAFE_INTEGER) : -MAX_SAFE_INTEGER,
+      max: valueRange.max !== undefined ? Math.min(valueRange.max, MAX_SAFE_INTEGER) : MAX_SAFE_INTEGER
+    }
+  } else {
+    options.valueRange = {
+      min: -MAX_SAFE_INTEGER,
+      max: MAX_SAFE_INTEGER
+    }
+  }
+
   if (autoDecimalMode) {
     options.distractionFree.hideNegligibleDecimalDigits = false
     inputElement.setAttribute('inputmode', 'numeric')
@@ -37,16 +51,7 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
 }
 
 const validateValueRange = (value, valueRange) => {
-  if (valueRange) {
-    const { min, max } = valueRange
-    if (min !== undefined && value < min) {
-      value = min
-    }
-    if (max !== undefined && value > max) {
-      value = max
-    }
-  }
-  return value
+  return Math.min(Math.max(value, valueRange.min), valueRange.max)
 }
 
 const triggerEvent = (el, eventName) => {
@@ -78,11 +83,13 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
       minimumFractionDigits = hideNegligibleDecimalDigits
         ? fractionDigits.replace(/0+$/, '').length
         : Math.min(minimumFractionDigits, fractionDigits.length)
-      formattedValue = currencyFormat.format(numberValue, {
-        useGrouping: !(focus && distractionFree.hideGroupingSymbol),
-        minimumFractionDigits,
-        maximumFractionDigits
-      })
+      formattedValue = numberValue > MAX_SAFE_INTEGER
+        ? previousConformedValue
+        : currencyFormat.format(numberValue, {
+          useGrouping: !(focus && distractionFree.hideGroupingSymbol),
+          minimumFractionDigits,
+          maximumFractionDigits
+        })
     } else {
       formattedValue = conformedValue
     }
