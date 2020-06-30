@@ -58,3 +58,25 @@ describe('when the value is changed externally by using a format event', () => {
     expect(wrapper.emitted('input')).toEqual([['€1,234.00']])
   })
 })
+
+describe('when the input is focused', () => {
+  it('should not emit an input event if empty', () => {
+    const wrapper = createMockComponent('input', { locale: 'en', distractionFree: true })
+
+    wrapper.find('input').trigger('focus')
+    jest.runOnlyPendingTimers()
+
+    expect(wrapper.emitted('input')).toBeFalsy()
+  })
+})
+
+describe('when the input is blurred', () => {
+  it('should not emit an input event if empty', () => {
+    const wrapper = createMockComponent('input', { locale: 'en', distractionFree: true })
+
+    wrapper.find('input').trigger('blur')
+    jest.runOnlyPendingTimers()
+
+    expect(wrapper.emitted('input')).toBeFalsy()
+  })
+})

@@ -151,7 +151,9 @@ const addEventListener = el => {
     if (hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = el
-        format(el, el.value, hideNegligibleDecimalDigits)
+        if (value) {
+          format(el, value, hideNegligibleDecimalDigits)
+        }
         if (Math.abs(selectionStart - selectionEnd) > 0) {
           el.setSelectionRange(0, el.value.length)
         } else {
@@ -163,7 +165,9 @@ const addEventListener = el => {
 
   el.addEventListener('blur', () => {
     el.$ci.focus = false
-    applyFixedFractionFormat(el, el.$ci.numberValue)
+    if (el.$ci.numberValue) {
+      applyFixedFractionFormat(el, el.$ci.numberValue)
+    }
   })
 
   el.addEventListener('change', e => {
