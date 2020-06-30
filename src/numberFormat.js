@@ -1,5 +1,7 @@
 import { count, escapeRegExp, startsWith, substringBefore } from './utils/stringUtils'
 
+export const DECIMAL_SYMBOLS = [',', '.', '٫']
+
 export default class NumberFormat {
   constructor (options) {
     const { currency, locale, precision, autoDecimalMode, valueAsInteger } = options
@@ -75,7 +77,7 @@ export default class NumberFormat {
   }
 
   isFractionIncomplete (str) {
-    return this.normalizeDigits(str).match(new RegExp(`${this.integerPattern()}${escapeRegExp(this.decimalSymbol)}$`))
+    return !!this.normalizeDigits(str).match(new RegExp(`^${this.integerPattern()}${escapeRegExp(this.decimalSymbol)}$`))
   }
 
   isNegative (str) {
@@ -92,6 +94,13 @@ export default class NumberFormat {
 
   stripCurrencySymbol (str) {
     return str.replace(this.negativePrefix, '').replace(this.prefix, '').replace(this.suffix, '')
+  }
+
+  normalizeDecimalSymbol (str, from) {
+    DECIMAL_SYMBOLS.forEach(s => {
+      str = str.substr(0, from) + str.substr(from).replace(s, this.decimalSymbol)
+    })
+    return str
   }
 
   normalizeDigits (str) {

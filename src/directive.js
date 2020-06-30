@@ -3,7 +3,7 @@ import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretP
 import dispatchEvent from './utils/dispatchEvent'
 import equal from './utils/equal'
 import { toExternalNumberModel, toInternalNumberModel } from './utils/numberUtils'
-import NumberFormat from './numberFormat'
+import NumberFormat, { DECIMAL_SYMBOLS } from './numberFormat'
 import { AutoDecimalModeNumberMask, DefaultNumberMask } from './numberMask'
 
 const MAX_SAFE_INTEGER = Math.pow(2, 53) - 1
@@ -70,8 +70,12 @@ const applyFixedFractionFormat = (el, value, forcedChange = false) => {
 
 const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
   if (value != null) {
-    const { focus, options, numberMask, currencyFormat, previousConformedValue } = el.$ci
+    const { focus, decimalSymbolInsertedAt, options, numberMask, currencyFormat, previousConformedValue } = el.$ci
     const { allowNegative, distractionFree } = options
+    if (decimalSymbolInsertedAt !== undefined) {
+      value = currencyFormat.normalizeDecimalSymbol(value, decimalSymbolInsertedAt)
+      el.$ci.decimalSymbolInserted = undefined
+    }
     const conformedValue = numberMask.conformToMask(value, previousConformedValue)
     let formattedValue
     if (typeof conformedValue === 'object') {
@@ -116,8 +120,8 @@ const format = (el, value, hideNegligibleDecimalDigits = false) => {
   triggerEvent(el, 'input')
 }
 
-const addEventListener = (el) => {
-  el.addEventListener('input', (e) => {
+const addEventListener = el => {
+  el.addEventListener('input', e => {
     if (!e.detail) {
       const { value, selectionStart, $ci: { currencyFormat, options } } = el
       format(el, value)
@@ -127,7 +131,13 @@ const addEventListener = (el) => {
     }
   }, { capture: true })
 
-  el.addEventListener('format', (e) => {
+  el.addEventListener('keypress', e => {
+    if (DECIMAL_SYMBOLS.includes(e.key)) {
+      el.$ci.decimalSymbolInsertedAt = el.selectionStart
+    }
+  })
+
+  el.addEventListener('format', e => {
     const { currencyFormat, options, numberValue } = el.$ci
     const value = toInternalNumberModel(e.detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits)
     if (value !== numberValue) {
@@ -156,7 +166,7 @@ const addEventListener = (el) => {
     applyFixedFractionFormat(el, el.$ci.numberValue)
   })
 
-  el.addEventListener('change', (e) => {
+  el.addEventListener('change', e => {
     if (!e.detail) {
       triggerEvent(el, 'change')
     }

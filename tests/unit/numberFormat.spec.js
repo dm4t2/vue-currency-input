@@ -100,6 +100,22 @@ describe('NumberFormat', () => {
     })
   })
 
+  describe('isFractionIncomplete', () => {
+    it('should return true if the fraction is incomplete', () => {
+      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234.')).toBe(true)
+      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234')).toBe(false)
+      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234.3')).toBe(false)
+      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234.3.')).toBe(false)
+      expect(new NumberFormat({ locale: 'de' }).isFractionIncomplete('1,3,')).toBe(false)
+    })
+  })
+
+  describe('normalizeDecimalSymbol', () => {
+    it('should replace the first decimal symbol with the one of the current locale', () => {
+      expect(new NumberFormat({ locale: 'en' }).normalizeDecimalSymbol('1,23,4,567', 2)).toBe('1,23.4,567')
+    })
+  })
+
   describe('format', () => {
     it('should return the formatted value for the respective options', () => {
       expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).format(1234.5789)).toBe('€1,234.58')

@@ -171,6 +171,32 @@ describe('when the input is changed by the user', () => {
       expect(wrapper.element.value).toBe(Number.MAX_SAFE_INTEGER.toString())
     })
   })
+
+  describe('a decimal separator different from the current locale is entered', () => {
+    it('should apply the new value', () => {
+      const wrapper = mountComponent({ locale: 'en', distractionFree: false })
+      wrapper.setValue('€1,234,567.89')
+      wrapper.element.setSelectionRange(4, 4)
+
+      wrapper.trigger('keypress', { key: ',' })
+      wrapper.setValue('€1,2,34,567.89')
+
+      expect(wrapper.element.value).toBe('€12.34')
+    })
+  })
+
+  describe('a invalid character is entered', () => {
+    it('should ignore the input', () => {
+      const wrapper = mountComponent({ locale: 'en', distractionFree: false })
+      wrapper.setValue('€1,234,567.89')
+      wrapper.element.setSelectionRange(4, 4)
+
+      wrapper.trigger('keypress', { key: 'a' })
+      wrapper.setValue('€1,2a34,567.89')
+
+      expect(wrapper.element.value).toBe('€1,234,567.89')
+    })
+  })
 })
 
 describe('when the input is changed externally', () => {
