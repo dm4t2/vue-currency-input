@@ -24,13 +24,20 @@ Name | Arguments | Description
 `setValue` | `value` (Number) | Sets a value programmatically.
 
 ## Directive options
-The `v-currency` directive supports the same options as the `<currency-input>` component which have to be passed as object:
+The `v-currency` directive supports the same options as the `<currency-input>` component which have to be passed as object.
+All object keys have to be defined in camel case notation, for example:
 
 ```vue
 <template>
   <input v-currency="{
+    locale: 'en',
     currency: 'USD',
-    locale: 'en-US'
+    valueAsInteger: false,
+    distractionFree: true,
+    precision: 5,
+    autoDecimalMode: true,
+    valueRange: { min: 0 },
+    allowNegative: false
   }"/>
 </template>
 ```
