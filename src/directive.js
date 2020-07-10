@@ -1,8 +1,8 @@
-import { DEFAULT_OPTIONS } from './api'
+import { DEFAULT_OPTIONS, setValue } from './api'
 import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition, setCaretPosition } from './utils/caretPosition'
 import dispatchEvent from './utils/dispatchEvent'
 import equal from './utils/equal'
-import { toExternalNumberModel, toInternalNumberModel } from './utils/numberUtils'
+import { toExternalNumberModel } from './utils/numberUtils'
 import NumberFormat, { DECIMAL_SYMBOLS } from './numberFormat'
 import { AutoDecimalModeNumberMask, DefaultNumberMask } from './numberMask'
 
@@ -42,7 +42,7 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   }
   const currencyFormat = new NumberFormat(options)
   inputElement.$ci = {
-    ...inputElement.$ci || {},
+    ...inputElement.$ci || { numberValue: null },
     options,
     numberMask: options.autoDecimalMode ? new AutoDecimalModeNumberMask(currencyFormat) : new DefaultNumberMask(currencyFormat),
     currencyFormat
@@ -139,9 +139,10 @@ const addEventListener = el => {
 
   el.addEventListener('format', e => {
     const { currencyFormat, options, numberValue } = el.$ci
-    const value = toInternalNumberModel(e.detail.value, options.valueAsInteger, currencyFormat.maximumFractionDigits)
-    if (value !== numberValue) {
-      applyFixedFractionFormat(el, value)
+    const toInternalNumberModel = n => options.valueAsInteger && n != null ? n / Math.pow(10, currencyFormat.maximumFractionDigits) : n
+    const newValue = toInternalNumberModel(e.detail.value)
+    if (numberValue !== newValue) {
+      applyFixedFractionFormat(el, newValue)
     }
   })
 
@@ -178,13 +179,10 @@ const addEventListener = el => {
 }
 
 export default {
-  bind (el, { value: options }, { context }) {
-    const inputElement = init(el, options, context)
-    const { value, $ci: { currencyFormat } } = inputElement
-    if (value) {
-      applyFixedFractionFormat(inputElement, toInternalNumberModel(currencyFormat.parse(value), options.valueAsInteger, currencyFormat.maximumFractionDigits))
-    }
+  bind (el, { value }, { context }) {
+    const inputElement = init(el, value, context)
     addEventListener(inputElement)
+    setValue(inputElement, inputElement.$ci.currencyFormat.parse(inputElement.value))
   },
   componentUpdated (el, { value, oldValue }, { context }) {
     if (!equal(value, oldValue)) {
