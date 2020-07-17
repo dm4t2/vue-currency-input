@@ -173,15 +173,17 @@ describe('when the input is changed by the user', () => {
   })
 
   describe('a decimal separator different from the current locale is entered', () => {
-    it('should apply the new value', () => {
+    it('should accept the decimal separator only once', () => {
       const wrapper = mountComponent({ locale: 'en', distractionFree: false })
       wrapper.setValue('€1,234,567.89')
       wrapper.element.setSelectionRange(4, 4)
-
       wrapper.trigger('keypress', { key: ',' })
-      wrapper.setValue('€1,2,34,567.89')
 
+      wrapper.setValue('€1,2,34,567.89')
       expect(wrapper.element.value).toBe('€12.34')
+
+      wrapper.setValue('€1,234,567.89')
+      expect(wrapper.element.value).toBe('€1,234,567.89')
     })
   })
 

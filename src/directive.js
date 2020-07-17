@@ -74,7 +74,7 @@ const updateInputValue = (el, value, hideNegligibleDecimalDigits) => {
     const { allowNegative, distractionFree } = options
     if (decimalSymbolInsertedAt !== undefined) {
       value = currencyFormat.normalizeDecimalSymbol(value, decimalSymbolInsertedAt)
-      el.$ci.decimalSymbolInserted = undefined
+      el.$ci.decimalSymbolInsertedAt = undefined
     }
     const conformedValue = numberMask.conformToMask(value, previousConformedValue)
     let formattedValue
