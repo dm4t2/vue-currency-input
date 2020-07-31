@@ -166,7 +166,7 @@ const addEventListener = el => {
 
   el.addEventListener('blur', () => {
     el.$ci.focus = false
-    if (el.$ci.numberValue) {
+    if (el.$ci.numberValue != null) {
       applyFixedFractionFormat(el, el.$ci.numberValue)
     }
   })

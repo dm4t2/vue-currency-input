@@ -72,11 +72,20 @@ describe('when the input is focused', () => {
 
 describe('when the input is blurred', () => {
   it('should not emit an input event if empty', () => {
-    const wrapper = createMockComponent('input', { locale: 'en', distractionFree: true })
+    const expectValue = (value, emittedValue, options) => {
+      const wrapper = createMockComponent('input', { value }, options)
 
-    wrapper.find('input').trigger('blur')
-    jest.runOnlyPendingTimers()
+      wrapper.find('input').trigger('blur')
 
-    expect(wrapper.emitted('input')).toBeFalsy()
+      if (emittedValue === false) {
+        expect(wrapper.emitted('input')).toBeFalsy()
+      } else {
+        expect(wrapper.emitted('input')).toEqual([[emittedValue], [emittedValue]])
+      }
+    }
+
+    expectValue('', false, { locale: 'en' })
+    expectValue('0', '€0.00', { locale: 'en' })
+    expectValue('1234', '€1,234.00', { locale: 'en' })
   })
 })
