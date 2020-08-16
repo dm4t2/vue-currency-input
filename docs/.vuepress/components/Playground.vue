@@ -20,7 +20,7 @@
           Number value: <code class="ml-2">{{ value != null ? value : 'null' }}</code>
         </v-col>
       </v-row>
-      <v-divider class="my-4"/>
+      <v-divider class="my-4" />
       <v-row>
         <v-col
           cols="12"
@@ -35,34 +35,34 @@
           />
           <span class="title">Currency</span>
           <v-radio-group
+            v-model="selectedCurrencyOption"
             class="full-width mb-12"
             column
             hide-details
-            v-model="selectedCurrencyOption"
           >
-            <v-radio label="Use ISO code"/>
+            <v-radio label="Use ISO code" />
             <v-select
+              v-model="currencyCode"
               :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR']"
               :disabled="selectedCurrencyOption !== 0"
               class="pl-8 mb-6 py-0"
               hide-details
-              v-model="currencyCode"
             />
-            <v-radio label="Hide currency symbol"/>
-            <v-radio label="Use custom currency symbol"/>
+            <v-radio label="Hide currency symbol" />
+            <v-radio label="Use custom currency symbol" />
             <div class="pl-8">
               <v-text-field
+                v-model="prefix"
                 :disabled="selectedCurrencyOption !== 2"
                 class="py-0"
                 hide-details
                 placeholder="Prefix"
-                v-model="prefix"
               />
               <v-text-field
+                v-model="suffix"
                 :disabled="selectedCurrencyOption !== 2"
                 hide-details
                 placeholder="Suffix"
-                v-model="suffix"
               />
             </div>
           </v-radio-group>
@@ -70,78 +70,78 @@
           <div class="d-flex align-center justify-space-between">
             <span class="title">Distraction Free</span>
             <v-switch
+              v-model="distractionFree"
               class="my-0"
               hide-details
-              v-model="distractionFree"
             />
           </div>
           <div class="my-4">
             Enables easier input by hiding various parts of the formatting on focus.
           </div>
           <v-checkbox
+            v-model="hideCurrencySymbol"
             :disabled="!distractionFree"
             class="my-0"
             hide-details
             label="Hide currency symbol"
-            v-model="hideCurrencySymbol"
           />
           <v-checkbox
+            v-model="hideGroupingSymbol"
             :disabled="!distractionFree"
             class="my-0"
             hide-details
             label="Hide grouping symbol"
-            v-model="hideGroupingSymbol"
           />
           <v-checkbox
+            v-model="hideNegligibleDecimalDigits"
             :disabled="!distractionFree"
             class="my-0"
             hide-details
             label="Hide negligible decimal digits"
-            v-model="hideNegligibleDecimalDigits"
           />
         </v-col>
         <v-col
-          cols=12
+          cols="12"
           sm="6"
         >
           <div class="d-flex align-center justify-space-between mb-4">
             <span class="title">Precision</span>
             <v-switch
+              v-model="precisionEnabled"
               class="my-0"
               hide-details
-              v-model="precisionEnabled"
             />
           </div>
           <div class="mb-6">
             Override the number of displayed decimal digits. Can only be applied for currencies that support decimal digits.
           </div>
           <v-switch
+            v-model="precisionRangeEnabled"
             :disabled="!precisionEnabled"
             class="mb-8"
             hide-details
             label="Use range"
-            v-model="precisionRangeEnabled"
           />
           <v-range-slider
-            :disabled="!precisionEnabled"
-            :max="20"
-            thumb-label="always"
-            thumb-size="24"
             v-if="precisionRangeEnabled"
             v-model="precisionRange"
-          />
-          <v-slider
             :disabled="!precisionEnabled"
             :max="20"
             thumb-label="always"
             thumb-size="24"
+          />
+          <v-slider
             v-else
             v-model="precisionFixed"
+            :disabled="!precisionEnabled"
+            :max="20"
+            thumb-label="always"
+            thumb-size="24"
           />
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Allow Negative</span>
-            <v-switch v-model="allowNegative"/>
+            <v-switch v-model="allowNegative" />
           </div>
           <div class="mb-6">
             Whether the input of negative values is allowed.
@@ -149,20 +149,22 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Value Range</span>
-            <v-switch v-model="valueRangeEnabled"/>
+            <v-switch v-model="valueRangeEnabled" />
           </div>
-          <div class="mb-8">The validation is triggered on blur and automatically sets the respective threshold if out of range.</div>
+          <div class="mb-8">
+            The validation is triggered on blur and automatically sets the respective threshold if out of range.
+          </div>
           <v-range-slider
+            v-model="valueRange"
             :disabled="!valueRangeEnabled"
             :max="999"
             thumb-label="always"
             thumb-size="24"
-            v-model="valueRange"
           />
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Auto Decimal Mode</span>
-            <v-switch v-model="autoDecimalMode"/>
+            <v-switch v-model="autoDecimalMode" />
           </div>
           <div class="mb-6">
             Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits.
@@ -170,7 +172,7 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Value As Integer</span>
-            <v-switch v-model="valueAsInteger"/>
+            <v-switch v-model="valueAsInteger" />
           </div>
           <div class="mb-6">
             Whether the number value should be handled as integer instead of a float value.
@@ -183,6 +185,7 @@
 
 <script>
 import VCurrencyField from '../../../demo/VCurrencyField'
+
 export default {
   name: 'Playground',
   components: { VCurrencyField },
@@ -237,10 +240,7 @@ export default {
 }
 </script>
 
-<style
-  lang="scss"
-  scoped
->
+<style lang="scss" scoped>
 @import '~@mdi/font/css/materialdesignicons.css';
 @import '~vuetify/dist/vuetify.min.css';
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");
