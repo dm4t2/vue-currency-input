@@ -7,10 +7,9 @@
           cols="12"
           sm="6"
         >
-          <currency-input
+          <v-currency-field
             v-model="value"
-            v-bind="options"
-            class="demo__currency-input"
+            :options="options"
           />
         </v-col>
         <v-col
@@ -183,8 +182,10 @@
 </template>
 
 <script>
+import VCurrencyField from '../../../demo/VCurrencyField'
 export default {
   name: 'Playground',
+  components: { VCurrencyField },
   data () {
     return {
       value: 1234,
@@ -243,16 +244,6 @@ export default {
 @import '~@mdi/font/css/materialdesignicons.css';
 @import '~vuetify/dist/vuetify.min.css';
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");
-
-.demo__currency-input {
-  background-color: #fff;
-  font-size: 20px;
-  padding: 4px 8px;
-  width: 100%;
-  box-sizing: border-box;
-  border: thin solid rgba(0, 0, 0, .42);
-  border-radius: 4px;
-}
 
 .full-width /deep/ .v-input__control {
   width: 100%;

@@ -8,12 +8,12 @@ import { AutoDecimalModeNumberMask, DefaultNumberMask } from './numberMask'
 
 const MAX_SAFE_INTEGER = Math.pow(2, 53) - 1
 
-const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
+const init = (el, optionsFromBinding, { $ci }) => {
   const inputElement = el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
   if (!inputElement) {
     throw new Error('No input element found')
   }
-  const options = { ...($CI_DEFAULT_OPTIONS || DEFAULT_OPTIONS), ...optionsFromBinding }
+  const options = { ...($ci ? $ci.GLOBAL_OPTIONS : DEFAULT_OPTIONS), ...optionsFromBinding }
   const { distractionFree, autoDecimalMode, valueRange } = options
   if (typeof distractionFree === 'boolean') {
     options.distractionFree = {
@@ -50,10 +50,6 @@ const init = (el, optionsFromBinding, { $CI_DEFAULT_OPTIONS }) => {
   return inputElement
 }
 
-const validateValueRange = (value, valueRange) => {
-  return Math.min(Math.max(value, valueRange.min), valueRange.max)
-}
-
 const triggerEvent = (el, eventName) => {
   let { numberValue, currencyFormat, options } = el.$ci
   numberValue = toExternalNumberModel(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
@@ -62,7 +58,9 @@ const triggerEvent = (el, eventName) => {
 
 const applyFixedFractionFormat = (el, value, forcedChange = false) => {
   const { currencyFormat, options } = el.$ci
-  format(el, value != null ? currencyFormat.format(validateValueRange(value, options.valueRange)) : null)
+  const { min, max } = options.valueRange
+  const validateValueRange = () => Math.min(Math.max(value, min), max)
+  format(el, value != null ? currencyFormat.format(validateValueRange()) : null)
   if (value !== el.$ci.numberValue || forcedChange) {
     triggerEvent(el, 'change')
   }

@@ -1,6 +1,5 @@
 import dispatchEvent from './utils/dispatchEvent'
 import { toExternalNumberModel } from './utils/numberUtils'
-import NumberFormat from './numberFormat'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
@@ -14,22 +13,20 @@ export const DEFAULT_OPTIONS = {
 }
 
 /**
- * Parses a number from a currency formatted string.
+ * Returns the current number value of an input.
  *
- * @param {String} formattedValue The currency formatted string to be parsed, for example `$1,234.50`.
- * @param {Object} options The configured options of the respective `v-currency` directive.
- * @returns {Number | null} The parsed number or `null` if the formatted string does not match.
+ * @param {HTMLInputElement} el The input element the `v-currency` directive is bound to.
+ * @returns {Number | null} The current number value or `null` if empty.
  */
-export const parseCurrency = (formattedValue, options) => {
-  const mergedOptions = { ...DEFAULT_OPTIONS, ...options }
-  const numberFormat = new NumberFormat(mergedOptions)
-  return toExternalNumberModel(numberFormat.parse(formattedValue), mergedOptions.valueAsInteger, numberFormat.maximumFractionDigits)
+export const getValue = el => {
+  const { numberValue, currencyFormat, options } = el.$ci
+  return toExternalNumberModel(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
 }
 
 /**
- * Sets a value of a input programmatically.
+ * Sets the value of an input programmatically.
  *
- * @param {HTMLInputElement} el An input element using on the `v-currency` directive.
+ * @param {HTMLInputElement} el The input element the `v-currency` directive is bound to.
  * @param {Number} value The number to be set.
  */
 export const setValue = (el, value) => dispatchEvent(el, 'format', { value })

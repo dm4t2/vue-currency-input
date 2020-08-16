@@ -20,8 +20,6 @@ Add the Vue plugin in your `main.js`:
 
 <<< @/docs/guide/main.js
 
-This registers the component/directive globally and provides the Vue instance method `$parseCurrency`.
-
 ### Nuxt
 Add `vue-currency-input/nuxt` to the modules section of `nuxt.config.js`:
 
@@ -55,8 +53,8 @@ The `v-currency` directive is great if you want to decorate existing input compo
 <<< @/docs/guide/DirectiveUsage.vue
 
 #### Getting the number value
-In comparision to the `<currency-input>` component the `v-currency` directive always emits the formatted string instead of the number value when used with `v-model`. 
-To get the number value you can use the [`parseCurrency` method](/api/#parsecurrency).
+In comparison to the `<currency-input>` component the `v-currency` directive always emits the formatted string instead of the number value when used with `v-model`. 
+To get the number value you can use the [`getValue` method](/api/#getvalue).
 
 ## Import on demand
 You can also import the component/directive on demand and register them locally in your Vue files. 

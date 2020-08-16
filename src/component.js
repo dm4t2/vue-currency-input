@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     options () {
-      const options = { ...this.$CI_DEFAULT_OPTIONS || DEFAULT_OPTIONS }
+      const options = { ...this.$ci ? this.$ci.GLOBAL_OPTIONS : DEFAULT_OPTIONS }
       Object.keys(DEFAULT_OPTIONS).forEach(key => {
         if (this[key] !== undefined) {
           options[key] = this[key]

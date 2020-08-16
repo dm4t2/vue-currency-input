@@ -1,25 +1,20 @@
-import { DEFAULT_OPTIONS, parseCurrency, setValue } from '../../src/api'
-import NumberFormat from '../../src/numberFormat'
-import dispatchEvent from '../../src/utils/dispatchEvent'
+import dispatchEvent from '@/utils/dispatchEvent'
+import { getValue, setValue } from '@/api'
 
 jest.mock('../../src/numberFormat')
 jest.mock('../../src/utils/dispatchEvent')
 
-describe('parseCurrency', () => {
-  it('delegates to the internal parse method with the expected arguments', () => {
-    const formattedValue = '$1,234.50'
-    const locale = 'en'
-    const currency = 'USD'
+describe('getValue', () => {
+  it('should return the current number value of an input', () => {
+    const el = document.createElement('input')
+    el.$ci = { numberValue: 1234, options: { valueAsInteger: true }, currencyFormat: { maximumFractionDigits: 3 } }
 
-    parseCurrency(formattedValue, { locale, currency })
-
-    expect(NumberFormat).toHaveBeenCalledWith({ ...DEFAULT_OPTIONS, locale, currency })
-    expect(NumberFormat.mock.instances[0].parse).toHaveBeenCalledWith(formattedValue)
+    expect(getValue(el)).toBe(1234000)
   })
 })
 
 describe('setValue', () => {
-  it('dispatches a format event on the given input', () => {
+  it('should set the value of an input', () => {
     const el = document.createElement('input')
 
     setValue(el, 1234)

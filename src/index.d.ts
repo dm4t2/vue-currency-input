@@ -45,12 +45,16 @@ export const CurrencyDirective: DirectiveOptions
 
 export const CurrencyInput: Component
 
-export function parseCurrency (formattedValue: string, options: CurrencyInputOptions): number
+export function getValue (el: HTMLInputElement): number | null
 
 export function setValue (el: HTMLInputElement, value: Number): void
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $parseCurrency (formattedValue: string, options?: CurrencyInputOptions): number
+    GLOBAL_OPTIONS: CurrencyInputOptions
+
+    $getValue (el: HTMLInputElement): number | null
+
+    $setValue (el: HTMLInputElement, value: Number): void
   }
 }
