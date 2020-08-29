@@ -1,4 +1,4 @@
-import { DEFAULT_OPTIONS, setValue } from './api'
+import { DEFAULT_OPTIONS, getValue, setValue } from './api'
 import currencyDirective from './directive'
 
 export default {
@@ -10,14 +10,13 @@ export default {
       }],
       on: {
         ...this.$listeners,
-        change: e => {
-          if (e.detail) {
-            this.$emit('change', e.detail.numberValue)
-          }
+        change: () => {
+          this.$emit('change', getValue(this.$el))
         },
-        input: e => {
-          if (e.detail && this.value !== e.detail.numberValue) {
-            this.$emit('input', e.detail.numberValue)
+        input: () => {
+          const numberValue = getValue(this.$el)
+          if (this.value !== numberValue) {
+            this.$emit('input', numberValue)
           }
         }
       }

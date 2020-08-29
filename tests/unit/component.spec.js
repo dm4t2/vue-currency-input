@@ -332,7 +332,7 @@ describe('when the input is changed', () => {
     wrapper.setValue('100')
     wrapper.trigger('change')
 
-    expect(wrapper.emitted('change')).toEqual([[100]])
+    expect(wrapper.emitted('change')).toEqual([[100], [100]])
   })
 })
 
@@ -371,6 +371,17 @@ describe('when the input is blurred', () => {
       expect(wrapper.element.value).toBe('€1,000.00')
       expect(wrapper.emitted('change')[0][0]).toBe(1000)
     })
+  })
+
+  it('should not emit an input or change event if empty', () => {
+    const wrapper = mountComponent({ locale: 'en' })
+
+    wrapper.trigger('focus')
+    wrapper.setValue('')
+    wrapper.trigger('blur')
+
+    expect(wrapper.emitted('input')).toBeFalsy()
+    expect(wrapper.emitted('change')).toBeFalsy()
   })
 })
 

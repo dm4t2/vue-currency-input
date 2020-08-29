@@ -1,6 +1,3 @@
-import dispatchEvent from './utils/dispatchEvent'
-import { toExternalNumberModel } from './utils/numberUtils'
-
 export const DEFAULT_OPTIONS = {
   locale: undefined,
   currency: 'EUR',
@@ -15,18 +12,17 @@ export const DEFAULT_OPTIONS = {
 /**
  * Returns the current number value of an input.
  *
- * @param {HTMLInputElement} el The input element the `v-currency` directive is bound to.
+ * @param ref {Element | VueConstructor} The element or Vue component the `v-currency` directive is bound to.
  * @returns {Number | null} The current number value or `null` if empty.
  */
-export const getValue = el => {
-  const { numberValue, currencyFormat, options } = el.$ci
-  return toExternalNumberModel(numberValue, options.valueAsInteger, currencyFormat.maximumFractionDigits)
-}
+export const getValue = (ref) => (ref.$el || ref).$ci.getValue()
 
 /**
  * Sets the value of an input programmatically.
  *
- * @param {HTMLInputElement} el The input element the `v-currency` directive is bound to.
+ * @param ref {Element | VueConstructor} The element or Vue component the `v-currency` directive is bound to.
  * @param {Number} value The number to be set.
  */
-export const setValue = (el, value) => dispatchEvent(el, 'format', { value })
+export const setValue = (ref, value) => {
+  (ref.$el || ref).$ci.setValue(value)
+}

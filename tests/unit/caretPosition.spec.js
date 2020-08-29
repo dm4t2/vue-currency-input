@@ -1,4 +1,4 @@
-import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition } from '../../src/utils/caretPosition'
+import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition } from '../../src/caretPosition'
 import NumberFormat from '../../src/numberFormat'
 
 const numberFormat = new NumberFormat({ locale: 'en', currency: 'USD' })

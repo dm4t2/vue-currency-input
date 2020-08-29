@@ -1,6 +1,4 @@
-import { count } from './stringUtils'
-
-export const setCaretPosition = (el, position) => el.setSelectionRange(position, position)
+import { count } from './utils/stringUtils'
 
 export const getCaretPositionAfterFormat = (newValue, inputtedValue, caretPosition, numberFormat, options) => {
   const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = numberFormat

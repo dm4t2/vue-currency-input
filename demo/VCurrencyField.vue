@@ -1,16 +1,17 @@
 <template>
   <VTextField
-    @input="$emit('input', $ci.getValue(inputRef))"
+    ref="input"
+    v-currency="options"
+    :value="formattedValue"
+    dense
     hide-details
     outlined
-    ref="textField"
-    v-currency="options"
+    @change="onChange"
+    @input="onInput"
   />
 </template>
 
 <script>
-import { setValue } from '../src/api'
-
 export default {
   name: 'VCurrencyField',
   props: {
@@ -25,17 +26,29 @@ export default {
   },
   data () {
     return {
-      inputRef: null
+      formattedValue: null
     }
   },
   watch: {
     value (value) {
-      setValue(this.inputRef, value)
+      this.setValue(value)
     }
   },
   mounted () {
-    this.inputRef = this.$refs.textField.$refs.input
-    setValue(this.inputRef, this.value)
+    this.setValue(this.value)
+  },
+  methods: {
+    setValue (value) {
+      this.$ci.setValue(this.$refs.input, value)
+    },
+    onInput (value) {
+      this.$emit('input', this.$ci.getValue(this.$refs.input))
+      this.formattedValue = value
+    },
+    onChange (value) {
+      this.$emit('change', this.$ci.getValue(this.$refs.input))
+      this.formattedValue = value
+    }
   }
 }
 </script>
