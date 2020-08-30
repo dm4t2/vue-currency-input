@@ -12,7 +12,7 @@ const equal = (a, b) => {
   if (!keys.every(Object.prototype.hasOwnProperty.bind(b))) {
     return false
   }
-  return keys.every(key => equal(a[key], b[key]))
+  return keys.every((key) => equal(a[key], b[key]))
 }
 
 export default equal

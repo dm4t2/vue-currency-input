@@ -4,7 +4,7 @@ import CurrencyInput from '../../src/component'
 
 jest.useFakeTimers()
 
-const mountComponent = propsData => shallowMount(CurrencyInput, { propsData })
+const mountComponent = (propsData) => shallowMount(CurrencyInput, { propsData })
 
 const expectInitialValue = async (expectedValue, propsData) => {
   const wrapper = mountComponent(propsData)

@@ -151,7 +151,7 @@ export class NumberInput {
       }
     })
 
-    this.el.addEventListener('keypress', e => {
+    this.el.addEventListener('keypress', (e) => {
       if (DECIMAL_SYMBOLS.includes(e.key)) {
         this.decimalSymbolInsertedAt = this.el.selectionStart
       }

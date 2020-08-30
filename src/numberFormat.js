@@ -10,7 +10,7 @@ export default class NumberFormat {
 
     this.locale = locale
     this.currency = currency
-    this.digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => i.toLocaleString(locale))
+    this.digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => i.toLocaleString(locale))
     this.decimalSymbol = count(ps, this.digits[0]) ? ps.substr(ps.indexOf(this.digits[6]) + 1, 1) : undefined
     this.groupingSymbol = ps.substr(ps.indexOf(this.digits[3]) + 1, 1)
     this.minusSymbol = substringBefore(Number(-1).toLocaleString(locale), this.digits[1])
@@ -100,7 +100,7 @@ export default class NumberFormat {
   }
 
   normalizeDecimalSymbol (str, from) {
-    DECIMAL_SYMBOLS.forEach(s => {
+    DECIMAL_SYMBOLS.forEach((s) => {
       str = str.substr(0, from) + str.substr(from).replace(s, this.decimalSymbol)
     })
     return str

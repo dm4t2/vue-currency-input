@@ -25,7 +25,7 @@ const mountComponent = (tag = 'input', propsData = {}, directiveOptions = {}, gl
             value: this.value
           },
           on: {
-            input: event => {
+            input: (event) => {
               this.$emit('input', event.target.value)
             }
           }
