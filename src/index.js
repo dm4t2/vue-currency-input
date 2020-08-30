@@ -1,10 +1,11 @@
-import { getValue, setValue } from './api'
+import { getValue, parse, setValue } from './api'
 import component from './component'
 import directive from './directive'
 import plugin from './plugin'
 
 export default plugin
 export {
+  parse,
   getValue,
   setValue,
   component as CurrencyInput,
