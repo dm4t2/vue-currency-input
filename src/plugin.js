@@ -1,4 +1,4 @@
-import { DEFAULT_OPTIONS, getValue, setValue } from './api'
+import { getValue, parse, setValue } from './api'
 import component from './component'
 import directive from './directive'
 
@@ -11,9 +11,10 @@ export default {
     Vue.component(componentName, component)
     Vue.directive(directiveName, directive)
     Vue.prototype.$ci = {
+      parse: (formattedValue, options) => parse(formattedValue, { ...globalOptions, ...options }),
       getValue,
       setValue,
-      GLOBAL_OPTIONS: { ...DEFAULT_OPTIONS, ...globalOptions }
+      globalOptions
     }
   }
 }

@@ -58,20 +58,12 @@ export class NumberInput {
     }
   }
 
-  toInternalNumberModel (number) {
-    return this.options.valueAsInteger && number != null ? number / Math.pow(10, this.currencyFormat.maximumFractionDigits) : number
-  }
-
-  toExternalNumberModel (number) {
-    return this.options.valueAsInteger && number != null ? Number(number.toFixed(this.currencyFormat.maximumFractionDigits).split('.').join('')) : number
-  }
-
   getValue () {
-    return this.toExternalNumberModel(this.numberValue)
+    return this.currencyFormat.parse(this.formattedValue, this.options.valueAsInteger)
   }
 
   setValue (value) {
-    const newValue = this.toInternalNumberModel(value)
+    const newValue = this.options.valueAsInteger && value != null ? value / Math.pow(10, this.currencyFormat.maximumFractionDigits) : value
     if (newValue !== this.numberValue) {
       this.applyFixedFractionFormat(newValue)
     }

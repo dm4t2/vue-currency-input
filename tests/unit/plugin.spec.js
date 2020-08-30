@@ -1,16 +1,10 @@
 import plugin from '@/plugin'
 import Vue from 'vue'
-import { DEFAULT_OPTIONS, getValue, setValue } from '@/api'
+import { getValue, setValue } from '@/api'
 import component from '@/component'
 import directive from '@/directive'
 
 describe('when the plugin is installed', () => {
-  it('should use the default options if no global options are set', () => {
-    plugin.install(Vue)
-
-    expect(Vue.prototype.$ci.GLOBAL_OPTIONS).toEqual(DEFAULT_OPTIONS)
-  })
-
   it('should provide the respective API methods on the Vue prototype', () => {
     plugin.install(Vue)
 
@@ -29,6 +23,6 @@ describe('when the plugin is installed', () => {
 
     expect(Vue.component).toHaveBeenCalledWith(componentName, component)
     expect(Vue.directive).toHaveBeenCalledWith(directiveName, directive)
-    expect(Vue.prototype.$ci.GLOBAL_OPTIONS).toEqual(expect.objectContaining(globalOptions))
+    expect(Vue.prototype.$ci.globalOptions).toEqual(globalOptions)
   })
 })

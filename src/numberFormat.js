@@ -40,15 +40,18 @@ export default class NumberFormat {
     }
   }
 
-  parse (str) {
-    const negative = this.isNegative(str)
-    str = this.normalizeDigits(str)
-    str = this.stripCurrencySymbol(str)
-    str = this.stripMinusSymbol(str)
-    const fraction = this.decimalSymbol ? `(${escapeRegExp(this.decimalSymbol)}\\d*)?` : ''
-    const match = str.match(new RegExp(`^${this.integerPattern()}${fraction}$`))
-    if (match) {
-      return Number(`${negative ? '-' : ''}${(this.onlyDigits(match[1]))}.${(this.onlyDigits(match[3] || ''))}`)
+  parse (str, valueAsInteger = false) {
+    if (str) {
+      const negative = this.isNegative(str)
+      str = this.normalizeDigits(str)
+      str = this.stripCurrencySymbol(str)
+      str = this.stripMinusSymbol(str)
+      const fraction = this.decimalSymbol ? `(${escapeRegExp(this.decimalSymbol)}\\d*)?` : ''
+      const match = str.match(new RegExp(`^${this.integerPattern()}${fraction}$`))
+      if (match) {
+        const number = Number(`${negative ? '-' : ''}${(this.onlyDigits(match[1]))}.${(this.onlyDigits(match[3] || ''))}`)
+        return valueAsInteger ? Number(number.toFixed(this.maximumFractionDigits).split('.').join('')) : number
+      }
     }
     return null
   }

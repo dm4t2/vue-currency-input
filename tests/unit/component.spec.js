@@ -26,7 +26,7 @@ describe('initial value', () => {
     })
 
     it('should respect the global options if present', async () => {
-      config.mocks.$ci = { GLOBAL_OPTIONS: { ...DEFAULT_OPTIONS, locale: 'uk', currency: 'UAH' } }
+      config.mocks.$ci = { globalOptions: { ...DEFAULT_OPTIONS, locale: 'uk', currency: 'UAH' } }
 
       await expectInitialValue('1 234,50 ₴', { value: 1234.5 })
     })
@@ -92,10 +92,10 @@ describe('component options', () => {
   })
 
   it('should fallback to the global options values for the props which are not set', () => {
-    config.mocks.$ci = { GLOBAL_OPTIONS: { ...DEFAULT_OPTIONS, distractionFree: false, currency: 'USD' } }
+    config.mocks.$ci = { globalOptions: { ...DEFAULT_OPTIONS, distractionFree: false, currency: 'USD' } }
     const wrapper = mountComponent({ locale: 'de' })
 
-    expect(wrapper.vm.options).toEqual({ ...config.mocks.$ci.GLOBAL_OPTIONS, locale: 'de' })
+    expect(wrapper.vm.options).toEqual({ ...config.mocks.$ci.globalOptions, locale: 'de' })
   })
 
   it('should reformat the value if the options get changed', async () => {

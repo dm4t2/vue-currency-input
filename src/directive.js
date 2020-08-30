@@ -8,7 +8,11 @@ export default {
     if (!inputElement) {
       throw new Error('No input element found')
     }
-    const options = { ...(vnode.context.$ci ? vnode.context.$ci.GLOBAL_OPTIONS : DEFAULT_OPTIONS), ...optionsFromBinding }
+    const options = {
+      ...DEFAULT_OPTIONS,
+      ...(vnode.context.$ci || {}).globalOptions,
+      ...optionsFromBinding
+    }
     const listeners = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners)
 
     const emit = (event, data) => {

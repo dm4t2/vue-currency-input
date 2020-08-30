@@ -55,6 +55,7 @@ describe('NumberFormat', () => {
 
   describe('parse', () => {
     it('should return null if the value is empty', () => {
+      expect(new NumberFormat({ locale: 'en' }).parse(null)).toBeNull()
       expect(new NumberFormat({ locale: 'en' }).parse('')).toBeNull()
       expect(new NumberFormat({ locale: 'en' }).parse(' ')).toBeNull()
     })

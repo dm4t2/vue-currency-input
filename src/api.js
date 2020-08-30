@@ -1,3 +1,5 @@
+import NumberFormat from './numberFormat'
+
 export const DEFAULT_OPTIONS = {
   locale: undefined,
   currency: 'EUR',
@@ -7,6 +9,18 @@ export const DEFAULT_OPTIONS = {
   autoDecimalMode: false,
   valueRange: undefined,
   allowNegative: true
+}
+
+/**
+ * Parses a number from a currency formatted string.
+ *
+ * @param {String} formattedValue The currency formatted string to be parsed, for example `$1,234.50`.
+ * @param {Object} options The configured options of the respective `v-currency` directive.
+ * @returns {Number | null} The parsed number or `null` if the formatted string does not match.
+ */
+export const parse = (formattedValue, options) => {
+  const mergedOptions = { ...DEFAULT_OPTIONS, ...options }
+  return new NumberFormat(mergedOptions).parse(formattedValue, mergedOptions.valueAsInteger)
 }
 
 /**

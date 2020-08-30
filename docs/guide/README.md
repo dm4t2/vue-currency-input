@@ -54,7 +54,7 @@ The `v-currency` directive is great if you want to decorate existing input compo
 
 #### Getting the number value
 In comparison to the `<currency-input>` component the `v-currency` directive always emits the formatted string instead of the number value when used with `v-model`. 
-To get the number value you can use the [`getValue` method](/api/#getvalue).
+To get the number value you can either use [`parse`](/api/#parse) or [`getValue`](/api/#getvalue).
 
 ## Import on demand
 You can also import the component/directive on demand and register them locally in your Vue files. 
