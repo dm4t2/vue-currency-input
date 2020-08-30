@@ -240,12 +240,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 @import '~@mdi/font/css/materialdesignicons.css';
 @import '~vuetify/dist/vuetify.min.css';
 @import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");
-
-.full-width /deep/ .v-input__control {
-  width: 100%;
-}
 </style>
