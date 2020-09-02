@@ -13,16 +13,16 @@ export default {
       ...(vnode.context.$ci || {}).globalOptions,
       ...optionsFromBinding
     }
-    const listeners = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners)
+    const listeners = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners) || {}
 
     const emit = (event, data) => {
       if (listeners[event]) {
-        listeners[event].fns(vnode.componentOptions ? data : { target: { value: data } })
+        listeners[event](vnode.componentOptions ? data : { target: { value: data } })
       }
     }
 
     el.$ci = new NumberInput(inputElement, options, {
-      onChange: () => emit('change', inputElement.value),
+      onChange: () => { emit('change', inputElement.value) },
       onInput: () => { emit('input', inputElement.value) }
     })
   },
