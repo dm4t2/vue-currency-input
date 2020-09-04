@@ -131,7 +131,7 @@ export class NumberInput {
       if (this.focus) {
         this.setCaretPosition(getCaretPositionAfterFormat(this.formattedValue, value, selectionStart, this.currencyFormat, this.options))
       }
-    })
+    }, { capture: true })
 
     this.el.addEventListener('focus', () => {
       this.focus = true
