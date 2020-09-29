@@ -1,8 +1,19 @@
 import NumberFormat, { DECIMAL_SYMBOLS } from './numberFormat'
-import { AutoDecimalModeNumberMask, DefaultNumberMask } from './numberMask'
-import { getCaretPositionAfterFormat, getDistractionFreeCaretPosition } from './caretPosition'
+import { AutoDecimalDigitsNumberMask, DefaultNumberMask } from './numberMask'
+import { count } from './stringUtils'
 
 const MAX_SAFE_INTEGER = Math.pow(2, 53) - 1
+
+export const DEFAULT_OPTIONS = {
+  locale: undefined,
+  currency: undefined,
+  valueAsInteger: false,
+  distractionFree: true,
+  precision: undefined,
+  autoDecimalDigits: false,
+  valueRange: undefined,
+  allowNegative: true
+}
 
 export class NumberInput {
   constructor (el, options, callbackFns) {
@@ -14,36 +25,34 @@ export class NumberInput {
     this.setValue(this.currencyFormat.parse(this.el.value))
   }
 
-  init (newOptions) {
-    const options = { ...newOptions }
-    const { distractionFree, autoDecimalMode, valueRange } = options
-    if (typeof distractionFree === 'boolean') {
-      options.distractionFree = {
-        hideCurrencySymbol: distractionFree,
-        hideNegligibleDecimalDigits: distractionFree,
-        hideGroupingSymbol: distractionFree
-      }
-    }
+  init (options) {
+    const { distractionFree, autoDecimalDigits, valueRange, valueAsInteger, allowNegative } = { ...DEFAULT_OPTIONS, ...options }
+    this.autoDecimalDigits = autoDecimalDigits
+    this.valueAsInteger = valueAsInteger
+    this.allowNegative = allowNegative
+    this.hideCurrencySymbolOnFocus = distractionFree === true || !!(distractionFree || {}).hideCurrencySymbol
+    this.hideNegligibleDecimalDigitsOnFocus = distractionFree === true || !!(distractionFree || {}).hideNegligibleDecimalDigits
+    this.hideGroupingSymbolOnFocus = distractionFree === true || !!(distractionFree || {}).hideGroupingSymbol
+
     if (valueRange) {
-      options.valueRange = {
+      this.valueRange = {
         min: valueRange.min !== undefined ? Math.max(valueRange.min, -MAX_SAFE_INTEGER) : -MAX_SAFE_INTEGER,
         max: valueRange.max !== undefined ? Math.min(valueRange.max, MAX_SAFE_INTEGER) : MAX_SAFE_INTEGER
       }
     } else {
-      options.valueRange = {
+      this.valueRange = {
         min: -MAX_SAFE_INTEGER,
         max: MAX_SAFE_INTEGER
       }
     }
-    if (autoDecimalMode) {
-      options.distractionFree.hideNegligibleDecimalDigits = false
+    if (autoDecimalDigits) {
+      this.hideNegligibleDecimalDigitsOnFocus = false
       this.el.setAttribute('inputmode', 'numeric')
     } else {
       this.el.setAttribute('inputmode', 'decimal')
     }
-    this.options = options
-    this.currencyFormat = new NumberFormat(this.options)
-    this.numberMask = options.autoDecimalMode ? new AutoDecimalModeNumberMask(this.currencyFormat) : new DefaultNumberMask(this.currencyFormat)
+    this.currencyFormat = new NumberFormat(options)
+    this.numberMask = autoDecimalDigits ? new AutoDecimalDigitsNumberMask(this.currencyFormat) : new DefaultNumberMask(this.currencyFormat)
   }
 
   setOptions (options) {
@@ -59,22 +68,26 @@ export class NumberInput {
   }
 
   getValue () {
-    return this.currencyFormat.parse(this.formattedValue, this.options.valueAsInteger)
+    const numberValue = this.valueAsInteger && this.numberValue != null ? Number(this.numberValue.toFixed(this.currencyFormat.maximumFractionDigits).split('.').join('')) : this.numberValue
+    return {
+      number: numberValue,
+      formatted: this.formattedValue
+    }
   }
 
   setValue (value) {
-    const newValue = this.options.valueAsInteger && value != null ? value / Math.pow(10, this.currencyFormat.maximumFractionDigits) : value
+    const newValue = this.valueAsInteger && value != null ? value / Math.pow(10, this.currencyFormat.maximumFractionDigits) : value
     if (newValue !== this.numberValue) {
       this.applyFixedFractionFormat(newValue)
     }
   }
 
   validateValueRange (value) {
-    const { min, max } = this.options.valueRange
+    const { min, max } = this.valueRange
     return Math.min(Math.max(value, min), max)
   }
 
-  updateInputValue (value, hideNegligibleDecimalDigits = false) {
+  format (value, hideNegligibleDecimalDigits = false) {
     if (value != null) {
       if (this.decimalSymbolInsertedAt !== undefined) {
         value = this.currencyFormat.normalizeDecimalSymbol(value, this.decimalSymbolInsertedAt)
@@ -94,17 +107,17 @@ export class NumberInput {
         formattedValue = numberValue > MAX_SAFE_INTEGER
           ? this.formattedValue
           : this.currencyFormat.format(numberValue, {
-            useGrouping: !(this.focus && this.options.distractionFree.hideGroupingSymbol),
+            useGrouping: !(this.focus && this.hideGroupingSymbolOnFocus),
             minimumFractionDigits,
             maximumFractionDigits
           })
       } else {
         formattedValue = conformedValue
       }
-      if (!this.options.allowNegative) {
+      if (!this.allowNegative) {
         formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
       }
-      if (this.focus && this.options.distractionFree.hideCurrencySymbol) {
+      if (this.focus && this.hideCurrencySymbolOnFocus) {
         formattedValue = formattedValue
           .replace(this.currencyFormat.negativePrefix, this.currencyFormat.minusSymbol)
           .replace(this.currencyFormat.prefix, '')
@@ -117,10 +130,6 @@ export class NumberInput {
       this.el.value = this.numberValue = null
     }
     this.formattedValue = this.el.value
-  }
-
-  format (value) {
-    this.updateInputValue(value)
     this.callbackFns.onInput(this.getValue())
   }
 
@@ -129,26 +138,64 @@ export class NumberInput {
       const { value, selectionStart } = this.el
       this.format(value)
       if (this.focus) {
-        this.setCaretPosition(getCaretPositionAfterFormat(this.formattedValue, value, selectionStart, this.currencyFormat, this.options))
+        const getCaretPositionAfterFormat = () => {
+          const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = this.currencyFormat
+
+          let caretPositionFromLeft = value.length - selectionStart
+          const newValueLength = this.formattedValue.length
+          if (this.formattedValue.substr(selectionStart, 1) === groupingSymbol && count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1) {
+            return newValueLength - caretPositionFromLeft - 1
+          }
+
+          if (decimalSymbol) {
+            const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
+            if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
+              return this.formattedValue.indexOf(decimalSymbol) + 1
+            } else {
+              if (!this.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
+                if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
+                  caretPositionFromLeft -= 1
+                }
+              }
+            }
+          }
+          return this.hideCurrencySymbolOnFocus ? newValueLength - caretPositionFromLeft : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
+        }
+        this.setCaretPosition(getCaretPositionAfterFormat())
       }
     }, { capture: true })
 
     this.el.addEventListener('focus', () => {
       this.focus = true
-      const { hideCurrencySymbol, hideGroupingSymbol, hideNegligibleDecimalDigits } = this.options.distractionFree
-      if (hideCurrencySymbol || hideGroupingSymbol || hideNegligibleDecimalDigits) {
-        setTimeout(() => {
-          const { value, selectionStart, selectionEnd } = this.el
-          if (value) {
-            this.updateInputValue(this.el.value, hideNegligibleDecimalDigits)
+      setTimeout(() => {
+        const { value, selectionStart, selectionEnd } = this.el
+        if ((this.hideCurrencySymbolOnFocus || this.hideGroupingSymbolOnFocus || this.hideNegligibleDecimalDigitsOnFocus) && value) {
+          this.format(value, this.hideNegligibleDecimalDigitsOnFocus)
+        }
+        if (Math.abs(selectionStart - selectionEnd) > 0) {
+          this.setCaretPosition(0, this.el.value.length)
+        } else {
+          const getSelectionStart = () => {
+            const { prefix, suffix, groupingSymbol } = this.currencyFormat
+            if (!this.hideCurrencySymbolOnFocus) {
+              if (selectionStart > value.length - suffix.length) {
+                return this.formattedValue.length - suffix.length
+              } else if (selectionStart < prefix.length) {
+                return prefix.length
+              }
+            }
+            let result = selectionStart
+            if (this.hideCurrencySymbolOnFocus) {
+              result -= prefix.length
+            }
+            if (this.hideGroupingSymbolOnFocus) {
+              result -= count(value.substring(0, selectionStart), groupingSymbol)
+            }
+            return result
           }
-          if (Math.abs(selectionStart - selectionEnd) > 0) {
-            this.setCaretPosition(0, this.el.value.length)
-          } else {
-            this.setCaretPosition(getDistractionFreeCaretPosition(this.currencyFormat, this.options, value, selectionStart))
-          }
-        })
-      }
+          this.setCaretPosition(getSelectionStart())
+        }
+      })
     })
 
     this.el.addEventListener('keypress', (e) => {

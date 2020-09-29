@@ -25,17 +25,29 @@ export default {
       exports: 'named',
       file: pkg.main,
       globals: {
-        vue: 'Vue'
+        'vue-demi': 'VueDemi'
+      },
+      banner
+    },
+    {
+      plugins: [
+        buble({
+          objectAssign: true
+        })
+      ],
+      name: 'VueCurrencyInput',
+      format: 'iife',
+      exports: 'named',
+      file: pkg.unpkg,
+      globals: {
+        'vue-demi': 'VueDemi'
       },
       banner
     }
   ],
   plugins: [
-    buble({
-      objectAssign: true
-    }),
     cleanup(),
     filesize()
   ],
-  external: ['vue']
+  external: ['vue-demi']
 }

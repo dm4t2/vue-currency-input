@@ -9,7 +9,7 @@
         >
           <v-currency-field
             v-model="value"
-            :options="options"
+            v-bind="options"
           />
         </v-col>
         <v-col
@@ -34,39 +34,12 @@
             hide-details
           />
           <span class="title">Currency</span>
-          <v-radio-group
-            v-model="selectedCurrencyOption"
-            class="full-width mb-12"
-            column
+          <v-select
+            v-model="currency"
+            :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR']"
+            class="mb-12"
             hide-details
-          >
-            <v-radio label="Use ISO code" />
-            <v-select
-              v-model="currencyCode"
-              :items="['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR']"
-              :disabled="selectedCurrencyOption !== 0"
-              class="pl-8 mb-6 py-0"
-              hide-details
-            />
-            <v-radio label="Hide currency symbol" />
-            <v-radio label="Use custom currency symbol" />
-            <div class="pl-8">
-              <v-text-field
-                v-model="prefix"
-                :disabled="selectedCurrencyOption !== 2"
-                class="py-0"
-                hide-details
-                placeholder="Prefix"
-              />
-              <v-text-field
-                v-model="suffix"
-                :disabled="selectedCurrencyOption !== 2"
-                hide-details
-                placeholder="Suffix"
-              />
-            </div>
-          </v-radio-group>
-
+          />
           <div class="d-flex align-center justify-space-between">
             <span class="title">Distraction Free</span>
             <v-switch
@@ -99,6 +72,13 @@
             hide-details
             label="Hide negligible decimal digits"
           />
+          <div class="d-flex align-center justify-space-between mt-8">
+            <span class="title">Allow Negative</span>
+            <v-switch v-model="allowNegative" />
+          </div>
+          <div class="mb-6">
+            Whether the input of negative values is allowed.
+          </div>
         </v-col>
         <v-col
           cols="12"
@@ -138,15 +118,6 @@
             thumb-label="always"
             thumb-size="24"
           />
-
-          <div class="d-flex align-center justify-space-between">
-            <span class="title">Allow Negative</span>
-            <v-switch v-model="allowNegative" />
-          </div>
-          <div class="mb-6">
-            Whether the input of negative values is allowed.
-          </div>
-
           <div class="d-flex align-center justify-space-between">
             <span class="title">Value Range</span>
             <v-switch v-model="valueRangeEnabled" />
@@ -163,8 +134,8 @@
           />
 
           <div class="d-flex align-center justify-space-between">
-            <span class="title">Auto Decimal Mode</span>
-            <v-switch v-model="autoDecimalMode" />
+            <span class="title">Auto Decimal Digits</span>
+            <v-switch v-model="autoDecimalDigits" />
           </div>
           <div class="mb-6">
             Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits.
@@ -193,14 +164,11 @@ export default {
     return {
       value: 1234,
       locale: 'de-DE',
-      selectedCurrencyOption: 0,
-      currencyCode: 'EUR',
+      currency: 'EUR',
       distractionFree: true,
       hideCurrencySymbol: true,
       hideGroupingSymbol: true,
       hideNegligibleDecimalDigits: true,
-      prefix: null,
-      suffix: null,
       precisionEnabled: false,
       precisionRangeEnabled: false,
       precisionFixed: 2,
@@ -209,7 +177,7 @@ export default {
       valueRange: [0, 9999],
       minActive: false,
       maxActive: false,
-      autoDecimalMode: false,
+      autoDecimalDigits: false,
       valueAsInteger: false,
       allowNegative: true
     }
@@ -218,7 +186,7 @@ export default {
     options () {
       return {
         locale: this.locale,
-        currency: [this.currencyCode, null, { prefix: this.prefix, suffix: this.suffix }][this.selectedCurrencyOption],
+        currency: this.currency,
         valueRange: this.valueRangeEnabled
           ? { min: this.valueRange[0], max: this.valueRange[1] }
           : undefined,
@@ -231,7 +199,7 @@ export default {
             hideCurrencySymbol: this.hideCurrencySymbol,
             hideGroupingSymbol: this.hideGroupingSymbol
           } : false,
-        autoDecimalMode: this.autoDecimalMode,
+        autoDecimalDigits: this.autoDecimalDigits,
         valueAsInteger: this.valueAsInteger,
         allowNegative: this.allowNegative
       }

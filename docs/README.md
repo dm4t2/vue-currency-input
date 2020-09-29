@@ -6,16 +6,16 @@ actionText: Get Started →
 actionLink: /guide/
 features:
 - title: Lightweight
-  details: Tiny bundle size and zero dependencies.
-- title: Format as you type
+  details: Tiny bundle size.
+- title: Format As You Type
   details: Numbers are formatted immediately during input.
-- title: i18n Support
-  details: Locale dependent, ISO-compliant currency formatting.
-- title: Distraction free
+- title: Built On Standards
+  details: Locale dependent currency formatting using the ECMAScript Internationalization API.
+- title: Distraction Free
   details: Hides the formatting on focus for easier input.
-- title: Fully customizable
-  details: Use custom currency symbols, precision ranges and much more.
-- title: Built-in validation
+- title: Auto Decimal Digits
+  details: Automatically use the last inputted digits as decimal digits.
+- title: Built-in Validation
   details: Check if the input is within a valid value range.
 footer: MIT Licensed | Copyright © Matthias Stiller 
 ---

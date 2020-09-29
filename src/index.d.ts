@@ -1,9 +1,4 @@
-import { Component, DirectiveOptions, PluginFunction } from 'vue'
-
-export interface CurrencyOptions {
-  prefix?: string,
-  suffix?: string
-}
+import { Ref } from 'vue-demi'
 
 export interface DistractionFreeOptions {
   hideCurrencySymbol?: boolean,
@@ -18,49 +13,24 @@ export interface NumberRange {
 
 export interface CurrencyInputOptions {
   locale?: string,
-  currency?: string | CurrencyOptions,
+  currency: string,
   valueAsInteger?: boolean,
   distractionFree?: boolean | DistractionFreeOptions,
   precision?: number | NumberRange,
-  autoDecimalMode?: boolean,
+  autoDecimalDigits?: boolean,
   valueRange?: NumberRange,
   allowNegative?: boolean
 }
 
-export interface PluginOptions {
-  globalOptions?: CurrencyInputOptions,
-  componentName?: string,
-  directiveName?: string
+export interface ComposableOptions {
+  inputRef: Ref,
+  props: any,
+
+  emit (event: string, value: number | null): void
 }
 
-export interface VueCurrencyInput {
-  install: PluginFunction<PluginOptions>
+declare const useCurrencyInput: ({ emit, inputRef, props }: ComposableOptions) => {
+  formattedValue: string
 }
 
-declare const VueCurrencyInput: VueCurrencyInput
-
-export default VueCurrencyInput
-
-export const CurrencyDirective: DirectiveOptions
-
-export const CurrencyInput: Component
-
-export function parse (formattedValue: string, options: CurrencyInputOptions): number | null
-
-export function getValue (el: HTMLInputElement): number | null
-
-export function setValue (el: HTMLInputElement, value: Number): void
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    $ci: {
-      globalOptions: CurrencyInputOptions
-
-      parse (formattedValue: string, options: CurrencyInputOptions): number | null
-
-      getValue (el: HTMLInputElement): number | null
-
-      setValue (el: HTMLInputElement, value: Number): void
-    }
-  }
-}
+export default useCurrencyInput

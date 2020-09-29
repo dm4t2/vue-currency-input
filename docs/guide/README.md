@@ -5,88 +5,122 @@ sidebarDepth: 3
 # Guide
 
 ## Introduction
-The Vue Currency Input plugin allows an easy input of currency formatted numbers. 
-It provides both a standalone component (`<currency-input>`) and a custom Vue directive (`v-currency`) for decorating existing input components with currency format capabilities.
+Vue Currency Input allows an easy input of currency formatted numbers. Powered by the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides a Vue composable for decorating input components with currency format capabilities.
+
+![](../vue-currency-input.gif)
 
 ## Installation
 Install the npm package:
+
+<code-group>
+<code-block title="npm">
 ``` bash
 npm install vue-currency-input 
-# OR 
-yarn add vue-currency-input
 ```
+</code-block>
 
-Add the Vue plugin in your `main.js`:
-
-<<< @/docs/guide/main.js
-
-### Nuxt
-Add `vue-currency-input/nuxt` to the modules section of `nuxt.config.js`:
-
-<<< @/docs/guide/nuxt.config.js
-
-### Direct download via CDN
-If you don't use a module system you can also download the plugin as UMD bundle via CDN. 
-Include the plugin after Vue and it will install itself automatically:
-
-```html
-<script src="https://unpkg.com/vue"></script>
-<script src="https://unpkg.com/vue-currency-input"></script>
+<code-block title="yarn">
+``` bash
+yarn add vue-currency-input 
 ```
+</code-block>
+</code-group>
 
-[Try it on CodeSandbox](https://codesandbox.io/s/vue-currency-input-direct-browser-usage-yjtci?fontsize=14)
+For usage with Vue 2 you have to install also the `@vue/composition-api` package:
+
+<code-group>
+<code-block title="npm">
+``` bash
+npm install @vue/composition-api
+```
+</code-block>
+
+<code-block title="yarn">
+``` bash
+yarn add @vue/composition-api
+```
+</code-block>
+</code-group>
 
 ## Usage
-### Component
-The `<currency-input>` component only needs a number value binding. All other [component props](/config/) are optional.
+Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Vuetify](https://vuetifyjs.com/en/components/text-fields/), [Quasar](https://quasar.dev/vue-components/input) or [Element](https://element.eleme.io/#/en-US/component/input)).
 
-<<< @/docs/guide/ComponentUsage.vue
+The following example component `<currency-input>` uses a simple HTML input element:
 
-#### Lazy value binding
-Sometimes you might want to update the bound value only when the input loses its focus. In this case, listen to the `change` event instead of using `v-model`.
-
-<<< @/docs/guide/LazyValueBinding.vue
-
-### Directive
-The `v-currency` directive is great if you want to decorate existing input components with currency format capabilities (for example like those from [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)).
-
-<<< @/docs/guide/DirectiveUsage.vue
-
-#### Getting the number value
-In comparison to the `<currency-input>` component the `v-currency` directive always emits the formatted string instead of the number value when used with `v-model`. 
-To get the number value you can either use [`parse`](/api/#parse) or [`getValue`](/api/#getvalue).
-
-## Import on demand
-You can also import the component/directive on demand and register them locally in your Vue files. 
-This is useful if you want to use [async components](https://vuejs.org/v2/guide/components-dynamic-async.html#Async-Components).
-
-### Component
-```vue
+<code-group>
+<code-block title="Vue 3">
+``` vue
 <template>
-  <currency-input :value="1000"/>
+  <input ref="inputRef" :value="formattedValue">
 </template>
 
 <script>
-import { CurrencyInput } from 'vue-currency-input'
-export default {
-  components: { CurrencyInput }
-}
-</script>
-```
+import { ref } from 'vue'
+import useCurrencyInput from 'vue-currency-input'
 
-### Directive
-```vue
-<template>
-  <input v-currency/>
-</template>
-
-<script>
-import { CurrencyDirective } from 'vue-currency-input'
 export default {
-  directives: {
-    currency: CurrencyDirective
+  name: 'CurrencyInput',
+  props: {
+    modelValue: Number,
+    currency: String
+    // additional props for options...
+  },
+  setup (props, { emit }) {
+    const inputRef = ref(null)
+    const { formattedValue } = useCurrencyInput({ inputRef, props, emit })
+
+    return { inputRef, formattedValue }
   }
 }
 </script>
+```
+</code-block>
 
+<code-block title="Vue 2">
+``` vue
+<template>
+  <input ref="inputRef" :value="formattedValue">
+</template>
+
+<script>
+import { ref } from '@vue/composition-api'
+import useCurrencyInput from 'vue-currency-input'
+
+export default {
+  name: 'CurrencyInput',
+  props: {
+    value: Number, 
+    currency: String
+    // additional props for options...
+  },
+  setup (props, { emit }) {
+    const inputRef = ref(null)
+    const { formattedValue } = useCurrencyInput({ inputRef, props, emit })
+
+    return { inputRef, formattedValue }
+  }
+}
+</script>
+```
+</code-block>
+</code-group>
+
+
+The component should provide at least props for the `v-model` value binding and the currency. Optionally further props can be added for the respective options (see [Config Reference](/config/)).
+
+Now you can use the `<currency-input>` component in your app:
+``` vue
+<template>
+  <currency-input v-model="value" currency="EUR" />
+</template>
+
+<script>
+import CurrencyInput from './components/CurrencyInput.vue'
+
+export default {
+  name: 'App',
+  components: { CurrencyInput },
+  data: () => ({ value: 1234 })
+}
+</script> 
 ```

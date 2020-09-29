@@ -1,4 +1,4 @@
-import { removeLeadingZeros, startsWith } from './utils/stringUtils'
+import { removeLeadingZeros, startsWith } from './stringUtils'
 
 export class DefaultNumberMask {
   constructor (numberFormat) {
@@ -48,7 +48,7 @@ export class DefaultNumberMask {
   }
 }
 
-export class AutoDecimalModeNumberMask {
+export class AutoDecimalDigitsNumberMask {
   constructor (numberFormat) {
     this.numberFormat = numberFormat
   }

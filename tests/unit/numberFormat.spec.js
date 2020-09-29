@@ -1,4 +1,4 @@
-import NumberFormat from '../../src/numberFormat'
+import NumberFormat from '@/numberFormat'
 
 describe('NumberFormat', () => {
   describe('constructing number formats', () => {
@@ -18,33 +18,15 @@ describe('NumberFormat', () => {
       expect(new NumberFormat({ locale: 'fa-IR', currency: 'IRR' })).toMatchSnapshot('fa-IR_IRR')
     })
 
-    describe('custom currency symbol', () => {
-      it('should work with a custom prefix', () => {
-        expect(new NumberFormat({ locale: 'de-DE', currency: { prefix: '₿ ' } })).toMatchSnapshot()
-      })
-
-      it('should work wit a custom suffix', () => {
-        expect(new NumberFormat({ locale: 'de-DE', currency: { suffix: ' Euro' } })).toMatchSnapshot()
-      })
-
-      it('should work if the currency symbol is hidden', () => {
-        expect(new NumberFormat({ locale: 'de-DE' })).toMatchSnapshot()
-      })
-    })
-
     describe('custom precision', () => {
       it('should work with a custom precision', () => {
-        expect(new NumberFormat({ precision: 0 })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 }))
-        expect(new NumberFormat({ precision: { min: 0, max: 0 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 }))
-        expect(new NumberFormat({ precision: { min: 0, max: 2 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 2 }))
+        expect(new NumberFormat({ currency: 'EUR', precision: 0 })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 }))
+        expect(new NumberFormat({ currency: 'EUR', precision: { min: 0, max: 0 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 }))
+        expect(new NumberFormat({ currency: 'EUR', precision: { min: 0, max: 2 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 2 }))
       })
 
-      it('should ignore precision ranges when "Auto decimal mode" is used', () => {
-        expect(new NumberFormat({ currency: 'EUR', autoDecimalMode: true, precision: { min: 0, max: 2 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 2, maximumFractionDigits: 2 }))
-      })
-
-      it('should ignore precision ranges when "Value as integer" is used', () => {
-        expect(new NumberFormat({ currency: 'EUR', valueAsInteger: true, precision: { min: 0, max: 2 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+      it('should ignore precision ranges when the option "Auto decimal digits" is used', () => {
+        expect(new NumberFormat({ currency: 'EUR', autoDecimalDigits: true, precision: { min: 0, max: 2 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 2, maximumFractionDigits: 2 }))
       })
 
       it('should ignore the custom precision if the locale does not support decimal digits', () => {
@@ -55,35 +37,35 @@ describe('NumberFormat', () => {
 
   describe('parse', () => {
     it('should return null if the value is empty', () => {
-      expect(new NumberFormat({ locale: 'en' }).parse(null)).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse('')).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse(' ')).toBeNull()
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse(null)).toBeNull()
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('')).toBeNull()
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse(' ')).toBeNull()
     })
 
     it('should return null if the value is invalid', () => {
-      expect(new NumberFormat({ locale: 'en' }).parse('-')).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse('123e-1')).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse('0x11')).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse('0b11')).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse('0o11')).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse('1.2e1')).toBeNull()
-      expect(new NumberFormat({ locale: 'en' }).parse('1.23.4')).toBeNull()
+      expect(new NumberFormat({ currency: 'EUR', locale: 'en' }).parse('-')).toBeNull()
+      expect(new NumberFormat({ currency: 'EUR', locale: 'en' }).parse('123e-1')).toBeNull()
+      expect(new NumberFormat({ currency: 'EUR', locale: 'en' }).parse('0x11')).toBeNull()
+      expect(new NumberFormat({ currency: 'EUR', locale: 'en' }).parse('0b11')).toBeNull()
+      expect(new NumberFormat({ currency: 'EUR', locale: 'en' }).parse('0o11')).toBeNull()
+      expect(new NumberFormat({ currency: 'EUR', locale: 'en' }).parse('1.2e1')).toBeNull()
+      expect(new NumberFormat({ currency: 'EUR', locale: 'en' }).parse('1.23.4')).toBeNull()
     })
 
     it('should return the parsed number if the value conforms to the currency format', () => {
-      expect(new NumberFormat({ locale: 'en' }).parse('1234')).toBe(1234)
-      expect(new NumberFormat({ locale: 'en' }).parse('1,234,567')).toBe(1234567)
-      expect(new NumberFormat({ locale: 'en' }).parse('-1,234,567')).toBe(-1234567)
-      expect(new NumberFormat({ locale: 'de' }).parse('-1234567,89')).toBe(-1234567.89)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('1234')).toBe(1234)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('1,234,567')).toBe(1234567)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('-1,234,567')).toBe(-1234567)
+      expect(new NumberFormat({ locale: 'de', currency: 'EUR' }).parse('-1234567,89')).toBe(-1234567.89)
       expect(new NumberFormat({ locale: 'en', currency: 'USD' }).parse('$1,234,567')).toBe(1234567)
       expect(new NumberFormat({ locale: 'de', currency: 'EUR' }).parse('1234 €')).toBe(1234)
-      expect(new NumberFormat({ locale: 'en' }).parse('-1234')).toBe(-1234)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('-1234')).toBe(-1234)
       expect(new NumberFormat({ locale: 'en', currency: 'USD' }).parse('-$1234')).toBe(-1234)
       expect(new NumberFormat({ locale: 'de', currency: 'EUR' }).parse('-1234 €')).toBe(-1234)
       expect(new NumberFormat({ locale: 'ja', currency: 'JPY' }).parse('￥123,456')).toBe(123456)
-      expect(new NumberFormat({ locale: 'en' }).parse('0.5')).toBe(0.5)
-      expect(new NumberFormat({ locale: 'en' }).parse('1234.50')).toBe(1234.5)
-      expect(new NumberFormat({ locale: 'en' }).parse('1234.00')).toBe(1234)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('0.5')).toBe(0.5)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('1234.50')).toBe(1234.5)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('1234.00')).toBe(1234)
       expect(new NumberFormat({ locale: 'en', currency: 'USD' }).parse('$1,234.50')).toBe(1234.5)
       expect(new NumberFormat({ locale: 'de', currency: 'EUR' }).parse('1.234,50 €')).toBe(1234.5)
       expect(new NumberFormat({ locale: 'ar', currency: 'SAR' }).parse('١٢٣٤')).toBe(1234)
@@ -93,8 +75,8 @@ describe('NumberFormat', () => {
     })
 
     it('should return null if the value does not conform to the currency format', () => {
-      expect(new NumberFormat({ locale: 'en' }).parse('1234,5')).toBeNull()
-      expect(new NumberFormat({ locale: 'de' }).parse('1,234,567.89')).toBeNull()
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).parse('1234,5')).toBeNull()
+      expect(new NumberFormat({ locale: 'de', currency: 'EUR' }).parse('1,234,567.89')).toBeNull()
       expect(new NumberFormat({ locale: 'de', currency: 'EUR' }).parse('$1234')).toBeNull()
       expect(new NumberFormat({ locale: 'en', currency: 'USD' }).parse('1234 €')).toBeNull()
       expect(new NumberFormat({ locale: 'ja', currency: 'JPY' }).parse('1234.56')).toBeNull()
@@ -103,17 +85,17 @@ describe('NumberFormat', () => {
 
   describe('isFractionIncomplete', () => {
     it('should return true if the fraction is incomplete', () => {
-      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234.')).toBe(true)
-      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234')).toBe(false)
-      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234.3')).toBe(false)
-      expect(new NumberFormat({ locale: 'en' }).isFractionIncomplete('1234.3.')).toBe(false)
-      expect(new NumberFormat({ locale: 'de' }).isFractionIncomplete('1,3,')).toBe(false)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).isFractionIncomplete('1234.')).toBe(true)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).isFractionIncomplete('1234')).toBe(false)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).isFractionIncomplete('1234.3')).toBe(false)
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).isFractionIncomplete('1234.3.')).toBe(false)
+      expect(new NumberFormat({ locale: 'de', currency: 'EUR' }).isFractionIncomplete('1,3,')).toBe(false)
     })
   })
 
   describe('normalizeDecimalSymbol', () => {
     it('should replace the first decimal symbol with the one of the current locale', () => {
-      expect(new NumberFormat({ locale: 'en' }).normalizeDecimalSymbol('1,23,4,567', 2)).toBe('1,23.4,567')
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).normalizeDecimalSymbol('1,23,4,567', 2)).toBe('1,23.4,567')
     })
   })
 
@@ -121,9 +103,6 @@ describe('NumberFormat', () => {
     it('should return the formatted value for the respective options', () => {
       expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).format(1234.5789)).toBe('€1,234.58')
       expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).format(1234.5789, { minimumFractionDigits: 4 })).toBe('€1,234.5789')
-      expect(new NumberFormat({ locale: 'en' }).format(-1)).toBe('-1.00')
-      expect(new NumberFormat({ locale: 'en' }).format(-0)).toBe('-0.00')
-      expect(new NumberFormat({ locale: 'en' }).format(1234.5789, { minimumFractionDigits: 4 })).toBe('1,234.5789')
     })
   })
 })

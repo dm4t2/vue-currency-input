@@ -1,11 +1,11 @@
-import { count, escapeRegExp, startsWith, substringBefore } from './utils/stringUtils'
+import { count, escapeRegExp, startsWith, substringBefore } from './stringUtils'
 
 export const DECIMAL_SYMBOLS = [',', '.', '٫']
 
 export default class NumberFormat {
   constructor (options) {
-    const { currency, locale, precision, autoDecimalMode, valueAsInteger } = options
-    const numberFormat = new Intl.NumberFormat(locale, typeof currency === 'string' ? { currency, style: 'currency' } : { minimumFractionDigits: 1 })
+    const { currency, locale, precision, autoDecimalDigits } = options
+    const numberFormat = new Intl.NumberFormat(locale, { currency, style: 'currency' })
     const ps = numberFormat.format(123456)
 
     this.locale = locale
@@ -19,28 +19,20 @@ export default class NumberFormat {
       this.minimumFractionDigits = this.maximumFractionDigits = 0
     } else if (typeof precision === 'number') {
       this.minimumFractionDigits = this.maximumFractionDigits = precision
-    } else if (typeof precision === 'object' && !autoDecimalMode && !valueAsInteger) {
+    } else if (typeof precision === 'object' && !autoDecimalDigits) {
       this.minimumFractionDigits = precision.min || 0
       this.maximumFractionDigits = precision.max !== undefined ? precision.max : 20
-    } else if (typeof currency === 'string') {
+    } else {
       this.minimumFractionDigits = numberFormat.resolvedOptions().minimumFractionDigits
       this.maximumFractionDigits = numberFormat.resolvedOptions().maximumFractionDigits
-    } else {
-      this.minimumFractionDigits = this.maximumFractionDigits = 2
     }
 
-    if (typeof currency === 'string') {
-      this.prefix = substringBefore(ps, this.digits[1])
-      this.negativePrefix = substringBefore(numberFormat.format(-1), this.digits[1])
-      this.suffix = ps.substring(ps.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[6]) + 1)
-    } else {
-      this.prefix = (currency || {}).prefix || ''
-      this.negativePrefix = `${this.minusSymbol}${this.prefix}`
-      this.suffix = (currency || {}).suffix || ''
-    }
+    this.prefix = substringBefore(ps, this.digits[1])
+    this.negativePrefix = substringBefore(numberFormat.format(-1), this.digits[1])
+    this.suffix = ps.substring(ps.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[6]) + 1)
   }
 
-  parse (str, valueAsInteger = false) {
+  parse (str) {
     if (str) {
       const negative = this.isNegative(str)
       str = this.normalizeDigits(str)
@@ -49,8 +41,7 @@ export default class NumberFormat {
       const fraction = this.decimalSymbol ? `(${escapeRegExp(this.decimalSymbol)}\\d*)?` : ''
       const match = str.match(new RegExp(`^${this.integerPattern()}${fraction}$`))
       if (match) {
-        const number = Number(`${negative ? '-' : ''}${(this.onlyDigits(match[1]))}.${(this.onlyDigits(match[3] || ''))}`)
-        return valueAsInteger ? Number(number.toFixed(this.maximumFractionDigits).split('.').join('')) : number
+        return Number(`${negative ? '-' : ''}${(this.onlyDigits(match[1]))}.${(this.onlyDigits(match[3] || ''))}`)
       }
     }
     return null
@@ -60,15 +51,11 @@ export default class NumberFormat {
     minimumFractionDigits: this.minimumFractionDigits,
     maximumFractionDigits: this.maximumFractionDigits
   }) {
-    if (typeof this.currency === 'string') {
-      return number.toLocaleString(this.locale, {
-        style: 'currency',
-        currency: this.currency,
-        ...options
-      })
-    } else {
-      return this.insertCurrencySymbol(Math.abs(number).toLocaleString(this.locale, options), number < 0 || (number === 0 && (1 / number < 0)))
-    }
+    return number.toLocaleString(this.locale, {
+      style: 'currency',
+      currency: this.currency,
+      ...options
+    })
   }
 
   integerPattern () {

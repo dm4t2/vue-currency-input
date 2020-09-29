@@ -1,54 +1,40 @@
 <template>
   <VTextField
-    ref="input"
-    v-currency="options"
+    ref="inputRef"
     :value="formattedValue"
     dense
     hide-details
     outlined
-    @change="onChange"
-    @input="onInput"
   />
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
+import useCurrencyInput from '../src'
+
 export default {
   name: 'VCurrencyField',
   props: {
-    value: {
-      type: Number,
-      default: null
-    },
-    options: {
-      type: Object,
-      default: () => {}
-    }
+    value: Number,
+    locale: String,
+    currency: String,
+    distractionFree: [Boolean, Object],
+    precision: [Number, Object],
+    autoDecimalDigits: Boolean,
+    valueAsInteger: Boolean,
+    valueRange: Object,
+    allowNegative: Boolean
   },
-  data () {
-    return {
-      formattedValue: null
-    }
-  },
-  watch: {
-    value (value) {
-      this.setValue(value)
-    }
-  },
-  mounted () {
-    this.setValue(this.value)
-  },
-  methods: {
-    setValue (value) {
-      this.$ci.setValue(this.$refs.input, value)
-    },
-    onInput (value) {
-      this.$emit('input', this.$ci.getValue(this.$refs.input))
-      this.formattedValue = value
-    },
-    onChange (value) {
-      this.$emit('change', this.$ci.getValue(this.$refs.input))
-      this.formattedValue = value
-    }
+  setup (props, { emit }) {
+    const inputRef = ref(null)
+
+    const { formattedValue } = useCurrencyInput({
+      inputRef,
+      props,
+      emit
+    })
+
+    return { inputRef, formattedValue }
   }
 }
 </script>

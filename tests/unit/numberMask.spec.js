@@ -1,5 +1,5 @@
 import NumberFormat from '../../src/numberFormat'
-import { AutoDecimalModeNumberMask, DefaultNumberMask } from '../../src/numberMask'
+import { AutoDecimalDigitsNumberMask, DefaultNumberMask } from '@/numberMask'
 
 describe('DefaultNumberMask', () => {
   describe('when the value is invalid', () => {
@@ -24,15 +24,6 @@ describe('DefaultNumberMask', () => {
   })
 
   describe('when a invalid negative value is about to being entered', () => {
-    describe('the currency symbol is hidden', () => {
-      it('should return the previous conformed value', () => {
-        const numberFormat = new NumberFormat({ locale: 'en', currency: null })
-
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-a', '-')).toEqual('-')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('--', '-')).toEqual('-')
-      })
-    })
-
     describe('the currency symbol is prefixed', () => {
       it('should return the previous conformed value', () => {
         const numberFormat = new NumberFormat({ locale: 'en', currency: 'USD' })
@@ -62,29 +53,9 @@ describe('DefaultNumberMask', () => {
   describe('when the value is incomplete', () => {
     describe('the digits are locale dependent', () => {
       it('should return the expected value', () => {
-        const numberFormat = new NumberFormat({ locale: 'ar-SA', currency: null })
+        const numberFormat = new NumberFormat({ locale: 'ar-SA', currency: 'USD' })
 
-        expect(new DefaultNumberMask(numberFormat).conformToMask('٫١١')).toEqual('٠٫١١')
-      })
-    })
-
-    describe('the currency symbol is hidden', () => {
-      it('should return the expected value', () => {
-        const numberFormat = new NumberFormat({ locale: 'en', currency: null })
-
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-')).toEqual('-')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('1.')).toEqual('1.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('1234.')).toEqual('1234.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('1,234.')).toEqual('1,234.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-1.')).toEqual('-1.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-1234.')).toEqual('-1234.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-1,234.')).toEqual('-1,234.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('.')).toEqual('0.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('.1')).toEqual('0.1')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('.1.234')).toEqual('0.12')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-.')).toEqual('-0.')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-.1')).toEqual('-0.1')
-        expect(new DefaultNumberMask(numberFormat).conformToMask('-.1.234')).toEqual('-0.12')
+        expect(new DefaultNumberMask(numberFormat).conformToMask('٫١١')).toEqual('٠٫١١ US$')
       })
     })
 
@@ -165,15 +136,6 @@ describe('DefaultNumberMask', () => {
     })
   })
 
-  describe('when the currency prefix contains the decimal symbol', () => {
-    it('should return the expected result', () => {
-      const numberFormat = new NumberFormat({ locale: 'de-CH', currency: { prefix: 'Fr. ' } })
-
-      expect(new DefaultNumberMask(numberFormat).conformToMask('Fr. 1.2')).toEqual({ numberValue: 1.2, fractionDigits: '2' })
-      expect(new DefaultNumberMask(numberFormat).conformToMask('-Fr. 0.5')).toEqual({ numberValue: -0.5, fractionDigits: '5' })
-    })
-  })
-
   describe('when the negative/positive prefixes have different white spaces', () => {
     it('should return the expected result', () => {
       expect(new DefaultNumberMask(new NumberFormat({ locale: 'de-CH', currency: 'USD' })).conformToMask('$-123.45')).toEqual({ numberValue: -123.45, fractionDigits: '45' })
@@ -182,16 +144,16 @@ describe('DefaultNumberMask', () => {
   })
 })
 
-describe('AutoDecimalModeNumberMask', () => {
+describe('AutoDecimalDigitsNumberMask', () => {
   it('should return the expected result', () => {
-    const numberFormat = new NumberFormat({ locale: 'nl', currency: 'EUR', precision: 2, autoDecimalMode: true })
+    const numberFormat = new NumberFormat({ locale: 'nl', currency: 'EUR', precision: 2, autoDecimalDigits: true })
 
-    expect(new AutoDecimalModeNumberMask(numberFormat).conformToMask('')).toEqual('')
-    expect(new AutoDecimalModeNumberMask(numberFormat).conformToMask('-')).toEqual({ numberValue: -0, fractionDigits: '00' })
-    expect(new AutoDecimalModeNumberMask(numberFormat).conformToMask('1')).toEqual({ numberValue: 0.01, fractionDigits: '01' })
-    expect(new AutoDecimalModeNumberMask(numberFormat).conformToMask('12345')).toEqual({ numberValue: 123.45, fractionDigits: '45' })
-    expect(new AutoDecimalModeNumberMask(numberFormat).conformToMask('-12345')).toEqual({ numberValue: -123.45, fractionDigits: '45' })
-    expect(new AutoDecimalModeNumberMask(numberFormat).conformToMask('€ -12345')).toEqual({ numberValue: -123.45, fractionDigits: '45' })
-    expect(new AutoDecimalModeNumberMask(numberFormat).conformToMask('00012345')).toEqual({ numberValue: 123.45, fractionDigits: '45' })
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('')).toEqual('')
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('-')).toEqual({ numberValue: -0, fractionDigits: '00' })
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('1')).toEqual({ numberValue: 0.01, fractionDigits: '01' })
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('12345')).toEqual({ numberValue: 123.45, fractionDigits: '45' })
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('-12345')).toEqual({ numberValue: -123.45, fractionDigits: '45' })
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('€ -12345')).toEqual({ numberValue: -123.45, fractionDigits: '45' })
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('00012345')).toEqual({ numberValue: 123.45, fractionDigits: '45' })
   })
 })
