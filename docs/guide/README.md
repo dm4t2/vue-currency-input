@@ -18,13 +18,13 @@ Install the npm package:
 <code-group>
 <code-block title="npm">
 ``` bash
-npm install vue-currency-input 
+npm install vue-currency-input@next 
 ```
 </code-block>
 
 <code-block title="yarn">
 ``` bash
-yarn add vue-currency-input 
+yarn add vue-currency-input@next 
 ```
 </code-block>
 </code-group>
