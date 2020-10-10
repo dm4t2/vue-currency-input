@@ -7,15 +7,15 @@ actionLink: /guide/
 features:
 - title: Lightweight
   details: Tiny bundle size.
-- title: Format As You Type
+- title: Format as you type
   details: Numbers are formatted immediately during input.
-- title: Built On Standards
-  details: Locale dependent currency formatting using the ECMAScript Internationalization API.
-- title: Distraction Free
+- title: Built on standards
+  details: Uses the ECMAScript Internationalization API for currency formatting.
+- title: Distraction free
   details: Hides the formatting on focus for easier input.
-- title: Auto Decimal Digits
+- title: Auto decimal digits
   details: Automatically use the last inputted digits as decimal digits.
-- title: Built-in Validation
+- title: Built-in validation
   details: Check if the input is within a valid value range.
 footer: MIT Licensed | Copyright © Matthias Stiller 
 ---

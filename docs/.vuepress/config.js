@@ -9,6 +9,9 @@ module.exports = {
     search: false,
     editLinks: false,
     nav: [{
+      text: 'v1 Docs',
+      link: 'https://vue-currency-input-v1.netlify.app/'
+    },{
       text: 'Release Notes',
       link: 'https://github.com/dm4t2/vue-currency-input/releases'
     }],
@@ -22,5 +25,14 @@ module.exports = {
     repo: 'dm4t2/vue-currency-input',
     docsDir: 'docs',
     docsBranch: 'gh-pages'
-  }
+  },
+  plugins: [
+    [
+      '@vuepress/pwa',
+      {
+        serviceWorker: true,
+        updatePopup: true
+      }
+    ]
+  ]
 }

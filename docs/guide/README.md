@@ -1,8 +1,11 @@
 ---
 sidebarDepth: 3
 ---
-
 # Guide
+
+:::warning Version
+You’re browsing the documentation for v2.x. [For v1.x, click here](https://vue-currency-input-v1.netlify.app/).
+:::
 
 ## Introduction
 Vue Currency Input allows an easy input of currency formatted numbers. Powered by the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides a Vue composable for decorating input components with currency format capabilities.
@@ -108,14 +111,14 @@ export default {
 
 The component should provide at least props for the `v-model` value binding and the currency. Optionally further props can be added for the respective options (see [Config Reference](/config/)).
 
-Now you can use the `<currency-input>` component in your app:
+Now you can use the created `<currency-input>` component in your app:
 ``` vue
 <template>
   <currency-input v-model="value" currency="EUR" />
 </template>
 
 <script>
-import CurrencyInput from './components/CurrencyInput.vue'
+import CurrencyInput from 'CurrencyInput.vue'
 
 export default {
   name: 'App',
@@ -124,3 +127,44 @@ export default {
 }
 </script> 
 ```
+
+### Lazy value binding
+Sometimes you might want to update the bound value only when the input loses its focus. In this case, use the `v-model.lazy` for Vue 3. For Vue 2 listen to the `change` event instead of using `v-model`.
+
+<code-group>
+<code-block title="Vue 3">
+``` vue
+<template>
+  <currency-input v-model.lazy="value" currency="EUR" />
+</template>
+
+<script>
+import CurrencyInput from 'CurrencyInput.vue'
+
+export default {
+  name: 'App',
+  components: { CurrencyInput },
+  data: () => ({ value: 1234 })
+}
+</script> 
+```
+</code-block>
+
+<code-block title="Vue 2">
+``` vue
+<template>
+  <currency-input :value="value" currency="EUR" @change="value = $event" />
+</template>
+
+<script>
+import CurrencyInput from 'CurrencyInput.vue'
+
+export default {
+  name: 'App',
+  components: { CurrencyInput },
+  data: () => ({ value: 1234 })
+}
+</script> 
+```
+</code-block>
+</code-group>

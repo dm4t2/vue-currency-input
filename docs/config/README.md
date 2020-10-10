@@ -1,10 +1,16 @@
 # Config Reference
 
-The following options can be used as component props:
+## Required Props
 
 Name | Type | Description
 --- | --- | --- 
-`currency` (required) | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`).
+`modelValue` / `value` | Number | Prop for the `v-model` value binding.
+`currency` | String | A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code (for example `USD` or `EUR`).
+
+## Optional Props
+
+Name | Type | Description
+--- | --- | --- 
 `locale` | String | A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is `undefined` (use the default locale of the Browser).
 `autoDecimalDigits` | Boolean | Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits. Default is `false` (the decimal symbol needs to be inserted manually).
 `precision` | Number/Object | The number of displayed decimal digits. Default is `undefined` (use the currency's default). Must be between 0 and 20 and can only be applied for currencies that support decimal digits. You can also pass an object `{min, max}` to use a precision range (ranges are not available when using `autoDecimalMode`).
