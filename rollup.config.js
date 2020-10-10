@@ -1,4 +1,3 @@
-import buble from 'rollup-plugin-buble'
 import cleanup from 'rollup-plugin-cleanup'
 import filesize from 'rollup-plugin-filesize'
 import pkg from './package.json'
@@ -24,21 +23,6 @@ export default {
       format: 'umd',
       exports: 'named',
       file: pkg.main,
-      globals: {
-        'vue-demi': 'VueDemi'
-      },
-      banner
-    },
-    {
-      plugins: [
-        buble({
-          objectAssign: true
-        })
-      ],
-      name: 'VueCurrencyInput',
-      format: 'iife',
-      exports: 'named',
-      file: pkg.unpkg,
       globals: {
         'vue-demi': 'VueDemi'
       },
