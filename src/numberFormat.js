@@ -1,6 +1,7 @@
 import { count, escapeRegExp, startsWith, substringBefore } from './stringUtils'
 
 export const DECIMAL_SYMBOLS = [',', '.', '٫']
+export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 
 export default class NumberFormat {
   constructor (options) {
@@ -38,13 +39,20 @@ export default class NumberFormat {
       str = this.normalizeDigits(str)
       str = this.stripCurrencySymbol(str)
       str = this.stripMinusSymbol(str)
-      const fraction = this.decimalSymbol ? `(${escapeRegExp(this.decimalSymbol)}\\d*)?` : ''
-      const match = str.match(new RegExp(`^${this.integerPattern()}${fraction}$`))
-      if (match) {
-        return Number(`${negative ? '-' : ''}${(this.onlyDigits(match[1]))}.${(this.onlyDigits(match[3] || ''))}`)
+      const fraction = this.decimalSymbol ? `(?:${escapeRegExp(this.decimalSymbol)}(\\d*))?` : ''
+      const match = this.stripGroupingSymbol(str).match(new RegExp(`^${INTEGER_PATTERN}${fraction}$`))
+      if (match && this.isValidIntegerFormat(str.split(this.decimalSymbol)[0], Number(match[1]))) {
+        return Number(`${negative ? '-' : ''}${(this.onlyDigits(match[1]))}.${(this.onlyDigits(match[2] || ''))}`)
       }
     }
     return null
+  }
+
+  isValidIntegerFormat (str, integerNumber) {
+    return [
+      this.normalizeDigits(integerNumber.toLocaleString(this.locale), { useGrouping: true }),
+      this.normalizeDigits(integerNumber.toLocaleString(this.locale, { useGrouping: false }))
+    ].includes(str)
   }
 
   format (number, options = {
@@ -58,16 +66,12 @@ export default class NumberFormat {
     })
   }
 
-  integerPattern () {
-    return `(0|[1-9]\\d{0,2}(${escapeRegExp(this.groupingSymbol)}?\\d{3})*)`
-  }
-
   toFraction (str) {
     return `${this.digits[0]}${this.decimalSymbol}${(this.onlyLocaleDigits(str.substr(1)).substr(0, this.maximumFractionDigits))}`
   }
 
   isFractionIncomplete (str) {
-    return !!this.normalizeDigits(str).match(new RegExp(`^${this.integerPattern()}${escapeRegExp(this.decimalSymbol)}$`))
+    return !!this.normalizeDigits(this.stripGroupingSymbol(str)).match(new RegExp(`^${INTEGER_PATTERN}${escapeRegExp(this.decimalSymbol)}$`))
   }
 
   isNegative (str) {
@@ -76,6 +80,10 @@ export default class NumberFormat {
 
   insertCurrencySymbol (str, negative) {
     return `${negative ? this.negativePrefix : this.prefix}${str}${this.suffix}`
+  }
+
+  stripGroupingSymbol (str) {
+    return str.replace(new RegExp(escapeRegExp(this.groupingSymbol), 'g'), '')
   }
 
   stripMinusSymbol (str) {
