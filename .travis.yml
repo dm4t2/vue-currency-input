@@ -11,9 +11,9 @@ jobs:
     - stage: Lint
       script: yarn lint
     - stage: Deploy GitHub Pages
-      script:
-        - cd docs
-        - yarn build
+      before_install: cd docs
+      install: yarn install
+      script: yarn build
       deploy:
         on:
           branch: master
