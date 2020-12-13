@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import VCurrencyField from '../../../demo/VCurrencyField'
+import VCurrencyField from './VCurrencyField'
 
 export default {
   name: 'Playground',
