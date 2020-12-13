@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Playground from '../docs/.vuepress/components/Playground'
+import Playground from './Playground'
 
 export default {
   name: 'App',

@@ -63,7 +63,6 @@
     "rollup-plugin-filesize": "^9.0.0",
     "vue": "^2.6.11",
     "vue-template-compiler": "^2.6.11",
-    "vuepress": "^1.5.1",
     "vuetify": "^2.1.15"
   }
 }

@@ -1,3 +1,5 @@
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 import VueCurrencyInput from '../../src/plugin'
 import Vuetify from 'vuetify'
 

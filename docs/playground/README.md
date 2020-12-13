@@ -1,3 +1,3 @@
 # Playground
 
-<Playground/>
+<Demo/>
