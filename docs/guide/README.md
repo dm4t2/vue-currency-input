@@ -1,5 +1,5 @@
 ---
-sidebarDepth: 3
+sidebarDepth: 1
 ---
 # Guide
 
@@ -54,23 +54,23 @@ The following example component `<currency-input>` uses a simple HTML input elem
 <code-block title="Vue 3">
 ``` vue
 <template>
-  <input ref="inputRef" :value="formattedValue">
+  <input 
+    ref="inputRef" 
+    :value="formattedValue"
+  >
 </template>
 
 <script>
-import { ref } from 'vue'
 import useCurrencyInput from 'vue-currency-input'
 
 export default {
   name: 'CurrencyInput',
   props: {
     modelValue: Number,
-    currency: String
-    // additional props for options...
+    options: Object
   },
-  setup (props, { emit }) {
-    const inputRef = ref(null)
-    const { formattedValue } = useCurrencyInput({ inputRef, props, emit })
+  setup (props) {
+    const { formattedValue, inputRef } = useCurrencyInput(props.options)
 
     return { inputRef, formattedValue }
   }
@@ -82,24 +82,24 @@ export default {
 <code-block title="Vue 2">
 ``` vue
 <template>
-  <input ref="inputRef" :value="formattedValue">
+  <input 
+    ref="inputRef" 
+    :value="formattedValue"
+  >
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
 import useCurrencyInput from 'vue-currency-input'
 
 export default {
   name: 'CurrencyInput',
   props: {
-    value: Number, 
-    currency: String
-    // additional props for options...
+    value: Number,
+    options: Object
   },
-  setup (props, { emit }) {
-    const inputRef = ref(null)
-    const { formattedValue } = useCurrencyInput({ inputRef, props, emit })
-
+  setup (props) {
+    const { formattedValue, inputRef } = useCurrencyInput(props.options)
+    
     return { inputRef, formattedValue }
   }
 }
@@ -109,16 +109,19 @@ export default {
 </code-group>
 
 
-The component should provide at least props for the `v-model` value binding and the currency. Optionally further props can be added for the respective options (see [Config Reference](/config/)).
+The component should provide props for the `v-model` value binding, and the options (see [Config Reference](/config/)).
 
 Now you can use the created `<currency-input>` component in your app:
 ``` vue
 <template>
-  <currency-input v-model="value" currency="EUR" />
+  <currency-input 
+    v-model="value" 
+    :options="{ currency: 'EUR' }"
+  />
 </template>
 
 <script>
-import CurrencyInput from 'CurrencyInput.vue'
+import CurrencyInput from './CurrencyInput'
 
 export default {
   name: 'App',
@@ -135,11 +138,14 @@ Sometimes you might want to update the bound value only when the input loses its
 <code-block title="Vue 3">
 ``` vue
 <template>
-  <currency-input v-model.lazy="value" currency="EUR" />
+  <currency-input 
+    v-model.lazy="value" 
+    :options="{ currency: 'EUR' }"
+  />
 </template>
 
 <script>
-import CurrencyInput from 'CurrencyInput.vue'
+import CurrencyInput from './CurrencyInput'
 
 export default {
   name: 'App',
@@ -153,7 +159,11 @@ export default {
 <code-block title="Vue 2">
 ``` vue
 <template>
-  <currency-input :value="value" currency="EUR" @change="value = $event" />
+  <currency-input 
+    :value="value" 
+    :options="{ currency: 'EUR' }" 
+    @change="value = $event"
+  />
 </template>
 
 <script>
@@ -165,6 +175,75 @@ export default {
   data: () => ({ value: 1234 })
 }
 </script> 
+```
+</code-block>
+</code-group>
+
+### Reacting on external props changes
+If the value of the input is changed externally (and not only by user input) you need to use the `setValue` function returned by `useCurrencyInput` within a watcher.
+
+The same applies for the options of your currency input component. Use the `setOptions` function in a watcher in order to make the options reactive for changes after the component has been mounted (like in the [Playground](/playground/)).
+
+<code-group>
+<code-block title="Vue 3">
+``` vue
+<template>
+  <input 
+    ref="inputRef" 
+    :value="formattedValue"
+  >
+</template>
+
+<script>
+import { watch } from 'vue'
+import useCurrencyInput from 'vue-currency-input'
+
+export default {
+  name: 'CurrencyInput',
+  props: {
+    modelValue: Number,
+    options: Object
+  },
+  setup (props) {
+    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
+    watch(() => props.options, (options) => setOptions(options))
+    watch(() => props.value, (value) => setValue(value))
+
+    return { inputRef, formattedValue }
+  }
+}
+</script>
+```
+</code-block>
+
+<code-block title="Vue 2">
+``` vue
+<template>
+  <input 
+    ref="inputRef" 
+    :value="formattedValue"
+  >
+</template>
+
+<script>
+import { watch } from '@vue/composition-api'
+import useCurrencyInput from 'vue-currency-input'
+
+export default {
+  name: 'CurrencyInput',
+  props: {
+    value: Number,
+    options: Object
+  },
+  setup (props) {
+    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
+    watch(() => props.options, (options) => setOptions(options))
+    watch(() => props.value, (value) => setValue(value))
+
+    return { inputRef, formattedValue }
+  }
+}
+</script>
 ```
 </code-block>
 </code-group>

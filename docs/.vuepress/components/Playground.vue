@@ -9,7 +9,7 @@
         >
           <v-currency-field
             v-model="value"
-            v-bind="options"
+            :options="options"
           />
         </v-col>
         <v-col

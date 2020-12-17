@@ -9,30 +9,19 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
 import useCurrencyInput from '../src'
+import { watch } from '@vue/composition-api'
 
 export default {
   name: 'VCurrencyField',
   props: {
     value: Number,
-    locale: String,
-    currency: String,
-    distractionFree: [Boolean, Object],
-    precision: [Number, Object],
-    autoDecimalDigits: Boolean,
-    valueAsInteger: Boolean,
-    valueRange: Object,
-    allowNegative: Boolean
+    options: Object
   },
-  setup (props, { emit }) {
-    const inputRef = ref(null)
-
-    const { formattedValue } = useCurrencyInput({
-      inputRef,
-      props,
-      emit
-    })
+  setup (props) {
+    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
+    watch(() => props.options, (options) => setOptions(options))
+    watch(() => props.value, (value) => setValue(value))
 
     return { inputRef, formattedValue }
   }
