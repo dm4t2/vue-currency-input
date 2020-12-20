@@ -1,5 +1,5 @@
 import { NumberInput } from './numberInput'
-import { computed, getCurrentInstance, isVue3, onMounted, ref } from 'vue-demi'
+import { computed, getCurrentInstance, isVue3, onMounted, onUnmounted, ref } from 'vue-demi'
 
 const findInput = (el) => el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input')
 
@@ -13,6 +13,22 @@ export default (options) => {
   const currentInstance = getCurrentInstance()
   const lazy = isVue3 && (currentInstance.attrs.modelModifiers || {}).lazy
   const numberValue = computed(() => isVue3 ? currentInstance.props.modelValue : currentInstance.value)
+  const hasInputEventListener = !!(isVue3 ? currentInstance.attrs['onUpdate:modelValue'] : currentInstance.$listeners[inputEvent])
+  const hasChangeEventListener = !!(isVue3 ? currentInstance.attrs['onUpdate:modelValue'] : currentInstance.$listeners[changeEvent])
+
+  const onInput = (e) => {
+    if (e.detail && !lazy && numberValue.value !== e.detail.number) {
+      currentInstance[isVue3 ? 'emit' : '$emit'](inputEvent, e.detail.number)
+      formattedValue.value = e.detail.formatted
+    }
+  }
+
+  const onChange = (e) => {
+    if (e.detail) {
+      currentInstance[isVue3 ? 'emit' : '$emit'](changeEvent, e.detail.number)
+      formattedValue.value = e.detail.formatted
+    }
+  }
 
   onMounted(() => {
     input = '$el' in inputRef.value ? findInput(inputRef.value.$el) : inputRef.value
@@ -20,19 +36,23 @@ export default (options) => {
     if (input == null) {
       throw new Error('No input element found')
     } else {
-      numberInput = new NumberInput(input, options, {
-        onInput (value) {
-          if (!lazy && numberValue.value !== value.number) {
-            currentInstance[isVue3 ? 'emit' : '$emit'](inputEvent, value.number)
-          }
-          formattedValue.value = value.formatted
-        },
-        onChange (value) {
-          currentInstance[isVue3 ? 'emit' : '$emit'](changeEvent, value.number)
-          formattedValue.value = value.formatted
-        }
-      })
+      numberInput = new NumberInput(input, options)
+      if (hasInputEventListener) {
+        input.addEventListener('input', onInput)
+      }
+      if (hasChangeEventListener) {
+        input.addEventListener('change', onChange)
+      }
       numberInput.setValue(numberValue.value)
+    }
+  })
+
+  onUnmounted(() => {
+    if (hasInputEventListener) {
+      input.removeEventListener('input', onInput)
+    }
+    if (hasChangeEventListener) {
+      input.removeEventListener('change', onChange)
     }
   })
 

@@ -16,9 +16,8 @@ export const DEFAULT_OPTIONS = {
 }
 
 export class NumberInput {
-  constructor (el, options, callbackFns) {
+  constructor (el, options) {
     this.el = el
-    this.callbackFns = callbackFns
     this.numberValue = null
     this.addEventListener()
     this.init(options)
@@ -60,10 +59,16 @@ export class NumberInput {
     this.applyFixedFractionFormat(this.numberValue, true)
   }
 
+  dispatchEvent (eventName) {
+    const event = document.createEvent('CustomEvent')
+    event.initCustomEvent(eventName, true, true, { ...this.getValue() })
+    this.el.dispatchEvent(event)
+  }
+
   applyFixedFractionFormat (number, forcedChange) {
     this.format(number != null ? this.currencyFormat.format(this.validateValueRange(number)) : null)
     if (number !== this.numberValue || forcedChange) {
-      this.callbackFns.onChange(this.getValue())
+      this.dispatchEvent('change')
     }
   }
 
@@ -130,38 +135,40 @@ export class NumberInput {
       this.el.value = this.numberValue = null
     }
     this.formattedValue = this.el.value
-    this.callbackFns.onInput(this.getValue())
+    this.dispatchEvent('input')
   }
 
   addEventListener () {
-    this.el.addEventListener('input', () => {
-      const { value, selectionStart } = this.el
-      this.format(value)
-      if (this.focus) {
-        const getCaretPositionAfterFormat = () => {
-          const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = this.currencyFormat
+    this.el.addEventListener('input', (e) => {
+      if (!e.detail) {
+        const { value, selectionStart } = this.el
+        this.format(value)
+        if (this.focus) {
+          const getCaretPositionAfterFormat = () => {
+            const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = this.currencyFormat
 
-          let caretPositionFromLeft = value.length - selectionStart
-          const newValueLength = this.formattedValue.length
-          if (this.formattedValue.substr(selectionStart, 1) === groupingSymbol && count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1) {
-            return newValueLength - caretPositionFromLeft - 1
-          }
+            let caretPositionFromLeft = value.length - selectionStart
+            const newValueLength = this.formattedValue.length
+            if (this.formattedValue.substr(selectionStart, 1) === groupingSymbol && count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1) {
+              return newValueLength - caretPositionFromLeft - 1
+            }
 
-          if (decimalSymbol) {
-            const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
-            if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
-              return this.formattedValue.indexOf(decimalSymbol) + 1
-            } else {
-              if (!this.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
-                if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
-                  caretPositionFromLeft -= 1
+            if (decimalSymbol) {
+              const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
+              if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
+                return this.formattedValue.indexOf(decimalSymbol) + 1
+              } else {
+                if (!this.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
+                  if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
+                    caretPositionFromLeft -= 1
+                  }
                 }
               }
             }
+            return this.hideCurrencySymbolOnFocus ? newValueLength - caretPositionFromLeft : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
           }
-          return this.hideCurrencySymbolOnFocus ? newValueLength - caretPositionFromLeft : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
+          this.setCaretPosition(getCaretPositionAfterFormat())
         }
-        this.setCaretPosition(getCaretPositionAfterFormat())
       }
     }, { capture: true })
 
@@ -211,8 +218,10 @@ export class NumberInput {
       }
     })
 
-    this.el.addEventListener('change', () => {
-      this.callbackFns.onChange(this.getValue())
+    this.el.addEventListener('change', (e) => {
+      if (!e.detail) {
+        this.dispatchEvent('change')
+      }
     })
   }
 
