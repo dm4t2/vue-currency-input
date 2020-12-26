@@ -48,11 +48,16 @@ export default class NumberFormat {
     return null
   }
 
-  isValidIntegerFormat (str, integerNumber) {
+  /**
+   * @param formattedNumber {string}
+   * @param number {number}
+   * @returns {boolean}
+   */
+  isValidIntegerFormat (formattedNumber, number) {
     return [
-      this.normalizeDigits(integerNumber.toLocaleString(this.locale), { useGrouping: true }),
-      this.normalizeDigits(integerNumber.toLocaleString(this.locale, { useGrouping: false }))
-    ].includes(str)
+      this.normalizeDigits(number.toLocaleString(this.locale, { useGrouping: true })),
+      this.normalizeDigits(number.toLocaleString(this.locale, { useGrouping: false }))
+    ].includes(formattedNumber)
   }
 
   format (number, options = {

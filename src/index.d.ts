@@ -17,7 +17,8 @@ export interface CurrencyInputOptions {
   precision?: number | NumberRange,
   autoDecimalDigits?: boolean,
   valueRange?: NumberRange,
-  allowNegative?: boolean
+  allowNegative?: boolean,
+  useGrouping?: boolean
 }
 
 declare const useCurrencyInput: (options: CurrencyInputOptions) => {

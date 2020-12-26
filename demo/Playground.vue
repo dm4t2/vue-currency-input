@@ -41,6 +41,17 @@
             hide-details
           />
           <div class="d-flex align-center justify-space-between">
+            <span class="title">Use Grouping</span>
+            <v-switch
+              v-model="useGrouping"
+              class="my-0"
+              hide-details
+            />
+          </div>
+          <div class="mt-4 mb-10">
+            Whether to use grouping separators such as thousands/lakh/crore separators.
+          </div>
+          <div class="d-flex align-center justify-space-between">
             <span class="title">Distraction Free</span>
             <v-switch
               v-model="distractionFree"
@@ -179,7 +190,8 @@ export default {
       maxActive: false,
       autoDecimalDigits: false,
       valueAsInteger: false,
-      allowNegative: true
+      allowNegative: true,
+      useGrouping: true
     }
   },
   computed: {
@@ -201,7 +213,8 @@ export default {
           } : false,
         autoDecimalDigits: this.autoDecimalDigits,
         valueAsInteger: this.valueAsInteger,
-        allowNegative: this.allowNegative
+        allowNegative: this.allowNegative,
+        useGrouping: this.useGrouping
       }
     }
   }

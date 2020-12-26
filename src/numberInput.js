@@ -12,7 +12,8 @@ export const DEFAULT_OPTIONS = {
   precision: undefined,
   autoDecimalDigits: false,
   valueRange: undefined,
-  allowNegative: true
+  allowNegative: true,
+  useGrouping: true
 }
 
 export class NumberInput {
@@ -25,10 +26,11 @@ export class NumberInput {
   }
 
   init (options) {
-    const { distractionFree, autoDecimalDigits, valueRange, valueAsInteger, allowNegative } = { ...DEFAULT_OPTIONS, ...options }
+    const { distractionFree, autoDecimalDigits, valueRange, valueAsInteger, allowNegative, useGrouping } = { ...DEFAULT_OPTIONS, ...options }
     this.autoDecimalDigits = autoDecimalDigits
     this.valueAsInteger = valueAsInteger
     this.allowNegative = allowNegative
+    this.useGrouping = useGrouping
     this.hideCurrencySymbolOnFocus = distractionFree === true || !!(distractionFree || {}).hideCurrencySymbol
     this.hideNegligibleDecimalDigitsOnFocus = distractionFree === true || !!(distractionFree || {}).hideNegligibleDecimalDigits
     this.hideGroupingSymbolOnFocus = distractionFree === true || !!(distractionFree || {}).hideGroupingSymbol
@@ -112,7 +114,7 @@ export class NumberInput {
         formattedValue = numberValue > MAX_SAFE_INTEGER
           ? this.formattedValue
           : this.currencyFormat.format(numberValue, {
-            useGrouping: !(this.focus && this.hideGroupingSymbolOnFocus),
+            useGrouping: this.useGrouping && !(this.focus && this.hideGroupingSymbolOnFocus),
             minimumFractionDigits,
             maximumFractionDigits
           })

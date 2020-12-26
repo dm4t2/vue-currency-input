@@ -73,6 +73,7 @@ describe('NumberFormat', () => {
       expect(new NumberFormat({ locale: 'ar', currency: 'SAR' }).parse('٠٫٩')).toBe(0.9)
       expect(new NumberFormat({ locale: 'ar', currency: 'SAR' }).parse('؜-٠٫٥٠ ر.س.‏')).toBe(-0.5)
       expect(new NumberFormat({ locale: 'en-IN', currency: 'INR' }).parse('₹1,23,334.00')).toBe(123334)
+      expect(new NumberFormat({ locale: 'en-IN', currency: 'INR' }).parse('₹123334.00')).toBe(123334)
     })
 
     it('should return null if the value does not conform to the currency format', () => {
