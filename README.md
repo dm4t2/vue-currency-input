@@ -14,9 +14,9 @@ Vue Currency Input allows an easy input of currency formatted numbers. Powered b
 * Supports both Vue 2 and Vue 3
 * [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input)
 * Format as you type
-* Built on standards: Uses the [ECMAScript Internationalization API (ECMA-402)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat) for currency formatting
+* Standard-compliant currency formatting based on [ECMAScript Internationalization API (ECMA-402)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)
 * Distraction free (hides the formatting on focus for easier input)
-* Allows handling values as integer numbers for full precision
+* Allows float values to be exported as integer numbers depending on used precision (`$1.99` ➔ `199` cents)
 * Auto decimal digits (automatically inserts the decimal symbol, using the last inputted digits as decimal digits)
 * Built-in value range validation
 * Works with input components of popular frameworks like [Vuetify](https://vuetifyjs.com/en/components/text-fields/), [Quasar](https://quasar.dev/vue-components/input) or [Element](https://element.eleme.io/#/en-US/component/input)
