@@ -5,27 +5,30 @@ const findInput = (el) => el.tagName.toLowerCase() === 'input' ? el : el.querySe
 
 export default (options) => {
   let numberInput, input
-  const inputEvent = isVue3 ? 'update:modelValue' : 'input'
-  const changeEvent = isVue3 ? 'update:modelValue' : 'change'
   const inputRef = ref(null)
   const formattedValue = ref(null)
 
-  const currentInstance = getCurrentInstance()
-  const lazy = isVue3 && (currentInstance.attrs.modelModifiers || {}).lazy
-  const numberValue = computed(() => isVue3 ? currentInstance.props.modelValue : currentInstance.value)
-  const hasInputEventListener = !!(isVue3 ? currentInstance.attrs['onUpdate:modelValue'] : currentInstance.$listeners[inputEvent])
-  const hasChangeEventListener = !!(isVue3 ? currentInstance.attrs['onUpdate:modelValue'] : currentInstance.$listeners[changeEvent])
+  const instance = getCurrentInstance()
+  const emit = (event, value) => isVue3 ? instance.emit(event, value) : instance.proxy.$emit(event, value)
+  const lazyModel = isVue3 && (instance.attrs.modelModifiers || {}).lazy
+  const numberValue = computed(() => isVue3 ? instance.props.modelValue : instance.props.value)
+  const inputEvent = isVue3 ? 'update:modelValue' : 'input'
+  const changeEvent = isVue3 && lazyModel ? 'update:modelValue' : 'change'
+  const hasInputEventListener = (!!instance.attrs['onUpdate:modelValue'] && !lazyModel) || !!instance.proxy.$listeners[inputEvent]
+  const hasChangeEventListener = lazyModel || !!instance.attrs.onChange || !!instance.proxy.$listeners[changeEvent]
 
   const onInput = (e) => {
-    if (e.detail && !lazy && numberValue.value !== e.detail.number) {
-      currentInstance[isVue3 ? 'emit' : '$emit'](inputEvent, e.detail.number)
+    if (e.detail) {
+      if (numberValue.value !== e.detail.number) {
+        emit(inputEvent, e.detail.number)
+      }
       formattedValue.value = e.detail.formatted
     }
   }
 
   const onChange = (e) => {
     if (e.detail) {
-      currentInstance[isVue3 ? 'emit' : '$emit'](changeEvent, e.detail.number)
+      emit(changeEvent, e.detail.number)
       formattedValue.value = e.detail.formatted
     }
   }
