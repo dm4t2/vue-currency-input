@@ -14,8 +14,8 @@ export default (options) => {
   const numberValue = computed(() => isVue3 ? instance.props.modelValue : instance.props.value)
   const inputEvent = isVue3 ? 'update:modelValue' : 'input'
   const changeEvent = isVue3 && lazyModel ? 'update:modelValue' : 'change'
-  const hasInputEventListener = (!!instance.attrs['onUpdate:modelValue'] && !lazyModel) || !!instance.proxy.$listeners[inputEvent]
-  const hasChangeEventListener = lazyModel || !!instance.attrs.onChange || !!instance.proxy.$listeners[changeEvent]
+  const hasInputEventListener = isVue3 ? (!!instance.attrs['onUpdate:modelValue'] && !lazyModel) : !!instance.proxy.$listeners[inputEvent]
+  const hasChangeEventListener = isVue3 ? (lazyModel || !!instance.attrs.onChange) : !!instance.proxy.$listeners[changeEvent]
 
   const onInput = (e) => {
     if (e.detail) {
