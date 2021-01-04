@@ -132,7 +132,7 @@ export default {
 ```
 
 ### Lazy value binding
-Sometimes you might want to update the bound value only when the input loses its focus. In this case, use the `v-model.lazy` for Vue 3. For Vue 2 listen to the `change` event instead of using `v-model`.
+Sometimes you might want to update the bound value only when the input loses its focus. In this case, use `v-model.lazy` for Vue 3. For Vue 2 listen to the `change` event instead of using `v-model`, since the `lazy` modifier is not supported when using `v-model` on custom components.
 
 <code-group>
 <code-block title="Vue 3">
@@ -205,9 +205,20 @@ export default {
     options: Object
   },
   setup (props) {
-    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
-    watch(() => props.options, (options) => setOptions(options))
-    watch(() => props.value, (value) => setValue(value))
+    const {
+      inputRef,
+      formattedValue,
+      setOptions,
+      setValue
+    } = useCurrencyInput(props.options)
+
+    watch(() => props.modelValue, (value) => {
+      setValue(value)
+    })
+
+    watch(() => props.options, (options) => {
+      setOptions(options)
+    })
 
     return { inputRef, formattedValue }
   }
@@ -236,9 +247,20 @@ export default {
     options: Object
   },
   setup (props) {
-    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
-    watch(() => props.options, (options) => setOptions(options))
-    watch(() => props.value, (value) => setValue(value))
+    const {
+      inputRef,
+      formattedValue,
+      setOptions,
+      setValue
+    } = useCurrencyInput(props.options)
+
+    watch(() => props.value, (value) => {
+      setValue(value)
+    })
+
+    watch(() => props.options, (options) => {
+      setOptions(options)
+    })
 
     return { inputRef, formattedValue }
   }
