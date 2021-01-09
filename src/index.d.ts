@@ -1,3 +1,5 @@
+import { Ref } from 'vue-demi'
+
 export interface DistractionFreeOptions {
   hideCurrencySymbol?: boolean,
   hideGroupingSymbol?: boolean,
@@ -22,7 +24,10 @@ export interface CurrencyInputOptions {
 }
 
 declare const useCurrencyInput: (options: CurrencyInputOptions) => {
-  formattedValue: string
+  inputRef: Ref;
+  formattedValue: Ref<string | null>;
+  setValue: (number: number | null) => void;
+  setOptions: (options: CurrencyInputOptions) => void;
 }
 
 export default useCurrencyInput
