@@ -11,14 +11,14 @@ The Vue Currency Input plugin allows an easy input of currency formatted numbers
 [![](docs/vue-currency-input.gif)](https://dm4t2.github.io/vue-currency-input)
 
 ## Features
-* [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input) and zero dependencies
-* Format as you type
-* Locale dependent, ISO-compliant currency formatting based on [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
-* Distraction free (hides the formatting on focus for easier input)
-* Allows handling values as integer numbers for full precision
-* Auto decimal mode (automatically inserts the decimal symbol, using the last inputted digits as decimal digits)
-* Built-in value range validation
-* Works with input components of popular frameworks like [Vuetify](https://codesandbox.io/s/using-vue-currency-input-with-vuetify-kd7d1) or [Element](https://codesandbox.io/s/using-vue-currency-input-with-element-ui-z8gik)
+  * [Tiny bundle size](https://bundlephobia.com/result?p=vue-currency-input) and zero dependencies
+  * Format as you type
+  * Locale dependent, ISO-compliant currency formatting based on [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
+  * Distraction free (hides the formatting on focus for easier input)
+  * Allows handling values as integer numbers for full precision
+  * Auto decimal mode (automatically inserts the decimal symbol, using the last inputted digits as decimal digits)
+  * Built-in value range validation
+  * Works with input components of popular frameworks like [Vuetify](https://codesandbox.io/s/using-vue-currency-input-with-vuetify-kd7d1) or [Element](https://codesandbox.io/s/using-vue-currency-input-with-element-ui-z8gik)
 
 ## Live Demo
 Check out the [playground](https://dm4t2.github.io/vue-currency-input/playground/) to see it in action.
