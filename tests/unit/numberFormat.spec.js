@@ -103,6 +103,7 @@ describe('NumberFormat', () => {
 
   describe('format', () => {
     it('should return the formatted value for the respective options', () => {
+      expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).format(null)).toBe('')
       expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).format(1234.5789)).toBe('€1,234.58')
       expect(new NumberFormat({ locale: 'en', currency: 'EUR' }).format(1234.5789, { minimumFractionDigits: 4 })).toBe('€1,234.5789')
     })

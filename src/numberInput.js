@@ -26,34 +26,24 @@ export class NumberInput {
   }
 
   init (options) {
-    const { distractionFree, autoDecimalDigits, valueRange, valueAsInteger, allowNegative, useGrouping } = { ...DEFAULT_OPTIONS, ...options }
-    this.autoDecimalDigits = autoDecimalDigits
-    this.valueAsInteger = valueAsInteger
-    this.allowNegative = allowNegative
-    this.useGrouping = useGrouping
-    this.hideCurrencySymbolOnFocus = distractionFree === true || !!(distractionFree || {}).hideCurrencySymbol
-    this.hideNegligibleDecimalDigitsOnFocus = distractionFree === true || !!(distractionFree || {}).hideNegligibleDecimalDigits
-    this.hideGroupingSymbolOnFocus = distractionFree === true || !!(distractionFree || {}).hideGroupingSymbol
+    this.options = { ...DEFAULT_OPTIONS, ...options }
+    this.autoDecimalDigits = this.options.autoDecimalDigits
+    this.valueAsInteger = this.options.valueAsInteger
+    this.allowNegative = this.options.allowNegative
+    this.useGrouping = this.options.useGrouping
+    this.hideCurrencySymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideCurrencySymbol
+    this.hideNegligibleDecimalDigitsOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideNegligibleDecimalDigits
+    this.hideGroupingSymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideGroupingSymbol
+    this.valueRange = this.options.valueRange
 
-    if (valueRange) {
-      this.valueRange = {
-        min: valueRange.min !== undefined ? Math.max(valueRange.min, -MAX_SAFE_INTEGER) : -MAX_SAFE_INTEGER,
-        max: valueRange.max !== undefined ? Math.min(valueRange.max, MAX_SAFE_INTEGER) : MAX_SAFE_INTEGER
-      }
-    } else {
-      this.valueRange = {
-        min: -MAX_SAFE_INTEGER,
-        max: MAX_SAFE_INTEGER
-      }
-    }
-    if (autoDecimalDigits) {
+    if (this.options.autoDecimalDigits) {
       this.hideNegligibleDecimalDigitsOnFocus = false
       this.el.setAttribute('inputmode', 'numeric')
     } else {
       this.el.setAttribute('inputmode', 'decimal')
     }
-    this.currencyFormat = new NumberFormat(options)
-    this.numberMask = autoDecimalDigits ? new AutoDecimalDigitsNumberMask(this.currencyFormat) : new DefaultNumberMask(this.currencyFormat)
+    this.currencyFormat = new NumberFormat(this.options)
+    this.numberMask = this.options.autoDecimalDigits ? new AutoDecimalDigitsNumberMask(this.currencyFormat) : new DefaultNumberMask(this.currencyFormat)
   }
 
   setOptions (options) {
@@ -68,14 +58,14 @@ export class NumberInput {
   }
 
   applyFixedFractionFormat (number, forcedChange) {
-    this.format(number != null ? this.currencyFormat.format(this.validateValueRange(number)) : null)
+    this.format(this.currencyFormat.format(this.validateValueRange(number)))
     if (number !== this.numberValue || forcedChange) {
       this.dispatchEvent('change')
     }
   }
 
   getValue () {
-    const numberValue = this.valueAsInteger && this.numberValue != null ? Number(this.numberValue.toFixed(this.currencyFormat.maximumFractionDigits).split('.').join('')) : this.numberValue
+    const numberValue = this.valueAsInteger && this.numberValue != null ? this.toInteger(this.numberValue) : this.numberValue
     return {
       number: numberValue,
       formatted: this.formattedValue
@@ -83,15 +73,28 @@ export class NumberInput {
   }
 
   setValue (value) {
-    const newValue = this.valueAsInteger && value != null ? value / Math.pow(10, this.currencyFormat.maximumFractionDigits) : value
+    const newValue = this.valueAsInteger && value != null ? this.toFloat(value) : value
     if (newValue !== this.numberValue) {
       this.applyFixedFractionFormat(newValue)
     }
   }
 
+  toInteger (number) {
+    return Number(number.toFixed(this.currencyFormat.maximumFractionDigits).split('.').join(''))
+  }
+
+  toFloat (value) {
+    return value / Math.pow(10, this.currencyFormat.maximumFractionDigits)
+  }
+
   validateValueRange (value) {
-    const { min, max } = this.valueRange
-    return Math.min(Math.max(value, min), max)
+    if (value != null) {
+      let { min, max } = this.valueRange || {}
+      min = min !== undefined ? Math.max(min, this.toFloat(-MAX_SAFE_INTEGER)) : this.toFloat(-MAX_SAFE_INTEGER)
+      max = max !== undefined ? Math.min(max, this.toFloat(MAX_SAFE_INTEGER)) : this.toFloat(MAX_SAFE_INTEGER)
+      value = Math.min(Math.max(value, min), max)
+    }
+    return value
   }
 
   format (value, hideNegligibleDecimalDigits = false) {
@@ -111,7 +114,7 @@ export class NumberInput {
         minimumFractionDigits = hideNegligibleDecimalDigits
           ? fractionDigits.replace(/0+$/, '').length
           : Math.min(minimumFractionDigits, fractionDigits.length)
-        formattedValue = numberValue > MAX_SAFE_INTEGER
+        formattedValue = this.toInteger(Math.abs(numberValue)) > MAX_SAFE_INTEGER
           ? this.formattedValue
           : this.currencyFormat.format(numberValue, {
             useGrouping: this.useGrouping && !(this.focus && this.hideGroupingSymbolOnFocus),

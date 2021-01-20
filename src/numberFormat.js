@@ -4,8 +4,7 @@ export const DECIMAL_SYMBOLS = [',', '.', '٫']
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 
 export default class NumberFormat {
-  constructor (options) {
-    const { currency, locale, precision, autoDecimalDigits } = options
+  constructor ({ currency, locale, precision, autoDecimalDigits }) {
     const numberFormat = new Intl.NumberFormat(locale, { currency, style: 'currency' })
     const ps = numberFormat.format(123456)
 
@@ -22,7 +21,7 @@ export default class NumberFormat {
       this.minimumFractionDigits = this.maximumFractionDigits = precision
     } else if (typeof precision === 'object' && !autoDecimalDigits) {
       this.minimumFractionDigits = precision.min || 0
-      this.maximumFractionDigits = precision.max !== undefined ? precision.max : 20
+      this.maximumFractionDigits = precision.max !== undefined ? precision.max : 15
     } else {
       this.minimumFractionDigits = numberFormat.resolvedOptions().minimumFractionDigits
       this.maximumFractionDigits = numberFormat.resolvedOptions().maximumFractionDigits
@@ -64,11 +63,15 @@ export default class NumberFormat {
     minimumFractionDigits: this.minimumFractionDigits,
     maximumFractionDigits: this.maximumFractionDigits
   }) {
-    return number.toLocaleString(this.locale, {
-      style: 'currency',
-      currency: this.currency,
-      ...options
-    })
+    if (number == null) {
+      return ''
+    } else {
+      return number.toLocaleString(this.locale, {
+        style: 'currency',
+        currency: this.currency,
+        ...options
+      })
+    }
   }
 
   toFraction (str) {
