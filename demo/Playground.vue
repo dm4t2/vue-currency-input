@@ -117,7 +117,7 @@
             v-if="precisionRangeEnabled"
             v-model="precisionRange"
             :disabled="!precisionEnabled"
-            :max="20"
+            :max="15"
             thumb-label="always"
             thumb-size="24"
           />
@@ -125,7 +125,7 @@
             v-else
             v-model="precisionFixed"
             :disabled="!precisionEnabled"
-            :max="20"
+            :max="15"
             thumb-label="always"
             thumb-size="24"
           />
@@ -183,7 +183,7 @@ export default {
       precisionEnabled: false,
       precisionRangeEnabled: false,
       precisionFixed: 2,
-      precisionRange: [0, 20],
+      precisionRange: [0, 15],
       valueRangeEnabled: false,
       valueRange: [0, 9999],
       minActive: false,

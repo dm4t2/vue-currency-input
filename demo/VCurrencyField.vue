@@ -19,9 +19,20 @@ export default {
     options: Object
   },
   setup (props) {
-    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
-    watch(() => props.options, (options) => setOptions(options))
-    watch(() => props.value, (value) => setValue(value))
+    const {
+      inputRef,
+      formattedValue,
+      setOptions,
+      setValue
+    } = useCurrencyInput(props.options)
+
+    watch(() => props.options, (options) => {
+      setOptions(options)
+    })
+
+    watch(() => props.value, (value) => {
+      setValue(value)
+    })
 
     return { inputRef, formattedValue }
   }
