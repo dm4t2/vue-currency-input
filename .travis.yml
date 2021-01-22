@@ -30,6 +30,7 @@ jobs:
           branch: master
           tags: true
         provider: npm
+        tag: next
         skip_cleanup: true
         email: dm4t2@outlook.com
         api_key:
