@@ -147,6 +147,9 @@ export class NumberInput {
     this.el.addEventListener('input', (e) => {
       if (!e.detail) {
         const { value, selectionStart } = this.el
+        if (DECIMAL_SYMBOLS.includes(e.data)) {
+          this.decimalSymbolInsertedAt = selectionStart - 1
+        }
         this.format(value)
         if (this.focus) {
           const getCaretPositionAfterFormat = () => {
@@ -208,12 +211,6 @@ export class NumberInput {
           this.setCaretPosition(getSelectionStart())
         }
       })
-    })
-
-    this.el.addEventListener('keypress', (e) => {
-      if (DECIMAL_SYMBOLS.includes(e.key)) {
-        this.decimalSymbolInsertedAt = this.el.selectionStart
-      }
     })
 
     this.el.addEventListener('blur', () => {
