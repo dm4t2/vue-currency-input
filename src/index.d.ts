@@ -49,7 +49,7 @@ export function parse (formattedValue: string, options: CurrencyInputOptions): n
 
 export function getValue (el: HTMLInputElement): number | null
 
-export function setValue (el: HTMLInputElement, value: Number): void
+export function setValue (el: HTMLInputElement, value: number | null): void
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -60,7 +60,7 @@ declare module 'vue/types/vue' {
 
       getValue (el: HTMLInputElement): number | null
 
-      setValue (el: HTMLInputElement, value: Number): void
+      setValue (el: HTMLInputElement, value: number | null): void
     }
   }
 }
