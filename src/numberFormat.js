@@ -58,9 +58,12 @@ export default class NumberFormat {
   }
 
   isValidIntegerFormat (str, integerNumber) {
+    const options = typeof this.currency === 'string'
+      ? { style: 'currency', currency: this.currency, minimumFractionDigits: 0 }
+      : {}
     return [
-      this.normalizeDigits(integerNumber.toLocaleString(this.locale)),
-      this.normalizeDigits(integerNumber.toLocaleString(this.locale, { useGrouping: false }))
+      this.stripCurrencySymbol(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: true }))),
+      this.stripCurrencySymbol(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: false })))
     ].includes(str)
   }
 
