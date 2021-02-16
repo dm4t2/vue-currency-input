@@ -1,4 +1,4 @@
-import { removeLeadingZeros, startsWith } from './stringUtils'
+import { removeLeadingZeros } from './stringUtils'
 
 export class DefaultNumberMask {
   constructor (numberFormat) {
@@ -13,7 +13,7 @@ export class DefaultNumberMask {
       } else if (this.numberFormat.maximumFractionDigits > 0) {
         if (this.numberFormat.isFractionIncomplete(str)) {
           return str
-        } else if (startsWith(str, this.numberFormat.decimalSymbol)) {
+        } else if (str.startsWith(this.numberFormat.decimalSymbol)) {
           return this.numberFormat.toFraction(str)
         }
       }

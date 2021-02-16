@@ -1,4 +1,4 @@
-import { count, escapeRegExp, startsWith, substringBefore } from './stringUtils'
+import { count, escapeRegExp, substringBefore } from './stringUtils'
 
 export const DECIMAL_SYMBOLS = [',', '.', '٫']
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
@@ -79,7 +79,7 @@ export default class NumberFormat {
   }
 
   isNegative (str) {
-    return startsWith(str, this.negativePrefix) || startsWith(str.replace('-', this.minusSymbol), this.minusSymbol)
+    return str.startsWith(this.negativePrefix) || str.replace('-', this.minusSymbol).startsWith(this.minusSymbol)
   }
 
   insertCurrencySymbol (str, negative) {
