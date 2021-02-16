@@ -47,15 +47,11 @@ export default class NumberFormat {
     return null
   }
 
-  /**
-   * @param formattedNumber {string}
-   * @param number {number}
-   * @returns {boolean}
-   */
-  isValidIntegerFormat (formattedNumber, number) {
+  isValidIntegerFormat (formattedNumber, integerNumber) {
+    const options = { style: 'currency', currency: this.currency, minimumFractionDigits: 0 }
     return [
-      this.normalizeDigits(number.toLocaleString(this.locale, { useGrouping: true })),
-      this.normalizeDigits(number.toLocaleString(this.locale, { useGrouping: false }))
+      this.stripCurrencySymbol(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: true }))),
+      this.stripCurrencySymbol(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: false })))
     ].includes(formattedNumber)
   }
 
