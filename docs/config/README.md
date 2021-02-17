@@ -11,5 +11,5 @@ Name | Type | Description
 `distractionFree` | Boolean/Object | Whether to hide negligible decimal digits, the currency symbol and the grouping symbol on focus. Default is `true`. You can also pass an object of boolean properties to configure each option: `{hideNegligibleDecimalDigits, hideCurrencySymbol, hideGroupingSymbol}`. Using `false` will leave the formatted value untouched on focus.
 `valueAsInteger` | Boolean | Whether the number value should be handled as integer instead of float value. Default is `false`.
 `valueRange` | Object | The range of accepted values as object `{min, max}`. Default is `undefined` (no value range). The validation is triggered on blur and automatically sets the respective threshold if out of range.
-`allowNegative` | Boolean | Whether the input of negative values is allowed. Default is `true`. If `false` it prevents the user to enter a minus symbol.
+`autoSign` | Boolean | Whether the minus symbol is automatically inserted or prevented to be inputted depending the configured `valueRange`. Default is `true`.
 `useGrouping` | Boolean | Whether to use grouping separators such as thousands/lakh/crore separators.

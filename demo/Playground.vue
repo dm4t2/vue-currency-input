@@ -84,11 +84,11 @@
             label="Hide negligible decimal digits"
           />
           <div class="d-flex align-center justify-space-between mt-8">
-            <span class="title">Allow Negative</span>
-            <v-switch v-model="allowNegative" />
+            <span class="title">Auto Sign</span>
+            <v-switch v-model="autoSign" />
           </div>
           <div class="mb-6">
-            Whether the input of negative values is allowed.
+            Whether the minus symbol is automatically inserted or prevented to be inputted depending the current value range.
           </div>
         </v-col>
         <v-col
@@ -139,7 +139,8 @@
           <v-range-slider
             v-model="valueRange"
             :disabled="!valueRangeEnabled"
-            :max="999"
+            :max="1000"
+            :min="-1000"
             thumb-label="always"
             thumb-size="24"
           />
@@ -190,7 +191,7 @@ export default {
       maxActive: false,
       autoDecimalDigits: false,
       valueAsInteger: false,
-      allowNegative: true,
+      autoSign: true,
       useGrouping: true
     }
   },
@@ -213,7 +214,7 @@ export default {
           } : false,
         autoDecimalDigits: this.autoDecimalDigits,
         valueAsInteger: this.valueAsInteger,
-        allowNegative: this.allowNegative,
+        autoSign: this.autoSign,
         useGrouping: this.useGrouping
       }
     }

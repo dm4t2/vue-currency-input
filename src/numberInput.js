@@ -2,8 +2,6 @@ import NumberFormat, { DECIMAL_SYMBOLS } from './numberFormat'
 import { AutoDecimalDigitsNumberMask, DefaultNumberMask } from './numberMask'
 import { count } from './stringUtils'
 
-const MAX_SAFE_INTEGER = Math.pow(2, 53) - 1
-
 export const DEFAULT_OPTIONS = {
   locale: undefined,
   currency: undefined,
@@ -12,7 +10,7 @@ export const DEFAULT_OPTIONS = {
   precision: undefined,
   autoDecimalDigits: false,
   valueRange: undefined,
-  allowNegative: true,
+  autoSign: true,
   useGrouping: true
 }
 
@@ -27,14 +25,19 @@ export class NumberInput {
 
   init (options) {
     this.options = { ...DEFAULT_OPTIONS, ...options }
+    this.currencyFormat = new NumberFormat(this.options)
     this.autoDecimalDigits = this.options.autoDecimalDigits
     this.valueAsInteger = this.options.valueAsInteger
-    this.allowNegative = this.options.allowNegative
+    this.autoSign = this.options.autoSign
     this.useGrouping = this.options.useGrouping
     this.hideCurrencySymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideCurrencySymbol
     this.hideNegligibleDecimalDigitsOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideNegligibleDecimalDigits
     this.hideGroupingSymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideGroupingSymbol
     this.valueRange = this.options.valueRange
+
+    const { min, max } = this.valueRange || {}
+    this.min = min !== undefined ? Math.max(min, this.toFloat(Number.MIN_SAFE_INTEGER)) : this.toFloat(Number.MIN_SAFE_INTEGER)
+    this.max = max !== undefined ? Math.min(max, this.toFloat(Number.MAX_SAFE_INTEGER)) : this.toFloat(Number.MAX_SAFE_INTEGER)
 
     if (this.options.autoDecimalDigits) {
       this.hideNegligibleDecimalDigitsOnFocus = false
@@ -42,7 +45,6 @@ export class NumberInput {
     } else {
       this.el.setAttribute('inputmode', 'decimal')
     }
-    this.currencyFormat = new NumberFormat(this.options)
     this.numberMask = this.options.autoDecimalDigits ? new AutoDecimalDigitsNumberMask(this.currencyFormat) : new DefaultNumberMask(this.currencyFormat)
   }
 
@@ -89,10 +91,7 @@ export class NumberInput {
 
   validateValueRange (value) {
     if (value != null) {
-      let { min, max } = this.valueRange || {}
-      min = min !== undefined ? Math.max(min, this.toFloat(-MAX_SAFE_INTEGER)) : this.toFloat(-MAX_SAFE_INTEGER)
-      max = max !== undefined ? Math.min(max, this.toFloat(MAX_SAFE_INTEGER)) : this.toFloat(MAX_SAFE_INTEGER)
-      value = Math.min(Math.max(value, min), max)
+      return Math.min(Math.max(value, this.min), this.max)
     }
     return value
   }
@@ -114,7 +113,7 @@ export class NumberInput {
         minimumFractionDigits = hideNegligibleDecimalDigits
           ? fractionDigits.replace(/0+$/, '').length
           : Math.min(minimumFractionDigits, fractionDigits.length)
-        formattedValue = this.toInteger(Math.abs(numberValue)) > MAX_SAFE_INTEGER
+        formattedValue = this.toInteger(Math.abs(numberValue)) > Number.MAX_SAFE_INTEGER
           ? this.formattedValue
           : this.currencyFormat.format(numberValue, {
             useGrouping: this.useGrouping && !(this.focus && this.hideGroupingSymbolOnFocus),
@@ -124,8 +123,13 @@ export class NumberInput {
       } else {
         formattedValue = conformedValue
       }
-      if (!this.allowNegative) {
-        formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
+      if (this.autoSign) {
+        if (this.max <= 0 && !this.currencyFormat.isNegative(formattedValue) && this.currencyFormat.parse(formattedValue) != null) {
+          formattedValue = formattedValue.replace(this.currencyFormat.prefix, this.currencyFormat.negativePrefix)
+        }
+        if (this.min >= 0) {
+          formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
+        }
       }
       if (this.focus && this.hideCurrencySymbolOnFocus) {
         formattedValue = formattedValue

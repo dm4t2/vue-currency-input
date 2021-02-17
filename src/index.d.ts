@@ -19,7 +19,7 @@ export interface CurrencyInputOptions {
   precision?: number | NumberRange,
   autoDecimalDigits?: boolean,
   valueRange?: NumberRange,
-  allowNegative?: boolean,
+  autoSign?: boolean,
   useGrouping?: boolean
 }
 
