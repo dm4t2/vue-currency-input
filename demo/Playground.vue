@@ -154,11 +154,11 @@
           </div>
 
           <div class="d-flex align-center justify-space-between">
-            <span class="title">Value As Integer</span>
-            <v-switch v-model="valueAsInteger" />
+            <span class="title">Export Value As Integer</span>
+            <v-switch v-model="exportValueAsInteger" />
           </div>
           <div class="mb-6">
-            Whether the number value should be handled as integer instead of a float value.
+            Whether the number value should be exported as integer instead of a float value depending the configured precision.
           </div>
         </v-col>
       </v-row>
@@ -190,7 +190,7 @@ export default {
       minActive: false,
       maxActive: false,
       autoDecimalDigits: false,
-      valueAsInteger: false,
+      exportValueAsInteger: false,
       autoSign: true,
       useGrouping: true
     }
@@ -213,7 +213,7 @@ export default {
             hideGroupingSymbol: this.hideGroupingSymbol
           } : false,
         autoDecimalDigits: this.autoDecimalDigits,
-        valueAsInteger: this.valueAsInteger,
+        exportValueAsInteger: this.exportValueAsInteger,
         autoSign: this.autoSign,
         useGrouping: this.useGrouping
       }

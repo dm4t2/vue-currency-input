@@ -5,7 +5,7 @@ import { count } from './stringUtils'
 export const DEFAULT_OPTIONS = {
   locale: undefined,
   currency: undefined,
-  valueAsInteger: false,
+  exportValueAsInteger: false,
   distractionFree: true,
   precision: undefined,
   autoDecimalDigits: false,
@@ -27,7 +27,7 @@ export class NumberInput {
     this.options = { ...DEFAULT_OPTIONS, ...options }
     this.currencyFormat = new NumberFormat(this.options)
     this.autoDecimalDigits = this.options.autoDecimalDigits
-    this.valueAsInteger = this.options.valueAsInteger
+    this.exportValueAsInteger = this.options.exportValueAsInteger
     this.autoSign = this.options.autoSign
     this.useGrouping = this.options.useGrouping
     this.hideCurrencySymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideCurrencySymbol
@@ -67,7 +67,7 @@ export class NumberInput {
   }
 
   getValue () {
-    const numberValue = this.valueAsInteger && this.numberValue != null ? this.toInteger(this.numberValue) : this.numberValue
+    const numberValue = this.exportValueAsInteger && this.numberValue != null ? this.toInteger(this.numberValue) : this.numberValue
     return {
       number: numberValue,
       formatted: this.formattedValue
@@ -75,7 +75,7 @@ export class NumberInput {
   }
 
   setValue (value) {
-    const newValue = this.valueAsInteger && value != null ? this.toFloat(value) : value
+    const newValue = this.exportValueAsInteger && value != null ? this.toFloat(value) : value
     if (newValue !== this.numberValue) {
       this.applyFixedFractionFormat(newValue)
     }

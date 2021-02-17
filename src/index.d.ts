@@ -14,7 +14,7 @@ export interface NumberRange {
 export interface CurrencyInputOptions {
   locale?: string,
   currency: string,
-  valueAsInteger?: boolean,
+  exportValueAsInteger?: boolean,
   distractionFree?: boolean | DistractionFreeOptions,
   precision?: number | NumberRange,
   autoDecimalDigits?: boolean,
