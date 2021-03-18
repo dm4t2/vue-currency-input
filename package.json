@@ -42,6 +42,11 @@
     "@vue/composition-api": "^1.0.0-rc.1",
     "vue": "^2.6 || ^3.0.0"
   },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@mdi/font": "^4.7.95",
     "@vue/cli-plugin-babel": "~4.5.11",
