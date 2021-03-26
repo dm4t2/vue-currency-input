@@ -53,8 +53,8 @@ export class AutoDecimalDigitsNumberMask {
     this.numberFormat = numberFormat
   }
 
-  conformToMask (str) {
-    if (str === '') {
+  conformToMask (str, previousConformedValue = '') {
+    if (str === '' || (this.numberFormat.parse(previousConformedValue) === 0 && this.numberFormat.stripCurrencySymbol(previousConformedValue).slice(0, -1) === this.numberFormat.stripCurrencySymbol(str))) {
       return ''
     }
     const negative = this.numberFormat.isNegative(str)

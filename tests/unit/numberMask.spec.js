@@ -149,6 +149,7 @@ describe('AutoDecimalDigitsNumberMask', () => {
     const numberFormat = new NumberFormat({ locale: 'nl', currency: 'EUR', precision: 2, autoDecimalDigits: true })
 
     expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('')).toEqual('')
+    expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('0,0', '0,00')).toEqual('')
     expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('-')).toEqual({ numberValue: -0, fractionDigits: '00' })
     expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('1')).toEqual({ numberValue: 0.01, fractionDigits: '01' })
     expect(new AutoDecimalDigitsNumberMask(numberFormat).conformToMask('12345')).toEqual({ numberValue: 123.45, fractionDigits: '45' })
