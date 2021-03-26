@@ -1,6 +1,6 @@
 import NumberFormat, { DECIMAL_SYMBOLS } from './numberFormat'
 import { AutoDecimalDigitsNumberMask, DefaultNumberMask } from './numberMask'
-import { count } from './stringUtils'
+import { count, escapeRegExp } from './stringUtils'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
@@ -11,7 +11,8 @@ export const DEFAULT_OPTIONS = {
   autoDecimalDigits: false,
   valueRange: undefined,
   autoSign: true,
-  useGrouping: true
+  useGrouping: true,
+  decimalDigitsReplacement: undefined
 }
 
 export class NumberInput {
@@ -30,6 +31,7 @@ export class NumberInput {
     this.exportValueAsInteger = this.options.exportValueAsInteger
     this.autoSign = this.options.autoSign
     this.useGrouping = this.options.useGrouping
+    this.hasDecimalDigitsReplacement = (this.options.decimalDigitsReplacement || '').trim().length > 0
     this.hideCurrencySymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideCurrencySymbol
     this.hideNegligibleDecimalDigitsOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideNegligibleDecimalDigits
     this.hideGroupingSymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideGroupingSymbol
@@ -41,6 +43,7 @@ export class NumberInput {
 
     if (this.options.autoDecimalDigits) {
       this.hideNegligibleDecimalDigitsOnFocus = false
+      this.hasDecimalDigitsReplacement = false
       this.el.setAttribute('inputmode', 'numeric')
     } else {
       this.el.setAttribute('inputmode', 'decimal')
@@ -102,17 +105,18 @@ export class NumberInput {
         value = this.currencyFormat.normalizeDecimalSymbol(value, this.decimalSymbolInsertedAt)
         this.decimalSymbolInsertedAt = undefined
       }
-      const conformedValue = this.numberMask.conformToMask(value, this.formattedValue)
+      const conformedValue = this.numberMask.conformToMask(value, this.formattedValue, this.focus)
       let formattedValue
       if (typeof conformedValue === 'object') {
         const { numberValue, fractionDigits } = conformedValue
         let { maximumFractionDigits, minimumFractionDigits } = this.currencyFormat
         if (this.focus) {
-          minimumFractionDigits = maximumFractionDigits
+          minimumFractionDigits = hideNegligibleDecimalDigits
+            ? fractionDigits.replace(/0+$/, '').length
+            : Math.min(maximumFractionDigits, fractionDigits.length)
+        } else if (Number.isInteger(numberValue) && !this.autoDecimalDigits && (this.options.precision === undefined || minimumFractionDigits === 0)) {
+          minimumFractionDigits = maximumFractionDigits = this.hasDecimalDigitsReplacement ? 1 : 0
         }
-        minimumFractionDigits = hideNegligibleDecimalDigits
-          ? fractionDigits.replace(/0+$/, '').length
-          : Math.min(minimumFractionDigits, fractionDigits.length)
         formattedValue = this.toInteger(Math.abs(numberValue)) > Number.MAX_SAFE_INTEGER
           ? this.formattedValue
           : this.currencyFormat.format(numberValue, {
@@ -137,9 +141,18 @@ export class NumberInput {
           .replace(this.currencyFormat.prefix, '')
           .replace(this.currencyFormat.suffix, '')
       }
-
-      this.el.value = formattedValue
       this.numberValue = this.currencyFormat.parse(formattedValue)
+      if (
+        !this.focus &&
+        Number.isInteger(this.numberValue) &&
+        this.hasDecimalDigitsReplacement &&
+        this.currencyFormat.decimalSymbol !== undefined) {
+        formattedValue = formattedValue.replace(
+          new RegExp(`${escapeRegExp(this.currencyFormat.decimalSymbol)}${this.currencyFormat.digits[0]}*`),
+          `${this.currencyFormat.decimalSymbol}${this.options.decimalDigitsReplacement}`
+        )
+      }
+      this.el.value = formattedValue
     } else {
       this.el.value = this.numberValue = null
     }
@@ -188,9 +201,7 @@ export class NumberInput {
       this.focus = true
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = this.el
-        if ((this.hideCurrencySymbolOnFocus || this.hideGroupingSymbolOnFocus || this.hideNegligibleDecimalDigitsOnFocus) && value) {
-          this.format(value, this.hideNegligibleDecimalDigitsOnFocus)
-        }
+        this.format(value, this.hideNegligibleDecimalDigitsOnFocus)
         if (Math.abs(selectionStart - selectionEnd) > 0) {
           this.setCaretPosition(0, this.el.value.length)
         } else {

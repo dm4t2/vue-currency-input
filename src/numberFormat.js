@@ -4,7 +4,7 @@ export const DECIMAL_SYMBOLS = [',', '.', '٫']
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 
 export default class NumberFormat {
-  constructor ({ currency, locale, precision, autoDecimalDigits }) {
+  constructor ({ currency, locale, precision, autoDecimalDigits, decimalDigitsReplacement }) {
     const numberFormat = new Intl.NumberFormat(locale, { currency, style: 'currency' })
     const ps = numberFormat.format(123456)
 
@@ -30,6 +30,7 @@ export default class NumberFormat {
     this.prefix = substringBefore(ps, this.digits[1])
     this.negativePrefix = substringBefore(numberFormat.format(-1), this.digits[1])
     this.suffix = ps.substring(ps.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[6]) + 1)
+    this.decimalDigitsReplacement = decimalDigitsReplacement
   }
 
   parse (str) {
@@ -96,6 +97,10 @@ export default class NumberFormat {
 
   stripCurrencySymbol (str) {
     return str.replace(this.negativePrefix, '').replace(this.prefix, '').replace(this.suffix, '')
+  }
+
+  stripDecimalDigitsReplacement (str) {
+    return str.replace(this.decimalSymbol + this.decimalDigitsReplacement, this.decimalSymbol + this.digits[0].repeat(this.maximumFractionDigits))
   }
 
   normalizeDecimalSymbol (str, from) {

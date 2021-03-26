@@ -21,6 +21,7 @@ export class DefaultNumberMask {
     }
 
     let value = str
+    value = this.numberFormat.stripDecimalDigitsReplacement(value)
     value = this.numberFormat.stripCurrencySymbol(value)
     value = this.numberFormat.stripMinusSymbol(value)
 

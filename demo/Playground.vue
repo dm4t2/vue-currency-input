@@ -78,7 +78,7 @@
           />
           <v-checkbox
             v-model="hideNegligibleDecimalDigits"
-            :disabled="!distractionFree"
+            :disabled="!distractionFree || !hideNegligibleDecimalDigitsEnabled"
             class="my-0"
             hide-details
             label="Hide negligible decimal digits"
@@ -130,6 +130,14 @@
             thumb-size="24"
           />
           <div class="d-flex align-center justify-space-between">
+            <span class="title">Decimal Digits Replacement</span>
+            <v-switch v-model="decimalDigitsReplacementEnabled" />
+          </div>
+          <div class="mb-8">
+            Replaces decimal digits with a custom character. Only applies for integer numbers.
+          </div>
+          <v-text-field v-model="decimalDigitsReplacement" />
+          <div class="d-flex align-center justify-space-between">
             <span class="title">Value Range</span>
             <v-switch v-model="valueRangeEnabled" />
           </div>
@@ -147,7 +155,10 @@
 
           <div class="d-flex align-center justify-space-between">
             <span class="title">Auto Decimal Digits</span>
-            <v-switch v-model="autoDecimalDigits" />
+            <v-switch
+              v-model="autoDecimalDigits"
+              :disabled="!autoDecimalDigitsEnabled"
+            />
           </div>
           <div class="mb-6">
             Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits.
@@ -180,15 +191,19 @@ export default {
       distractionFree: true,
       hideCurrencySymbol: true,
       hideGroupingSymbol: true,
+      hideNegligibleDecimalDigitsEnabled: true,
       hideNegligibleDecimalDigits: true,
       precisionEnabled: false,
       precisionRangeEnabled: false,
       precisionFixed: 2,
       precisionRange: [0, 15],
+      decimalDigitsReplacementEnabled: false,
+      decimalDigitsReplacement: '—',
       valueRangeEnabled: false,
       valueRange: [0, 9999],
       minActive: false,
       maxActive: false,
+      autoDecimalDigitsEnabled: true,
       autoDecimalDigits: false,
       exportValueAsInteger: false,
       autoSign: true,
@@ -206,6 +221,7 @@ export default {
         precision: this.precisionEnabled
           ? (this.precisionRangeEnabled ? { min: this.precisionRange[0], max: this.precisionRange[1] } : this.precisionFixed)
           : undefined,
+        decimalDigitsReplacement: this.decimalDigitsReplacementEnabled ? this.decimalDigitsReplacement : undefined,
         distractionFree: this.distractionFree
           ? {
             hideNegligibleDecimalDigits: this.hideNegligibleDecimalDigits,
@@ -217,6 +233,19 @@ export default {
         autoSign: this.autoSign,
         useGrouping: this.useGrouping
       }
+    }
+  },
+  watch: {
+    decimalDigitsReplacementEnabled (value) {
+      this.autoDecimalDigitsEnabled = !value
+      if (value) {
+        this.autoDecimalDigits = false
+      }
+    },
+    autoDecimalDigits (value) {
+      this.hideNegligibleDecimalDigitsEnabled = !value
+      this.hideNegligibleDecimalDigits = !value
+      this.precisionRangeEnabled = !value
     }
   }
 }
