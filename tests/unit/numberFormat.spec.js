@@ -21,12 +21,6 @@ describe('NumberFormat', () => {
     describe('custom precision', () => {
       it('should work with a custom precision', () => {
         expect(new NumberFormat({ currency: 'EUR', precision: 0 })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 }))
-        expect(new NumberFormat({ currency: 'EUR', precision: { min: 0, max: 0 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 }))
-        expect(new NumberFormat({ currency: 'EUR', precision: { min: 0, max: 2 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 2 }))
-      })
-
-      it('should ignore precision ranges when the option "Auto decimal digits" is used', () => {
-        expect(new NumberFormat({ currency: 'EUR', autoDecimalDigits: true, precision: { min: 0, max: 2 } })).toEqual(expect.objectContaining({ minimumFractionDigits: 2, maximumFractionDigits: 2 }))
       })
 
       it('should ignore the custom precision if the locale does not support decimal digits', () => {

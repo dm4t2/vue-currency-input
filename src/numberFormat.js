@@ -4,7 +4,7 @@ export const DECIMAL_SYMBOLS = [',', '.', '٫']
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 
 export default class NumberFormat {
-  constructor ({ currency, locale, precision, autoDecimalDigits, decimalDigitsReplacement }) {
+  constructor ({ currency, locale, precision, decimalDigitsReplacement }) {
     const numberFormat = new Intl.NumberFormat(locale, { currency, style: 'currency' })
     const ps = numberFormat.format(123456)
 
@@ -17,11 +17,8 @@ export default class NumberFormat {
 
     if (this.decimalSymbol === undefined) {
       this.minimumFractionDigits = this.maximumFractionDigits = 0
-    } else if (typeof precision === 'number') {
+    } else if (precision !== undefined) {
       this.minimumFractionDigits = this.maximumFractionDigits = precision
-    } else if (typeof precision === 'object' && !autoDecimalDigits) {
-      this.minimumFractionDigits = precision.min || 0
-      this.maximumFractionDigits = precision.max !== undefined ? precision.max : 15
     } else {
       this.minimumFractionDigits = numberFormat.resolvedOptions().minimumFractionDigits
       this.maximumFractionDigits = numberFormat.resolvedOptions().maximumFractionDigits

@@ -10,8 +10,6 @@ You’re browsing the documentation for v2.x. [For v1.x, click here](https://vue
 ## Introduction
 Vue Currency Input allows an easy input of currency formatted numbers. Powered by the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides a Vue composable for decorating input components with currency format capabilities.
 
-![](../vue-currency-input.gif)
-
 ## Installation
 Install the npm package:
 

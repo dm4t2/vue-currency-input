@@ -2,7 +2,6 @@
   <VTextField
     ref="inputRef"
     :value="formattedValue"
-    dense
     hide-details
     outlined
   />

@@ -16,11 +16,12 @@ export interface CurrencyInputOptions {
   currency: string,
   exportValueAsInteger?: boolean,
   distractionFree?: boolean | DistractionFreeOptions,
-  precision?: number | NumberRange,
+  precision?: number,
   autoDecimalDigits?: boolean,
   valueRange?: NumberRange,
   autoSign?: boolean,
-  useGrouping?: boolean
+  useGrouping?: boolean,
+  decimalDigitsReplacement?: string
 }
 
 declare const useCurrencyInput: (options: CurrencyInputOptions) => {
