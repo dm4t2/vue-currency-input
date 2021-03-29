@@ -46,6 +46,7 @@ yarn add @vue/composition-api
 ## Usage
 Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Vuetify](https://vuetifyjs.com/en/components/text-fields/), [Quasar](https://quasar.dev/vue-components/input) or [Element](https://element.eleme.io/#/en-US/component/input)).
 
+### Creating a custom component
 The following example component `<currency-input>` uses a simple HTML input element:
 
 <code-group>
@@ -106,9 +107,15 @@ export default {
 </code-block>
 </code-group>
 
-
+:::tip Component Props
 The component should provide props for the `v-model` value binding, and the options (see [Config Reference](/config/)).
+:::
 
+:::warning Input Type
+Make sure, that the input element has type `text` (or omit the type since it's the default).
+:::
+
+### Use the custom component
 Now you can use the created `<currency-input>` component in your app:
 ``` vue
 <template>
@@ -129,7 +136,7 @@ export default {
 </script> 
 ```
 
-### Lazy value binding
+## Lazy value binding
 Sometimes you might want to update the bound value only when the input loses its focus. In this case, use `v-model.lazy` for Vue 3. For Vue 2 listen to the `change` event instead of using `v-model`, since the `lazy` modifier is not supported when using `v-model` on custom components.
 
 <code-group>
@@ -177,7 +184,7 @@ export default {
 </code-block>
 </code-group>
 
-### Reacting on external props changes
+## External props changes
 If the value of the input is changed externally (and not only by user input) you need to use the `setValue` function returned by `useCurrencyInput` within a watcher.
 
 The same applies for the options of your currency input component. Use the `setOptions` function in a watcher in order to make the options reactive for changes after the component has been mounted (like in the [Playground](/playground/)).
