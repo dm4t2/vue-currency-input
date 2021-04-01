@@ -230,9 +230,7 @@ export class NumberInput {
 
     this.el.addEventListener('blur', () => {
       this.focus = false
-      if (this.numberValue != null) {
-        this.applyFixedFractionFormat(this.numberValue)
-      }
+      this.applyFixedFractionFormat(this.numberValue)
     })
 
     this.el.addEventListener('change', (e) => {
