@@ -128,7 +128,7 @@ export class NumberInput {
         formattedValue = conformedValue
       }
       if (this.autoSign) {
-        if (this.max <= 0 && !this.currencyFormat.isNegative(formattedValue) && this.currencyFormat.parse(formattedValue) != null) {
+        if (this.max <= 0 && !this.currencyFormat.isNegative(formattedValue) && this.currencyFormat.parse(formattedValue) !== 0) {
           formattedValue = formattedValue.replace(this.currencyFormat.prefix, this.currencyFormat.negativePrefix)
         }
         if (this.min >= 0) {
