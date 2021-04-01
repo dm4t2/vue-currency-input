@@ -20,17 +20,52 @@
           Number value: <code class="ml-2">{{ value != null ? value : 'null' }}</code>
         </v-col>
       </v-row>
-      <v-divider class="my-6" />
+      <v-row>
+        <v-col cols="12">
+          <div class="mt-8 d-flex align-center justify-space-between">
+            <span class="headline">Options</span>
+            <v-btn
+              small
+              @click="exportDialogVisible = !exportDialogVisible"
+            >
+              <v-icon left>
+                mdi-export
+              </v-icon>
+              Export
+            </v-btn>
+            <v-dialog
+              v-model="exportDialogVisible"
+              width="500"
+            >
+              <v-card>
+                <pre
+                  class="white--text m-0"
+                  style="margin: 0"
+                >{{ stringifiedOptions }}</pre>
+              </v-card>
+            </v-dialog>
+          </div>
+        </v-col>
+      </v-row>
+      <v-divider class="mt-2 mb-6" />
       <v-row>
         <v-col
           cols="12"
           sm="6"
         >
           <div class="mb-12">
-            <span class="title">Locale</span>
+            <div class="d-flex align-center justify-space-between">
+              <span class="title">Locale</span>
+              <v-switch
+                v-model="localeEnabled"
+                class="my-0"
+                hide-details
+              />
+            </div>
             <v-select
               v-model="locale"
-              :items="[{text: 'Default', value: undefined}, 'de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR']"
+              :disabled="!localeEnabled"
+              :items="['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR']"
               hide-details
             />
           </div>
@@ -199,13 +234,16 @@
 
 <script>
 import VCurrencyField from './VCurrencyField'
+import stringifyObject from 'stringify-object'
 
 export default {
   name: 'Playground',
   components: { VCurrencyField },
   data () {
     return {
+      exportDialogVisible: false,
       value: 1234.5,
+      localeEnabled: false,
       locale: 'de-DE',
       currency: 'EUR',
       distractionFree: true,
@@ -231,7 +269,7 @@ export default {
   computed: {
     options () {
       return {
-        locale: this.locale,
+        locale: this.localeEnabled ? this.locale : undefined,
         currency: this.currency,
         valueRange: this.valueRangeEnabled
           ? { min: this.valueRange[0], max: this.valueRange[1] }
@@ -251,6 +289,9 @@ export default {
         autoSign: this.autoSign,
         useGrouping: this.useGrouping
       }
+    },
+    stringifiedOptions () {
+      return stringifyObject(this.options)
     }
   },
   watch: {
