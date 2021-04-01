@@ -73,6 +73,6 @@
     "vuetify": "^2.4.4"
   },
   "dependencies": {
-    "vue-demi": "^0.6.0"
+    "vue-demi": "^0.7.4"
   }
 }
