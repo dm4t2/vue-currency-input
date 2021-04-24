@@ -20,8 +20,7 @@ export interface CurrencyInputOptions {
   autoDecimalDigits?: boolean,
   valueRange?: NumberRange,
   autoSign?: boolean,
-  useGrouping?: boolean,
-  decimalDigitsReplacement?: string
+  useGrouping?: boolean
 }
 
 declare const useCurrencyInput: (options: CurrencyInputOptions) => {

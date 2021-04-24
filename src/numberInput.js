@@ -1,6 +1,6 @@
 import NumberFormat, { DECIMAL_SYMBOLS } from './numberFormat'
 import { AutoDecimalDigitsNumberMask, DefaultNumberMask } from './numberMask'
-import { count, escapeRegExp } from './stringUtils'
+import { count } from './stringUtils'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
@@ -11,8 +11,7 @@ export const DEFAULT_OPTIONS = {
   autoDecimalDigits: false,
   valueRange: undefined,
   autoSign: true,
-  useGrouping: true,
-  decimalDigitsReplacement: undefined
+  useGrouping: true
 }
 
 export class NumberInput {
@@ -31,7 +30,6 @@ export class NumberInput {
     this.exportValueAsInteger = this.options.exportValueAsInteger
     this.autoSign = this.options.autoSign
     this.useGrouping = this.options.useGrouping
-    this.hasDecimalDigitsReplacement = (this.options.decimalDigitsReplacement || '').trim().length > 0
     this.hideCurrencySymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideCurrencySymbol
     this.hideNegligibleDecimalDigitsOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideNegligibleDecimalDigits
     this.hideGroupingSymbolOnFocus = this.options.distractionFree === true || !!(this.options.distractionFree || {}).hideGroupingSymbol
@@ -43,7 +41,6 @@ export class NumberInput {
 
     if (this.options.autoDecimalDigits) {
       this.hideNegligibleDecimalDigitsOnFocus = false
-      this.hasDecimalDigitsReplacement = false
       this.el.setAttribute('inputmode', 'numeric')
     } else {
       this.el.setAttribute('inputmode', 'decimal')
@@ -115,7 +112,7 @@ export class NumberInput {
             ? fractionDigits.replace(/0+$/, '').length
             : Math.min(maximumFractionDigits, fractionDigits.length)
         } else if (Number.isInteger(numberValue) && !this.autoDecimalDigits && (this.options.precision === undefined || minimumFractionDigits === 0)) {
-          minimumFractionDigits = maximumFractionDigits = this.hasDecimalDigitsReplacement ? 1 : 0
+          minimumFractionDigits = maximumFractionDigits = 0
         }
         formattedValue = this.toInteger(Math.abs(numberValue)) > Number.MAX_SAFE_INTEGER
           ? this.formattedValue
@@ -142,16 +139,6 @@ export class NumberInput {
           .replace(this.currencyFormat.suffix, '')
       }
       this.numberValue = this.currencyFormat.parse(formattedValue)
-      if (
-        !this.focus &&
-        Number.isInteger(this.numberValue) &&
-        this.hasDecimalDigitsReplacement &&
-        this.currencyFormat.decimalSymbol !== undefined) {
-        formattedValue = formattedValue.replace(
-          new RegExp(`${escapeRegExp(this.currencyFormat.decimalSymbol)}${this.currencyFormat.digits[0]}*`),
-          `${this.currencyFormat.decimalSymbol}${this.options.decimalDigitsReplacement}`
-        )
-      }
       this.el.value = formattedValue
     } else {
       this.el.value = this.numberValue = null
@@ -208,7 +195,7 @@ export class NumberInput {
           const getSelectionStart = () => {
             const { prefix, suffix, groupingSymbol } = this.currencyFormat
             if (!this.hideCurrencySymbolOnFocus) {
-              if (selectionStart > value.length - suffix.length) {
+              if (selectionStart >= value.length - suffix.length) {
                 return this.formattedValue.length - suffix.length
               } else if (selectionStart < prefix.length) {
                 return prefix.length

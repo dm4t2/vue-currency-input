@@ -3,7 +3,6 @@
 exports[`NumberFormat constructing number formats should work for respective locale and currency: ar-SA_SAR 1`] = `
 NumberFormat {
   "currency": "SAR",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": "٫",
   "digits": Array [
     "٠",
@@ -31,7 +30,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: de-CH_EUR 1`] = `
 NumberFormat {
   "currency": "EUR",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -59,7 +57,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: de-DE_EUR 1`] = `
 NumberFormat {
   "currency": "EUR",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -87,7 +84,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: en-GB_GBP 1`] = `
 NumberFormat {
   "currency": "GBP",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -115,7 +111,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: en-IN_INR 1`] = `
 NumberFormat {
   "currency": "INR",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -143,7 +138,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: en-US_USD 1`] = `
 NumberFormat {
   "currency": "USD",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -171,7 +165,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: es-ES_EUR 1`] = `
 NumberFormat {
   "currency": "EUR",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -199,7 +192,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: fa-IR_IRR 1`] = `
 NumberFormat {
   "currency": "IRR",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": undefined,
   "digits": Array [
     "۰",
@@ -227,7 +219,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: fr-CH_CHF 1`] = `
 NumberFormat {
   "currency": "CHF",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -255,7 +246,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: ja_JPY 1`] = `
 NumberFormat {
   "currency": "JPY",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": undefined,
   "digits": Array [
     "0",
@@ -283,7 +273,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: nl-NL_EUR 1`] = `
 NumberFormat {
   "currency": "EUR",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -311,7 +300,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: pt_BRL 1`] = `
 NumberFormat {
   "currency": "BRL",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -339,7 +327,6 @@ NumberFormat {
 exports[`NumberFormat constructing number formats should work for respective locale and currency: zh_CNY 1`] = `
 NumberFormat {
   "currency": "CNY",
-  "decimalDigitsReplacement": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",

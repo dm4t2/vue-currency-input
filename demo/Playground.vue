@@ -69,6 +69,7 @@
               hide-details
             />
           </div>
+
           <div class="mb-12">
             <span class="title">Currency</span>
             <v-select
@@ -77,19 +78,7 @@
               hide-details
             />
           </div>
-          <div class="mb-12">
-            <div class="d-flex align-center justify-space-between">
-              <span class="title">Use Grouping</span>
-              <v-switch
-                v-model="useGrouping"
-                class="my-0"
-                hide-details
-              />
-            </div>
-            <div class="mt-4">
-              Whether to use grouping separators such as thousands/lakh/crore separators.
-            </div>
-          </div>
+
           <div class="mb-12">
             <div class="d-flex align-center justify-space-between">
               <span class="title">Distraction Free</span>
@@ -124,6 +113,7 @@
               label="Hide negligible decimal digits"
             />
           </div>
+
           <div class="mb-12">
             <div class="d-flex align-center justify-space-between">
               <span class="title">Auto Sign</span>
@@ -160,6 +150,20 @@
         >
           <div class="mb-12">
             <div class="d-flex align-center justify-space-between">
+              <span class="title">Use Grouping</span>
+              <v-switch
+                v-model="useGrouping"
+                class="my-0"
+                hide-details
+              />
+            </div>
+            <div class="mt-4">
+              Whether to use grouping separators such as thousands/lakh/crore separators.
+            </div>
+          </div>
+
+          <div class="mb-12">
+            <div class="d-flex align-center justify-space-between">
               <span class="title">Precision</span>
               <v-switch
                 v-model="precisionEnabled"
@@ -177,24 +181,6 @@
               hide-details
               thumb-label="always"
               thumb-size="24"
-            />
-          </div>
-
-          <div class="mb-12">
-            <div class="d-flex align-center justify-space-between">
-              <span class="title">Decimal Digits Replacement</span>
-              <v-switch
-                v-model="decimalDigitsReplacementEnabled"
-                class="my-0"
-                hide-details
-              />
-            </div>
-            <div class="mt-4">
-              Replaces decimal digits with a custom string. Only applies for integer numbers.
-            </div>
-            <v-text-field
-              v-model="decimalDigitsReplacement"
-              hide-details
             />
           </div>
 
@@ -253,8 +239,6 @@ export default {
       hideNegligibleDecimalDigits: true,
       precisionEnabled: false,
       precision: 2,
-      decimalDigitsReplacementEnabled: false,
-      decimalDigitsReplacement: '—',
       valueRangeEnabled: false,
       valueRange: [0, 9999],
       minActive: false,
@@ -277,7 +261,6 @@ export default {
         precision: this.precisionEnabled
           ? this.precision
           : undefined,
-        decimalDigitsReplacement: this.decimalDigitsReplacementEnabled ? this.decimalDigitsReplacement : undefined,
         distractionFree: this.distractionFree
           ? {
             hideNegligibleDecimalDigits: this.hideNegligibleDecimalDigits,
@@ -295,12 +278,6 @@ export default {
     }
   },
   watch: {
-    decimalDigitsReplacementEnabled (value) {
-      this.autoDecimalDigitsEnabled = !value
-      if (value) {
-        this.autoDecimalDigits = false
-      }
-    },
     autoDecimalDigits (value) {
       this.hideNegligibleDecimalDigitsEnabled = !value
       this.hideNegligibleDecimalDigits = !value
