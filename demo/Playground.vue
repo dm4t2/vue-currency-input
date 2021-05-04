@@ -129,6 +129,7 @@
             :max="20"
             thumb-label="always"
             thumb-size="24"
+            track-color="primary lighten-2"
           />
           <v-slider
             v-else
@@ -137,6 +138,7 @@
             :max="20"
             thumb-label="always"
             thumb-size="24"
+            track-color="primary lighten-2"
           />
 
           <div class="d-flex align-center justify-space-between">
@@ -160,6 +162,7 @@
             :max="999"
             thumb-label="always"
             thumb-size="24"
+            track-color="primary lighten-2"
           />
 
           <div class="d-flex align-center justify-space-between">
@@ -239,9 +242,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css" scoped>
-@import '~@mdi/font/css/materialdesignicons.css';
-@import '~vuetify/dist/vuetify.min.css';
-@import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");
-</style>
