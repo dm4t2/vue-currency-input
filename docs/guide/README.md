@@ -1,5 +1,5 @@
 ---
-sidebarDepth: 3
+sidebarDepth: 2
 ---
 
 # Guide
@@ -18,16 +18,16 @@ yarn add vue-currency-input
 
 Add the Vue plugin in your `main.js`:
 
-<<< @/docs/guide/main.js
+<<< @/guide/main.js
 
 ### Nuxt
 Add `vue-currency-input/nuxt` to the modules section of `nuxt.config.js`:
 
-<<< @/docs/guide/nuxt.config.js
+<<< @/guide/nuxt.config.js
 
 ### Direct download via CDN
 If you don't use a module system you can also download the plugin as UMD bundle via CDN. 
-Include the plugin after Vue and it will install itself automatically:
+Include the plugin after Vue, and it will install itself automatically:
 
 ```html
 <script src="https://unpkg.com/vue"></script>
@@ -40,17 +40,17 @@ Include the plugin after Vue and it will install itself automatically:
 ### Component
 The `<currency-input>` component only needs a number value binding. All other [component props](/config/) are optional.
 
-<<< @/docs/guide/ComponentUsage.vue
+<<< @/guide/ComponentUsage.vue
 
 #### Lazy value binding
 Sometimes you might want to update the bound value only when the input loses its focus. In this case, listen to the `change` event instead of using `v-model`.
 
-<<< @/docs/guide/LazyValueBinding.vue
+<<< @/guide/LazyValueBinding.vue
 
 ### Directive
 The `v-currency` directive is great if you want to decorate existing input components with currency format capabilities (for example like those from [Vuetify](https://vuetifyjs.com/en/components/text-fields) or [Element](https://element.eleme.io/#/en-US/component/input)).
 
-<<< @/docs/guide/DirectiveUsage.vue
+<<< @/guide/DirectiveUsage.vue
 
 #### Getting the number value
 In comparison to the `<currency-input>` component the `v-currency` directive always emits the formatted string instead of the number value when used with `v-model`. 
@@ -88,5 +88,4 @@ export default {
   }
 }
 </script>
-
 ```

@@ -90,6 +90,9 @@ describe('NumberFormat', () => {
       expect(new NumberFormat({ locale: 'ar', currency: 'SAR' }).parse('١٬٢٣٤')).toBe(1234)
       expect(new NumberFormat({ locale: 'ar', currency: 'SAR' }).parse('٠٫٩')).toBe(0.9)
       expect(new NumberFormat({ locale: 'ar', currency: 'SAR' }).parse('؜-٠٫٥٠ ر.س.‏')).toBe(-0.5)
+      expect(new NumberFormat({ locale: 'en-IN', currency: 'INR' }).parse('₹1,23,334.00')).toBe(123334)
+      expect(new NumberFormat({ locale: 'de-AT', currency: 'EUR' }).parse('€ 66.668')).toBe(66668)
+      expect(new NumberFormat({ locale: 'de-AT', currency: null }).parse('-66 668')).toBe(-66668)
     })
 
     it('should return null if the value does not conform to the currency format', () => {
