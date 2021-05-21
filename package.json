@@ -7,10 +7,10 @@
   "jsdelivr": "dist/vue-currency-input.umd.js",
   "module": "dist/vue-currency-input.esm.js",
   "main": "dist/vue-currency-input.umd.js",
-  "types": "src/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/*.js",
-    "src/index.d.ts"
+    "dist/index.d.ts"
   ],
   "sideeffects": false,
   "author": "Matthias Stiller",
@@ -23,20 +23,19 @@
     "vue",
     "composition api",
     "composable",
-    "text mask",
     "input mask",
     "currency input",
     "money input",
     "number format",
-    "i18n",
-    "ISO 4217",
     "ECMA-402"
   ],
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "rollup -c",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "dev": "vitepress dev docs",
+    "docs": "vitepress build docs",
+    "test": "jest",
+    "lint": "eslint",
+    "prebuild": "rimraf dist",
+    "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-rc.1",
@@ -48,31 +47,37 @@
     }
   },
   "devDependencies": {
-    "@mdi/font": "^4.7.95",
-    "@vue/cli-plugin-babel": "~4.5.11",
-    "@vue/cli-plugin-eslint": "~4.5.11",
-    "@vue/cli-plugin-unit-jest": "~4.5.11",
-    "@vue/cli-service": "~4.5.11",
-    "@vue/composition-api": "^1.0.0-rc.1",
-    "@vue/eslint-config-standard": "^5.1.2",
-    "@vue/test-utils": "^1.0.3",
-    "babel-eslint": "^10.1.0",
-    "core-js": "^3.6.5",
-    "eslint": "^6.7.2",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^6.2.2",
-    "rollup": "^2.15.0",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-filesize": "^9.0.0",
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "@vue/composition-api": "^1.0.0-rc.8",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-vue": "^7.9.0",
+    "jest": "^26.6.3",
+    "jest-environment-jsdom-fifteen": "^1.0.2",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.47.0",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-dts": "^3.0.1",
+    "rollup-plugin-filesize": "^9.1.1",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "sass": "^1.32.13",
     "stringify-object": "^3.3.0",
-    "vue": "^2.6.12",
-    "vue-template-compiler": "^2.6.12",
-    "vuetify": "^2.4.4"
+    "ts-jest": "^26.5.6",
+    "typescript": "^4.2.4",
+    "vite-plugin-components": "^0.8.4",
+    "vite-plugin-pwa": "^0.7.2",
+    "vite-plugin-windicss": "^0.15.10",
+    "vitepress": "^0.13.2",
+    "vue": "^3.0.11",
+    "windicss": "^2.5.14"
   },
   "dependencies": {
-    "vue-demi": "^0.7.4"
+    "vue-demi": "^0.9.0"
   }
 }
