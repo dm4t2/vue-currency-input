@@ -7,11 +7,10 @@ install:
 jobs:
   include:
     - stage: Unit Tests
-      script: yarn test:unit --coverage && codecov
+      script: yarn test --coverage && codecov
     - stage: Lint
       script: yarn lint
     - stage: Deploy GitHub Pages
-      install: yarn install
       script: yarn docs
       deploy:
         on:
