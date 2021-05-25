@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$track-color: #ffffff !default;
+$track-color: rgb(209, 213, 219) !default;
 $thumb-color: #3eaf7c !default;
 
 $thumb-radius: 12px !default;
@@ -29,15 +29,15 @@ $thumb-width: 20px !default;
 $thumb-shadow-size: 2px !default;
 $thumb-shadow-blur: 4px !default;
 $thumb-shadow-color: rgba(0, 0, 0, 0.2) !default;
-$thumb-border-width: 0px !default;
-$thumb-border-color: #eceff1 !default;
+$thumb-border-width: 1px !default;
+$thumb-border-color: #3eaf7c !default;
 
 $track-width: 100% !default;
-$track-height: 8px !default;
+$track-height: 6px !default;
 $track-shadow-size: 1px !default;
 $track-shadow-blur: 1px !default;
 $track-shadow-color: rgba(0, 0, 0, 0.05) !default;
-$track-border-width: 1px !default;
+$track-border-width: 0px !default;
 $track-border-color: rgb(107, 114, 128) !default;
 
 $track-radius: 5px !default;
@@ -74,22 +74,6 @@ $ie-bottom-track-color: darken($track-color, $contrast) !default;
 
   &::-moz-focus-outer {
     border: 0;
-  }
-
-  &:focus {
-    outline: 0;
-
-    &::-webkit-slider-runnable-track {
-      background: lighten($track-color, $contrast);
-    }
-
-    &::-ms-fill-lower {
-      background: $track-color;
-    }
-
-    &::-ms-fill-upper {
-      background: lighten($track-color, $contrast);
-    }
   }
 
   &::-webkit-slider-runnable-track {

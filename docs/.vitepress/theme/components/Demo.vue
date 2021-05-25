@@ -86,7 +86,7 @@
         description="Override the number of displayed decimal digits. Can only be applied for currencies that support decimal digits."
       >
         <div class="flex items-center">
-          <Slider v-model="precision" :disabled="!precisionEnabled" />
+          <Slider v-model.number="precision" :disabled="!precisionEnabled" />
           <code :value="precision" class="w-10 ml-4 text-center"> {{ precision }}</code>
         </div>
       </OptionSection>
