@@ -35,7 +35,6 @@
           <option v-for="locale in locales" :key="locale">{{ locale }}</option>
         </select>
       </OptionSection>
-
       <OptionSection label="Currency">
         <select
           v-model="currency"
@@ -44,11 +43,22 @@
           <option v-for="currency in currencies" :key="currency">{{ currency }}</option>
         </select>
       </OptionSection>
+      <OptionSection label="Currency Display" description="How to display the currency in the formatting.">
+        <select
+          v-model="currencyDisplay"
+          class="cursor-pointer w-full shadow-sm not-disabled:( rounded-lg text-base focus:border-primary focus:ring focus:ring-offset-0 focus:ring-primary focus:ring-opacity-50"
+        >
+          <option v-for="currencyDisplay in currencyDisplays" :key="currencyDisplay.value" :value="currencyDisplay.value">{{ currencyDisplay.label }}</option>
+        </select>
+      </OptionSection>
+      <OptionSection v-model="useGrouping" label="Use Grouping" description="Whether to use grouping separators such as thousands/lakh/crore separators." />
       <OptionSection label="Distraction Free Input" description="Hide various parts of the formatting on focus for easier input.">
         <Checkbox v-model="hideCurrencySymbolOnFocus" label="Hide currency symbol" class="mb-1" />
         <Checkbox v-model="hideGroupingSeparatorOnFocus" label="Hide grouping separator" class="mb-1" />
         <Checkbox v-model="hideNegligibleDecimalDigitsOnFocus" :disabled="!hideNegligibleDecimalDigitsOnFocusEnabled" label="Hide negligible decimal digits" />
       </OptionSection>
+    </div>
+    <div>
       <OptionSection
         v-model="autoSign"
         label="Auto Sign"
@@ -77,9 +87,6 @@
           />
         </div>
       </OptionSection>
-    </div>
-    <div>
-      <OptionSection v-model="useGrouping" label="Use Grouping" description="Whether to use grouping separators such as thousands/lakh/crore separators." />
       <OptionSection
         v-model="precisionEnabled"
         label="Precision"
@@ -107,7 +114,6 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, toRefs, watch } from 'vue'
 import CurrencyInput from './CurrencyInput.vue'
-import Switch from './Switch.vue'
 import Dialog from './Dialog.vue'
 import stringifyObject from 'stringify-object'
 import OptionSection from './OptionSection.vue'
@@ -116,7 +122,7 @@ import Slider from './Slider.vue'
 
 export default defineComponent({
   name: 'Demo',
-  components: { Slider, Checkbox, OptionSection, Dialog, Switch, CurrencyInput },
+  components: { Slider, Checkbox, OptionSection, Dialog, CurrencyInput },
   setup() {
     const state: any = reactive({
       exportDialogVisible: false,
@@ -125,7 +131,15 @@ export default defineComponent({
       locale: 'de-DE',
       locales: ['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR'],
       currency: 'EUR',
+      currencyDisplay: 'symbol',
       currencies: ['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR'],
+      currencyDisplays: [
+        { value: 'symbol', label: 'Symbol' },
+        { value: 'narrowSymbol', label: 'Narrow symbol' },
+        { value: 'code', label: 'Code' },
+        { value: 'name', label: 'Name' },
+        { value: 'hidden', label: 'Hidden' }
+      ],
       hideCurrencySymbolOnFocus: true,
       hideGroupingSeparatorOnFocus: true,
       hideNegligibleDecimalDigitsOnFocusEnabled: true,
@@ -144,6 +158,7 @@ export default defineComponent({
         return {
           locale: state.localeEnabled ? state.locale : undefined,
           currency: state.currency,
+          currencyDisplay: state.currencyDisplay,
           valueRange: state.valueRangeEnabled ? { min: state.minValue, max: state.maxValue } : undefined,
           precision: state.precisionEnabled ? state.precision : undefined,
           hideCurrencySymbolOnFocus: state.hideCurrencySymbolOnFocus,

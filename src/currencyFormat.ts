@@ -1,5 +1,5 @@
 import { count, escapeRegExp, substringBefore } from './utils'
-import { CurrencyInputOptions } from './api'
+import { CurrencyDisplay, CurrencyInputOptions } from './api'
 import NumberFormatOptions = Intl.NumberFormatOptions
 
 export const DECIMAL_SEPARATORS = [',', '.', '٫']
@@ -8,6 +8,7 @@ export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 export default class CurrencyFormat {
   locale?: string
   currency: string
+  currencyDisplay: CurrencyDisplay | undefined
   digits: string[]
   decimalSymbol: string | undefined
   groupingSymbol: string
@@ -19,8 +20,9 @@ export default class CurrencyFormat {
   suffix: string
 
   constructor(options: CurrencyInputOptions) {
-    const { currency, locale, precision } = options
-    const numberFormat = new Intl.NumberFormat(locale, { currency, style: 'currency' })
+    const { currency, currencyDisplay, locale, precision } = options
+    this.currencyDisplay = currencyDisplay !== CurrencyDisplay.hidden ? currencyDisplay : undefined
+    const numberFormat = new Intl.NumberFormat(locale, { currency, currencyDisplay: this.currencyDisplay, style: 'currency' })
     const ps = numberFormat.format(123456)
 
     this.locale = locale
@@ -60,7 +62,7 @@ export default class CurrencyFormat {
   }
 
   isValidIntegerFormat(formattedNumber: string, integerNumber: number): boolean {
-    const options = { style: 'currency', currency: this.currency, minimumFractionDigits: 0 }
+    const options = { style: 'currency', currency: this.currency, currencyDisplay: this.currencyDisplay, minimumFractionDigits: 0 }
     return [
       this.stripCurrencySymbol(
         this.normalizeDigits(
@@ -92,6 +94,7 @@ export default class CurrencyFormat {
       ? value.toLocaleString(this.locale, {
           style: 'currency',
           currency: this.currency,
+          currencyDisplay: this.currencyDisplay,
           ...options
         })
       : ''

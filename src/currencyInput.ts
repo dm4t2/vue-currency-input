@@ -1,11 +1,12 @@
 import CurrencyFormat, { DECIMAL_SEPARATORS } from './currencyFormat'
 import { AutoDecimalDigitsInputMask, DefaultInputMask, InputMask } from './inputMask'
 import { count } from './utils'
-import { CurrencyInputOptions, CurrencyInputValue } from './api'
+import { CurrencyDisplay, CurrencyInputOptions, CurrencyInputValue } from './api'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
   currency: undefined,
+  currencyDisplay: undefined,
   exportValueAsInteger: false,
   hideGroupingSeparatorOnFocus: true,
   hideCurrencySymbolOnFocus: true,
@@ -155,7 +156,7 @@ export class CurrencyInput {
           formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
         }
       }
-      if (this.focus && this.options.hideCurrencySymbolOnFocus) {
+      if (this.options.currencyDisplay === CurrencyDisplay.hidden || (this.focus && this.options.hideCurrencySymbolOnFocus)) {
         formattedValue = formattedValue
           .replace(this.currencyFormat.negativePrefix, this.currencyFormat.minusSymbol)
           .replace(this.currencyFormat.prefix, '')

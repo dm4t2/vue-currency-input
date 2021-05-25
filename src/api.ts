@@ -10,9 +10,18 @@ export interface NumberRange {
   max?: number
 }
 
+export enum CurrencyDisplay {
+  symbol = 'symbol',
+  narrowSymbol = 'narrowSymbol',
+  code = 'code',
+  name = 'name',
+  hidden = 'hidden'
+}
+
 export interface CurrencyInputOptions {
   locale?: string
   currency: string
+  currencyDisplay?: CurrencyDisplay
   exportValueAsInteger?: boolean
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
