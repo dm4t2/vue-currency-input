@@ -3,15 +3,21 @@
   "description": "Easy input of currency formatted numbers for Vue.js.",
   "version": "2.0.0-rc.5",
   "license": "MIT",
-  "unpkg": "dist/vue-currency-input.umd.js",
-  "jsdelivr": "dist/vue-currency-input.umd.js",
-  "module": "dist/vue-currency-input.esm.js",
-  "main": "dist/vue-currency-input.umd.js",
-  "types": "dist/index.d.ts",
+  "unpkg": "./dist/index.iife.js",
+  "jsdelivr": "./dist/index.iife.js",
+  "module": "./dist/index.esm.js",
+  "main": "./dist/index.cjs.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/*.js",
     "dist/index.d.ts"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
   "sideeffects": false,
   "author": "Matthias Stiller",
   "repository": {

@@ -16,11 +16,16 @@ export default [
     output: [
       {
         file: pkg.main,
-        name: 'NumberInput',
-        format: 'umd',
+        format: 'cjs',
+        exports: 'named',
+        banner
+      },
+      {
+        file: pkg.jsdelivr,
+        name: 'VueCurrencyInput',
+        format: 'iife',
         exports: 'named',
         globals: {
-          vue: 'vue',
           'vue-demi': 'VueDemi'
         },
         banner
