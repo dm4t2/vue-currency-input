@@ -30,7 +30,7 @@ export class DefaultInputMask extends AbstractInputMask implements InputMask {
     }
 
     let value = str
-    value = this.currencyFormat.stripCurrencySymbol(value)
+    value = this.currencyFormat.stripCurrencySymbol(value, negative)
     value = this.currencyFormat.stripMinusSymbol(value)
 
     const incompleteValue = checkIncompleteValue(value)
@@ -63,7 +63,7 @@ export class AutoDecimalDigitsInputMask extends AbstractInputMask implements Inp
     if (
       str === '' ||
       (this.currencyFormat.parse(previousConformedValue) === 0 &&
-        this.currencyFormat.stripCurrencySymbol(previousConformedValue).slice(0, -1) === this.currencyFormat.stripCurrencySymbol(str))
+        this.currencyFormat.stripCurrencySymbol(previousConformedValue, true).slice(0, -1) === this.currencyFormat.stripCurrencySymbol(str, true))
     ) {
       return ''
     }

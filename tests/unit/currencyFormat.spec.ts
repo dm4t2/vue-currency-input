@@ -1,4 +1,5 @@
 import CurrencyFormat from '../../src/currencyFormat'
+import { CurrencyDisplay } from '../../src'
 
 describe('CurrencyFormat', () => {
   describe('constructing number formats', () => {
@@ -71,6 +72,7 @@ describe('CurrencyFormat', () => {
       expect(new CurrencyFormat({ locale: 'en-IN', currency: 'INR' }).parse('₹1,23,334.00')).toBe(123334)
       expect(new CurrencyFormat({ locale: 'en-IN', currency: 'INR' }).parse('₹123334.00')).toBe(123334)
       expect(new CurrencyFormat({ locale: 'de-AT', currency: 'EUR' }).parse('€ 66.668')).toBe(66668)
+      expect(new CurrencyFormat({ locale: 'de-DE', currency: 'USD', currencyDisplay: CurrencyDisplay.name }).parse('1.234,50 US-Dollar')).toBe(1234.5)
     })
 
     it('should return null if the value does not conform to the currency format', () => {

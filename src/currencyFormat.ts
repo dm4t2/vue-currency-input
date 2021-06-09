@@ -50,7 +50,7 @@ export default class CurrencyFormat {
     if (str) {
       const negative = this.isNegative(str)
       str = this.normalizeDigits(str)
-      str = this.stripCurrencySymbol(str)
+      str = this.stripCurrencySymbol(str, negative)
       str = this.stripMinusSymbol(str)
       const fraction = this.decimalSymbol ? `(?:${escapeRegExp(this.decimalSymbol)}(\\d*))?` : ''
       const match = this.stripGroupingSeparator(str).match(new RegExp(`^${INTEGER_PATTERN}${fraction}$`))
@@ -70,7 +70,8 @@ export default class CurrencyFormat {
             ...options,
             useGrouping: true
           })
-        )
+        ),
+        false
       ),
       this.stripCurrencySymbol(
         this.normalizeDigits(
@@ -78,7 +79,8 @@ export default class CurrencyFormat {
             ...options,
             useGrouping: false
           })
-        )
+        ),
+        false
       )
     ].includes(formattedNumber)
   }
@@ -124,8 +126,8 @@ export default class CurrencyFormat {
     return str.replace('-', this.minusSymbol).replace(this.minusSymbol, '')
   }
 
-  stripCurrencySymbol(str: string): string {
-    return str.replace(this.negativePrefix, '').replace(this.prefix, '').replace(this.suffix, '')
+  stripCurrencySymbol(str: string, negative: boolean): string {
+    return str.replace(negative ? this.negativePrefix : this.prefix, '').replace(this.suffix, '')
   }
 
   normalizeDecimalSeparator(str: string, from: number): string {
