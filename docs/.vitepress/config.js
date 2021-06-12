@@ -5,6 +5,7 @@ module.exports = {
     ['link', { rel: 'icon', href: '/favicon.png' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap' }]
   ],
+  base: '/vue-currency-input/',
   themeConfig: {
     logo: '/favicon.png',
     nav: [
