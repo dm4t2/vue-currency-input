@@ -105,7 +105,7 @@
       <OptionSection
         v-model="exportValueAsInteger"
         label="Export Value As Integer"
-        description="Whether the number value should be exported as integer instead of a float value depending the configured precision."
+        description="Whether the number value should be exported as integer instead of a float value depending on the configured precision."
       />
     </div>
   </div>
@@ -129,7 +129,7 @@ export default defineComponent({
       value: 1234.5,
       localeEnabled: false,
       locale: 'de-DE',
-      locales: ['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR'],
+      locales: ['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'pt-BR', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR'],
       currency: 'EUR',
       currencyDisplay: 'symbol',
       currencies: ['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR'],
