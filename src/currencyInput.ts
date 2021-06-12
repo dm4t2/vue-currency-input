@@ -56,9 +56,7 @@ export class CurrencyInput {
   }
 
   private dispatchEvent(eventName: string) {
-    const event = document.createEvent('CustomEvent')
-    event.initCustomEvent(eventName, true, true, { ...this.getValue() })
-    this.el.dispatchEvent(event)
+    this.el.dispatchEvent(new CustomEvent(eventName, { detail: this.getValue() }))
   }
 
   private init(options: CurrencyInputOptions) {
