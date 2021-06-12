@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.com/dm4t2/vue-currency-input.svg?branch=master)](https://travis-ci.com/dm4t2/vue-currency-input)
 [![codecov](https://codecov.io/gh/dm4t2/vue-currency-input/branch/master/graph/badge.svg)](https://codecov.io/gh/dm4t2/vue-currency-input)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f094b44873724daf98afa67f8f68c456)](https://www.codacy.com/manual/dm4t2/vue-currency-input)
 [![npm version](https://badgen.net/npm/v/vue-currency-input?color=green)](https://www.npmjs.com/package/vue-currency-input)
 [![Bundlephobia](https://badgen.net/bundlephobia/minzip/vue-currency-input?color=green)](https://bundlephobia.com/result?p=vue-currency-input)
 [![License](https://badgen.net/github/license/dm4t2/vue-currency-input?color=green)](https://github.com/dm4t2/vue-currency-input/blob/master/LICENSE)
