@@ -1,7 +1,7 @@
 {
   "name": "vue-currency-input",
   "description": "Easy input of currency formatted numbers for Vue.js.",
-  "version": "2.0.0-rc.5",
+  "version": "2.0.0",
   "license": "MIT",
   "unpkg": "./dist/index.iife.js",
   "jsdelivr": "./dist/index.iife.js",
