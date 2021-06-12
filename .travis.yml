@@ -1,25 +1,23 @@
 language: node_js
 node_js:
-  - "13"
+  - "14"
 install:
   - yarn install
   - yarn global add codecov
 jobs:
   include:
     - stage: Unit Tests
-      script: yarn test:unit --coverage && codecov
+      script: yarn test --coverage && codecov
     - stage: Lint
       script: yarn lint
     - stage: Deploy GitHub Pages
-      before_install: cd docs
-      install: yarn install
-      script: yarn build
+      script: yarn docs
       deploy:
         on:
           branch: master
         provider: pages
         skip-cleanup: true
-        local_dir: docs/.vuepress/dist
+        local_dir: docs/.vitepress/dist
         github-token: $GITHUB_TOKEN
         repo: dm4t2/vue-currency-input
     - stage: Publish npm package
