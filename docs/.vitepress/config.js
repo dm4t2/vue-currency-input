@@ -2,7 +2,7 @@ module.exports = {
   title: 'Vue Currency Input',
   description: 'Easy input of currency formatted numbers for Vue.js',
   head: [
-    ['link', { rel: 'icon', href: '/favicon.png' }],
+    ['link', { rel: 'icon', href: '/vue-currency-input/favicon.png' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap' }]
   ],
   base: '/vue-currency-input/',
