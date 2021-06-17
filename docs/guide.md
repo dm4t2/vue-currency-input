@@ -19,6 +19,20 @@ For usage with Vue 2 you have to install also the `@vue/composition-api` package
 ```bash
 npm install @vue/composition-api
 ```
+## Browser compatibility
+The library is compiled to the latest ECMAScript Version (ES2020) and does not include polyfills. Make sure that [the dependency is transpiled with Babel](https://cli.vuejs.org/config/#transpiledependencies) in your Vue CLI project.
+
+Example `vue.config.js`:
+```js
+/**
+ * @type {import('@vue/cli-service').ProjectOptions}
+ */
+module.exports = {
+  transpileDependencies: [
+    'vue-currency-input'
+  ]
+}
+``` 
 
 ## Usage
 Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Vuetify](https://vuetifyjs.com/en/components/text-fields/), [Quasar](https://quasar.dev/vue-components/input) or [Element](https://element.eleme.io/#/en-US/component/input)).
