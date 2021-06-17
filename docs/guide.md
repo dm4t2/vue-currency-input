@@ -11,10 +11,10 @@ Vue Currency Input allows an easy input of currency formatted numbers. Powered b
 Install the npm package:
 
 ```bash
-npm install vue-currency-input@next 
+npm install vue-currency-input
 ```
 
-For usage with Vue 2 you have to install also the `@vue/composition-api` package:
+For usage with Vue 2 you have to install also the Vue Composition API plugin:
 
 ```bash
 npm install @vue/composition-api
@@ -67,7 +67,7 @@ export default {
 ```
 
 :::tip Component Props
-The component should provide props for the `v-model` value binding, and the options (see [Config Reference](/config)).
+The component should provide props for the `v-model` value binding, and the options (see [Config Reference](config)).
 :::
 
 :::warning Input Type
@@ -120,7 +120,7 @@ export default {
 ## External props changes
 If the value of the input is changed externally (and not only by user input) you need to use the `setValue` function returned by `useCurrencyInput` within a watcher.
 
-The same applies for the options of your currency input component. Use the `setOptions` function in a watcher in order to make the options reactive for changes after the component has been mounted (like in the [Playground](/playground)).
+The same applies for the options of your currency input component. Use the `setOptions` function in a watcher in order to make the options reactive for changes after the component has been mounted (like in the [Playground](playground)).
 
 ```vue
 <template>
