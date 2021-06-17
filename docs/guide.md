@@ -95,6 +95,8 @@ export default {
 </script> 
 ```
 
+See the final result in the [examples](examples#simple-html-input-element).
+
 ## Lazy value binding
 Sometimes you might want to update the bound value only when the input loses its focus. In this case, use `v-model.lazy` for Vue 3. For Vue 2 listen to the `change` event instead of using `v-model`, since the `lazy` modifier is not supported when using `v-model` on custom components.
 

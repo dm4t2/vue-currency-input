@@ -30,6 +30,10 @@ module.exports = {
       {
         text: 'Playground',
         link: '/playground'
+      },
+      {
+        text: 'Examples',
+        link: '/examples'
       }
     ],
     repo: 'dm4t2/vue-currency-input',
