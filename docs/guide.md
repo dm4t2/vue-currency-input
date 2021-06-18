@@ -54,7 +54,7 @@ import useCurrencyInput from 'vue-currency-input'
 export default {
   name: 'CurrencyInput',
   props: {
-    modelValue: Number,
+    modelValue: Number, // Vue 2: value
     options: Object
   },
   setup (props) {
@@ -98,25 +98,21 @@ export default {
 See the final result in the [examples](examples#simple-html-input-element).
 
 ## Lazy value binding
-Sometimes you might want to update the bound value only when the input loses its focus. In this case, use `v-model.lazy` for Vue 3. For Vue 2 listen to the `change` event instead of using `v-model`, since the `lazy` modifier is not supported when using `v-model` on custom components.
+Sometimes you might want to update the bound value only when the input loses its focus. In this case, use `v-model.lazy` for Vue 3:
 
 ```vue
-<template>
-  <currency-input 
-    v-model.lazy="value" 
-    :options="{ currency: 'EUR' }"
-  />
-</template>
-
-<script>
-import CurrencyInput from './CurrencyInput'
-
-export default {
-  name: 'App',
-  components: { CurrencyInput },
-  data: () => ({ value: 1234 })
-}
-</script> 
+<currency-input
+  v-model.lazy="value"
+  :options="{ currency: 'EUR' }"
+/>
+```
+For Vue 2 listen to the `change` event instead of using `v-model`, since the `lazy` modifier is not supported when using `v-model` on custom components:
+```vue
+<currency-input
+  :value="value"
+  :options="{ currency: 'EUR' }"
+  @change="value = $event"
+/>
 ```
 
 ## External props changes
@@ -133,13 +129,13 @@ The same applies for the options of your currency input component. Use the `setO
 </template>
 
 <script>
-import { watch } from 'vue'
+import { watch } from 'vue' // Vue 2: import { watch } from '@vue/composition-api' 
 import useCurrencyInput from 'vue-currency-input'
 
 export default {
   name: 'CurrencyInput',
   props: {
-    modelValue: Number,
+    modelValue: Number, // Vue 2: value
     options: Object
   },
   setup (props) {
@@ -150,7 +146,7 @@ export default {
       setValue
     } = useCurrencyInput(props.options)
 
-    watch(() => props.modelValue, (value) => {
+    watch(() => props.modelValue, (value) => { // Vue 2: props.value
       setValue(value)
     })
 
