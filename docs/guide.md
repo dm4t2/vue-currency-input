@@ -19,8 +19,8 @@ For usage with Vue 2 you have to install also the Vue Composition API plugin:
 ```bash
 npm install @vue/composition-api
 ```
-## Browser compatibility
-The library is compiled to the latest ECMAScript Version (ES2020) and does not include polyfills. Make sure that [the dependency is transpiled with Babel](https://cli.vuejs.org/config/#transpiledependencies) in your Vue CLI project.
+
+In Vue CLI projects, make sure that [the dependency is transpiled with Babel](https://cli.vuejs.org/config/#transpiledependencies), since the library is compiled to the latest ECMAScript Version (ES2020).
 
 Example `vue.config.js`:
 ```js
