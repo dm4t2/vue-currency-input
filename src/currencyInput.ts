@@ -175,45 +175,44 @@ export class CurrencyInput {
     this.el.addEventListener(
       'input',
       (e: Event) => {
-        if (!e.isTrusted) {
-          return
-        }
-        const { value, selectionStart } = this.el
-        const inputEvent = e as InputEvent
-        if (selectionStart && inputEvent.data && DECIMAL_SEPARATORS.includes(inputEvent.data)) {
-          this.decimalSymbolInsertedAt = selectionStart - 1
-        }
-        this.format(value)
-        if (this.focus && selectionStart != null) {
-          const getCaretPositionAfterFormat = () => {
-            const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = this.currencyFormat
+        if (!(e as CustomEvent).detail) {
+          const { value, selectionStart } = this.el
+          const inputEvent = e as InputEvent
+          if (selectionStart && inputEvent.data && DECIMAL_SEPARATORS.includes(inputEvent.data)) {
+            this.decimalSymbolInsertedAt = selectionStart - 1
+          }
+          this.format(value)
+          if (this.focus && selectionStart != null) {
+            const getCaretPositionAfterFormat = () => {
+              const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = this.currencyFormat
 
-            let caretPositionFromLeft = value.length - selectionStart
-            const newValueLength = this.formattedValue.length
-            if (
-              this.formattedValue.substr(selectionStart, 1) === groupingSymbol &&
-              count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1
-            ) {
-              return newValueLength - caretPositionFromLeft - 1
-            }
+              let caretPositionFromLeft = value.length - selectionStart
+              const newValueLength = this.formattedValue.length
+              if (
+                this.formattedValue.substr(selectionStart, 1) === groupingSymbol &&
+                count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1
+              ) {
+                return newValueLength - caretPositionFromLeft - 1
+              }
 
-            if (decimalSymbol) {
-              const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
-              if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
-                return this.formattedValue.indexOf(decimalSymbol) + 1
-              } else {
-                if (!this.options.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
-                  if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
-                    caretPositionFromLeft -= 1
+              if (decimalSymbol) {
+                const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
+                if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
+                  return this.formattedValue.indexOf(decimalSymbol) + 1
+                } else {
+                  if (!this.options.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
+                    if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
+                      caretPositionFromLeft -= 1
+                    }
                   }
                 }
               }
+              return this.options.hideCurrencySymbolOnFocus
+                ? newValueLength - caretPositionFromLeft
+                : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
             }
-            return this.options.hideCurrencySymbolOnFocus
-              ? newValueLength - caretPositionFromLeft
-              : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
+            this.setCaretPosition(getCaretPositionAfterFormat())
           }
-          this.setCaretPosition(getCaretPositionAfterFormat())
         }
       },
       { capture: true }
@@ -257,11 +256,10 @@ export class CurrencyInput {
 
     this.el.addEventListener(
       'change',
-      (e) => {
-        if (!e.isTrusted) {
-          return
+      (e: Event) => {
+        if (!(e as CustomEvent).detail) {
+          this.dispatchEvent('change')
         }
-        this.dispatchEvent('change')
       },
       { capture: true }
     )
