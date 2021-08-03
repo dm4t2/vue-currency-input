@@ -44,7 +44,7 @@
     "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js"
   },
   "peerDependencies": {
-    "@vue/composition-api": "^1.0.0-rc.1",
+    "@vue/composition-api": "^1.0.0",
     "vue": "^2.6 || ^3.0.0"
   },
   "peerDependenciesMeta": {
@@ -57,7 +57,7 @@
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
-    "@vue/composition-api": "^1.0.0-rc.8",
+    "@vue/composition-api": "^1.0.5",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^7.19.0",
@@ -79,8 +79,8 @@
     "typescript": "^4.2.4",
     "vite-plugin-components": "^0.8.4",
     "vite-plugin-windicss": "^0.15.10",
-    "vitepress": "^0.13.2",
-    "vue": "^3.0.11",
+    "vitepress": "^0.15.6",
+    "vue": "^3.1.5",
     "windicss": "^2.5.14"
   },
   "dependencies": {
