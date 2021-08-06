@@ -67,6 +67,9 @@ export class CurrencyInput {
     if (this.options.autoDecimalDigits) {
       this.options.hideNegligibleDecimalDigitsOnFocus = false
       this.el.setAttribute('inputmode', 'numeric')
+      if(typeof this.options.precision === 'object') {
+        throw new Error('Precision ranges are not available when using `autoDecimalDigits`.');
+      }
     } else {
       this.el.setAttribute('inputmode', 'decimal')
     }

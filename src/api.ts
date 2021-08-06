@@ -10,6 +10,11 @@ export interface NumberRange {
   max?: number
 }
 
+export interface PrecisionRange {
+  min: number,
+  max: number
+}
+
 export enum CurrencyDisplay {
   symbol = 'symbol',
   narrowSymbol = 'narrowSymbol',
@@ -26,7 +31,7 @@ export interface CurrencyInputOptions {
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean
-  precision?: number
+  precision?: PrecisionRange | number
   autoDecimalDigits?: boolean
   autoSign?: boolean
   valueRange?: NumberRange
