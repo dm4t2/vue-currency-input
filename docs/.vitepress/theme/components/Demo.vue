@@ -92,7 +92,27 @@
         label="Precision"
         description="Override the number of displayed decimal digits. Can only be applied for currencies that support decimal digits."
       >
-        <div class="flex items-center">
+        <Checkbox v-model="usePrecisionRange" label="Use precision range" class="mb-4" :disabled="!precisionEnabled || autoDecimalDigits" />
+        <template v-if="usePrecisionRange">
+          <div class="flex items-center space-x-4">
+            <input
+              v-model.number="minPrecision"
+              :disabled="!precisionEnabled"
+              type="number"
+              placeholder="Min"
+              class="min-w-0 flex-1 shadow-sm disabled:(opacity-50 cursor-not-allowed) rounded-md text-base focus:border-primary focus:ring focus:ring-offset-0 focus:ring-primary focus:ring-opacity-50"
+            />
+            <span class="text-center">to</span>
+            <input
+              v-model.number="maxPrecision"
+              :disabled="!precisionEnabled"
+              type="number"
+              placeholder="Max"
+              class="min-w-0 flex-1 shadow-sm disabled:(opacity-50 cursor-not-allowed) rounded-md text-base focus:border-primary focus:ring focus:ring-offset-0 focus:ring-primary focus:ring-opacity-50"
+            />
+          </div>
+        </template>
+        <div v-else class="flex items-center">
           <Slider v-model.number="precision" :disabled="!precisionEnabled" />
           <code :value="precision" class="w-10 ml-4 text-center"> {{ precision }}</code>
         </div>
@@ -101,6 +121,7 @@
         v-model="autoDecimalDigits"
         label="Auto Decimal Digits"
         description="Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits."
+        @update:modelValue="usePrecisionRange = false"
       />
       <OptionSection
         v-model="exportValueAsInteger"
@@ -145,7 +166,10 @@ export default defineComponent({
       hideNegligibleDecimalDigitsOnFocusEnabled: true,
       hideNegligibleDecimalDigitsOnFocus: true,
       precisionEnabled: false,
+      usePrecisionRange: false,
       precision: 2,
+      minPrecision: 2,
+      maxPrecision: 4,
       valueRangeEnabled: false,
       minValue: undefined,
       maxValue: undefined,
@@ -160,7 +184,7 @@ export default defineComponent({
           currency: state.currency,
           currencyDisplay: state.currencyDisplay,
           valueRange: state.valueRangeEnabled ? { min: state.minValue, max: state.maxValue } : undefined,
-          precision: state.precisionEnabled ? state.precision : undefined,
+          precision: state.precisionEnabled ? (state.usePrecisionRange ? {min: state.minPrecision, max: state.maxPrecision} : state.precision) : undefined,
           hideCurrencySymbolOnFocus: state.hideCurrencySymbolOnFocus,
           hideGroupingSeparatorOnFocus: state.hideGroupingSeparatorOnFocus,
           hideNegligibleDecimalDigitsOnFocus: state.hideNegligibleDecimalDigitsOnFocus,
