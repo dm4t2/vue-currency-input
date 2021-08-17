@@ -21,16 +21,6 @@ export default [
         banner
       },
       {
-        file: pkg.jsdelivr,
-        name: 'VueCurrencyInput',
-        format: 'iife',
-        exports: 'named',
-        globals: {
-          'vue-demi': 'VueDemi'
-        },
-        banner
-      },
-      {
         file: pkg.module,
         format: 'es',
         exports: 'named',
