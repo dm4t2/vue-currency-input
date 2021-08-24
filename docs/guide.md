@@ -21,15 +21,22 @@ npm install @vue/composition-api
 ```
 
 ## Usage
-Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Vuetify](https://vuetifyjs.com/en/components/text-fields/), [Quasar](https://quasar.dev/vue-components/input) or [Element](https://element.eleme.io/#/en-US/component/input)).
+Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Quasar](examples#usage-with-quasar-veevalidate) or [Element Plus](examples#usage-with-element-plus)).
+
+::: warning Code examples
+The following code examples are for Vue 3. Deviations for Vue 2 are noted as inline code comments.
+:::
 
 ### Creating a custom component
-The following example component `<currency-input>` uses a simple HTML input element:
+The following example component `<currency-input>` uses a simple HTML input element. 
+
+The component must provide props for the `v-model` value binding and the options (see [Config Reference](config)). Make also sure, that the input element has type `text` (or omit the type since it's the default).
 
 ```vue
 <template>
   <input 
-    ref="inputRef" 
+    ref="inputRef"
+    type="text"
     :value="formattedValue"
   >
 </template>
@@ -51,14 +58,6 @@ export default {
 }
 </script>
 ```
-
-:::tip Component Props
-The component should provide props for the `v-model` value binding, and the options (see [Config Reference](config)).
-:::
-
-:::warning Input Type
-Make sure, that the input element has type `text` (or omit the type since it's the default).
-:::
 
 ### Use the custom component
 Now you can use the created `<currency-input>` component in your app:
