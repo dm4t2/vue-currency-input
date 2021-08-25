@@ -7,9 +7,7 @@ You’re browsing the documentation for v2.x. [For v1.x, click here](https://vue
 ## Introduction
 Vue Currency Input allows an easy input of currency formatted numbers based on the [ECMAScript Internationalization API (ECMA-402)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
 
-Powered by the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides the function `useCurrencyInput` (a so called *Vue composable*) for decorating input components with currency format capabilities.
-
-Thanks to [Vue Demi](https://github.com/vueuse/vue-demi), it supports both Vue 3 and Vue 2 (with [Composition API plugin](https://github.com/vuejs/composition-api)).
+Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides the function `useCurrencyInput` (a so called *Vue composable*) for decorating input components with currency format capabilities. Thanks to [Vue Demi](https://github.com/vueuse/vue-demi), it supports both Vue 2 and Vue 3.
 
 ## Installation
 Install the npm package:
