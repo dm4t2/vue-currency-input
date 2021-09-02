@@ -1,0 +1,38 @@
+name: Bug Report
+description: Create a bug report for Vue Currency Input.
+labels: []
+body:
+  - type: input
+    attributes:
+      label: Vue Currency Input version
+      description: 'For example: v2.0.2'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Vue version
+      description: 'For example: v3.2.0'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What browser are you using?
+      description: 'For example: Chrome'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What operating system are you using?
+      description: 'For example: Windows'
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Reproduction repo/CodeSandbox
+      description: A public GitHub repo or a [CodeSandbox](https://codesandbox.io/s/vue) that includes a minimal reproduction of the bug, for example a fresh Vue CLI project without any unnecessary code.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe your issue
+      description: Describe the problem, any important steps to reproduce and what behavior is expected.
