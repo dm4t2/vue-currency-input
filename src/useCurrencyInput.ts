@@ -24,7 +24,7 @@ export default (options: CurrencyInputOptions): UseCurrencyInput => {
   // @ts-ignore
   const hasChangeEventListener = isVue3 ? lazyModel || !!instance.attrs.onChange : !!instance.proxy.$listeners[changeEvent]
 
-  const onInput = (e: CustomEvent<CurrencyInputValue>): void => {
+  const onInput = (e: CustomEvent<CurrencyInputValue>) => {
     if (e.detail) {
       if (numberValue.value !== e.detail.number) {
         emit(inputEvent, e.detail.number)
