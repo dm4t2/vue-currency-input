@@ -211,7 +211,8 @@ export class CurrencyInput {
                   }
                 }
               }
-              return this.options.hideCurrencySymbolOnFocus
+
+              return this.options.hideCurrencySymbolOnFocus || this.options.currencyDisplay === CurrencyDisplay.hidden
                 ? newValueLength - caretPositionFromLeft
                 : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
             }
@@ -232,7 +233,7 @@ export class CurrencyInput {
         } else if (selectionStart != null) {
           const getCaretPositionOnFocus = () => {
             const { prefix, suffix, groupingSymbol } = this.currencyFormat
-            if (!this.options.hideCurrencySymbolOnFocus) {
+            if (!this.options.hideCurrencySymbolOnFocus && this.options.currencyDisplay !== CurrencyDisplay.hidden) {
               if (selectionStart >= value.length - suffix.length) {
                 return this.formattedValue.length - suffix.length
               } else if (selectionStart < prefix.length) {
@@ -240,7 +241,7 @@ export class CurrencyInput {
               }
             }
             let result = selectionStart
-            if (this.options.hideCurrencySymbolOnFocus) {
+            if (this.options.hideCurrencySymbolOnFocus && this.options.currencyDisplay !== CurrencyDisplay.hidden) {
               result -= prefix.length
             }
             if (this.options.hideGroupingSeparatorOnFocus) {
