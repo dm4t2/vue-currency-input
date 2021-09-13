@@ -195,7 +195,11 @@ export class CurrencyInput {
                 return newValueLength - caretPositionFromLeft - 1
               }
 
-              if (decimalSymbol) {
+              if (newValueLength < caretPositionFromLeft) {
+                return selectionStart
+              }
+
+              if (decimalSymbol !== undefined && value.indexOf(decimalSymbol) !== -1) {
                 const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
                 if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
                   return this.formattedValue.indexOf(decimalSymbol) + 1
