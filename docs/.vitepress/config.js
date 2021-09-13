@@ -10,6 +10,10 @@ module.exports = {
     logo: '/favicon.png',
     nav: [
       {
+        text: '❤ Donate',
+        link: 'https://ko-fi.com/dm4t20593'
+      },
+      {
         text: 'v1 Docs',
         link: 'https://vue-currency-input-v1.netlify.app/'
       },
