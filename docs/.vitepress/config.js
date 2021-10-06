@@ -10,7 +10,7 @@ module.exports = {
     logo: '/favicon.png',
     nav: [
       {
-        text: '❤ Donate',
+        text: '❤ Sponsor',
         link: 'https://ko-fi.com/dm4t20593'
       },
       {
