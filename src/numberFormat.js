@@ -36,7 +36,7 @@ export default class NumberFormat {
       this.suffix = ps.substring(ps.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[6]) + 1)
     } else {
       this.prefix = (currency || {}).prefix || ''
-      this.negativePrefix = `${this.minusSymbol}${this.prefix}`
+      this.negativePrefix = (this.prefix == '') ? '' : `${this.minusSymbol}${this.prefix}`
       this.suffix = (currency || {}).suffix || ''
     }
   }
