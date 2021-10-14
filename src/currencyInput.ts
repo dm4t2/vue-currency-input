@@ -136,7 +136,7 @@ export class CurrencyInput {
           minimumFractionDigits = maximumFractionDigits = 0
         }
         formattedValue =
-          numberValue > this.toInteger(Math.abs(numberValue))
+          this.toInteger(Math.abs(numberValue)) > Number.MAX_SAFE_INTEGER
             ? this.formattedValue
             : this.currencyFormat.format(numberValue, {
                 useGrouping: this.options.useGrouping && !(this.focus && this.options.hideGroupingSeparatorOnFocus),
