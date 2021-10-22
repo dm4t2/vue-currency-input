@@ -28,7 +28,7 @@ body:
       required: true
   - type: input
     attributes:
-      label: Reproduction repo/CodeSandbox
+      label: Reproduction link
       description: A public GitHub repo or a [CodeSandbox](https://codesandbox.io/s/vue) that includes a minimal reproduction of the bug, for example a fresh Vue CLI project without any unnecessary code.
     validations:
       required: true
