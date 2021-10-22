@@ -37,7 +37,7 @@
     "dev": "vitepress dev docs",
     "docs": "vitepress build docs",
     "test": "jest",
-    "lint": "eslint",
+    "lint": "eslint . --no-fix",
     "prebuild": "rimraf dist",
     "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js"
   },
