@@ -1,15 +1,16 @@
 import { CurrencyInput } from './currencyInput'
-import { ComponentInternalInstance, computed, ComputedRef, getCurrentInstance, isVue3, onMounted, onUnmounted, Ref, ref } from 'vue-demi'
+import { computed, ComputedRef, getCurrentInstance, isVue3, onMounted, onUnmounted, Ref, ref } from 'vue-demi'
 import { CurrencyInputOptions, CurrencyInputValue, UseCurrencyInput } from './api'
 
-const findInput = (el: HTMLElement) => (el.tagName.toLowerCase() === 'input' ? el : el.querySelector('input'))
+const findInput = (el: HTMLElement | null) => (el?.matches('input') ? el : el?.querySelector('input'))
 
 export default (options: CurrencyInputOptions): UseCurrencyInput => {
-  let numberInput: CurrencyInput, input: HTMLInputElement
+  let numberInput: CurrencyInput | null
+  let input: HTMLInputElement | null
   const inputRef: Ref<HTMLInputElement | null> = ref(null)
   const formattedValue = ref<string | null>(null)
 
-  const instance: ComponentInternalInstance | null = getCurrentInstance()
+  const instance = getCurrentInstance()
   if (instance == null) {
     throw new Error()
   }
@@ -41,38 +42,34 @@ export default (options: CurrencyInputOptions): UseCurrencyInput => {
   }
 
   onMounted(() => {
-    if (inputRef.value) {
-      // @ts-ignore
-      input = ('$el' in inputRef.value ? findInput(inputRef.value.$el) : inputRef.value) as HTMLInputElement
-
-      if (input == null) {
-        throw new Error('No input element found')
-      } else {
-        numberInput = new CurrencyInput(input, options)
-        if (hasInputEventListener) {
-          input.addEventListener('input', onInput as EventListener)
-        }
-        if (hasChangeEventListener) {
-          input.addEventListener('change', onChange as EventListener)
-        }
-        numberInput.setValue(numberValue.value)
-      }
+    // @ts-ignore
+    input = findInput(inputRef.value?.$el ?? inputRef.value)
+    if (!input) {
+      throw new Error('No input element found')
     }
+    numberInput = new CurrencyInput(input, options)
+    if (hasInputEventListener) {
+      input.addEventListener('input', onInput as EventListener)
+    }
+    if (hasChangeEventListener) {
+      input.addEventListener('change', onChange as EventListener)
+    }
+    numberInput.setValue(numberValue.value)
   })
 
   onUnmounted(() => {
     if (hasInputEventListener) {
-      input.removeEventListener('input', onInput as EventListener)
+      input?.removeEventListener('input', onInput as EventListener)
     }
     if (hasChangeEventListener) {
-      input.removeEventListener('change', onChange as EventListener)
+      input?.removeEventListener('change', onChange as EventListener)
     }
   })
 
   return {
     inputRef,
     formattedValue,
-    setValue: (value: number | null) => numberInput.setValue(value),
-    setOptions: (options: CurrencyInputOptions) => numberInput.setOptions(options)
+    setValue: (value: number | null) => numberInput?.setValue(value),
+    setOptions: (options: CurrencyInputOptions) => numberInput?.setOptions(options)
   }
 }
