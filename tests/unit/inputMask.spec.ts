@@ -152,7 +152,7 @@ describe('DefaultInputMask', () => {
 
 describe('AutoDecimalDigitsInputMask', () => {
   it('should return the expected result', () => {
-    const currencyFormat = new CurrencyFormat({ locale: 'nl', currency: 'EUR', precision: 2, autoDecimalDigits: true })
+    const currencyFormat = new CurrencyFormat({ locale: 'nl', currency: 'EUR', autoDecimalDigits: true })
 
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('')).toEqual('')
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('0,0', '0,00')).toEqual('')
