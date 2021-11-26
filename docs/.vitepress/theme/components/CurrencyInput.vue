@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, watch } from 'vue'
-import useCurrencyInput from '../../../../src'
+import { useCurrencyInput } from '../../../../src'
 
 export default defineComponent({
   name: 'CurrencyInput',
@@ -18,8 +18,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
-    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
+  setup (props) {
+    const { inputRef, setOptions, setValue } = useCurrencyInput(props.options)
 
     watch(
       () => props.options,

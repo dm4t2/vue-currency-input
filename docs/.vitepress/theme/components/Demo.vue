@@ -129,10 +129,10 @@ export default defineComponent({
       value: 1234.5,
       localeEnabled: false,
       locale: 'de-DE',
-      locales: ['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'pt-BR', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR'],
+      locales: ['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'pt-BR', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR', 'bg-BG'],
       currency: 'EUR',
       currencyDisplay: 'symbol',
-      currencies: ['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR'],
+      currencies: ['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR', 'BGN'],
       currencyDisplays: [
         { value: 'symbol', label: 'Symbol' },
         { value: 'narrowSymbol', label: 'Narrow symbol' },
