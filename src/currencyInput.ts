@@ -244,7 +244,7 @@ export class CurrencyInput {
             if (this.options.hideCurrencySymbolOnFocus && this.options.currencyDisplay !== CurrencyDisplay.hidden) {
               result -= prefix.length
             }
-            if (this.options.hideGroupingSeparatorOnFocus) {
+            if (this.options.hideGroupingSeparatorOnFocus && groupingSymbol !== undefined) {
               result -= count(value.substring(0, selectionStart), groupingSymbol)
             }
             return result

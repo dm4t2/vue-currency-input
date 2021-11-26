@@ -17,6 +17,7 @@ describe('CurrencyFormat', () => {
       expect(new CurrencyFormat({ locale: 'ja', currency: 'JPY' })).toMatchSnapshot('ja_JPY')
       expect(new CurrencyFormat({ locale: 'ar-SA', currency: 'SAR' })).toMatchSnapshot('ar-SA_SAR')
       expect(new CurrencyFormat({ locale: 'fa-IR', currency: 'IRR' })).toMatchSnapshot('fa-IR_IRR')
+      expect(new CurrencyFormat({ locale: 'bg-BG', currency: 'BGN' })).toMatchSnapshot('bg-BG_BGN')
     })
 
     describe('custom precision', () => {

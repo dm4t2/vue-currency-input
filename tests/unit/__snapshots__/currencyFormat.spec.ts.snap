@@ -28,6 +28,34 @@ CurrencyFormat {
 }
 `;
 
+exports[`CurrencyFormat constructing number formats should work for respective locale and currency: bg-BG_BGN 1`] = `
+CurrencyFormat {
+  "currency": "BGN",
+  "currencyDisplay": undefined,
+  "decimalSymbol": ",",
+  "digits": Array [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+  ],
+  "groupingSymbol": undefined,
+  "locale": "bg-BG",
+  "maximumFractionDigits": 2,
+  "minimumFractionDigits": 2,
+  "minusSymbol": "-",
+  "negativePrefix": "-",
+  "prefix": "",
+  "suffix": " лв.",
+}
+`;
+
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: de-CH_EUR 1`] = `
 CurrencyFormat {
   "currency": "EUR",

@@ -1,4 +1,4 @@
-import { count, escapeRegExp, substringBefore } from './utils'
+import { escapeRegExp, substringBefore } from './utils'
 import { CurrencyDisplay, CurrencyInputOptions } from './api'
 import NumberFormatOptions = Intl.NumberFormatOptions
 
@@ -11,7 +11,7 @@ export default class CurrencyFormat {
   currencyDisplay: CurrencyDisplay | undefined
   digits: string[]
   decimalSymbol: string | undefined
-  groupingSymbol: string
+  groupingSymbol: string | undefined
   minusSymbol: string
   minimumFractionDigits: number
   maximumFractionDigits: number
@@ -23,13 +23,14 @@ export default class CurrencyFormat {
     const { currency, currencyDisplay, locale, precision } = options
     this.currencyDisplay = currencyDisplay !== CurrencyDisplay.hidden ? currencyDisplay : undefined
     const numberFormat = new Intl.NumberFormat(locale, { currency, currencyDisplay: this.currencyDisplay, style: 'currency' })
-    const ps = numberFormat.format(123456)
+    const formatSample = numberFormat.format(1)
+    const formatParts = numberFormat.formatToParts(123456)
 
     this.locale = locale
     this.currency = currency
     this.digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => i.toLocaleString(locale))
-    this.decimalSymbol = count(ps, this.digits[0]) ? ps.substr(ps.indexOf(this.digits[6]) + 1, 1) : undefined
-    this.groupingSymbol = ps.substr(ps.indexOf(this.digits[3]) + 1, 1)
+    this.decimalSymbol = formatParts.find(({ type }) => type === 'decimal')?.value
+    this.groupingSymbol = formatParts.find(({ type }) => type === 'group')?.value
     this.minusSymbol = substringBefore(Number(-1).toLocaleString(locale), this.digits[1])
 
     if (this.decimalSymbol === undefined) {
@@ -41,9 +42,9 @@ export default class CurrencyFormat {
       this.maximumFractionDigits = numberFormat.resolvedOptions().maximumFractionDigits
     }
 
-    this.prefix = substringBefore(ps, this.digits[1])
+    this.prefix = substringBefore(formatSample, this.digits[1])
     this.negativePrefix = substringBefore(numberFormat.format(-1), this.digits[1])
-    this.suffix = ps.substring(ps.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[6]) + 1)
+    this.suffix = formatSample.substring(formatSample.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[1]) + 1)
   }
 
   parse(str: string | null): number | null {
@@ -119,7 +120,7 @@ export default class CurrencyFormat {
   }
 
   stripGroupingSeparator(str: string): string {
-    return str.replace(new RegExp(escapeRegExp(this.groupingSymbol), 'g'), '')
+    return this.groupingSymbol !== undefined ? str.replace(new RegExp(escapeRegExp(this.groupingSymbol), 'g'), '') : str
   }
 
   stripMinusSymbol(str: string): string {
