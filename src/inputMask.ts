@@ -71,10 +71,10 @@ export class AutoDecimalDigitsInputMask extends AbstractInputMask implements Inp
     const numberValue =
       this.currencyFormat.stripMinusSymbol(str) === ''
         ? -0
-        : Number(`${negative ? '-' : ''}${removeLeadingZeros(this.currencyFormat.onlyDigits(str))}`) / Math.pow(10, this.currencyFormat.minimumFractionDigits)
+        : Number(`${negative ? '-' : ''}${removeLeadingZeros(this.currencyFormat.onlyDigits(str))}`) / Math.pow(10, this.currencyFormat.maximumFractionDigits)
     return {
       numberValue,
-      fractionDigits: numberValue.toFixed(this.currencyFormat.minimumFractionDigits).slice(-this.currencyFormat.minimumFractionDigits)
+      fractionDigits: numberValue.toFixed(this.currencyFormat.maximumFractionDigits).slice(-this.currencyFormat.maximumFractionDigits)
     }
   }
 }
