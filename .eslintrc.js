@@ -10,7 +10,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/ban-ts-comment': 'off'
   },
-  ignorePatterns: ['dist/**'],
+  ignorePatterns: ['dist/**', 'coverage/**'],
   overrides: [
     {
       files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],

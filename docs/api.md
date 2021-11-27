@@ -3,11 +3,13 @@
 ## Functions
 
 ### useCurrencyInput
+
 ```typescript
 declare const useCurrencyInput: (options: CurrencyInputOptions) => UseCurrencyInput
 ```
 
 ### parse
+
 ```typescript
 declare const parse: (formattedValue: string, options: CurrencyInputOptions) => number | null
 ```
@@ -15,6 +17,7 @@ declare const parse: (formattedValue: string, options: CurrencyInputOptions) => 
 ## Enums
 
 ### CurrencyDisplay
+
 ```typescript
 enum CurrencyDisplay {
   symbol = 'symbol',
@@ -28,6 +31,7 @@ enum CurrencyDisplay {
 ## Types
 
 ### NumberRange
+
 ```typescript
 interface NumberRange {
   min?: number
@@ -36,6 +40,7 @@ interface NumberRange {
 ```
 
 ### CurrencyInputOptions
+
 ```typescript
 interface CurrencyInputOptions {
   locale?: string
@@ -54,6 +59,7 @@ interface CurrencyInputOptions {
 ```
 
 ### UseCurrencyInput
+
 ```typescript
 interface UseCurrencyInput {
   inputRef: Ref

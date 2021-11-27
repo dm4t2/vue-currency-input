@@ -37,7 +37,8 @@
     "dev": "vitepress dev docs",
     "docs": "vitepress build docs",
     "test": "jest",
-    "lint": "eslint . --no-fix",
+    "lint": "eslint --no-fix --max-warnings 0 {**/*,*}.{js,ts} && prettier --check {**/*,*}.{js,ts,json,md}",
+    "lint:fix": "eslint --fix {**/*,*}.{js,ts} && prettier --write {**/*,*}.{js,ts,json,md}",
     "prebuild": "rimraf dist",
     "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js"
   },
@@ -66,6 +67,7 @@
     "eslint-plugin-vue": "^7.9.0",
     "jest": "^26.6.3",
     "jest-environment-jsdom-fifteen": "^1.0.2",
+    "lint-staged": "^12.1.2",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.47.0",
@@ -74,6 +76,7 @@
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-typescript2": "^0.30.0",
     "sass": "^1.32.13",
+    "simple-git-hooks": "^2.7.0",
     "stringify-object": "^3.3.0",
     "ts-jest": "^26.5.6",
     "typescript": "^4.2.4",
@@ -86,5 +89,16 @@
   },
   "dependencies": {
     "vue-demi": "^0.12.1"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "{**/*,*}.{js,ts}": [
+      "eslint --fix"
+    ],
+    "{**/*,*}.{js,ts,json,md}": [
+      "prettier --write"
+    ]
   }
 }
