@@ -25,6 +25,12 @@ describe('CurrencyFormat', () => {
         expect(new CurrencyFormat({ currency: 'EUR', precision: 0 })).toEqual(expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 }))
       })
 
+      it('should work with a custom precision range', () => {
+        expect(new CurrencyFormat({ currency: 'EUR', precision: { min: 0, max: 4 } })).toEqual(
+          expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 4 })
+        )
+      })
+
       it('should ignore the custom precision if the locale does not support decimal digits', () => {
         expect(new CurrencyFormat({ locale: 'ja', currency: 'JPY', precision: 2 })).toEqual(
           expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 0 })
@@ -106,6 +112,15 @@ describe('CurrencyFormat', () => {
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).format(null)).toBe('')
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).format(1234.5789)).toBe('€1,234.58')
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).format(1234.5789, { minimumFractionDigits: 4 })).toBe('€1,234.5789')
+    })
+
+    it('should apply the custom percision range', () => {
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234)).toBe('€1,234')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.5)).toBe('€1,234.5')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.57)).toBe('€1,234.57')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.578)).toBe('€1,234.578')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.5789)).toBe('€1,234.5789')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.57891)).toBe('€1,234.5789')
     })
   })
 })

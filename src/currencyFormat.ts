@@ -35,11 +35,11 @@ export default class CurrencyFormat {
 
     if (this.decimalSymbol === undefined) {
       this.minimumFractionDigits = this.maximumFractionDigits = 0
-    } else if (precision !== undefined) {
+    } else if (typeof precision === 'number') {
       this.minimumFractionDigits = this.maximumFractionDigits = precision
     } else {
-      this.minimumFractionDigits = numberFormat.resolvedOptions().minimumFractionDigits
-      this.maximumFractionDigits = numberFormat.resolvedOptions().maximumFractionDigits
+      this.minimumFractionDigits = precision?.min ?? numberFormat.resolvedOptions().minimumFractionDigits
+      this.maximumFractionDigits = precision?.max ?? numberFormat.resolvedOptions().maximumFractionDigits
     }
 
     this.prefix = substringBefore(formatSample, this.digits[1])
