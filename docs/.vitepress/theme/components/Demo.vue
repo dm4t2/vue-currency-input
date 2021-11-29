@@ -92,7 +92,7 @@
         label="Precision"
         description="Override the number of displayed decimal digits. Can only be applied for currencies that support decimal digits."
       >
-        <Checkbox v-model="usePrecisionRange" label="Use precision range" class="mb-4" :disabled="!precisionEnabled || autoDecimalDigits" />
+        <Checkbox v-model="usePrecisionRange" label="Use precision range" class="mb-4" :disabled="!precisionEnabled" />
         <template v-if="usePrecisionRange">
           <div class="flex items-center space-x-4">
             <input
@@ -121,7 +121,6 @@
         v-model="autoDecimalDigits"
         label="Auto Decimal Digits"
         description="Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits."
-        @update:modelValue="usePrecisionRange = false"
       />
       <OptionSection
         v-model="exportValueAsInteger"
