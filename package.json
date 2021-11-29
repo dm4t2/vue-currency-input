@@ -40,7 +40,6 @@
     "lint": "eslint --no-fix --max-warnings 0 {**/*,*}.{js,ts} && prettier --check {**/*,*}.{js,ts,json,md}",
     "lint:fix": "eslint --fix {**/*,*}.{js,ts} && prettier --write {**/*,*}.{js,ts,json,md}",
     "prebuild": "rimraf dist",
-    "prepare": "npm run build",
     "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js"
   },
   "peerDependencies": {

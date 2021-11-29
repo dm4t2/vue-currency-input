@@ -26,7 +26,7 @@ describe('CurrencyFormat', () => {
       })
 
       it('should work with a custom precision range', () => {
-        expect(new CurrencyFormat({ currency: 'EUR', precision: {min: 0, max: 4} })).toEqual(
+        expect(new CurrencyFormat({ currency: 'EUR', precision: { min: 0, max: 4 } })).toEqual(
           expect.objectContaining({ minimumFractionDigits: 0, maximumFractionDigits: 4 })
         )
       })
@@ -115,12 +115,12 @@ describe('CurrencyFormat', () => {
     })
 
     it('should apply the custom percision range', () => {
-      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: {min: 0, max: 4} }).format(1234)).toBe('€1,234')
-      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: {min: 0, max: 4} }).format(1234.5)).toBe('€1,234.5')
-      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: {min: 0, max: 4} }).format(1234.57)).toBe('€1,234.57')
-      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: {min: 0, max: 4} }).format(1234.578)).toBe('€1,234.578')
-      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: {min: 0, max: 4} }).format(1234.5789)).toBe('€1,234.5789')
-      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: {min: 0, max: 4} }).format(1234.57891)).toBe('€1,234.5789')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234)).toBe('€1,234')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.5)).toBe('€1,234.5')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.57)).toBe('€1,234.57')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.578)).toBe('€1,234.578')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.5789)).toBe('€1,234.5789')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.57891)).toBe('€1,234.5789')
     })
   })
 })
