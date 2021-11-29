@@ -50,7 +50,7 @@ interface CurrencyInputOptions {
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean
-  precision?: number
+  precision?: NumberRange | number
   autoDecimalDigits?: boolean
   autoSign?: boolean
   valueRange?: NumberRange
