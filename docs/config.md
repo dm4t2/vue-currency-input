@@ -27,7 +27,7 @@ Whether the decimal symbol is inserted automatically, using the last inputted di
 ### precision
 
 The number of displayed decimal digits. Default is `undefined` (use the currency's default, decimal digits will be hidden for integer numbers). Must be between 0 and 15 and can only be applied for currencies that support decimal digits.
-You can also pass an object `{min, max}` to use a precision range (ranges are not available when using `autoDecimalDigits`).
+You can also pass an object `{min, max}` to use a precision range.
 
 ### hideCurrencySymbolOnFocus
 
