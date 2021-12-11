@@ -1,5 +1,5 @@
 import { CurrencyInput } from './currencyInput'
-import { ComponentPublicInstance, computed, ComputedRef, getCurrentInstance, isVue3, onMounted, onUnmounted, Ref, ref } from 'vue-demi'
+import { ComponentPublicInstance, computed, ComputedRef, getCurrentInstance, isVue3, onUnmounted, Ref, ref, watch } from 'vue-demi'
 import { CurrencyInputOptions, CurrencyInputValue, UseCurrencyInput } from './api'
 
 const findInput = (el: HTMLElement | null) => (el?.matches('input') ? el : el?.querySelector('input')) as HTMLInputElement
@@ -35,19 +35,23 @@ export default (options: CurrencyInputOptions): UseCurrencyInput => {
     }
   }
 
-  onMounted(() => {
-    input = findInput((inputRef.value as ComponentPublicInstance)?.$el ?? inputRef.value)
-    if (input) {
-      numberInput = new CurrencyInput(input, options)
-      if (hasInputEventListener) {
-        input.addEventListener('input', onInput as EventListener)
+  watch(inputRef, (value) => {
+    if (value) {
+      input = findInput((value as ComponentPublicInstance)?.$el ?? value)
+      if (input) {
+        numberInput = new CurrencyInput(input, options)
+        if (hasInputEventListener) {
+          input.addEventListener('input', onInput as EventListener)
+        }
+        if (hasChangeEventListener) {
+          input.addEventListener('change', onChange as EventListener)
+        }
+        numberInput.setValue(numberValue.value)
+      } else {
+        console.error('No input element found. Please make sure that the "inputRef" template ref is properly assigned.')
       }
-      if (hasChangeEventListener) {
-        input.addEventListener('change', onChange as EventListener)
-      }
-      numberInput.setValue(numberValue.value)
     } else {
-      console.error('No input element found. Please make sure that the "inputRef" template ref is properly assigned.')
+      numberInput = null
     }
   })
 

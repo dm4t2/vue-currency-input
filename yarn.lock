@@ -491,21 +491,6 @@
     "@babel/helper-simple-access" "^7.16.0"
     babel-plugin-dynamic-import-node "^2.3.3"
 
-"@babel/runtime-corejs3@^7.10.2":
-  version "7.16.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.16.3.tgz#1e25de4fa994c57c18e5fdda6cc810dac70f5590"
-  integrity sha512-IAdDC7T0+wEB4y2gbIL0uOXEYpiZEeuFUTVbdGq+UwCcF35T/tS8KrmMomEwEc5wBbyfH3PJVpTSUqrhPDXFcQ==
-  dependencies:
-    core-js-pure "^3.19.0"
-    regenerator-runtime "^0.13.4"
-
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.14.0":
-  version "7.16.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.16.3.tgz#b86f0db02a04187a3c17caa77de69840165d42d5"
-  integrity sha512-WBwekcqacdY2e9AF/Q7WLFUWmdJGJTkbjqTjoMDgXkVZ3ZRUvOPsLb5KdwISoQVsbP+DQzVZW4Zhci0DvpbNTQ==
-  dependencies:
-    regenerator-runtime "^0.13.4"
-
 "@babel/runtime@^7.12.5", "@babel/runtime@^7.13.8":
   version "7.15.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.15.4.tgz#fd17d16bfdf878e6dd02d19753a39fa8a8d9c84a"
@@ -1035,20 +1020,6 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@testing-library/dom@^7.30.4":
-  version "7.31.2"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.31.2.tgz#df361db38f5212b88555068ab8119f5d841a8c4a"
-  integrity sha512-3UqjCpey6HiTZT92vODYLPxTBWlM8ZOOjr3LX5F37/VRipW2M1kX6I/Cm4VXzteZqfGfagg8yXywpcOgQBlNsQ==
-  dependencies:
-    "@babel/code-frame" "^7.10.4"
-    "@babel/runtime" "^7.12.5"
-    "@types/aria-query" "^4.2.0"
-    aria-query "^4.2.2"
-    chalk "^4.1.0"
-    dom-accessibility-api "^0.5.6"
-    lz-string "^1.4.4"
-    pretty-format "^26.6.2"
-
 "@testing-library/dom@^8.2.0":
   version "8.10.1"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.10.1.tgz#e24fed92ad51c619cf304c6f1410b4c76b1000c0"
@@ -1069,15 +1040,6 @@
   integrity sha512-5Kwtbo3Y/NowpkbRuSepbyMFkZmHgD+vPzYB/RJ4oxt5Gj/avFFBYjhw27cqSVPVw/3a67NK1PbiIr9k4Gwmdg==
   dependencies:
     "@babel/runtime" "^7.12.5"
-
-"@testing-library/vue@^6.4.2":
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/@testing-library/vue/-/vue-6.4.2.tgz#4286d9b6495fc8869b9e8e1937687c0755412aab"
-  integrity sha512-L+yFRVu+zc/kwYWRaEF3gkEwUcoxhKNz74aya1NmAni2xrJORMqpY7URKxjfiJb4YchLgA47qEZ3irE11/x/+A==
-  dependencies:
-    "@babel/runtime" "^7.14.0"
-    "@testing-library/dom" "^7.30.4"
-    "@vue/test-utils" "^2.0.0-rc.0"
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -1506,10 +1468,25 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.22.tgz#26dcbe5e530f6c1f2de5ca9aeab92ab00f523b41"
   integrity sha512-qWVav014mpjEtbWbEgl0q9pEyrrIySKum8UVYjwhC6njrKzknLZPvfuYdQyVbApsqr94tf/3dP4pCuZmmjdCWQ==
 
-"@vue/test-utils@^2.0.0-rc.0":
-  version "2.0.0-rc.16"
-  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-2.0.0-rc.16.tgz#59380f02870f856ac002a29c02681d3f3fcbafeb"
-  integrity sha512-TubikDVkI2LuRKRPSLv3lYpbpvvucT2DIcGqfBVpvYs4W19u0EBTJEdmfwmSuLY7H1TyAr9Stur3PI1sWWvTGQ==
+"@vue/test-utils@^2.0.0-rc.17":
+  version "2.0.0-rc.17"
+  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-2.0.0-rc.17.tgz#e6dcf5b5bd3ae23595bdb154b9b578ebcdffd698"
+  integrity sha512-7LHZKsFRV/HqDoMVY+cJamFzgHgsrmQFalROHC5FMWrzPzd+utG5e11krj1tVsnxYufGA2ABShX4nlcHXED+zQ==
+
+"@vueuse/core@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-7.1.2.tgz#61ab2698c725ccaf168676f34cf6f41f76f8df34"
+  integrity sha512-SLoOPfhZdNRNUkZfx+wrHj6WycWdSw2RmNS8E4ngQ2kmBoJjRarGy51/GkGdjqHQqmhuwuFoNO2WaU0yBn3ffg==
+  dependencies:
+    "@vueuse/shared" "7.1.2"
+    vue-demi "*"
+
+"@vueuse/shared@7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-7.1.2.tgz#caee72d0669ecdb2b845349e8fea9431e50c09d6"
+  integrity sha512-AjYh4y9S5FMOoHDsysqcXY/1mpqNTrnWUD50yaaiyf+5kGWQVIpAkkjKZlYSC/NHKxxCRn0cLR4nWMzceUWewQ==
+  dependencies:
+    vue-demi "*"
 
 "@windicss/plugin-utils@0.15.10":
   version "0.15.10"
@@ -1742,14 +1719,6 @@ argparse@^1.0.7:
   integrity sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==
   dependencies:
     sprintf-js "~1.0.2"
-
-aria-query@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/aria-query/-/aria-query-4.2.2.tgz#0d2ca6c9aceb56b8977e9fed6aed7e15bbd2f83b"
-  integrity sha512-o/HelwhuKpTj/frsOsbNLNgnNGVIFsVP/SW2BSF14gVl7kAfMOJ6/8wUAUvG1R1NHKrfG+2sHZTu0yauT1qBrA==
-  dependencies:
-    "@babel/runtime" "^7.10.2"
-    "@babel/runtime-corejs3" "^7.10.2"
 
 aria-query@^5.0.0:
   version "5.0.0"
@@ -2329,11 +2298,6 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
 
-core-js-pure@^3.19.0:
-  version "3.19.1"
-  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.19.1.tgz#edffc1fc7634000a55ba05e95b3f0fe9587a5aa4"
-  integrity sha512-Q0Knr8Es84vtv62ei6/6jXH/7izKmOrtrxH9WJTHLCMAVeU+8TF8z8Nr08CsH4Ot0oJKzBzJJL9SJBYIv7WlfQ==
-
 core-util-is@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -2527,11 +2491,6 @@ doctrine@^3.0.0:
   integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
   dependencies:
     esutils "^2.0.2"
-
-dom-accessibility-api@^0.5.6:
-  version "0.5.10"
-  resolved "https://registry.yarnpkg.com/dom-accessibility-api/-/dom-accessibility-api-0.5.10.tgz#caa6d08f60388d0bb4539dd75fe458a9a1d0014c"
-  integrity sha512-Xu9mD0UjrJisTmv7lmVSDMagQcU9R5hwAbxsaAE/35XPnPLJobbuREfV/rraiSaEj/UOvgrzQs66zyTWTlyd+g==
 
 dom-accessibility-api@^0.5.9:
   version "0.5.9"
@@ -7076,7 +7035,7 @@ vitepress@^0.19.2:
     vite "^2.5.0"
     vue "^3.2.13"
 
-vue-demi@^0.12.1:
+vue-demi@*, vue-demi@^0.12.1:
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.12.1.tgz#f7e18efbecffd11ab069d1472d7a06e319b4174c"
   integrity sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==
