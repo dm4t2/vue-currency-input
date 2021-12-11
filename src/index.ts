@@ -3,7 +3,7 @@ import CurrencyFormat from './currencyFormat'
 import { CurrencyInputOptions } from './api'
 
 /**
- * @deprecated Will be removed in next major release. Use the named export `useCurrencyInput` instead.
+ * @deprecated Use the named export `useCurrencyInput` instead.
  */
 export default useCurrencyInput
 export * from './api'

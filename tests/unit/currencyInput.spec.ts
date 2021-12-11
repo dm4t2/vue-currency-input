@@ -1,17 +1,19 @@
 import { CurrencyInput } from '../../src/currencyInput'
 import { fireEvent } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
-import { CurrencyDisplay } from '../../src'
+import { CurrencyDisplay, CurrencyInputOptions, ValueScaling } from '../../src'
 
 describe('Currency Input', () => {
-  let el: HTMLInputElement, currencyInput: CurrencyInput
+  let el: HTMLInputElement, currencyInput: CurrencyInput, options: CurrencyInputOptions
+
   beforeEach(() => {
     document.body.innerHTML = `<input type="text">`
     el = document.querySelector('input') as HTMLInputElement
-    currencyInput = new CurrencyInput(el, {
+    options = {
       locale: 'en',
       currency: 'EUR'
-    })
+    }
+    currencyInput = new CurrencyInput(el, options)
   })
 
   describe('setValue', () => {
@@ -19,6 +21,16 @@ describe('Currency Input', () => {
       currencyInput.setValue(1)
 
       expect(el.value).toBe('€1')
+    })
+
+    it('should consider the value scaling', () => {
+      currencyInput.setOptions({ ...options, valueScaling: ValueScaling.precision })
+      currencyInput.setValue(1)
+      expect(el.value).toBe('€0.01')
+
+      currencyInput.setOptions({ ...options, valueScaling: ValueScaling.thousands })
+      currencyInput.setValue(1234)
+      expect(el.value).toBe('€1.23')
     })
   })
 
@@ -44,6 +56,7 @@ describe('Currency Input', () => {
       })
     })
   })
+
   describe('on focus', () => {
     beforeEach(() => {
       jest.useFakeTimers()

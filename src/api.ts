@@ -18,10 +18,20 @@ export enum CurrencyDisplay {
   hidden = 'hidden'
 }
 
+export enum ValueScaling {
+  precision = 'precision',
+  thousands = 'thousands',
+  millions = 'millions',
+  billions = 'billions'
+}
+
 export interface CurrencyInputOptions {
   locale?: string
   currency: string
   currencyDisplay?: CurrencyDisplay
+  /**
+   * @deprecated Use `valueScaling` instead.
+   */
   exportValueAsInteger?: boolean
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
@@ -31,6 +41,7 @@ export interface CurrencyInputOptions {
   autoSign?: boolean
   valueRange?: NumberRange
   useGrouping?: boolean
+  valueScaling?: ValueScaling
 }
 
 export interface UseCurrencyInput {

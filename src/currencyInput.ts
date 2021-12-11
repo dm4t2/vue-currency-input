@@ -1,7 +1,7 @@
 import CurrencyFormat, { DECIMAL_SEPARATORS } from './currencyFormat'
 import { AutoDecimalDigitsInputMask, DefaultInputMask, InputMask } from './inputMask'
 import { count } from './utils'
-import { CurrencyDisplay, CurrencyInputOptions, CurrencyInputValue } from './api'
+import { CurrencyDisplay, CurrencyInputOptions, CurrencyInputValue, ValueScaling } from './api'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
@@ -15,7 +15,8 @@ export const DEFAULT_OPTIONS = {
   autoDecimalDigits: false,
   valueRange: undefined,
   autoSign: true,
-  useGrouping: true
+  useGrouping: true,
+  valueScaling: undefined
 }
 
 export class CurrencyInput {
@@ -29,6 +30,8 @@ export class CurrencyInput {
   private focus!: boolean
   private minValue!: number
   private maxValue!: number
+  private valueScaling: number | undefined
+  private valueScalingFractionDigits!: number
 
   constructor(el: HTMLInputElement, options: CurrencyInputOptions) {
     this.el = el
@@ -44,12 +47,12 @@ export class CurrencyInput {
   }
 
   getValue(): CurrencyInputValue {
-    const numberValue = this.options.exportValueAsInteger && this.numberValue != null ? this.toInteger(this.numberValue) : this.numberValue
+    const numberValue = this.valueScaling && this.numberValue != null ? this.toInteger(this.numberValue, this.valueScaling) : this.numberValue
     return { number: numberValue, formatted: this.formattedValue }
   }
 
   setValue(value: number | null): void {
-    const newValue = this.options.exportValueAsInteger && value != null ? this.toFloat(value) : value
+    const newValue = this.valueScaling !== undefined && value != null ? this.toFloat(value, this.valueScaling) : value
     if (newValue !== this.numberValue) {
       this.applyFixedFractionFormat(newValue)
     }
@@ -72,6 +75,21 @@ export class CurrencyInput {
     }
     this.currencyFormat = new CurrencyFormat(this.options)
     this.numberMask = this.options.autoDecimalDigits ? new AutoDecimalDigitsInputMask(this.currencyFormat) : new DefaultInputMask(this.currencyFormat)
+    const valueScalingOptions = {
+      [ValueScaling.precision]: this.currencyFormat.maximumFractionDigits,
+      [ValueScaling.thousands]: 3,
+      [ValueScaling.millions]: 6,
+      [ValueScaling.billions]: 9
+    }
+    if (this.options.exportValueAsInteger) {
+      this.valueScaling = valueScalingOptions[ValueScaling.precision]
+    } else {
+      this.valueScaling = this.options.valueScaling ? valueScalingOptions[this.options.valueScaling] : undefined
+    }
+    this.valueScalingFractionDigits =
+      this.valueScaling !== undefined && this.options.valueScaling !== ValueScaling.precision
+        ? this.valueScaling + this.currencyFormat.maximumFractionDigits
+        : this.currencyFormat.maximumFractionDigits
     this.minValue = this.getMinValue()
     this.maxValue = this.getMaxValue()
   }
@@ -98,12 +116,17 @@ export class CurrencyInput {
     return max
   }
 
-  private toFloat(value: number): number {
-    return value / Math.pow(10, this.currencyFormat.maximumFractionDigits)
+  private toFloat(value: number, maxFractionDigits?: number): number {
+    return value / Math.pow(10, maxFractionDigits ?? this.valueScalingFractionDigits)
   }
 
-  private toInteger(value: number) {
-    return Number(value.toFixed(this.currencyFormat.maximumFractionDigits).split('.').join(''))
+  private toInteger(value: number, maxFractionDigits?: number) {
+    return Number(
+      value
+        .toFixed(maxFractionDigits ?? this.valueScalingFractionDigits)
+        .split('.')
+        .join('')
+    )
   }
 
   private validateValueRange(value: number | null): number | null {

@@ -28,7 +28,18 @@ enum CurrencyDisplay {
 }
 ```
 
-## Types
+### ValueScaling
+
+```typescript
+enum ValueScaling {
+  precision = 'precision',
+  thousands = 'thousands',
+  millions = 'millions',
+  billions = 'billions'
+}
+```
+
+## Interfaces
 
 ### NumberRange
 
@@ -46,6 +57,9 @@ interface CurrencyInputOptions {
   locale?: string
   currency: string
   currencyDisplay?: CurrencyDisplay
+  /**
+   * @deprecated Use `valueScaling` instead.
+   */
   exportValueAsInteger?: boolean
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
@@ -55,6 +69,7 @@ interface CurrencyInputOptions {
   autoSign?: boolean
   valueRange?: NumberRange
   useGrouping?: boolean
+  valueScaling?: ValueScaling
 }
 ```
 

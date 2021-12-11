@@ -118,14 +118,33 @@
         </div>
       </OptionSection>
       <OptionSection
+        v-model="valueScalingEnabled"
+        label="Value Scaling"
+        description="Applies a scaling on the exported value."
+      >
+        <select
+          v-model="valueScaling"
+          :disabled="!valueScalingEnabled"
+          class="
+            cursor-pointer
+            transition-all
+            w-full
+            shadow-sm
+            disabled:(cursor-not-allowed border-gray-300 text-gray-300)
+            rounded-md
+            text-base
+            focus:border-primary focus:ring focus:ring-offset-0 focus:ring-primary focus:ring-opacity-50
+          "
+        >
+          <option v-for="option in valueScalingOptions" :key="option.value"
+                  :value="option.value">{{ option.label }}
+          </option>
+        </select>
+      </OptionSection>
+      <OptionSection
         v-model="autoDecimalDigits"
         label="Auto Decimal Digits"
         description="Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits."
-      />
-      <OptionSection
-        v-model="exportValueAsInteger"
-        label="Export Value As Integer"
-        description="Whether the number value should be exported as integer instead of a float value depending on the configured precision."
       />
     </div>
   </div>
@@ -143,7 +162,7 @@ import Slider from './Slider.vue'
 export default defineComponent({
   name: 'Demo',
   components: { Slider, Checkbox, OptionSection, Dialog, CurrencyInput },
-  setup() {
+  setup () {
     const state: any = reactive({
       exportDialogVisible: false,
       value: 1234.5,
@@ -159,6 +178,14 @@ export default defineComponent({
         { value: 'code', label: 'Code' },
         { value: 'name', label: 'Name' },
         { value: 'hidden', label: 'Hidden' }
+      ],
+      valueScalingEnabled: false,
+      valueScaling: 'precision',
+      valueScalingOptions: [
+        { value: 'precision', label: 'Precision' },
+        { value: 'thousands', label: 'Thousands' },
+        { value: 'millions', label: 'Millions' },
+        { value: 'billions', label: 'Billions' }
       ],
       hideCurrencySymbolOnFocus: true,
       hideGroupingSeparatorOnFocus: true,
@@ -188,7 +215,7 @@ export default defineComponent({
           hideGroupingSeparatorOnFocus: state.hideGroupingSeparatorOnFocus,
           hideNegligibleDecimalDigitsOnFocus: state.hideNegligibleDecimalDigitsOnFocus,
           autoDecimalDigits: state.autoDecimalDigits,
-          exportValueAsInteger: state.exportValueAsInteger,
+          valueScaling: state.valueScalingEnabled ? state.valueScaling : undefined,
           autoSign: state.autoSign,
           useGrouping: state.useGrouping
         }

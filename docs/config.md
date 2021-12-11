@@ -4,21 +4,21 @@ The following options can be passed as an object literal to the `useCurrencyInpu
 
 ### currency
 
-A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code, for example `USD` or `EUR`. This option is **required**.
+A [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code, for example `"USD"` or `"EUR"`. This option is **required**.
 
 ### locale
 
-A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `en` or `de-DE`). Default is `undefined` (use the default locale of the Browser).
+A [BCP 47](https://tools.ietf.org/html/bcp47) language tag (for example `"en"` or `"de-DE"`). Default is `undefined` (use the default locale of the Browser).
 
 ### currencyDisplay
 
 How to display the currency in currency formatting. Possible values are:
 
-- `symbol` to use a localized currency symbol such as "€" (default value)
-- `narrowSymbol` to use a narrow format symbol ("$100" rather than "US$100")
-- `code` to use the ISO currency code
-- `name` to use a localized currency name such as "dollar"
-- `hidden` to hide the currency
+- `"symbol"` to use a localized currency symbol such as "€" (default value)
+- `"narrowSymbol"` to use a narrow format symbol ("$100" rather than "US$100")
+- `"code"` to use the ISO currency code
+- `"name"` to use a localized currency name such as "dollar"
+- `"hidden"` to hide the currency
 
 ### autoDecimalDigits
 
@@ -43,8 +43,21 @@ Whether to hide negligible decimal digits on focus. Default is `true`.
 
 ### exportValueAsInteger
 
-Whether the number value should be exported as integer instead of float value. Default is `false`.
+Whether the number value should be exported as integer by scaling the value depending on the current `precision`. Default is `false`.
 When used in combination with precision ranges, the value of `precision.max` will be used as a factor.
+
+::: warning Deprecated
+Use the `valueScaling` option with `"precision"` instead.
+:::
+
+### valueScaling
+
+Applies a scaling to the exported value. Possible values are:
+
+- `"precision"` for scaling float values automatically to integers depending on the current `precision`, for example 1.23 -> 123
+- `"thounsands"` for using a scaling factor of 1,000
+- `"millions""` for using scaling factor of 1,000,000
+- `"billions"` for using a scaling factor of 1,000,000,000
 
 ### valueRange
 
