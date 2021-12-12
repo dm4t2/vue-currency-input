@@ -40,7 +40,7 @@ The component must provide props for the `v-model` value binding and the options
 
 ```vue
 <template>
-  <input ref="inputRef" type="text" :value="formattedValue" />
+  <input ref="inputRef" type="text" />
 </template>
 
 <script>
@@ -53,9 +53,9 @@ export default {
     options: Object
   },
   setup(props) {
-    const { formattedValue, inputRef } = useCurrencyInput(props.options)
+    const { inputRef } = useCurrencyInput(props.options)
 
-    return { inputRef, formattedValue }
+    return { inputRef }
   }
 }
 </script>
@@ -105,7 +105,7 @@ The same applies for the options of your currency input component. Use the `setO
 
 ```vue
 <template>
-  <input ref="inputRef" :value="formattedValue" />
+  <input ref="inputRef" />
 </template>
 
 <script>
@@ -119,12 +119,11 @@ export default {
     options: Object
   },
   setup(props) {
-    const { inputRef, formattedValue, setOptions, setValue } = useCurrencyInput(props.options)
+    const { inputRef, setOptions, setValue } = useCurrencyInput(props.options)
 
     watch(
-      () => props.modelValue,
+      () => props.modelValue, // Vue 2: props.value
       (value) => {
-        // Vue 2: props.value
         setValue(value)
       }
     )
@@ -136,7 +135,7 @@ export default {
       }
     )
 
-    return { inputRef, formattedValue }
+    return { inputRef }
   }
 }
 </script>
