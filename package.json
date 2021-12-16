@@ -76,7 +76,6 @@
     "rollup-plugin-dts": "^3.0.1",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-typescript2": "^0.30.0",
-    "sass": "^1.32.13",
     "simple-git-hooks": "^2.7.0",
     "stringify-object": "^3.3.0",
     "ts-jest": "^26.5.6",
