@@ -2,8 +2,7 @@
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: ar-SA_SAR 1`] = `
 CurrencyFormat {
-  "currency": "SAR",
-  "currencyDisplay": undefined,
+  "currency": "ر.س.",
   "decimalSymbol": "٫",
   "digits": Array [
     "٠",
@@ -21,8 +20,15 @@ CurrencyFormat {
   "locale": "ar-SA",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "؜-",
+  "minusSign": "-",
   "negativePrefix": "؜-",
+  "negativeSuffix": " ر.س.‏",
+  "options": Object {
+    "currency": "SAR",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "",
   "suffix": " ر.س.‏",
 }
@@ -30,8 +36,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: bg-BG_BGN 1`] = `
 CurrencyFormat {
-  "currency": "BGN",
-  "currencyDisplay": undefined,
+  "currency": "лв.",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -49,8 +54,15 @@ CurrencyFormat {
   "locale": "bg-BG",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-",
+  "negativeSuffix": " лв.",
+  "options": Object {
+    "currency": "BGN",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "",
   "suffix": " лв.",
 }
@@ -59,7 +71,6 @@ CurrencyFormat {
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: de-CH_EUR 1`] = `
 CurrencyFormat {
   "currency": "EUR",
-  "currencyDisplay": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -77,8 +88,15 @@ CurrencyFormat {
   "locale": "de-CH",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "EUR-",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "EUR",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "EUR ",
   "suffix": "",
 }
@@ -86,8 +104,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: de-DE_EUR 1`] = `
 CurrencyFormat {
-  "currency": "EUR",
-  "currencyDisplay": undefined,
+  "currency": "€",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -105,8 +122,15 @@ CurrencyFormat {
   "locale": "de-DE",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-",
+  "negativeSuffix": " €",
+  "options": Object {
+    "currency": "EUR",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "",
   "suffix": " €",
 }
@@ -114,8 +138,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: en-GB_GBP 1`] = `
 CurrencyFormat {
-  "currency": "GBP",
-  "currencyDisplay": undefined,
+  "currency": "£",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -133,8 +156,15 @@ CurrencyFormat {
   "locale": "en-GB",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-£",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "GBP",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "£",
   "suffix": "",
 }
@@ -142,8 +172,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: en-IN_INR 1`] = `
 CurrencyFormat {
-  "currency": "INR",
-  "currencyDisplay": undefined,
+  "currency": "₹",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -161,8 +190,15 @@ CurrencyFormat {
   "locale": "en-GB",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-₹",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "INR",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "₹",
   "suffix": "",
 }
@@ -170,8 +206,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: en-US_USD 1`] = `
 CurrencyFormat {
-  "currency": "USD",
-  "currencyDisplay": undefined,
+  "currency": "$",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -189,8 +224,15 @@ CurrencyFormat {
   "locale": "en-US",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-$",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "USD",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "$",
   "suffix": "",
 }
@@ -198,8 +240,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: es-ES_EUR 1`] = `
 CurrencyFormat {
-  "currency": "EUR",
-  "currencyDisplay": undefined,
+  "currency": "€",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -217,8 +258,15 @@ CurrencyFormat {
   "locale": "es-ES",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-",
+  "negativeSuffix": " €",
+  "options": Object {
+    "currency": "EUR",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "",
   "suffix": " €",
 }
@@ -226,8 +274,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: fa-IR_IRR 1`] = `
 CurrencyFormat {
-  "currency": "IRR",
-  "currencyDisplay": undefined,
+  "currency": "ریال",
   "decimalSymbol": undefined,
   "digits": Array [
     "۰",
@@ -245,8 +292,15 @@ CurrencyFormat {
   "locale": "fa-IR",
   "maximumFractionDigits": 0,
   "minimumFractionDigits": 0,
-  "minusSymbol": "‎−",
+  "minusSign": "−",
   "negativePrefix": "‎−‎ریال ",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "IRR",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "‎ریال ",
   "suffix": "",
 }
@@ -255,7 +309,6 @@ CurrencyFormat {
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: fr-CH_CHF 1`] = `
 CurrencyFormat {
   "currency": "CHF",
-  "currencyDisplay": undefined,
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -273,8 +326,15 @@ CurrencyFormat {
   "locale": "fr-CH",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-",
+  "negativeSuffix": " CHF",
+  "options": Object {
+    "currency": "CHF",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "",
   "suffix": " CHF",
 }
@@ -282,8 +342,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: ja_JPY 1`] = `
 CurrencyFormat {
-  "currency": "JPY",
-  "currencyDisplay": undefined,
+  "currency": "￥",
   "decimalSymbol": undefined,
   "digits": Array [
     "0",
@@ -301,8 +360,15 @@ CurrencyFormat {
   "locale": "ja",
   "maximumFractionDigits": 0,
   "minimumFractionDigits": 0,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-￥",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "JPY",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "￥",
   "suffix": "",
 }
@@ -310,8 +376,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: nl-NL_EUR 1`] = `
 CurrencyFormat {
-  "currency": "EUR",
-  "currencyDisplay": undefined,
+  "currency": "€",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -329,8 +394,15 @@ CurrencyFormat {
   "locale": "nl-NL",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "€ -",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "EUR",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "€ ",
   "suffix": "",
 }
@@ -338,8 +410,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: pt_BRL 1`] = `
 CurrencyFormat {
-  "currency": "BRL",
-  "currencyDisplay": undefined,
+  "currency": "R$",
   "decimalSymbol": ",",
   "digits": Array [
     "0",
@@ -357,8 +428,15 @@ CurrencyFormat {
   "locale": "pt",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-R$ ",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "BRL",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "R$ ",
   "suffix": "",
 }
@@ -366,8 +444,7 @@ CurrencyFormat {
 
 exports[`CurrencyFormat constructing number formats should work for respective locale and currency: zh_CNY 1`] = `
 CurrencyFormat {
-  "currency": "CNY",
-  "currencyDisplay": undefined,
+  "currency": "¥",
   "decimalSymbol": ".",
   "digits": Array [
     "0",
@@ -385,8 +462,15 @@ CurrencyFormat {
   "locale": "zh",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
-  "minusSymbol": "-",
+  "minusSign": "-",
   "negativePrefix": "-¥",
+  "negativeSuffix": "",
+  "options": Object {
+    "currency": "CNY",
+    "currencyDisplay": undefined,
+    "currencySign": undefined,
+    "style": "currency",
+  },
   "prefix": "¥",
   "suffix": "",
 }

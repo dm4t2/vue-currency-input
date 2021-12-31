@@ -51,6 +51,7 @@
           <option v-for="currencyDisplay in currencyDisplays" :key="currencyDisplay.value" :value="currencyDisplay.value">{{ currencyDisplay.label }}</option>
         </select>
       </OptionSection>
+      <OptionSection v-model="accountingSign" label="Accounting Sign" description="Whether to use accounting sign formatting." />
       <OptionSection v-model="useGrouping" label="Use Grouping" description="Whether to use grouping separators such as thousands/lakh/crore separators." />
       <OptionSection label="Distraction Free Input" description="Hide various parts of the formatting on focus for easier input.">
         <Checkbox v-model="hideCurrencySymbolOnFocus" label="Hide currency symbol" class="mb-1" />
@@ -200,6 +201,7 @@ export default defineComponent({
       autoDecimalDigits: false,
       exportValueAsInteger: false,
       autoSign: true,
+      accountingSign: false,
       useGrouping: true,
       options: computed(() => {
         return {
@@ -223,7 +225,8 @@ export default defineComponent({
           autoDecimalDigits: state.autoDecimalDigits,
           valueScaling: state.valueScalingEnabled ? state.valueScaling : undefined,
           autoSign: state.autoSign,
-          useGrouping: state.useGrouping
+          useGrouping: state.useGrouping,
+          accountingSign: state.accountingSign,
         }
       }),
       stringifiedOptions: computed(() => stringifyObject(state.options))

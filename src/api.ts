@@ -1,4 +1,5 @@
 import { Ref } from 'vue-demi'
+import CurrencyFormat from './currencyFormat'
 
 export interface CurrencyInputValue {
   number: number | null
@@ -25,10 +26,15 @@ export enum ValueScaling {
   billions = 'billions'
 }
 
-export interface CurrencyInputOptions {
+export interface CurrencyFormatOptions {
   locale?: string
   currency: string
   currencyDisplay?: CurrencyDisplay
+  precision?: NumberRange | number
+  accountingSign?: boolean
+}
+
+export interface CurrencyInputOptions extends CurrencyFormatOptions {
   /**
    * @deprecated Use `valueScaling` instead.
    */
@@ -36,7 +42,6 @@ export interface CurrencyInputOptions {
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean
-  precision?: NumberRange | number
   autoDecimalDigits?: boolean
   autoSign?: boolean
   valueRange?: NumberRange
@@ -49,4 +54,8 @@ export interface UseCurrencyInput {
   formattedValue: Ref<string | null>
   setValue: (number: number | null) => void
   setOptions: (options: CurrencyInputOptions) => void
+}
+
+export const parse = (formattedValue: string, options: CurrencyFormatOptions): number | null => {
+  return new CurrencyFormat(options).parse(formattedValue)
 }

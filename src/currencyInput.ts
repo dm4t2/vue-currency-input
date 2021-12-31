@@ -179,7 +179,8 @@ export class CurrencyInput {
       }
       if (this.options.currencyDisplay === CurrencyDisplay.hidden || (this.focus && this.options.hideCurrencySymbolOnFocus)) {
         formattedValue = formattedValue
-          .replace(this.currencyFormat.negativePrefix, this.currencyFormat.minusSymbol)
+          .replace(this.currencyFormat.negativePrefix, this.currencyFormat.minusSign !== undefined ? this.currencyFormat.minusSign : '(')
+          .replace(this.currencyFormat.negativeSuffix, this.currencyFormat.minusSign !== undefined ? '' : ')')
           .replace(this.currencyFormat.prefix, '')
           .replace(this.currencyFormat.suffix, '')
       }
@@ -211,6 +212,11 @@ export class CurrencyInput {
 
               let caretPositionFromLeft = value.length - selectionStart
               const newValueLength = this.formattedValue.length
+
+              if (this.currencyFormat.minusSign === undefined && (value.startsWith('(') || value.startsWith('-')) && !value.endsWith(')')) {
+                return newValueLength - this.currencyFormat.negativeSuffix.length > 1 ? this.formattedValue.substring(selectionStart).length : 1
+              }
+
               if (
                 this.formattedValue.substr(selectionStart, 1) === groupingSymbol &&
                 count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1
@@ -254,25 +260,8 @@ export class CurrencyInput {
         if (selectionStart != null && selectionEnd != null && Math.abs(selectionStart - selectionEnd) > 0) {
           this.setCaretPosition(0, this.el.value.length)
         } else if (selectionStart != null) {
-          const getCaretPositionOnFocus = () => {
-            const { prefix, suffix, groupingSymbol } = this.currencyFormat
-            if (!this.options.hideCurrencySymbolOnFocus && this.options.currencyDisplay !== CurrencyDisplay.hidden) {
-              if (selectionStart >= value.length - suffix.length) {
-                return this.formattedValue.length - suffix.length
-              } else if (selectionStart < prefix.length) {
-                return prefix.length
-              }
-            }
-            let result = selectionStart
-            if (this.options.hideCurrencySymbolOnFocus && this.options.currencyDisplay !== CurrencyDisplay.hidden) {
-              result -= prefix.length
-            }
-            if (this.options.hideGroupingSeparatorOnFocus && groupingSymbol !== undefined) {
-              result -= count(value.substring(0, selectionStart), groupingSymbol)
-            }
-            return result
-          }
-          this.setCaretPosition(getCaretPositionOnFocus())
+          const caretPositionOnFocus = this.getCaretPositionOnFocus(value, selectionStart)
+          this.setCaretPosition(caretPositionOnFocus)
         }
       })
     })
@@ -291,6 +280,49 @@ export class CurrencyInput {
       },
       { capture: true }
     )
+  }
+
+  private getCaretPositionOnFocus(value: string, selectionStart: number) {
+    if (this.numberValue == null) {
+      return selectionStart
+    }
+    const { prefix, negativePrefix, suffix, negativeSuffix, groupingSymbol, currency } = this.currencyFormat
+    const isNegative = this.numberValue < 0
+    const currentPrefix = isNegative ? negativePrefix : prefix
+    const prefixLength = currentPrefix.length
+    if (this.options.hideCurrencySymbolOnFocus || this.options.currencyDisplay === CurrencyDisplay.hidden) {
+      if (isNegative) {
+        if (selectionStart <= 1) {
+          return 1
+        } else if (value.endsWith(')') && selectionStart > value.indexOf(')')) {
+          return this.formattedValue.length - 1
+        }
+      }
+    } else {
+      const suffixLength = isNegative ? negativeSuffix.length : suffix.length
+      if (selectionStart >= value.length - suffixLength) {
+        return this.formattedValue.length - suffixLength
+      } else if (selectionStart < prefixLength) {
+        return prefixLength
+      }
+    }
+    let result = selectionStart
+    if (
+      this.options.hideCurrencySymbolOnFocus &&
+      this.options.currencyDisplay !== CurrencyDisplay.hidden &&
+      selectionStart >= prefixLength &&
+      currency !== undefined &&
+      currentPrefix.includes(currency)
+    ) {
+      result -= prefixLength
+      if (isNegative) {
+        result += 1
+      }
+    }
+    if (this.options.hideGroupingSeparatorOnFocus && groupingSymbol !== undefined) {
+      result -= count(value.substring(0, selectionStart), groupingSymbol)
+    }
+    return result
   }
 
   private setCaretPosition(start: number, end = start) {

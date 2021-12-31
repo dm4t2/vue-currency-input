@@ -80,6 +80,7 @@ describe('CurrencyFormat', () => {
       expect(new CurrencyFormat({ locale: 'en-IN', currency: 'INR' }).parse('₹123334.00')).toBe(123334)
       expect(new CurrencyFormat({ locale: 'de-AT', currency: 'EUR' }).parse('€ 66.668')).toBe(66668)
       expect(new CurrencyFormat({ locale: 'de-DE', currency: 'USD', currencyDisplay: CurrencyDisplay.name }).parse('1.234,50 US-Dollar')).toBe(1234.5)
+      expect(new CurrencyFormat({ locale: 'en', currency: 'USD', accountingSign: true }).parse('(1,234.50)')).toBe(-1234.5)
     })
 
     it('should return null if the value does not conform to the currency format', () => {
@@ -121,6 +122,15 @@ describe('CurrencyFormat', () => {
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.578)).toBe('€1,234.578')
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.5789)).toBe('€1,234.5789')
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234.57891)).toBe('€1,234.5789')
+    })
+  })
+
+  describe('isNegative', () => {
+    it('should check if a formatted value is negative or not', () => {
+      expect(new CurrencyFormat({ locale: 'en', currency: 'USD', accountingSign: true }).isNegative('($1)')).toBe(true)
+      expect(new CurrencyFormat({ locale: 'en', currency: 'USD', accountingSign: true }).isNegative('(1)')).toBe(true)
+      expect(new CurrencyFormat({ locale: 'en', currency: 'USD', accountingSign: true }).isNegative('-1')).toBe(true)
+      expect(new CurrencyFormat({ locale: 'sv', currency: 'EUR' }).isNegative('-1.')).toBe(true)
     })
   })
 })

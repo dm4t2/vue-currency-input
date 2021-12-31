@@ -1,37 +1,41 @@
 import { escapeRegExp, substringBefore } from './utils'
-import { CurrencyDisplay, CurrencyInputOptions } from './api'
-import NumberFormatOptions = Intl.NumberFormatOptions
+import { CurrencyDisplay, CurrencyFormatOptions } from './api'
 
 export const DECIMAL_SEPARATORS = [',', '.', '٫']
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 
 export default class CurrencyFormat {
+  options: Intl.NumberFormatOptions
   locale?: string
-  currency: string
-  currencyDisplay: CurrencyDisplay | undefined
+  currency?: string
   digits: string[]
   decimalSymbol: string | undefined
   groupingSymbol: string | undefined
-  minusSymbol: string
+  minusSign: string | undefined
   minimumFractionDigits: number
   maximumFractionDigits: number
   prefix: string
   negativePrefix: string
   suffix: string
+  negativeSuffix: string
 
-  constructor(options: CurrencyInputOptions) {
-    const { currency, currencyDisplay, locale, precision } = options
-    this.currencyDisplay = currencyDisplay !== CurrencyDisplay.hidden ? currencyDisplay : undefined
-    const numberFormat = new Intl.NumberFormat(locale, { currency, currencyDisplay: this.currencyDisplay, style: 'currency' })
-    const formatSample = numberFormat.format(1)
+  constructor(options: CurrencyFormatOptions) {
+    const { currency, currencyDisplay, locale, precision, accountingSign } = options
+    this.locale = locale
+    this.options = {
+      style: 'currency',
+      currency,
+      currencySign: accountingSign ? 'accounting' : undefined,
+      currencyDisplay: currencyDisplay !== CurrencyDisplay.hidden ? currencyDisplay : undefined
+    }
+    const numberFormat = new Intl.NumberFormat(locale, this.options)
     const formatParts = numberFormat.formatToParts(123456)
 
-    this.locale = locale
-    this.currency = currency
+    this.currency = formatParts.find(({ type }) => type === 'currency')?.value
     this.digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => i.toLocaleString(locale))
     this.decimalSymbol = formatParts.find(({ type }) => type === 'decimal')?.value
     this.groupingSymbol = formatParts.find(({ type }) => type === 'group')?.value
-    this.minusSymbol = substringBefore(Number(-1).toLocaleString(locale), this.digits[1])
+    this.minusSign = numberFormat.formatToParts(-1).find(({ type }) => type === 'minusSign')?.value
 
     if (this.decimalSymbol === undefined) {
       this.minimumFractionDigits = this.maximumFractionDigits = 0
@@ -42,17 +46,25 @@ export default class CurrencyFormat {
       this.maximumFractionDigits = precision?.max ?? numberFormat.resolvedOptions().maximumFractionDigits
     }
 
-    this.prefix = substringBefore(formatSample, this.digits[1])
-    this.negativePrefix = substringBefore(numberFormat.format(-1), this.digits[1])
-    this.suffix = formatSample.substring(formatSample.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[1]) + 1)
+    const getPrefix = (str: string) => {
+      return substringBefore(str, this.digits[1])
+    }
+    const getSuffix = (str: string) => {
+      return str.substring(str.lastIndexOf(this.decimalSymbol ? this.digits[0] : this.digits[1]) + 1)
+    }
+
+    this.prefix = getPrefix(numberFormat.format(1))
+    this.suffix = getSuffix(numberFormat.format(1))
+    this.negativePrefix = getPrefix(numberFormat.format(-1))
+    this.negativeSuffix = getSuffix(numberFormat.format(-1))
   }
 
   parse(str: string | null): number | null {
     if (str) {
       const negative = this.isNegative(str)
       str = this.normalizeDigits(str)
-      str = this.stripCurrencySymbol(str, negative)
-      str = this.stripMinusSymbol(str)
+      str = this.stripCurrency(str, negative)
+      str = this.stripSignLiterals(str)
       const fraction = this.decimalSymbol ? `(?:${escapeRegExp(this.decimalSymbol)}(\\d*))?` : ''
       const match = this.stripGroupingSeparator(str).match(new RegExp(`^${INTEGER_PATTERN}${fraction}$`))
       if (match && this.isValidIntegerFormat(this.decimalSymbol ? str.split(this.decimalSymbol)[0] : str, Number(match[1]))) {
@@ -63,9 +75,9 @@ export default class CurrencyFormat {
   }
 
   isValidIntegerFormat(formattedNumber: string, integerNumber: number): boolean {
-    const options = { style: 'currency', currency: this.currency, currencyDisplay: this.currencyDisplay, minimumFractionDigits: 0 }
+    const options = { ...this.options, minimumFractionDigits: 0 }
     return [
-      this.stripCurrencySymbol(
+      this.stripCurrency(
         this.normalizeDigits(
           integerNumber.toLocaleString(this.locale, {
             ...options,
@@ -74,7 +86,7 @@ export default class CurrencyFormat {
         ),
         false
       ),
-      this.stripCurrencySymbol(
+      this.stripCurrency(
         this.normalizeDigits(
           integerNumber.toLocaleString(this.locale, {
             ...options,
@@ -88,19 +100,12 @@ export default class CurrencyFormat {
 
   format(
     value: number | null,
-    options: NumberFormatOptions = {
+    options: Intl.NumberFormatOptions = {
       minimumFractionDigits: this.minimumFractionDigits,
       maximumFractionDigits: this.maximumFractionDigits
     }
   ): string {
-    return value != null
-      ? value.toLocaleString(this.locale, {
-          style: 'currency',
-          currency: this.currency,
-          currencyDisplay: this.currencyDisplay,
-          ...options
-        })
-      : ''
+    return value != null ? value.toLocaleString(this.locale, { ...this.options, ...options }) : ''
   }
 
   toFraction(str: string): string {
@@ -112,23 +117,31 @@ export default class CurrencyFormat {
   }
 
   isNegative(str: string): boolean {
-    return str.startsWith(this.negativePrefix) || str.replace('-', this.minusSymbol).startsWith(this.minusSymbol)
+    return (
+      str.startsWith(this.negativePrefix) ||
+      (this.minusSign === undefined && (str.startsWith('(') || str.startsWith('-'))) ||
+      (this.minusSign !== undefined && str.replace('-', this.minusSign).startsWith(this.minusSign))
+    )
   }
 
-  insertCurrencySymbol(str: string, negative: boolean): string {
-    return `${negative ? this.negativePrefix : this.prefix}${str}${this.suffix}`
+  insertCurrency(str: string, negative: boolean): string {
+    return `${negative ? this.negativePrefix : this.prefix}${str}${negative ? this.negativeSuffix : this.suffix}`
   }
 
   stripGroupingSeparator(str: string): string {
     return this.groupingSymbol !== undefined ? str.replace(new RegExp(escapeRegExp(this.groupingSymbol), 'g'), '') : str
   }
 
-  stripMinusSymbol(str: string): string {
-    return str.replace('-', this.minusSymbol).replace(this.minusSymbol, '')
+  stripSignLiterals(str: string): string {
+    if (this.minusSign !== undefined) {
+      return str.replace('-', this.minusSign).replace(this.minusSign, '')
+    } else {
+      return str.replace(/[-()]/g, '')
+    }
   }
 
-  stripCurrencySymbol(str: string, negative: boolean): string {
-    return str.replace(negative ? this.negativePrefix : this.prefix, '').replace(this.suffix, '')
+  stripCurrency(str: string, negative: boolean): string {
+    return str.replace(negative ? this.negativePrefix : this.prefix, '').replace(negative ? this.negativeSuffix : this.suffix, '')
   }
 
   normalizeDecimalSeparator(str: string, from: number): string {

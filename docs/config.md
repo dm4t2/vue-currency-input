@@ -20,6 +20,10 @@ How to display the currency in currency formatting. Possible values are:
 - `"name"` to use a localized currency name such as "dollar"
 - `"hidden"` to hide the currency
 
+### accountingSign
+
+Whether to use accounting sign formatting, for example wrapping negative values with parentheses instead of prepending a minus sign.
+
 ### autoDecimalDigits
 
 Whether the decimal symbol is inserted automatically, using the last inputted digits as decimal digits. Default is `false` (the decimal symbol needs to be inserted manually).

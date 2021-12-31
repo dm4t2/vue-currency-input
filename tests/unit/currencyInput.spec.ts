@@ -71,37 +71,110 @@ describe('Currency Input', () => {
     })
 
     describe('caret position', () => {
-      it('should set the caret position in front of the first number when targeting the prefix', () => {
-        currencyInput.setValue(1234)
-        currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: false })
-
-        el.setSelectionRange(0, 0)
+      const expectCaretPosition = (given: number, expected: number) => {
+        el.setSelectionRange(given, given)
         userEvent.click(el)
         jest.runOnlyPendingTimers()
 
-        expect(el.selectionStart).toBe(1)
+        expect(el.selectionStart).toBe(expected)
+      }
+
+      it('should not modify the caret position for empty values', () => {
+        currencyInput.setValue(null)
+        currencyInput.setOptions({ locale: 'en', currency: 'EUR' })
+        expectCaretPosition(0, 0)
       })
 
-      it('should set the caret position after the last number when targeting the suffix', () => {
-        currencyInput.setValue(1234)
-        currencyInput.setOptions({ locale: 'de', currency: 'EUR', hideCurrencySymbolOnFocus: false })
+      describe('hideCurrencySymbolOnFocus is true', () => {
+        /**
+         * -€1|,234 -> -1|234
+         */
+        it('should consider the sign for the new caret position', () => {
+          currencyInput.setValue(-1234)
+          currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true })
+          expectCaretPosition(3, 2)
+        })
 
-        el.setSelectionRange(el.value.length, el.value.length)
-        userEvent.click(el)
-        jest.runOnlyPendingTimers()
+        /**
+         * 1|,234 -> 1|234
+         */
+        it('should not modify the caret position if currencyDisplay is hidden', () => {
+          currencyInput.setValue(1234)
+          currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true, currencyDisplay: CurrencyDisplay.hidden })
+          expectCaretPosition(1, 1)
+        })
 
-        expect(el.selectionStart).toBe(4)
+        /**
+         * |-€1 -> -|1
+         */
+        it('should set the caret position in front of the first digit when targeting the sign', () => {
+          currencyInput.setValue(-1)
+          currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true })
+          expectCaretPosition(0, 1)
+        })
+
+        /**
+         * -|€1 -> -|1
+         */
+        it('should set the caret position in front of the first digit when targeting the currency', () => {
+          currencyInput.setValue(-1)
+          currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true })
+          expectCaretPosition(1, 1)
+        })
+
+        /**
+         * (€ 5)| -> (5|)
+         */
+        it('should set the caret position after the last digit number when targeting the closing parentheses of the accounting sign', () => {
+          currencyInput.setValue(-5)
+          currencyInput.setOptions({ locale: 'nl', currency: 'EUR', hideCurrencySymbolOnFocus: true, accountingSign: true })
+          expectCaretPosition(el.value.length, 2)
+        })
       })
 
-      it('should ignore the prefix in the caret position calculation when the currency is hidden', () => {
-        currencyInput.setValue(1234)
-        currencyInput.setOptions({ locale: 'en', currency: 'EUR', currencyDisplay: CurrencyDisplay.hidden })
+      describe('hideCurrencySymbolOnFocus is false', () => {
+        /**
+         * |€1,234 -> €|1234
+         */
+        it('should set the caret position in front of the first number when targeting the prefix', () => {
+          currencyInput.setValue(1234)
+          currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: false })
+          expectCaretPosition(0, 1)
+        })
 
-        el.setSelectionRange(el.value.length, el.value.length)
-        userEvent.click(el)
-        jest.runOnlyPendingTimers()
+        /**
+         * 1.234 €| -> 1234| €
+         */
+        it('should set the caret position after the last number when targeting the suffix', () => {
+          currencyInput.setValue(1234)
+          currencyInput.setOptions({ locale: 'de', currency: 'EUR', hideCurrencySymbolOnFocus: false })
+          expectCaretPosition(el.value.length, 4)
+        })
+      })
 
-        expect(el.selectionStart).toBe(el.value.length)
+      describe('currencyDisplay is hidden', () => {
+        /**
+         * (1)| -> (1|)
+         */
+        it('should set the caret position after the last digit number when targeting the closing parentheses of the accounting sign', () => {
+          currencyInput.setValue(-1)
+          currencyInput.setOptions({ locale: 'en', currency: 'EUR', currencyDisplay: CurrencyDisplay.hidden, accountingSign: true })
+          expectCaretPosition(el.value.length, 2)
+        })
+
+        /**
+         * 1,234| -> 1234|
+         */
+        it('should ignore the prefix for the new caret position', () => {
+          currencyInput.setValue(1234)
+          currencyInput.setOptions({ locale: 'en', currency: 'EUR', currencyDisplay: CurrencyDisplay.hidden })
+
+          el.setSelectionRange(el.value.length, el.value.length)
+          userEvent.click(el)
+          jest.runOnlyPendingTimers()
+
+          expectCaretPosition(el.value.length, 4)
+        })
       })
     })
   })

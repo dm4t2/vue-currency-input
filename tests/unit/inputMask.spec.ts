@@ -30,6 +30,7 @@ describe('DefaultInputMask', () => {
 
         expect(new DefaultInputMask(currencyFormat).conformToMask('-$a', '-$')).toEqual('-$')
         expect(new DefaultInputMask(currencyFormat).conformToMask('-$-', '-$')).toEqual('-$')
+        expect(new DefaultInputMask(new CurrencyFormat({ locale: 'en', currency: 'USD', accountingSign: true })).conformToMask('($a)', '($)')).toEqual('($)')
       })
     })
 
@@ -45,8 +46,8 @@ describe('DefaultInputMask', () => {
 
   describe('when the value is negative and the prefixed currency symbol is deleted', () => {
     it('should return an empty value', () => {
-      const currencyFormat = new CurrencyFormat({ locale: 'en', currency: 'USD' })
-      expect(new DefaultInputMask(currencyFormat).conformToMask('-', '-$')).toEqual('')
+      expect(new DefaultInputMask(new CurrencyFormat({ locale: 'en', currency: 'USD' })).conformToMask('-', '-$')).toEqual('')
+      expect(new DefaultInputMask(new CurrencyFormat({ locale: 'en', currency: 'USD', accountingSign: true })).conformToMask('()', '($)')).toEqual('')
     })
   })
 
@@ -152,7 +153,7 @@ describe('DefaultInputMask', () => {
 
 describe('AutoDecimalDigitsInputMask', () => {
   it('should return the expected result', () => {
-    const currencyFormat = new CurrencyFormat({ locale: 'nl', currency: 'EUR', autoDecimalDigits: true })
+    const currencyFormat = new CurrencyFormat({ locale: 'nl', currency: 'EUR' })
 
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('')).toEqual('')
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('0,0', '0,00')).toEqual('')

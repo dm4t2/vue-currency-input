@@ -11,7 +11,7 @@ declare const useCurrencyInput: (options: CurrencyInputOptions) => UseCurrencyIn
 ### parse
 
 ```typescript
-declare const parse: (formattedValue: string, options: CurrencyInputOptions) => number | null
+declare const parse: (formattedValue: string, options: CurrencyFormatOptions) => number | null
 ```
 
 ## Enums
@@ -50,13 +50,22 @@ interface NumberRange {
 }
 ```
 
-### CurrencyInputOptions
+### CurrencyFormatOptions
 
 ```typescript
-interface CurrencyInputOptions {
+interface CurrencyFormatOptions {
   locale?: string
   currency: string
   currencyDisplay?: CurrencyDisplay
+  precision?: NumberRange | number
+  accountingSign?: boolean
+}
+```
+
+### CurrencyInputOptions
+
+```typescript
+interface CurrencyInputOptions extends CurrencyFormatOptions {
   /**
    * @deprecated Use `valueScaling` instead.
    */
@@ -64,7 +73,6 @@ interface CurrencyInputOptions {
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean
-  precision?: NumberRange | number
   autoDecimalDigits?: boolean
   autoSign?: boolean
   valueRange?: NumberRange
