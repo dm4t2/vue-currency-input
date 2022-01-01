@@ -146,7 +146,6 @@
 import { computed, defineComponent, reactive, toRefs, watch } from 'vue'
 import CurrencyInput from './CurrencyInput.vue'
 import Dialog from './Dialog.vue'
-import stringifyObject from 'stringify-object'
 import OptionSection from './OptionSection.vue'
 import Checkbox from './Checkbox.vue'
 
@@ -229,7 +228,7 @@ export default defineComponent({
           accountingSign: state.accountingSign,
         }
       }),
-      stringifiedOptions: computed(() => stringifyObject(state.options))
+      stringifiedOptions: computed(() => JSON.stringify(state.options, null, 2))
     })
 
     watch(
