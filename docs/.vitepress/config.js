@@ -11,7 +11,7 @@ module.exports = {
     nav: [
       {
         text: '❤ Sponsor',
-        link: 'https://ko-fi.com/dm4t20593'
+        link: 'https://ko-fi.com/dm4t2'
       },
       {
         text: 'v1 Docs',
