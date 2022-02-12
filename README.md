@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/dm4t2/vue-currency-input.svg?branch=master)](https://travis-ci.com/dm4t2/vue-currency-input)
+[![Build Status](https://travis-ci.com/dm4t2/vue-currency-input.svg?branch=master)](https://app.travis-ci.com/github/dm4t2/vue-currency-input)
 [![Codecov](https://codecov.io/gh/dm4t2/vue-currency-input/branch/master/graph/badge.svg)](https://codecov.io/gh/dm4t2/vue-currency-input)
 [![npm Version](https://badgen.net/npm/v/vue-currency-input?color=green)](https://www.npmjs.com/package/vue-currency-input)
 [![npm Downloads](https://badgen.net/npm/dw/vue-currency-input?color=green)](https://www.npmjs.com/package/vue-currency-input)
@@ -16,9 +16,3 @@ Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition
 ## Getting started
 
 Please read the [guide](https://dm4t2.github.io/vue-currency-input/guide) to get started or check out the [playground](https://dm4t2.github.io/vue-currency-input/playground) to see it in action.
-
-## Support me
-
-If you find my work helpful, or you want to support the development, star the repo or buy me a coffee:
-
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D6SXEA)
