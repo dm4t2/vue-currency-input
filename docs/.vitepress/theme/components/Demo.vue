@@ -3,7 +3,7 @@
     <CurrencyInput
       v-model="value"
       :options="options"
-      class="form-input"
+      class="*form-input"
     />
     <div>
       Number value: <code class="ml-2">{{ value != null ? value : 'null' }}</code>
@@ -30,7 +30,7 @@
         <select
           v-model="locale"
           :disabled="!localeEnabled"
-          class="form-input form-select"
+          class="*form-input *form-select"
         >
           <option v-for="locale in locales" :key="locale">{{ locale }}</option>
         </select>
@@ -38,7 +38,7 @@
       <OptionSection label="Currency">
         <select
           v-model="currency"
-          class="form-input form-select"
+          class="*form-input *form-select"
         >
           <option v-for="currency in currencies" :key="currency">{{ currency }}</option>
         </select>
@@ -46,7 +46,7 @@
       <OptionSection label="Currency Display" description="How to display the currency in the formatting.">
         <select
           v-model="currencyDisplay"
-          class="form-input form-select"
+          class="*form-input *form-select"
         >
           <option v-for="currencyDisplay in currencyDisplays" :key="currencyDisplay.value" :value="currencyDisplay.value">{{ currencyDisplay.label }}</option>
         </select>
@@ -76,7 +76,7 @@
             :disabled="!valueRangeEnabled"
             type="number"
             placeholder="Min"
-            class="form-input min-w-0"
+            class="*form-input min-w-0"
           />
           <span class="text-center">to</span>
           <input
@@ -84,7 +84,7 @@
             :disabled="!valueRangeEnabled"
             type="number"
             placeholder="Max"
-            class="form-input min-w-0"
+            class="*form-input min-w-0"
           />
         </div>
       </OptionSection>
@@ -96,15 +96,15 @@
         <div>
           <Checkbox v-model="precisionRangeEnabled" label="Use range" :disabled="!precisionEnabled" class="mb-2" />
           <div v-if="precisionRangeEnabled" class="flex items-center space-x-4">
-            <select v-model="precisionRangeMinValue" :disabled="!precisionEnabled" class="form-input form-select">
+            <select v-model="precisionRangeMinValue" :disabled="!precisionEnabled" class="*form-input *form-select">
               <option v-for="value in precisionRangeMinOptions" :key="value" :value="value">{{ value }}</option>
             </select>
             <span class="text-center">to</span>
-            <select v-model="precisionRangeMaxValue" :disabled="!precisionEnabled" class="form-input form-select">
+            <select v-model="precisionRangeMaxValue" :disabled="!precisionEnabled" class="*form-input *form-select">
               <option v-for="value in precisionRangeMaxOptions" :key="value" :value="value">{{ value }}</option>
             </select>
           </div>
-          <select v-else v-model="precision" :disabled="!precisionEnabled" class="form-input form-select">
+          <select v-else v-model="precision" :disabled="!precisionEnabled" class="*form-input *form-select">
             <option v-for="value in precisionOptions" :key="value" :value="value">{{ value }}</option>
           </select>
         </div>
@@ -117,16 +117,7 @@
         <select
           v-model="valueScaling"
           :disabled="!valueScalingEnabled"
-          class="
-            cursor-pointer
-            transition-all
-            w-full
-            shadow-sm
-            disabled:(cursor-not-allowed border-gray-300 text-gray-300)
-            rounded-md
-            text-base
-            focus:border-primary focus:ring focus:ring-offset-0 focus:ring-primary focus:ring-opacity-50
-          "
+          class="*form-input *form-select"
         >
           <option v-for="option in valueScalingOptions" :key="option.value"
                   :value="option.value">{{ option.label }}

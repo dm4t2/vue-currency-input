@@ -1,18 +1,16 @@
-import { UserConfig } from 'vite'
-import Components from 'vite-plugin-components'
+import { defineConfig } from 'vite'
+import Components from 'unplugin-vue-components/vite'
 import WindiCSS from 'vite-plugin-windicss'
 
-const config: UserConfig = {
+export default defineConfig({
   optimizeDeps: {
     exclude: ['vue-demi']
   },
   plugins: [
     Components({
       dirs: ['.vitepress/theme/components'],
-      customLoaderMatcher: (id) => id.endsWith('.md')
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/]
     }),
     WindiCSS()
   ]
-}
-
-export default config
+})

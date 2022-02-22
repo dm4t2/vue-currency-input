@@ -4,13 +4,9 @@ export default defineConfig({
   extract: {
     include: ['**/*.vue', '.vitepress/**/*.vue']
   },
-  shortcuts: {
-    'form-input':
-      'transition-all ' +
-      'disabled:(cursor-not-allowed border-gray-300 text-gray-300) ' +
-      'shadow-sm rounded-md text-base ' +
-      'focus:border-primary focus:ring focus:ring-offset-0 focus:ring-primary focus:ring-opacity-50',
-    'form-select': 'cursor-pointer w-full'
+  alias: {
+    'form-input': `shadow-sm rounded-md text-base transition-all disabled:(cursor-not-allowed border-gray-300 text-gray-300) focus:(border-primary ring ring-offset-0 ring-primary ring-opacity-50)`,
+    'form-select': 'cursor-pointer w-full py-2 px-3'
   },
   theme: {
     extend: {
