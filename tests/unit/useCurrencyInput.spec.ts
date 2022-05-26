@@ -1,3 +1,4 @@
+/* eslint-disable vue/one-component-per-file */
 import { defineComponent, h } from 'vue'
 import { useCurrencyInput } from '../../src'
 import { mount, shallowMount } from '@vue/test-utils'
@@ -12,7 +13,6 @@ describe('useCurrencyInput', () => {
       defineComponent({
         setup: () => {
           const { inputRef, formattedValue } = useCurrencyInput({ currency: 'EUR' })
-          // @ts-ignore
           return () => h('div', { ref: inputRef }, [h('input', { value: formattedValue })])
         }
       })
@@ -29,7 +29,6 @@ describe('useCurrencyInput', () => {
       defineComponent({
         setup: () => {
           const { inputRef, formattedValue } = useCurrencyInput({ currency: 'EUR' })
-          // @ts-ignore
           return () => h('div', { ref: inputRef }, [h('input', { value: formattedValue })])
         }
       })
@@ -47,7 +46,6 @@ describe('useCurrencyInput', () => {
       defineComponent({
         setup: () => {
           const { inputRef } = useCurrencyInput({ currency: 'EUR' })
-          // @ts-ignore
           return () => h('div', { ref: inputRef }, [h('div')])
         }
       })
@@ -61,8 +59,8 @@ describe('useCurrencyInput', () => {
   it('should accept a input element as template ref', async () => {
     const wrapper = shallowMount(
       defineComponent({
-        render: () => h('input', { ref: 'inputRef' }),
-        setup: () => useCurrencyInput({ currency: 'EUR' })
+        setup: () => useCurrencyInput({ currency: 'EUR' }),
+        render: () => h('input', { ref: 'inputRef' })
       })
     )
     await wrapper.vm.$nextTick()
@@ -76,8 +74,8 @@ describe('useCurrencyInput', () => {
     })
     const currencyInput = mount(
       defineComponent({
-        render: () => h(wrapper, { ref: 'inputRef' }),
-        setup: () => useCurrencyInput({ currency: 'EUR' })
+        setup: () => useCurrencyInput({ currency: 'EUR' }),
+        render: () => h(wrapper, { ref: 'inputRef' })
       })
     )
     await currencyInput.vm.$nextTick()
@@ -90,7 +88,6 @@ describe('useCurrencyInput', () => {
       defineComponent(() => {
         const { setValue, inputRef } = useCurrencyInput({ currency: 'EUR' })
         return () =>
-          // @ts-ignore
           h('div', { ref: inputRef }, [
             h('input'),
             h('button', {
@@ -113,7 +110,6 @@ describe('useCurrencyInput', () => {
       defineComponent(() => {
         const { setOptions, inputRef } = useCurrencyInput({ currency: 'EUR' })
         return () =>
-          // @ts-ignore
           h('div', { ref: inputRef }, [
             h('input'),
             h('button', {

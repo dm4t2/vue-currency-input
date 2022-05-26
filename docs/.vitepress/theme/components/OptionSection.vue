@@ -2,14 +2,24 @@
   <section class="mb-12 min-w-0">
     <div class="flex items-center justify-between mb-3">
       <span class="text-xl font-medium">{{ label }}</span>
-      <Switch v-if="modelValue !== undefined" :model-value="modelValue" @update:modelValue="$emit('update:modelValue', $event)" />
+      <Switch
+        v-if="modelValue !== undefined"
+        :model-value="modelValue"
+        @update:model-value="$emit('update:modelValue', $event)"
+      />
     </div>
-    <div v-if="description" class="mb-3">{{ description }}</div>
+    <div
+      v-if="description"
+      class="mb-3"
+    >
+      {{ description }}
+    </div>
     <slot />
   </section>
 </template>
 
 <script>
+/* eslint-disable vue/no-reserved-component-names */
 import Switch from './Switch.vue'
 export default {
   name: 'OptionSection',

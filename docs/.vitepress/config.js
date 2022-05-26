@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   title: 'Vue Currency Input',
   description: 'Easy input of currency formatted numbers for Vue.js',
   head: [

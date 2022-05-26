@@ -7,8 +7,14 @@
     @keydown.space.prevent="$emit('update:modelValue', !modelValue)"
     @click="$emit('update:modelValue', !modelValue)"
   >
-    <div class="w-10 h-6 flex items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out" :class="{ 'bg-primary': modelValue }">
-      <div class="bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out" :class="{ 'translate-x-4': modelValue }" />
+    <div
+      class="w-10 h-6 flex items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out"
+      :class="{ 'bg-primary': modelValue }"
+    >
+      <div
+        class="bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out"
+        :class="{ 'translate-x-4': modelValue }"
+      />
     </div>
   </div>
 </template>
@@ -17,6 +23,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+  // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
   name: 'Switch',
   props: {
     modelValue: Boolean

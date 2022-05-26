@@ -19,20 +19,32 @@
         Export
       </button>
       <Dialog v-model="exportDialogVisible">
-        <pre class="white--text m-0" style="margin: 0">{{ stringifiedOptions }}</pre>
+        <pre
+          class="white--text m-0"
+          style="margin: 0"
+          >{{ stringifiedOptions }}</pre
+        >
       </Dialog>
     </div>
   </div>
   <hr class="mb-8" />
   <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8">
     <div>
-      <OptionSection v-model="localeEnabled" label="Locale">
+      <OptionSection
+        v-model="localeEnabled"
+        label="Locale"
+      >
         <select
           v-model="locale"
           :disabled="!localeEnabled"
           class="*form-input *form-select"
         >
-          <option v-for="locale in locales" :key="locale">{{ locale }}</option>
+          <option
+            v-for="locale in locales"
+            :key="locale"
+          >
+            {{ locale }}
+          </option>
         </select>
       </OptionSection>
       <OptionSection label="Currency">
@@ -40,23 +52,60 @@
           v-model="currency"
           class="*form-input *form-select"
         >
-          <option v-for="currency in currencies" :key="currency">{{ currency }}</option>
+          <option
+            v-for="currency in currencies"
+            :key="currency"
+          >
+            {{ currency }}
+          </option>
         </select>
       </OptionSection>
-      <OptionSection label="Currency Display" description="How to display the currency in the formatting.">
+      <OptionSection
+        label="Currency Display"
+        description="How to display the currency in the formatting."
+      >
         <select
           v-model="currencyDisplay"
           class="*form-input *form-select"
         >
-          <option v-for="currencyDisplay in currencyDisplays" :key="currencyDisplay.value" :value="currencyDisplay.value">{{ currencyDisplay.label }}</option>
+          <option
+            v-for="currencyDisplay in currencyDisplays"
+            :key="currencyDisplay.value"
+            :value="currencyDisplay.value"
+          >
+            {{ currencyDisplay.label }}
+          </option>
         </select>
       </OptionSection>
-      <OptionSection v-model="accountingSign" label="Accounting Sign" description="Whether to use accounting sign formatting." />
-      <OptionSection v-model="useGrouping" label="Use Grouping" description="Whether to use grouping separators such as thousands/lakh/crore separators." />
-      <OptionSection label="Distraction Free Input" description="Hide various parts of the formatting on focus for easier input.">
-        <Checkbox v-model="hideCurrencySymbolOnFocus" label="Hide currency symbol" class="mb-1" />
-        <Checkbox v-model="hideGroupingSeparatorOnFocus" label="Hide grouping separator" class="mb-1" />
-        <Checkbox v-model="hideNegligibleDecimalDigitsOnFocus" :disabled="!hideNegligibleDecimalDigitsOnFocusEnabled" label="Hide negligible decimal digits" />
+      <OptionSection
+        v-model="accountingSign"
+        label="Accounting Sign"
+        description="Whether to use accounting sign formatting."
+      />
+      <OptionSection
+        v-model="useGrouping"
+        label="Use Grouping"
+        description="Whether to use grouping separators such as thousands/lakh/crore separators."
+      />
+      <OptionSection
+        label="Distraction Free Input"
+        description="Hide various parts of the formatting on focus for easier input."
+      >
+        <Checkbox
+          v-model="hideCurrencySymbolOnFocus"
+          label="Hide currency symbol"
+          class="mb-1"
+        />
+        <Checkbox
+          v-model="hideGroupingSeparatorOnFocus"
+          label="Hide grouping separator"
+          class="mb-1"
+        />
+        <Checkbox
+          v-model="hideNegligibleDecimalDigitsOnFocus"
+          :disabled="!hideNegligibleDecimalDigitsOnFocusEnabled"
+          label="Hide negligible decimal digits"
+        />
       </OptionSection>
     </div>
     <div>
@@ -94,18 +143,57 @@
         description="Override the number of displayed decimal digits. Can only be applied for currencies that support decimal digits."
       >
         <div>
-          <Checkbox v-model="precisionRangeEnabled" label="Use range" :disabled="!precisionEnabled" class="mb-2" />
-          <div v-if="precisionRangeEnabled" class="flex items-center space-x-4">
-            <select v-model="precisionRangeMinValue" :disabled="!precisionEnabled" class="*form-input *form-select">
-              <option v-for="value in precisionRangeMinOptions" :key="value" :value="value">{{ value }}</option>
+          <Checkbox
+            v-model="precisionRangeEnabled"
+            label="Use range"
+            :disabled="!precisionEnabled"
+            class="mb-2"
+          />
+          <div
+            v-if="precisionRangeEnabled"
+            class="flex items-center space-x-4"
+          >
+            <select
+              v-model="precisionRangeMinValue"
+              :disabled="!precisionEnabled"
+              class="*form-input *form-select"
+            >
+              <option
+                v-for="value in precisionRangeMinOptions"
+                :key="value"
+                :value="value"
+              >
+                {{ value }}
+              </option>
             </select>
             <span class="text-center">to</span>
-            <select v-model="precisionRangeMaxValue" :disabled="!precisionEnabled" class="*form-input *form-select">
-              <option v-for="value in precisionRangeMaxOptions" :key="value" :value="value">{{ value }}</option>
+            <select
+              v-model="precisionRangeMaxValue"
+              :disabled="!precisionEnabled"
+              class="*form-input *form-select"
+            >
+              <option
+                v-for="value in precisionRangeMaxOptions"
+                :key="value"
+                :value="value"
+              >
+                {{ value }}
+              </option>
             </select>
           </div>
-          <select v-else v-model="precision" :disabled="!precisionEnabled" class="*form-input *form-select">
-            <option v-for="value in precisionOptions" :key="value" :value="value">{{ value }}</option>
+          <select
+            v-else
+            v-model="precision"
+            :disabled="!precisionEnabled"
+            class="*form-input *form-select"
+          >
+            <option
+              v-for="value in precisionOptions"
+              :key="value"
+              :value="value"
+            >
+              {{ value }}
+            </option>
           </select>
         </div>
       </OptionSection>
@@ -119,8 +207,12 @@
           :disabled="!valueScalingEnabled"
           class="*form-input *form-select"
         >
-          <option v-for="option in valueScalingOptions" :key="option.value"
-                  :value="option.value">{{ option.label }}
+          <option
+            v-for="option in valueScalingOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
           </option>
         </select>
       </OptionSection>
@@ -134,6 +226,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable vue/no-reserved-component-names,vue/multi-word-component-names */
 import { computed, defineComponent, reactive, toRefs, watch } from 'vue'
 import CurrencyInput from './CurrencyInput.vue'
 import Dialog from './Dialog.vue'
@@ -143,11 +236,12 @@ import Checkbox from './Checkbox.vue'
 export default defineComponent({
   name: 'Demo',
   components: { Checkbox, OptionSection, Dialog, CurrencyInput },
-  setup () {
+  setup() {
     const range = (from: number, to: number) =>
       Array(to - from)
         .fill(from)
         .map((x, y) => x + y)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const state: any = reactive({
       exportDialogVisible: false,
       value: 1234.5,
@@ -200,9 +294,9 @@ export default defineComponent({
           currencyDisplay: state.currencyDisplay,
           valueRange: state.valueRangeEnabled
             ? {
-              min: state.minValue === '' ? undefined : state.minValue,
-              max: state.maxValue === '' ? undefined : state.maxValue
-            }
+                min: state.minValue === '' ? undefined : state.minValue,
+                max: state.maxValue === '' ? undefined : state.maxValue
+              }
             : undefined,
           precision: state.precisionEnabled
             ? state.precisionRangeEnabled
@@ -216,7 +310,7 @@ export default defineComponent({
           valueScaling: state.valueScalingEnabled ? state.valueScaling : undefined,
           autoSign: state.autoSign,
           useGrouping: state.useGrouping,
-          accountingSign: state.accountingSign,
+          accountingSign: state.accountingSign
         }
       }),
       stringifiedOptions: computed(() => JSON.stringify(state.options, null, 2))

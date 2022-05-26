@@ -1,5 +1,8 @@
 <template>
-  <label class="flex items-center" :class="{ 'text-gray-300 cursor-not-allowed': disabled, 'cursor-pointer': !disabled }">
+  <label
+    class="flex items-center"
+    :class="{ 'text-gray-300 cursor-not-allowed': disabled, 'cursor-pointer': !disabled }"
+  >
     <input
       :checked="modelValue"
       :disabled="disabled"
@@ -13,6 +16,7 @@
 
 <script>
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Checkbox',
   props: {
     modelValue: Boolean,
