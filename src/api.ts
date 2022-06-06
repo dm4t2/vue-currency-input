@@ -1,5 +1,4 @@
 import { Ref } from 'vue-demi'
-import CurrencyFormat from './currencyFormat'
 
 export interface CurrencyInputValue {
   number: number | null
@@ -51,11 +50,8 @@ export interface CurrencyInputOptions extends CurrencyFormatOptions {
 
 export interface UseCurrencyInput {
   inputRef: Ref
+  numberValue: Ref<number | null>
   formattedValue: Ref<string | null>
   setValue: (number: number | null) => void
   setOptions: (options: CurrencyInputOptions) => void
-}
-
-export const parse = (formattedValue: string, options: CurrencyFormatOptions): number | null => {
-  return new CurrencyFormat(options).parse(formattedValue)
 }
