@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.com/dm4t2/vue-currency-input.svg?branch=master)](https://app.travis-ci.com/github/dm4t2/vue-currency-input)
 [![Codecov](https://codecov.io/gh/dm4t2/vue-currency-input/branch/master/graph/badge.svg)](https://codecov.io/gh/dm4t2/vue-currency-input)
 [![npm Version](https://badgen.net/npm/v/vue-currency-input?color=green)](https://www.npmjs.com/package/vue-currency-input)
 [![npm Downloads](https://badgen.net/npm/dw/vue-currency-input?color=green)](https://www.npmjs.com/package/vue-currency-input)
