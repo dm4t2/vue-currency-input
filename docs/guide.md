@@ -121,6 +121,9 @@ export default {
 </script>
 ```
 
+See the final result in the [examples](examples#debouncing).
+
+
 ## Lazy value binding
 
 Sometimes you might want to update the bound value only when the input loses its focus. In this case, use `v-model.lazy` for Vue 3:
