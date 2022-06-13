@@ -1,5 +1,5 @@
 /* eslint-disable vue/one-component-per-file */
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, ref, VNode } from 'vue'
 import { useCurrencyInput } from '../../src'
 import { mount, shallowMount } from '@vue/test-utils'
 import { CurrencyInput } from '../../src/currencyInput'
@@ -7,32 +7,50 @@ import { mocked } from 'ts-jest/utils'
 
 jest.mock('../../src/currencyInput')
 
+const mountComponent = (
+  { type, children, autoEmit } = <
+    {
+      type: string
+      children?: VNode[]
+      autoEmit?: boolean
+    }
+  >{
+    type: 'div',
+    children: [h('input')],
+    autoEmit: true
+  }
+) =>
+  shallowMount(
+    defineComponent({
+      setup: () => {
+        const { inputRef } = useCurrencyInput({ currency: 'EUR' }, autoEmit)
+        return () => h(type, { ref: inputRef }, children)
+      }
+    })
+  )
+
 describe('useCurrencyInput', () => {
   it('should emit the new value on input', async () => {
-    const wrapper = shallowMount(
-      defineComponent({
-        setup: () => {
-          const { inputRef, formattedValue } = useCurrencyInput({ currency: 'EUR' })
-          return () => h('div', { ref: inputRef }, [h('input', { value: formattedValue })])
-        }
-      })
-    )
+    const wrapper = mountComponent()
+    await wrapper.vm.$nextTick()
+
+    wrapper.find('input').element.dispatchEvent(new CustomEvent('input', { detail: { number: 10 } }))
+
+    expect(wrapper.emitted('update:modelValue')).toEqual([[10]])
+    wrapper.unmount()
+  })
+
+  it('should not emit new values on input if autoEmit is false', async () => {
+    const wrapper = mountComponent({ type: 'input', autoEmit: false })
 
     await wrapper.vm.$nextTick()
     wrapper.find('input').element.dispatchEvent(new CustomEvent('input', { detail: { number: 10 } }))
 
-    expect(wrapper.emitted('update:modelValue')).toEqual([[10]])
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })
 
   it('should emit the new value on change', async () => {
-    const wrapper = shallowMount(
-      defineComponent({
-        setup: () => {
-          const { inputRef, formattedValue } = useCurrencyInput({ currency: 'EUR' })
-          return () => h('div', { ref: inputRef }, [h('input', { value: formattedValue })])
-        }
-      })
-    )
+    const wrapper = mountComponent()
 
     await wrapper.vm.$nextTick()
     wrapper.find('input').element.dispatchEvent(new CustomEvent('change', { detail: { number: 10 } }))
@@ -42,14 +60,7 @@ describe('useCurrencyInput', () => {
 
   it('should skip the CurrencyInput instantiation if no input element can be found', async () => {
     jest.spyOn(console, 'error').mockImplementation()
-    const wrapper = shallowMount(
-      defineComponent({
-        setup: () => {
-          const { inputRef } = useCurrencyInput({ currency: 'EUR' })
-          return () => h('div', { ref: inputRef }, [h('div')])
-        }
-      })
-    )
+    const wrapper = mountComponent({ type: 'div' })
     await wrapper.vm.$nextTick()
 
     expect(CurrencyInput).not.toHaveBeenCalled()
@@ -125,5 +136,32 @@ describe('useCurrencyInput', () => {
     wrapper.find('button').trigger('click')
 
     expect(mocked(CurrencyInput).mock.instances[0].setOptions).toHaveBeenCalledWith({ currency: 'USD' })
+  })
+
+  it('should support a conditionally rendered inputRef', async () => {
+    const wrapper = shallowMount(
+      defineComponent(() => {
+        const { inputRef } = useCurrencyInput({ currency: 'EUR' })
+        const visible = ref(true)
+        return () =>
+          h('div', [
+            visible.value ? h('input', { ref: inputRef }) : h('div'),
+            h('button', {
+              onClick: () => {
+                visible.value = !visible.value
+              }
+            })
+          ])
+      })
+    )
+    await wrapper.vm.$nextTick()
+    expect(CurrencyInput).toHaveBeenCalled()
+
+    mocked(CurrencyInput).mockClear()
+    await wrapper.find('button').trigger('click')
+    expect(CurrencyInput).not.toHaveBeenCalled()
+
+    await wrapper.find('button').trigger('click')
+    expect(CurrencyInput).toHaveBeenCalled()
   })
 })

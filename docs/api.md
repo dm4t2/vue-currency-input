@@ -5,13 +5,13 @@
 ### useCurrencyInput
 
 ```typescript
-declare const useCurrencyInput: (options: CurrencyInputOptions) => UseCurrencyInput
+declare const useCurrencyInput: (options: CurrencyInputOptions, autoEmit?: boolean) => UseCurrencyInput
 ```
 
 ### parse
 
 ```typescript
-declare const parse: (formattedValue: string, options: CurrencyFormatOptions) => number | null
+declare const parse: (formattedValue: string | null, options: CurrencyFormatOptions) => number | null
 ```
 
 ## Enums
@@ -86,6 +86,7 @@ interface CurrencyInputOptions extends CurrencyFormatOptions {
 ```typescript
 interface UseCurrencyInput {
   inputRef: Ref
+  numberValue: Ref<number | null>
   formattedValue: Ref<string | null>
   setValue: (number: number | null) => void
   setOptions: (options: CurrencyInputOptions) => void
