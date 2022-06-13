@@ -62,7 +62,7 @@ import{_ as n,c as a,o as s,a as t}from"./app.7462016e.js";const g='{"title":"Gu
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div><h2 id="lazy-value-binding" tabindex="-1">Lazy value binding <a class="header-anchor" href="#lazy-value-binding" aria-hidden="true">#</a></h2><p>Sometimes you might want to update the bound value only when the input loses its focus. In this case, use <code>v-model.lazy</code> for Vue 3:</p><div class="language-vue"><pre><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>CurrencyInput</span>
+</code></pre></div><p>See the final result in the <a href="./examples.html#debouncing">examples</a>.</p><h2 id="lazy-value-binding" tabindex="-1">Lazy value binding <a class="header-anchor" href="#lazy-value-binding" aria-hidden="true">#</a></h2><p>Sometimes you might want to update the bound value only when the input loses its focus. In this case, use <code>v-model.lazy</code> for Vue 3:</p><div class="language-vue"><pre><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>CurrencyInput</span>
   <span class="token attr-name">v-model.lazy</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>value<span class="token punctuation">&quot;</span></span>
   <span class="token attr-name">:options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">&quot;</span>{ currency: <span class="token punctuation">&#39;</span>EUR<span class="token punctuation">&#39;</span> }<span class="token punctuation">&quot;</span></span>
 <span class="token punctuation">/&gt;</span></span>
@@ -106,4 +106,4 @@ import{_ as n,c as a,o as s,a as t}from"./app.7462016e.js";const g='{"title":"Gu
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
-</code></pre></div>`,34),o=[e];function c(u,l,r,i,k,d){return s(),a("div",null,o)}var h=n(p,[["render",c]]);export{g as __pageData,h as default};
+</code></pre></div>`,35),o=[e];function c(u,l,r,i,k,d){return s(),a("div",null,o)}var h=n(p,[["render",c]]);export{g as __pageData,h as default};
