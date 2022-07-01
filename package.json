@@ -87,7 +87,7 @@
     "windicss": "^3.4.4"
   },
   "dependencies": {
-    "vue-demi": "^0.12.1"
+    "vue-demi": "^0.13.1"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
