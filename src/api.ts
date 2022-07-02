@@ -38,7 +38,6 @@ export interface CurrencyInputOptions extends CurrencyFormatOptions {
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean
   autoDecimalDigits?: boolean
-  autoSign?: boolean
   valueRange?: NumberRange
   useGrouping?: boolean
   valueScaling?: ValueScaling

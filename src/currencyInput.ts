@@ -13,7 +13,6 @@ export const DEFAULT_OPTIONS = {
   precision: undefined,
   autoDecimalDigits: false,
   valueRange: undefined,
-  autoSign: true,
   useGrouping: true,
   valueScaling: undefined
 }
@@ -94,9 +93,6 @@ export class CurrencyInput {
     if (this.options.valueRange?.min !== undefined) {
       min = Math.max(this.options.valueRange?.min, this.toFloat(-Number.MAX_SAFE_INTEGER))
     }
-    if (!this.options.autoSign && min < 0) {
-      min = 0
-    }
     return min
   }
 
@@ -104,9 +100,6 @@ export class CurrencyInput {
     let max = this.toFloat(Number.MAX_SAFE_INTEGER)
     if (this.options.valueRange?.max !== undefined) {
       max = Math.min(this.options.valueRange?.max, this.toFloat(Number.MAX_SAFE_INTEGER))
-    }
-    if (!this.options.autoSign && max < 0) {
-      max = this.toFloat(Number.MAX_SAFE_INTEGER)
     }
     return max
   }
@@ -164,13 +157,11 @@ export class CurrencyInput {
       } else {
         formattedValue = conformedValue
       }
-      if (this.options.autoSign) {
-        if (this.maxValue <= 0 && !this.currencyFormat.isNegative(formattedValue) && this.currencyFormat.parse(formattedValue) !== 0) {
-          formattedValue = formattedValue.replace(this.currencyFormat.prefix, this.currencyFormat.negativePrefix)
-        }
-        if (this.minValue >= 0) {
-          formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
-        }
+      if (this.maxValue <= 0 && !this.currencyFormat.isNegative(formattedValue) && this.currencyFormat.parse(formattedValue) !== 0) {
+        formattedValue = formattedValue.replace(this.currencyFormat.prefix, this.currencyFormat.negativePrefix)
+      }
+      if (this.minValue >= 0) {
+        formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
       }
       if (this.options.currencyDisplay === CurrencyDisplay.hidden || (this.focus && this.options.hideCurrencySymbolOnFocus)) {
         formattedValue = formattedValue

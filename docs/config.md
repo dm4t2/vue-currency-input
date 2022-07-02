@@ -58,10 +58,6 @@ Applies a scaling to the exported value. Possible values are:
 
 The range of accepted values as object `{min, max}`. Default is `undefined` (no value range). The validation is triggered on blur and automatically sets the respective threshold if out of range.
 
-### autoSign
-
-Whether the minus symbol is automatically inserted or prevented to be inputted depending on the configured `valueRange`. Default is `true`.
-
 ### useGrouping
 
 Whether to use grouping separators such as thousands/lakh/crore separators.

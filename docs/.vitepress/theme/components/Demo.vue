@@ -110,11 +110,6 @@
     </div>
     <div>
       <OptionSection
-        v-model="autoSign"
-        label="Auto Sign"
-        description="Whether the minus symbol is automatically inserted or prevented to be inputted depending the current value range."
-      />
-      <OptionSection
         v-model="valueRangeEnabled"
         label="Value Range"
         description="The validation is triggered on blur and automatically sets the respective threshold if out of range."
@@ -283,8 +278,6 @@ export default defineComponent({
       maxValue: undefined,
       autoDecimalDigitsEnabled: true,
       autoDecimalDigits: false,
-      exportValueAsInteger: false,
-      autoSign: true,
       accountingSign: false,
       useGrouping: true,
       options: computed(() => {
@@ -308,7 +301,6 @@ export default defineComponent({
           hideNegligibleDecimalDigitsOnFocus: state.hideNegligibleDecimalDigitsOnFocus,
           autoDecimalDigits: state.autoDecimalDigits,
           valueScaling: state.valueScalingEnabled ? state.valueScaling : undefined,
-          autoSign: state.autoSign,
           useGrouping: state.useGrouping,
           accountingSign: state.accountingSign
         }
