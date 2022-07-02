@@ -8,12 +8,6 @@
 declare const useCurrencyInput: (options: CurrencyInputOptions, autoEmit?: boolean) => UseCurrencyInput
 ```
 
-### parse
-
-```typescript
-declare const parse: (formattedValue: string | null, options: CurrencyFormatOptions) => number | null
-```
-
 ## Enums
 
 ### CurrencyDisplay
