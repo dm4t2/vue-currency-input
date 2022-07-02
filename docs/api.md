@@ -60,10 +60,6 @@ interface CurrencyFormatOptions {
 
 ```typescript
 interface CurrencyInputOptions extends CurrencyFormatOptions {
-  /**
-   * @deprecated Use `valueScaling` instead.
-   */
-  exportValueAsInteger?: boolean
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean

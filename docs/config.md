@@ -45,15 +45,6 @@ Whether to hide the grouping separator on focus. Default is `true`.
 
 Whether to hide negligible decimal digits on focus. Default is `true`.
 
-### exportValueAsInteger
-
-Whether the number value should be exported as integer by scaling the value depending on the current `precision`. Default is `false`.
-When used in combination with precision ranges, the value of `precision.max` will be used as a factor.
-
-::: warning Deprecated
-Use the `valueScaling` option with `"precision"` instead.
-:::
-
 ### valueScaling
 
 Applies a scaling to the exported value. Possible values are:

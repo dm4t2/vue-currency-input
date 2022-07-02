@@ -7,7 +7,6 @@ export const DEFAULT_OPTIONS = {
   locale: undefined,
   currency: undefined,
   currencyDisplay: undefined,
-  exportValueAsInteger: false,
   hideGroupingSeparatorOnFocus: true,
   hideCurrencySymbolOnFocus: true,
   hideNegligibleDecimalDigitsOnFocus: true,
@@ -81,11 +80,7 @@ export class CurrencyInput {
       [ValueScaling.millions]: 6,
       [ValueScaling.billions]: 9
     }
-    if (this.options.exportValueAsInteger) {
-      this.valueScaling = valueScalingOptions[ValueScaling.precision]
-    } else {
-      this.valueScaling = this.options.valueScaling ? valueScalingOptions[this.options.valueScaling] : undefined
-    }
+    this.valueScaling = this.options.valueScaling ? valueScalingOptions[this.options.valueScaling] : undefined
     this.valueScalingFractionDigits =
       this.valueScaling !== undefined && this.options.valueScaling !== ValueScaling.precision
         ? this.valueScaling + this.currencyFormat.maximumFractionDigits
