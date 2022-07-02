@@ -1,4 +1,4 @@
-import { Ref } from 'vue-demi'
+import { Ref } from 'vue'
 
 export interface CurrencyInputValue {
   number: number | null

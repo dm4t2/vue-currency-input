@@ -1,27 +1,18 @@
 # Guide
 
-:::warning Version
-You’re browsing the documentation for v2.x. [For v1.x, click here](https://vue-currency-input-v1.netlify.app/).
-:::
-
 ## Introduction
 
 Vue Currency Input allows an easy input of currency formatted numbers based on the [ECMAScript Internationalization API (Intl.NumberFormat)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
 
-Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides the function `useCurrencyInput` (a so called _Vue composable_) for decorating input components with currency format capabilities. Thanks to [Vue Demi](https://github.com/vueuse/vue-demi), it supports both Vue 2 and Vue 3.
+Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides the composable function `useCurrencyInput` for decorating input components with currency format capabilities.
+
+::: warning Compatibility
+Vue Currency Input 3.x requires either **Vue 2.7** or **Vue 3**. For Vue 2.6 or earlier, please use Vue Currency Input 2.x with the [Vue Composition API plugin](https://github.com/vuejs/composition-api).
+:::
 
 ## Installation
-
-Install the npm package:
-
 ```bash
 npm install vue-currency-input
-```
-
-For usage with Vue 2 you have to install also the [Vue Composition API plugin](https://github.com/vuejs/composition-api):
-
-```bash
-npm install @vue/composition-api
 ```
 
 ## Usage
@@ -90,10 +81,10 @@ export default {
 See the final result in the [examples](examples#simple-html-input-element).
 
 ## Auto emit
-By default, the `useCurrencyInput` composable emits the number value automatically on each input. 
-This can be disabled If you need a custom emit behavior for features such as debouncing.
+By default, the number value is automatically emitted on each input.
+This can be disabled by setting the `autoEmit` argument of `useCurrencyInput` to `false`, allowing you to implement a custom emit behavior for features such as debouncing.
 
-The following example component `<DebouncedCurrencyInput>` demonstrates this by using the awesome `watchDebounced` composable of [VueUse](https://vueuse.org/shared/watchDebounced): 
+The following example component `<DebouncedCurrencyInput>` demonstrates this by using [VueUse's `watchDebounced`](https://vueuse.org/shared/watchDebounced): 
 
 ```vue
 <template>
