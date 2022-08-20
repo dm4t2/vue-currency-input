@@ -1,5 +1,6 @@
 import CurrencyFormat from '../../src/currencyFormat'
 import { CurrencyDisplay } from '../../src'
+import { describe, expect, it } from 'vitest'
 
 describe('CurrencyFormat', () => {
   describe('constructing number formats', () => {

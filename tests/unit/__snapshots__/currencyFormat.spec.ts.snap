@@ -1,10 +1,10 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: ar-SA_SAR 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > ar-SA_SAR 1`] = `
 CurrencyFormat {
   "currency": "ر.س.",
   "decimalSymbol": "٫",
-  "digits": Array [
+  "digits": [
     "٠",
     "١",
     "٢",
@@ -23,7 +23,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "؜-",
   "negativeSuffix": " ر.س.‏",
-  "options": Object {
+  "options": {
     "currency": "SAR",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -34,11 +34,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: bg-BG_BGN 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > bg-BG_BGN 1`] = `
 CurrencyFormat {
   "currency": "лв.",
   "decimalSymbol": ",",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -57,7 +57,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-",
   "negativeSuffix": " лв.",
-  "options": Object {
+  "options": {
     "currency": "BGN",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -68,11 +68,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: de-CH_EUR 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > de-CH_EUR 1`] = `
 CurrencyFormat {
   "currency": "EUR",
   "decimalSymbol": ".",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -91,7 +91,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "EUR-",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "EUR",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -102,11 +102,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: de-DE_EUR 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > de-DE_EUR 1`] = `
 CurrencyFormat {
   "currency": "€",
   "decimalSymbol": ",",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -125,7 +125,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-",
   "negativeSuffix": " €",
-  "options": Object {
+  "options": {
     "currency": "EUR",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -136,11 +136,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: en-GB_GBP 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > en-GB_GBP 1`] = `
 CurrencyFormat {
   "currency": "£",
   "decimalSymbol": ".",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -159,7 +159,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-£",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "GBP",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -170,11 +170,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: en-IN_INR 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > en-IN_INR 1`] = `
 CurrencyFormat {
   "currency": "₹",
   "decimalSymbol": ".",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -193,7 +193,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-₹",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "INR",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -204,11 +204,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: en-US_USD 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > en-US_USD 1`] = `
 CurrencyFormat {
   "currency": "$",
   "decimalSymbol": ".",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -227,7 +227,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-$",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "USD",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -238,11 +238,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: es-ES_EUR 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > es-ES_EUR 1`] = `
 CurrencyFormat {
   "currency": "€",
   "decimalSymbol": ",",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -261,7 +261,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-",
   "negativeSuffix": " €",
-  "options": Object {
+  "options": {
     "currency": "EUR",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -272,11 +272,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: fa-IR_IRR 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > fa-IR_IRR 1`] = `
 CurrencyFormat {
   "currency": "ریال",
   "decimalSymbol": undefined,
-  "digits": Array [
+  "digits": [
     "۰",
     "۱",
     "۲",
@@ -295,7 +295,7 @@ CurrencyFormat {
   "minusSign": "−",
   "negativePrefix": "‎−‎ریال ",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "IRR",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -306,11 +306,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: fr-CH_CHF 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > fr-CH_CHF 1`] = `
 CurrencyFormat {
   "currency": "CHF",
   "decimalSymbol": ".",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -329,7 +329,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-",
   "negativeSuffix": " CHF",
-  "options": Object {
+  "options": {
     "currency": "CHF",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -340,11 +340,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: ja_JPY 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > ja_JPY 1`] = `
 CurrencyFormat {
   "currency": "￥",
   "decimalSymbol": undefined,
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -363,7 +363,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-￥",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "JPY",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -374,11 +374,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: nl-NL_EUR 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > nl-NL_EUR 1`] = `
 CurrencyFormat {
   "currency": "€",
   "decimalSymbol": ",",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -397,7 +397,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "€ -",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "EUR",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -408,11 +408,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: pt_BRL 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > pt_BRL 1`] = `
 CurrencyFormat {
   "currency": "R$",
   "decimalSymbol": ",",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -431,7 +431,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-R$ ",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "BRL",
     "currencyDisplay": undefined,
     "currencySign": undefined,
@@ -442,11 +442,11 @@ CurrencyFormat {
 }
 `;
 
-exports[`CurrencyFormat constructing number formats should work for respective locale and currency: zh_CNY 1`] = `
+exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > zh_CNY 1`] = `
 CurrencyFormat {
   "currency": "¥",
   "decimalSymbol": ".",
-  "digits": Array [
+  "digits": [
     "0",
     "1",
     "2",
@@ -465,7 +465,7 @@ CurrencyFormat {
   "minusSign": "-",
   "negativePrefix": "-¥",
   "negativeSuffix": "",
-  "options": Object {
+  "options": {
     "currency": "CNY",
     "currencyDisplay": undefined,
     "currencySign": undefined,

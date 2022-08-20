@@ -1,11 +1,12 @@
+// @vitest-environment jsdom
 /* eslint-disable vue/one-component-per-file */
 import { defineComponent, h, ref, VNode } from 'vue'
 import { useCurrencyInput } from '../../src'
 import { mount, shallowMount } from '@vue/test-utils'
 import { CurrencyInput } from '../../src/currencyInput'
-import { mocked } from 'ts-jest/utils'
+import { describe, expect, it, vi } from 'vitest'
 
-jest.mock('../../src/currencyInput')
+vi.mock('../../src/currencyInput')
 
 const mountComponent = (
   { type, children, autoEmit } = <
@@ -59,7 +60,8 @@ describe('useCurrencyInput', () => {
   })
 
   it('should skip the CurrencyInput instantiation if no input element can be found', async () => {
-    jest.spyOn(console, 'error').mockImplementation()
+    vi.spyOn(console, 'error')
+    vi.clearAllMocks()
     const wrapper = mountComponent({ type: 'div' })
     await wrapper.vm.$nextTick()
 
@@ -113,7 +115,7 @@ describe('useCurrencyInput', () => {
 
     wrapper.find('button').trigger('click')
 
-    expect(mocked(CurrencyInput).mock.instances[0].setValue).toHaveBeenCalledWith(1234)
+    expect(vi.mocked(CurrencyInput).mock.instances[0].setValue).toHaveBeenCalledWith(1234)
   })
 
   it('should allow to update the options', async () => {
@@ -135,7 +137,7 @@ describe('useCurrencyInput', () => {
 
     wrapper.find('button').trigger('click')
 
-    expect(mocked(CurrencyInput).mock.instances[0].setOptions).toHaveBeenCalledWith({ currency: 'USD' })
+    expect(vi.mocked(CurrencyInput).mock.instances[0].setOptions).toHaveBeenCalledWith({ currency: 'USD' })
   })
 
   it('should support a conditionally rendered inputRef', async () => {
@@ -157,7 +159,7 @@ describe('useCurrencyInput', () => {
     await wrapper.vm.$nextTick()
     expect(CurrencyInput).toHaveBeenCalled()
 
-    mocked(CurrencyInput).mockClear()
+    vi.mocked(CurrencyInput).mockClear()
     await wrapper.find('button').trigger('click')
     expect(CurrencyInput).not.toHaveBeenCalled()
 

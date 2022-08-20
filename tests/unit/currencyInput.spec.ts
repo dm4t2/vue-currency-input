@@ -1,7 +1,9 @@
+// @vitest-environment jsdom
 import { CurrencyInput } from '../../src/currencyInput'
 import { fireEvent } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import { CurrencyDisplay, CurrencyInputOptions, ValueScaling } from '../../src'
+import { describe, expect, it, beforeEach, vi } from 'vitest'
 
 describe('Currency Input', () => {
   let el: HTMLInputElement, currencyInput: CurrencyInput, options: CurrencyInputOptions
@@ -59,14 +61,14 @@ describe('Currency Input', () => {
 
   describe('on focus', () => {
     beforeEach(() => {
-      jest.useFakeTimers()
+      vi.useFakeTimers()
     })
 
     it('should update the input value', () => {
       currencyInput.setValue(12345.6)
       expect(el.value).toBe('€12,345.60')
       userEvent.click(el)
-      jest.runOnlyPendingTimers()
+      vi.runOnlyPendingTimers()
       expect(el.value).toBe('12345.6')
     })
 
@@ -74,7 +76,7 @@ describe('Currency Input', () => {
       const expectCaretPosition = (given: number, expected: number) => {
         el.setSelectionRange(given, given)
         userEvent.click(el)
-        jest.runOnlyPendingTimers()
+        vi.runOnlyPendingTimers()
 
         expect(el.selectionStart).toBe(expected)
       }
@@ -171,7 +173,7 @@ describe('Currency Input', () => {
 
           el.setSelectionRange(el.value.length, el.value.length)
           userEvent.click(el)
-          jest.runOnlyPendingTimers()
+          vi.runOnlyPendingTimers()
 
           expectCaretPosition(el.value.length, 4)
         })

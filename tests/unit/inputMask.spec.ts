@@ -1,5 +1,6 @@
 import CurrencyFormat from '../../src/currencyFormat'
 import { AutoDecimalDigitsInputMask, DefaultInputMask } from '../../src/inputMask'
+import { describe, expect, it } from 'vitest'
 
 describe('DefaultInputMask', () => {
   describe('when the value is invalid', () => {
