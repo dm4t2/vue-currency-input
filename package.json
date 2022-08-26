@@ -37,6 +37,7 @@
     "dev": "vitepress dev docs",
     "docs": "vitepress build docs",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "lint": "eslint --no-fix --max-warnings 0 {**/*,*}.{js,ts,vue}",
     "prebuild": "rimraf dist",
     "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js",
