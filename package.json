@@ -40,8 +40,7 @@
     "coverage": "vitest run --coverage",
     "lint": "eslint --no-fix --max-warnings 0 {**/*,*}.{js,ts,vue}",
     "prebuild": "rimraf dist",
-    "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js",
-    "release": "semantic-release"
+    "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js"
   },
   "peerDependencies": {
     "vue": "^2.7 || ^3.0.0"
@@ -68,7 +67,6 @@
     "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-typescript2": "^0.31.1",
-    "semantic-release": "^19.0.2",
     "simple-git-hooks": "^2.7.0",
     "typescript": "^4.5.4",
     "unplugin-vue-components": "^0.17.20",
