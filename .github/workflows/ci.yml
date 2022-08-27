@@ -1,7 +1,7 @@
-name: CI
+name: Continuous Integration
 on: [ push, pull_request ]
 jobs:
-  ci:
+  ci_checks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -11,7 +11,7 @@ jobs:
           node-version: '16'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: ESLint
+      - name: Run ESLint
         run: yarn lint
       - name: Run tests and collect coverage
         run: yarn coverage
@@ -22,3 +22,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        args: >
+          -Dsonar.organization=Matthias Stiller
+          -Dsonar.projectKey=vue-currency-input    
