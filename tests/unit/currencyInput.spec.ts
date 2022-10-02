@@ -15,7 +15,12 @@ describe('Currency Input', () => {
       locale: 'en',
       currency: 'EUR'
     }
-    currencyInput = new CurrencyInput(el, options)
+    currencyInput = new CurrencyInput({
+      el,
+      options,
+      onInput: vi.fn(),
+      onChange: vi.fn()
+    })
   })
 
   describe('setValue', () => {

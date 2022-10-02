@@ -37,7 +37,8 @@ export default [
       }),
       cleanup({ extensions: ['js', 'ts'] }),
       filesize()
-    ]
+    ],
+    external: ['vue']
   },
   {
     input: './dist/types/src/index.d.ts',

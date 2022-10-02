@@ -1,4 +1,2 @@
-import useCurrencyInput from './useCurrencyInput'
-
 export * from './api'
-export { useCurrencyInput }
+export { useCurrencyInput } from './useCurrencyInput'

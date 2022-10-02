@@ -4,7 +4,7 @@ import { defineComponent, h, ref, VNode } from 'vue'
 import { useCurrencyInput } from '../../src'
 import { mount, shallowMount } from '@vue/test-utils'
 import { CurrencyInput } from '../../src/currencyInput'
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('../../src/currencyInput')
 
@@ -31,30 +31,39 @@ const mountComponent = (
   )
 
 describe('useCurrencyInput', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it('should emit the new value on input', async () => {
     const wrapper = mountComponent()
     await wrapper.vm.$nextTick()
 
-    wrapper.find('input').element.dispatchEvent(new CustomEvent('input', { detail: { number: 10 } }))
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    vi.mocked(CurrencyInput).mock.calls[0][0].onInput({ number: 10, formatted: 'EUR 10' })
 
     expect(wrapper.emitted('update:modelValue')).toEqual([[10]])
-    wrapper.unmount()
   })
 
   it('should not emit new values on input if autoEmit is false', async () => {
     const wrapper = mountComponent({ type: 'input', autoEmit: false })
-
     await wrapper.vm.$nextTick()
-    wrapper.find('input').element.dispatchEvent(new CustomEvent('input', { detail: { number: 10 } }))
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    vi.mocked(CurrencyInput).mock.calls[0][0].onInput({ number: 10, formatted: 'EUR 10' })
 
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
   })
 
   it('should emit the new value on change', async () => {
     const wrapper = mountComponent()
-
     await wrapper.vm.$nextTick()
-    wrapper.find('input').element.dispatchEvent(new CustomEvent('change', { detail: { number: 10 } }))
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    vi.mocked(CurrencyInput).mock.calls[0][0].onChange({ number: 10, formatted: 'EUR 10' })
 
     expect(wrapper.emitted('change')).toEqual([[10]])
   })
@@ -77,8 +86,7 @@ describe('useCurrencyInput', () => {
       })
     )
     await wrapper.vm.$nextTick()
-
-    expect(CurrencyInput).toHaveBeenCalledWith(wrapper.find('input').element, { currency: 'EUR' })
+    expect(CurrencyInput).toHaveBeenCalledWith(expect.objectContaining({ el: wrapper.find('input').element }))
   })
 
   it('should accept custom input components as template ref', async () => {
@@ -93,7 +101,7 @@ describe('useCurrencyInput', () => {
     )
     await currencyInput.vm.$nextTick()
 
-    expect(CurrencyInput).toHaveBeenCalledWith(currencyInput.find('input').element, { currency: 'EUR' })
+    expect(CurrencyInput).toHaveBeenCalledWith(expect.objectContaining({ el: currencyInput.find('input').element }))
   })
 
   it('should allow to update the value', async () => {

@@ -19,8 +19,10 @@ export const DEFAULT_OPTIONS = {
 
 export class CurrencyInput {
   private readonly el: HTMLInputElement
+  private readonly onInput: (value: CurrencyInputValue) => void
+  private readonly onChange: (value: CurrencyInputValue) => void
+  private numberValue!: number | null
   private options!: CurrencyInputOptions
-  private numberValue: number | null
   private currencyFormat!: CurrencyFormat
   private decimalSymbolInsertedAt?: number
   private numberMask!: InputMask
@@ -31,12 +33,17 @@ export class CurrencyInput {
   private valueScaling: number | undefined
   private valueScalingFractionDigits!: number
 
-  constructor(el: HTMLInputElement, options: CurrencyInputOptions) {
-    this.el = el
-    this.numberValue = null
+  constructor(args: {
+    el: HTMLInputElement
+    options: CurrencyInputOptions
+    onInput: (value: CurrencyInputValue) => void
+    onChange: (value: CurrencyInputValue) => void
+  }) {
+    this.el = args.el
+    this.onInput = args.onInput
+    this.onChange = args.onChange
     this.addEventListener()
-    this.init(options)
-    this.setValue(this.currencyFormat.parse(this.el.value))
+    this.init(args.options)
   }
 
   setOptions(options: CurrencyInputOptions): void {
@@ -54,10 +61,6 @@ export class CurrencyInput {
     if (newValue !== this.numberValue) {
       this.applyFixedFractionFormat(newValue)
     }
-  }
-
-  private dispatchEvent(eventName: string) {
-    this.el.dispatchEvent(new CustomEvent(eventName, { detail: this.getValue() }))
   }
 
   private init(options: CurrencyInputOptions) {
@@ -124,7 +127,7 @@ export class CurrencyInput {
   private applyFixedFractionFormat(number: number | null, forcedChange = false) {
     this.format(this.currencyFormat.format(this.validateValueRange(number)))
     if (number !== this.numberValue || forcedChange) {
-      this.dispatchEvent('change')
+      this.onChange(this.getValue())
     }
   }
 
@@ -178,65 +181,53 @@ export class CurrencyInput {
       this.numberValue = null
     }
     this.formattedValue = this.el.value
-    this.dispatchEvent('input')
+    this.onInput(this.getValue())
   }
 
   private addEventListener(): void {
-    this.el.addEventListener(
-      'input',
-      (e: Event) => {
-        if (!(e as CustomEvent).detail) {
-          const { value, selectionStart } = this.el
-          const inputEvent = e as InputEvent
-          if (selectionStart && inputEvent.data && DECIMAL_SEPARATORS.includes(inputEvent.data)) {
-            this.decimalSymbolInsertedAt = selectionStart - 1
+    this.el.addEventListener('input', (e: Event) => {
+      const { value, selectionStart } = this.el
+      const inputEvent = e as InputEvent
+      if (selectionStart && inputEvent.data && DECIMAL_SEPARATORS.includes(inputEvent.data)) {
+        this.decimalSymbolInsertedAt = selectionStart - 1
+      }
+      this.format(value)
+      if (this.focus && selectionStart != null) {
+        const getCaretPositionAfterFormat = () => {
+          const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = this.currencyFormat
+          let caretPositionFromLeft = value.length - selectionStart
+          const newValueLength = this.formattedValue.length
+          if (this.currencyFormat.minusSign === undefined && (value.startsWith('(') || value.startsWith('-')) && !value.endsWith(')')) {
+            return newValueLength - this.currencyFormat.negativeSuffix.length > 1 ? this.formattedValue.substring(selectionStart).length : 1
           }
-          this.format(value)
-          if (this.focus && selectionStart != null) {
-            const getCaretPositionAfterFormat = () => {
-              const { prefix, suffix, decimalSymbol, maximumFractionDigits, groupingSymbol } = this.currencyFormat
-
-              let caretPositionFromLeft = value.length - selectionStart
-              const newValueLength = this.formattedValue.length
-
-              if (this.currencyFormat.minusSign === undefined && (value.startsWith('(') || value.startsWith('-')) && !value.endsWith(')')) {
-                return newValueLength - this.currencyFormat.negativeSuffix.length > 1 ? this.formattedValue.substring(selectionStart).length : 1
-              }
-
-              if (
-                this.formattedValue.substr(selectionStart, 1) === groupingSymbol &&
-                count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1
-              ) {
-                return newValueLength - caretPositionFromLeft - 1
-              }
-
-              if (newValueLength < caretPositionFromLeft) {
-                return selectionStart
-              }
-
-              if (decimalSymbol !== undefined && value.indexOf(decimalSymbol) !== -1) {
-                const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
-                if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
-                  return this.formattedValue.indexOf(decimalSymbol) + 1
-                } else {
-                  if (!this.options.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
-                    if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
-                      caretPositionFromLeft -= 1
-                    }
-                  }
+          if (
+            this.formattedValue.substr(selectionStart, 1) === groupingSymbol &&
+            count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1
+          ) {
+            return newValueLength - caretPositionFromLeft - 1
+          }
+          if (newValueLength < caretPositionFromLeft) {
+            return selectionStart
+          }
+          if (decimalSymbol !== undefined && value.indexOf(decimalSymbol) !== -1) {
+            const decimalSymbolPosition = value.indexOf(decimalSymbol) + 1
+            if (Math.abs(newValueLength - value.length) > 1 && selectionStart <= decimalSymbolPosition) {
+              return this.formattedValue.indexOf(decimalSymbol) + 1
+            } else {
+              if (!this.options.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
+                if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
+                  caretPositionFromLeft -= 1
                 }
               }
-
-              return this.options.hideCurrencySymbolOnFocus || this.options.currencyDisplay === CurrencyDisplay.hidden
-                ? newValueLength - caretPositionFromLeft
-                : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
             }
-            this.setCaretPosition(getCaretPositionAfterFormat())
           }
+          return this.options.hideCurrencySymbolOnFocus || this.options.currencyDisplay === CurrencyDisplay.hidden
+            ? newValueLength - caretPositionFromLeft
+            : Math.max(newValueLength - Math.max(caretPositionFromLeft, suffix.length), prefix.length)
         }
-      },
-      { capture: true }
-    )
+        this.setCaretPosition(getCaretPositionAfterFormat())
+      }
+    })
 
     this.el.addEventListener('focus', () => {
       this.focus = true
@@ -257,15 +248,9 @@ export class CurrencyInput {
       this.applyFixedFractionFormat(this.numberValue)
     })
 
-    this.el.addEventListener(
-      'change',
-      (e: Event) => {
-        if (!(e as CustomEvent).detail) {
-          this.dispatchEvent('change')
-        }
-      },
-      { capture: true }
-    )
+    this.el.addEventListener('change', () => {
+      this.onChange(this.getValue())
+    })
   }
 
   private getCaretPositionOnFocus(value: string, selectionStart: number) {
