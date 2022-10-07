@@ -1,4 +1,4 @@
-# Config Reference
+# Configuration
 
 The following options can be passed as an object literal to the `useCurrencyInput` function.
 
