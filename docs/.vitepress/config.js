@@ -28,7 +28,7 @@ export default {
         link: '/guide'
       },
       {
-        text: 'Config Reference',
+        text: 'Configuration',
         link: '/config'
       },
       {
@@ -36,8 +36,8 @@ export default {
         link: '/playground'
       },
       {
-        text: 'Examples',
-        link: '/examples'
+        text: 'Component library integrations',
+        link: '/component-library-integrations'
       },
       {
         text: 'API',

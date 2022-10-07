@@ -17,7 +17,7 @@ npm install vue-currency-input
 
 ## Usage
 
-Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Quasar](examples#usage-with-quasar-veevalidate) or [Element Plus](examples#usage-with-element-plus)).
+Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Quasar](component-library-integrations#quasar) or [Element Plus](component-library-integrations#element-plus)).
 
 ::: info Code examples
 The following code examples are for Vue 3. Deviations for Vue 2 are noted as inline code comments.
@@ -27,7 +27,7 @@ The following code examples are for Vue 3. Deviations for Vue 2 are noted as inl
 
 The following example component `<CurrencyInput>` uses a simple HTML input element.
 
-The component must provide props for the `v-model` value binding and the options (see [Config Reference](config)). Make also sure, that the input element has type `text` (or omit the type since it's the default).
+The component must provide props for the `v-model` value binding and the options (see [Configuration](config)). Make also sure, that the input element has type `text` (or omit the type since it's the default).
 
 ```vue
 <template>
@@ -78,7 +78,7 @@ export default {
 </script>
 ```
 
-See the final result in the [examples](examples#simple-html-input-element).
+[![Edit Vue Currency Input: Vue 3 Example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-currency-input-vue-3-example-5l51f?fontsize=14&hidenavigation=1&theme=dark)
 
 ## Auto emit
 By default, the number value is automatically emitted on each input.
@@ -104,7 +104,7 @@ export default {
   setup (props, { emit }) {
     const { inputRef, numberValue } = useCurrencyInput(props.options, false)
 
-    watchDebounced(numberValue, (value) => emit('update:modelValue', value), { debounce: 1000 })
+    watchDebounced(numberValue, (value) => emit('update:modelValue', value), { debounce: 1000 }) // Vue 2: emit('input', value)
 
     return { inputRef }
   }
@@ -112,7 +112,7 @@ export default {
 </script>
 ```
 
-See the final result in the [examples](examples#debouncing).
+[![Edit Using Vue Currency Input with debouncing](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/using-vue-currency-input-with-debouncing-vzwnss?fontsize=14&hidenavigation=1&theme=dark)
 
 
 ## Lazy value binding

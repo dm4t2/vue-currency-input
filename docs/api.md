@@ -5,7 +5,7 @@
 ### useCurrencyInput
 
 ```typescript
-declare const useCurrencyInput: (options: CurrencyInputOptions, autoEmit?: boolean) => UseCurrencyInput
+declare function useCurrencyInput(options: CurrencyInputOptions, autoEmit?: boolean): UseCurrencyInput;
 ```
 
 ## Enums
