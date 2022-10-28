@@ -10,6 +10,7 @@
     "dist/*.js",
     "dist/index.d.ts"
   ],
+  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.esm.js",
