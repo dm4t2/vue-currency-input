@@ -3,17 +3,17 @@
   "description": "Easy input of currency formatted numbers for Vue.js.",
   "version": "3.0.1",
   "license": "MIT",
-  "module": "./dist/index.esm.js",
-  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist/*.js",
-    "dist/index.d.ts"
+    "dist"
   ],
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "sideeffects": false,
@@ -25,8 +25,6 @@
   "homepage": "https://dm4t2.github.io/vue-currency-input",
   "keywords": [
     "vue",
-    "composition api",
-    "composable",
     "input mask",
     "currency input",
     "money input",
@@ -40,7 +38,7 @@
     "coverage": "vitest run --coverage",
     "lint": "eslint --no-fix --max-warnings 0 {**/*,*}.{js,ts,vue}",
     "prebuild": "rimraf dist",
-    "build": "tsc --emitDeclarationOnly --declaration --outDir dist/types && rollup -c rollup.config.js"
+    "build": "tsc --emitDeclarationOnly --declaration --outDir temp/types && rollup -c rollup.config.js"
   },
   "peerDependencies": {
     "vue": "^2.7 || ^3.0.0"
