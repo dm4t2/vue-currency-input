@@ -5,7 +5,7 @@ export default {
     ['link', { rel: 'icon', href: '/vue-currency-input/favicon.png' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap' }]
   ],
-  base: '/vue-currency-input/',
+  base: '/',
   themeConfig: {
     logo: '/favicon.png',
     nav: [
