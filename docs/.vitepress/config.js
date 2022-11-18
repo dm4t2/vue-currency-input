@@ -14,8 +14,8 @@ export default {
         link: 'https://ko-fi.com/dm4t2'
       },
       {
-        text: 'v1 Docs',
-        link: 'https://vue-currency-input-v1.netlify.app/'
+        text: 'v3 Docs',
+        link: 'https://dm4t2.github.io/vue-currency-input/'
       },
       {
         text: 'Release Notes',

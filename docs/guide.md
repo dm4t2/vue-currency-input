@@ -1,7 +1,7 @@
 # Guide
 
 :::warning Version
-You’re browsing the documentation for v2.x. [For v1.x, click here](https://vue-currency-input-v1.netlify.app/).
+You’re browsing the documentation for v2.x. [For v3.x, click here](https://dm4t2.github.io/vue-currency-input/).
 :::
 
 ## Introduction
@@ -15,7 +15,7 @@ Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition
 Install the npm package:
 
 ```bash
-npm install vue-currency-input
+npm install vue-currency-input@2.x
 ```
 
 For usage with Vue 2 you have to install also the [Vue Composition API plugin](https://github.com/vuejs/composition-api):
