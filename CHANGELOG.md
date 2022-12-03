@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3](https://github.com/dm4t2/vue-currency-input/compare/3.0.2...3.0.3) (2022-12-03)
+
+
+### Bug Fixes
+
+* change default value of option `useGrouping` ([#296](https://github.com/dm4t2/vue-currency-input/issues/296)) ([a37963e](https://github.com/dm4t2/vue-currency-input/commit/a37963ec4dcf42b528bf2e4aec628745f4513bb7))
+
 ## [3.0.2](https://github.com/dm4t2/vue-currency-input/compare/3.0.1...3.0.2) (2022-10-30)
 
 
