@@ -175,11 +175,6 @@ describe('Currency Input', () => {
         it('should ignore the prefix for the new caret position', () => {
           currencyInput.setValue(1234)
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', currencyDisplay: CurrencyDisplay.hidden })
-
-          el.setSelectionRange(el.value.length, el.value.length)
-          userEvent.click(el)
-          vi.runOnlyPendingTimers()
-
           expectCaretPosition(el.value.length, 4)
         })
       })

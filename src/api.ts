@@ -31,6 +31,7 @@ export interface CurrencyFormatOptions {
   currencyDisplay?: CurrencyDisplay
   precision?: NumberRange | number
   accountingSign?: boolean
+  useGrouping?: boolean
 }
 
 export interface CurrencyInputOptions extends CurrencyFormatOptions {
@@ -39,7 +40,6 @@ export interface CurrencyInputOptions extends CurrencyFormatOptions {
   hideNegligibleDecimalDigitsOnFocus?: boolean
   autoDecimalDigits?: boolean
   valueRange?: NumberRange
-  useGrouping?: boolean
   valueScaling?: ValueScaling
 }
 

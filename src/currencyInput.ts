@@ -13,7 +13,7 @@ export const DEFAULT_OPTIONS = {
   precision: undefined,
   autoDecimalDigits: false,
   valueRange: undefined,
-  useGrouping: true,
+  useGrouping: undefined,
   valueScaling: undefined
 }
 
@@ -153,7 +153,7 @@ export class CurrencyInput {
           this.toInteger(Math.abs(numberValue)) > Number.MAX_SAFE_INTEGER
             ? this.formattedValue
             : this.currencyFormat.format(numberValue, {
-                useGrouping: this.options.useGrouping && !(this.focus && this.options.hideGroupingSeparatorOnFocus),
+                useGrouping: this.options.useGrouping !== false && !(this.focus && this.options.hideGroupingSeparatorOnFocus),
                 minimumFractionDigits,
                 maximumFractionDigits
               })

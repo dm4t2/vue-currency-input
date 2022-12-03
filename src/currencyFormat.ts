@@ -20,11 +20,12 @@ export default class CurrencyFormat {
   negativeSuffix: string
 
   constructor(options: CurrencyFormatOptions) {
-    const { currency, currencyDisplay, locale, precision, accountingSign } = options
+    const { currency, currencyDisplay, locale, precision, accountingSign, useGrouping } = options
     this.locale = locale
     this.options = {
-      style: 'currency',
       currency,
+      useGrouping,
+      style: 'currency',
       currencySign: accountingSign ? 'accounting' : undefined,
       currencyDisplay: currencyDisplay !== CurrencyDisplay.hidden ? currencyDisplay : undefined
     }
@@ -77,24 +78,8 @@ export default class CurrencyFormat {
   isValidIntegerFormat(formattedNumber: string, integerNumber: number): boolean {
     const options = { ...this.options, minimumFractionDigits: 0 }
     return [
-      this.stripCurrency(
-        this.normalizeDigits(
-          integerNumber.toLocaleString(this.locale, {
-            ...options,
-            useGrouping: true
-          })
-        ),
-        false
-      ),
-      this.stripCurrency(
-        this.normalizeDigits(
-          integerNumber.toLocaleString(this.locale, {
-            ...options,
-            useGrouping: false
-          })
-        ),
-        false
-      )
+      this.stripCurrency(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: true })), false),
+      this.stripCurrency(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: false })), false)
     ].includes(formattedNumber)
   }
 
