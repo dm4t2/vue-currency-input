@@ -75,7 +75,7 @@ import{_ as n,c as a,o as s,a as t}from"./app.baf62c84.js";const m='{"title":"Gu
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
 
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">import</span> <span class="token punctuation">{</span> watch <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;vue&#39;</span> <span class="token comment">// Vue 2: import { watch } from &#39;@vue/composition-api&#39;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> watch <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;vue&#39;</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span> useCurrencyInput <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;vue-currency-input&#39;</span>
 
 <span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
