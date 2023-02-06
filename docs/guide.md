@@ -148,7 +148,7 @@ The same applies for the options of your currency input component. Use the `setO
 </template>
 
 <script>
-import { watch } from 'vue' // Vue 2.6 or earlier: import { watch } from '@vue/composition-api'
+import { watch } from 'vue'
 import { useCurrencyInput } from 'vue-currency-input'
 
 export default {
