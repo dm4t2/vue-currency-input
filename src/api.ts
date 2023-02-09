@@ -1,5 +1,8 @@
 import { Ref } from 'vue'
 
+/**
+ * @internal
+ */
 export interface CurrencyInputValue {
   number: number | null
   formatted: string | null
@@ -25,28 +28,25 @@ export enum ValueScaling {
   billions = 'billions'
 }
 
-export interface CurrencyFormatOptions {
-  locale?: string
+export interface CurrencyInputOptions {
+  accountingSign?: boolean
+  autoDecimalDigits?: boolean
   currency: string
   currencyDisplay?: CurrencyDisplay
-  precision?: NumberRange | number
-  accountingSign?: boolean
-  useGrouping?: boolean
-}
-
-export interface CurrencyInputOptions extends CurrencyFormatOptions {
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean
-  autoDecimalDigits?: boolean
+  locale?: string
+  precision?: NumberRange | number
+  useGrouping?: boolean
   valueRange?: NumberRange
   valueScaling?: ValueScaling
 }
 
 export interface UseCurrencyInput {
+  formattedValue: Ref<string | null>
   inputRef: Ref
   numberValue: Ref<number | null>
-  formattedValue: Ref<string | null>
-  setValue: (number: number | null) => void
   setOptions: (options: CurrencyInputOptions) => void
+  setValue: (number: number | null) => void
 }

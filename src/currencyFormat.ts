@@ -1,5 +1,5 @@
 import { escapeRegExp, substringBefore } from './utils'
-import { CurrencyDisplay, CurrencyFormatOptions } from './api'
+import { CurrencyDisplay, CurrencyInputOptions } from './api'
 
 export const DECIMAL_SEPARATORS = [',', '.', '٫']
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
@@ -19,7 +19,7 @@ export default class CurrencyFormat {
   suffix: string
   negativeSuffix: string
 
-  constructor(options: CurrencyFormatOptions) {
+  constructor(options: CurrencyInputOptions) {
     const { currency, currencyDisplay, locale, precision, accountingSign, useGrouping } = options
     this.locale = locale
     this.options = {

@@ -44,29 +44,22 @@ interface NumberRange {
 }
 ```
 
-### CurrencyFormatOptions
-
-```typescript
-interface CurrencyFormatOptions {
-  locale?: string
-  currency: string
-  currencyDisplay?: CurrencyDisplay
-  precision?: NumberRange | number
-  accountingSign?: boolean
-}
-```
-
 ### CurrencyInputOptions
 
 ```typescript
-interface CurrencyInputOptions extends CurrencyFormatOptions {
-  hideCurrencySymbolOnFocus?: boolean
-  hideGroupingSeparatorOnFocus?: boolean
-  hideNegligibleDecimalDigitsOnFocus?: boolean
-  autoDecimalDigits?: boolean
-  valueRange?: NumberRange
-  useGrouping?: boolean
-  valueScaling?: ValueScaling
+interface CurrencyInputOptions {
+  accountingSign?: boolean;
+  autoDecimalDigits?: boolean;
+  currency: string;
+  currencyDisplay?: CurrencyDisplay;
+  hideCurrencySymbolOnFocus?: boolean;
+  hideGroupingSeparatorOnFocus?: boolean;
+  hideNegligibleDecimalDigitsOnFocus?: boolean;
+  locale?: string;
+  precision?: NumberRange | number;
+  useGrouping?: boolean;
+  valueRange?: NumberRange;
+  valueScaling?: ValueScaling;
 }
 ```
 
@@ -74,10 +67,10 @@ interface CurrencyInputOptions extends CurrencyFormatOptions {
 
 ```typescript
 interface UseCurrencyInput {
-  inputRef: Ref
-  numberValue: Ref<number | null>
-  formattedValue: Ref<string | null>
-  setValue: (number: number | null) => void
-  setOptions: (options: CurrencyInputOptions) => void
+  formattedValue: Ref<string | null>;
+  inputRef: Ref;
+  numberValue: Ref<number | null>;
+  setOptions: (options: CurrencyInputOptions) => void;
+  setValue: (number: number | null) => void;
 }
 ```

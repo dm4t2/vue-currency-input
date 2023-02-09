@@ -7,7 +7,8 @@ Vue Currency Input allows an easy input of currency formatted numbers based on t
 Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides the composable function `useCurrencyInput` for decorating input components with currency format capabilities.
 
 ::: warning Compatibility
-Vue Currency Input 3.x requires either **Vue 2.7** or **Vue 3**. For Vue 2.6 or earlier, please use Vue Currency Input 2.x with the [Vue Composition API plugin](https://github.com/vuejs/composition-api).
+Vue Currency Input 3.x requires either **Vue 2.7** or **Vue 3**.
+For Vue 2.6 or earlier, please use [Vue Currency Input 2.x](https://vue-currency-input-v2.netlify.app/).
 :::
 
 ## Installation
@@ -17,7 +18,7 @@ npm install vue-currency-input
 
 ## Usage
 
-Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Quasar](component-library-integrations#quasar) or [Element Plus](component-library-integrations#element-plus)).
+Vue Currency Input does not provide a ready-to-use component, instead it enables you to create your own based on your favorite input component (for example [Quasar](examples#quasar) or [Element Plus](examples#element-plus)).
 
 ::: info Code examples
 The following code examples are for Vue 3. Deviations for Vue 2 are noted as inline code comments.
