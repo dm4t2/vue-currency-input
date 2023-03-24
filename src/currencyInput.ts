@@ -70,9 +70,9 @@ export class CurrencyInput {
     }
     if (this.options.autoDecimalDigits) {
       this.options.hideNegligibleDecimalDigitsOnFocus = false
-      this.el.setAttribute('inputmode', 'numeric')
-    } else {
-      this.el.setAttribute('inputmode', 'decimal')
+    }
+    if (!this.el.getAttribute('inputmode')) {
+      this.el.setAttribute('inputmode', this.options.autoDecimalDigits ? 'numeric' : 'decimal')
     }
     this.currencyFormat = new CurrencyFormat(this.options)
     this.numberMask = this.options.autoDecimalDigits ? new AutoDecimalDigitsInputMask(this.currencyFormat) : new DefaultInputMask(this.currencyFormat)

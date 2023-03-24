@@ -23,6 +23,25 @@ describe('Currency Input', () => {
     })
   })
 
+  describe('init', () => {
+    it('should preserve an existing "inputmode" attribute on the input element', () => {
+      document.body.innerHTML = `<input type="text" inputmode="text">`
+      el = document.querySelector('input') as HTMLInputElement
+      options = {
+        locale: 'en',
+        currency: 'EUR',
+        autoDecimalDigits: true
+      }
+      currencyInput = new CurrencyInput({
+        el,
+        options,
+        onInput: vi.fn(),
+        onChange: vi.fn()
+      })
+      expect(el.getAttribute('inputmode')).toBe('text')
+    })
+  })
+
   describe('setValue', () => {
     it('should update the input value', () => {
       currencyInput.setValue(1)
