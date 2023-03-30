@@ -22,6 +22,7 @@ export class CurrencyInput {
   private readonly onInput: (value: CurrencyInputValue) => void
   private readonly onChange: (value: CurrencyInputValue) => void
   private numberValue!: number | null
+  private numberValueOnFocus!: number | null
   private options!: CurrencyInputOptions
   private currencyFormat!: CurrencyFormat
   private decimalSymbolInsertedAt?: number
@@ -48,7 +49,8 @@ export class CurrencyInput {
 
   setOptions(options: CurrencyInputOptions): void {
     this.init(options)
-    this.applyFixedFractionFormat(this.numberValue, true)
+    this.format(this.currencyFormat.format(this.validateValueRange(this.numberValue)))
+    this.onChange(this.getValue())
   }
 
   getValue(): CurrencyInputValue {
@@ -59,7 +61,8 @@ export class CurrencyInput {
   setValue(value: number | null): void {
     const newValue = this.valueScaling !== undefined && value != null ? this.toFloat(value, this.valueScaling) : value
     if (newValue !== this.numberValue) {
-      this.applyFixedFractionFormat(newValue)
+      this.format(this.currencyFormat.format(this.validateValueRange(newValue)))
+      this.onChange(this.getValue())
     }
   }
 
@@ -122,13 +125,6 @@ export class CurrencyInput {
 
   private validateValueRange(value: number | null): number | null {
     return value != null ? Math.min(Math.max(value, this.minValue), this.maxValue) : value
-  }
-
-  private applyFixedFractionFormat(number: number | null, forcedChange = false) {
-    this.format(this.currencyFormat.format(this.validateValueRange(number)))
-    if (number !== this.numberValue || forcedChange) {
-      this.onChange(this.getValue())
-    }
   }
 
   private format(value: string | null, hideNegligibleDecimalDigits = false) {
@@ -231,6 +227,7 @@ export class CurrencyInput {
 
     this.el.addEventListener('focus', () => {
       this.focus = true
+      this.numberValueOnFocus = this.numberValue
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = this.el
         this.format(value, this.options.hideNegligibleDecimalDigitsOnFocus)
@@ -245,11 +242,10 @@ export class CurrencyInput {
 
     this.el.addEventListener('blur', () => {
       this.focus = false
-      this.applyFixedFractionFormat(this.numberValue)
-    })
-
-    this.el.addEventListener('change', () => {
-      this.onChange(this.getValue())
+      this.format(this.currencyFormat.format(this.validateValueRange(this.numberValue)))
+      if (this.numberValueOnFocus !== this.numberValue) {
+        this.onChange(this.getValue())
+      }
     })
   }
 

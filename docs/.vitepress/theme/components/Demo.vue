@@ -1,6 +1,13 @@
 <template>
-  <div class="grid gap-y-4 md:grid-cols-2 md:gap-x-8 items-center my-8">
+  <div class="grid gap-y-4 md:grid-cols-2 md:gap-x-8 items-center mt-8 mb-4">
     <CurrencyInput
+      v-if="lazy"
+      v-model.lazy="value"
+      :options="options"
+      class="*form-input"
+    />
+    <CurrencyInput
+      v-else
       v-model="value"
       :options="options"
       class="*form-input"
@@ -8,6 +15,12 @@
     <div>
       Number value: <code class="ml-2">{{ value != null ? value : 'null' }}</code>
     </div>
+  </div>
+  <div class="mb-8">
+    <Checkbox
+      v-model="lazy"
+      label="Use lazy value binding"
+    />
   </div>
   <div class="flex items-center justify-between mb-2">
     <span class="text-2xl font-bold">Options</span>
@@ -239,6 +252,7 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const state: any = reactive({
       exportDialogVisible: false,
+      lazy: false,
       value: 1234.5,
       localeEnabled: false,
       locale: 'de-DE',
