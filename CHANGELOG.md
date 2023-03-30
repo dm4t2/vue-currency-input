@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.4](https://github.com/dm4t2/vue-currency-input/compare/3.0.3...3.0.4) (2023-03-30)
+
+
+### Bug Fixes
+
+* preserve an existing "inputmode" attribute on the input element (closes [#372](https://github.com/dm4t2/vue-currency-input/issues/372)) ([e9fb330](https://github.com/dm4t2/vue-currency-input/commit/e9fb330d29bbdbde11c1b0b4d8036b692dbbcbaa))
+* use blur event for lazy value binding (closes [#322](https://github.com/dm4t2/vue-currency-input/issues/322)) ([eaeb864](https://github.com/dm4t2/vue-currency-input/commit/eaeb8640629036f62a59f42ffbbd6ad996c491a0))
+
 ## [3.0.3](https://github.com/dm4t2/vue-currency-input/compare/3.0.2...3.0.3) (2022-12-03)
 
 
