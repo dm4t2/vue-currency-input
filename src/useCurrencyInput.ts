@@ -34,7 +34,9 @@ export function useCurrencyInput(options: CurrencyInputOptions, autoEmit?: boole
             formattedValue.value = value.formatted
           },
           onChange: (value: CurrencyInputValue) => {
-            emit?.(changeEvent, value.number)
+            if (autoEmit !== false) {
+              emit?.(changeEvent, value.number)
+            }
           }
         })
         currencyInput.setValue(modelValue.value)

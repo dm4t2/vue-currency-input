@@ -39,8 +39,6 @@ describe('useCurrencyInput', () => {
     const wrapper = mountComponent()
     await wrapper.vm.$nextTick()
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     vi.mocked(CurrencyInput).mock.calls[0][0].onInput({ number: 10, formatted: 'EUR 10' })
 
     expect(wrapper.emitted('update:modelValue')).toEqual([[10]])
@@ -50,8 +48,6 @@ describe('useCurrencyInput', () => {
     const wrapper = mountComponent({ type: 'input', autoEmit: false })
     await wrapper.vm.$nextTick()
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     vi.mocked(CurrencyInput).mock.calls[0][0].onInput({ number: 10, formatted: 'EUR 10' })
 
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
@@ -61,11 +57,18 @@ describe('useCurrencyInput', () => {
     const wrapper = mountComponent()
     await wrapper.vm.$nextTick()
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     vi.mocked(CurrencyInput).mock.calls[0][0].onChange({ number: 10, formatted: 'EUR 10' })
 
     expect(wrapper.emitted('change')).toEqual([[10]])
+  })
+
+  it('should not emit new values on change if autoEmit is false', async () => {
+    const wrapper = mountComponent({ type: 'input', autoEmit: false })
+    await wrapper.vm.$nextTick()
+
+    vi.mocked(CurrencyInput).mock.calls[0][0].onChange({ number: 10, formatted: 'EUR 10' })
+
+    expect(wrapper.emitted('change')).toBeUndefined()
   })
 
   it('should skip the CurrencyInput instantiation if no input element can be found', async () => {
