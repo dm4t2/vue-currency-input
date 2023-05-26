@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.5](https://github.com/dm4t2/vue-currency-input/compare/3.0.4...3.0.5) (2023-05-26)
+
+
+### Bug Fixes
+
+* only emit change events if `autoEmit` is enabled (closes [#383](https://github.com/dm4t2/vue-currency-input/issues/383)) ([2cba481](https://github.com/dm4t2/vue-currency-input/commit/2cba481d247c80619f21a58f0994dee830c7e248))
+
 ## [3.0.4](https://github.com/dm4t2/vue-currency-input/compare/3.0.3...3.0.4) (2023-03-30)
 
 
