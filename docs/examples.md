@@ -6,3 +6,6 @@
 ## Element Plus
 [![Vue Currency Input: Integration with Element Plus](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/vue-currency-input-integration-with-element-plus-devoxx)
 
+## FormKit
+
+[![Vue Currency Input: Integration FormKit](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/formkit-vue-currency-input-example-mgmvyn)
