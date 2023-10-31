@@ -13,3 +13,7 @@ export const count = (str: string, search: string): number => {
 export const substringBefore = (str: string, search: string): string => {
   return str.substring(0, str.indexOf(search))
 }
+
+export const abs = (n: bigint): bigint => {
+  return n < BigInt(0) ? n * BigInt(-1) : n
+}

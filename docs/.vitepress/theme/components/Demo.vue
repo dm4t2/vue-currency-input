@@ -1,3 +1,72 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import CurrencyInput from './CurrencyInput.vue'
+import Dialog from './Dialog.vue'
+import OptionSection from './OptionSection.vue'
+import Checkbox from './Checkbox.vue'
+
+const range = (from: number, to: number) =>
+  Array(to - from)
+    .fill(from)
+    .map((x, y) => x + y)
+
+const exportDialogVisible = ref(false)
+const lazy = ref(false)
+const value = ref(1234n)
+const localeEnabled = ref(false)
+const locale = ref('de-DE')
+const currency = ref('EUR')
+const currencyDisplay = ref('symbol')
+
+const hideCurrencySymbolOnFocus = ref(true)
+const hideGroupingSeparatorOnFocus = ref(true)
+const hideNegligibleDecimalDigitsOnFocusEnabled = ref(true)
+const hideNegligibleDecimalDigitsOnFocus = ref(true)
+const precisionEnabled = ref(false)
+const precisionRangeEnabled = ref(false)
+const precisionRangeMinValue = ref(2)
+const precisionRangeMaxValue = ref(5)
+const precision = ref(2)
+const precisionRangeMinOptions = computed(() => range(1, precisionRangeMaxValue.value + 1))
+const precisionRangeMaxOptions = computed(() => range(precisionRangeMinValue.value, 16))
+const valueRangeEnabled = ref(false)
+const minValue = ref(undefined)
+const maxValue = ref(undefined)
+const autoDecimalDigits = ref(false)
+const accountingSign = ref(false)
+const useGrouping = ref(true)
+const options = computed(() => {
+  return {
+    locale: localeEnabled.value ? locale.value : undefined,
+    currency: currency.value,
+    currencyDisplay: currencyDisplay.value,
+    valueRange: valueRangeEnabled.value
+      ? {
+          min: minValue.value === '' ? undefined : minValue.value,
+          max: maxValue.value === '' ? undefined : maxValue.value
+        }
+      : undefined,
+    precision: precisionEnabled.value
+      ? precisionRangeEnabled.value
+        ? { min: precisionRangeMinValue.value, max: precisionRangeMaxValue.value }
+        : precision.value
+      : undefined,
+    hideCurrencySymbolOnFocus: hideCurrencySymbolOnFocus.value,
+    hideGroupingSeparatorOnFocus: hideGroupingSeparatorOnFocus.value,
+    hideNegligibleDecimalDigitsOnFocus: hideNegligibleDecimalDigitsOnFocus.value,
+    autoDecimalDigits: autoDecimalDigits.value,
+    useGrouping: useGrouping.value,
+    accountingSign: accountingSign.value
+  }
+})
+const stringifiedOptions = computed(() => JSON.stringify(options.value, null, 2))
+
+watch(autoDecimalDigits, (value) => {
+  hideNegligibleDecimalDigitsOnFocusEnabled.value = !value
+  hideNegligibleDecimalDigitsOnFocus.value = !value
+})
+</script>
+
 <template>
   <div class="grid gap-y-4 md:grid-cols-2 md:gap-x-8 items-center mt-8 mb-4">
     <CurrencyInput
@@ -13,7 +82,7 @@
       class="*form-input"
     />
     <div>
-      Number value: <code class="ml-2">{{ value != null ? value : 'null' }}</code>
+      Number value: <code class="ml-2">{{ value != null ? value.toString() : 'null' }}</code>
     </div>
   </div>
   <div class="mb-8">
@@ -53,10 +122,26 @@
           class="*form-input *form-select"
         >
           <option
-            v-for="locale in locales"
-            :key="locale"
+            v-for="item in [
+              'de-DE',
+              'de-CH',
+              'en-US',
+              'en-IN',
+              'nl-NL',
+              'sv-SE',
+              'fr-FR',
+              'es-ES',
+              'pt-PT',
+              'pt-BR',
+              'zh-ZH',
+              'ja-JP',
+              'ar-SA',
+              'fa-IR',
+              'bg-BG'
+            ]"
+            :key="item"
           >
-            {{ locale }}
+            {{ item }}
           </option>
         </select>
       </OptionSection>
@@ -66,10 +151,10 @@
           class="*form-input *form-select"
         >
           <option
-            v-for="currency in currencies"
-            :key="currency"
+            v-for="item in ['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR', 'BGN']"
+            :key="item"
           >
-            {{ currency }}
+            {{ item }}
           </option>
         </select>
       </OptionSection>
@@ -82,11 +167,17 @@
           class="*form-input *form-select"
         >
           <option
-            v-for="currencyDisplay in currencyDisplays"
-            :key="currencyDisplay.value"
-            :value="currencyDisplay.value"
+            v-for="item in [
+              { value: 'symbol', label: 'Symbol' },
+              { value: 'narrowSymbol', label: 'Narrow symbol' },
+              { value: 'code', label: 'Code' },
+              { value: 'name', label: 'Name' },
+              { value: 'hidden', label: 'Hidden' }
+            ]"
+            :key="item.value"
+            :value="item.value"
           >
-            {{ currencyDisplay.label }}
+            {{ item.label }}
           </option>
         </select>
       </OptionSection>
@@ -167,11 +258,11 @@
               class="*form-input *form-select"
             >
               <option
-                v-for="value in precisionRangeMinOptions"
-                :key="value"
-                :value="value"
+                v-for="item in precisionRangeMinOptions"
+                :key="item"
+                :value="item"
               >
-                {{ value }}
+                {{ item }}
               </option>
             </select>
             <span class="text-center">to</span>
@@ -181,11 +272,11 @@
               class="*form-input *form-select"
             >
               <option
-                v-for="value in precisionRangeMaxOptions"
-                :key="value"
-                :value="value"
+                v-for="item in precisionRangeMaxOptions"
+                :key="item"
+                :value="item"
               >
-                {{ value }}
+                {{ item }}
               </option>
             </select>
           </div>
@@ -196,33 +287,14 @@
             class="*form-input *form-select"
           >
             <option
-              v-for="value in precisionOptions"
-              :key="value"
-              :value="value"
+              v-for="item in range(1, 16)"
+              :key="item"
+              :value="item"
             >
-              {{ value }}
+              {{ item }}
             </option>
           </select>
         </div>
-      </OptionSection>
-      <OptionSection
-        v-model="valueScalingEnabled"
-        label="Value Scaling"
-        description="Applies a scaling on the exported value."
-      >
-        <select
-          v-model="valueScaling"
-          :disabled="!valueScalingEnabled"
-          class="*form-input *form-select"
-        >
-          <option
-            v-for="option in valueScalingOptions"
-            :key="option.value"
-            :value="option.value"
-          >
-            {{ option.label }}
-          </option>
-        </select>
       </OptionSection>
       <OptionSection
         v-model="autoDecimalDigits"
@@ -232,107 +304,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-/* eslint-disable vue/no-reserved-component-names,vue/multi-word-component-names */
-import { computed, defineComponent, reactive, toRefs, watch } from 'vue'
-import CurrencyInput from './CurrencyInput.vue'
-import Dialog from './Dialog.vue'
-import OptionSection from './OptionSection.vue'
-import Checkbox from './Checkbox.vue'
-
-export default defineComponent({
-  name: 'Demo',
-  components: { Checkbox, OptionSection, Dialog, CurrencyInput },
-  setup() {
-    const range = (from: number, to: number) =>
-      Array(to - from)
-        .fill(from)
-        .map((x, y) => x + y)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const state: any = reactive({
-      exportDialogVisible: false,
-      lazy: false,
-      value: 1234.5,
-      localeEnabled: false,
-      locale: 'de-DE',
-      locales: ['de-DE', 'de-CH', 'en-US', 'en-IN', 'nl-NL', 'sv-SE', 'fr-FR', 'es-ES', 'pt-PT', 'pt-BR', 'zh-ZH', 'ja-JP', 'ar-SA', 'fa-IR', 'bg-BG'],
-      currency: 'EUR',
-      currencyDisplay: 'symbol',
-      currencies: ['EUR', 'USD', 'JPY', 'GBP', 'BRL', 'INR', 'CNY', 'JPY', 'SAR', 'IRR', 'BGN'],
-      currencyDisplays: [
-        { value: 'symbol', label: 'Symbol' },
-        { value: 'narrowSymbol', label: 'Narrow symbol' },
-        { value: 'code', label: 'Code' },
-        { value: 'name', label: 'Name' },
-        { value: 'hidden', label: 'Hidden' }
-      ],
-      valueScalingEnabled: false,
-      valueScaling: 'precision',
-      valueScalingOptions: [
-        { value: 'precision', label: 'Precision' },
-        { value: 'thousands', label: 'Thousands' },
-        { value: 'millions', label: 'Millions' },
-        { value: 'billions', label: 'Billions' }
-      ],
-      hideCurrencySymbolOnFocus: true,
-      hideGroupingSeparatorOnFocus: true,
-      hideNegligibleDecimalDigitsOnFocusEnabled: true,
-      hideNegligibleDecimalDigitsOnFocus: true,
-      precisionEnabled: false,
-      precisionRangeEnabled: false,
-      precisionRangeMinValue: 2,
-      precisionRangeMaxValue: 5,
-      precision: 2,
-      precisionOptions: computed(() => range(1, 16)),
-      precisionRangeMinOptions: computed(() => range(1, state.precisionRangeMaxValue + 1)),
-      precisionRangeMaxOptions: computed(() => range(state.precisionRangeMinValue, 16)),
-      valueRangeEnabled: false,
-      minValue: undefined,
-      maxValue: undefined,
-      autoDecimalDigitsEnabled: true,
-      autoDecimalDigits: false,
-      accountingSign: false,
-      useGrouping: true,
-      options: computed(() => {
-        return {
-          locale: state.localeEnabled ? state.locale : undefined,
-          currency: state.currency,
-          currencyDisplay: state.currencyDisplay,
-          valueRange: state.valueRangeEnabled
-            ? {
-                min: state.minValue === '' ? undefined : state.minValue,
-                max: state.maxValue === '' ? undefined : state.maxValue
-              }
-            : undefined,
-          precision: state.precisionEnabled
-            ? state.precisionRangeEnabled
-              ? { min: state.precisionRangeMinValue, max: state.precisionRangeMaxValue }
-              : state.precision
-            : undefined,
-          hideCurrencySymbolOnFocus: state.hideCurrencySymbolOnFocus,
-          hideGroupingSeparatorOnFocus: state.hideGroupingSeparatorOnFocus,
-          hideNegligibleDecimalDigitsOnFocus: state.hideNegligibleDecimalDigitsOnFocus,
-          autoDecimalDigits: state.autoDecimalDigits,
-          valueScaling: state.valueScalingEnabled ? state.valueScaling : undefined,
-          useGrouping: state.useGrouping,
-          accountingSign: state.accountingSign
-        }
-      }),
-      stringifiedOptions: computed(() => JSON.stringify(state.options, null, 2))
-    })
-
-    watch(
-      () => state.autoDecimalDigits,
-      (value) => {
-        state.hideNegligibleDecimalDigitsOnFocusEnabled = !value
-        state.hideNegligibleDecimalDigitsOnFocus = !value
-      }
-    )
-
-    return toRefs(state)
-  }
-})
-</script>
-
-<style scoped></style>

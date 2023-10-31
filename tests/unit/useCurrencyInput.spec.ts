@@ -9,7 +9,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 vi.mock('../../src/currencyInput')
 
 const mountComponent = (
-  { type, children, autoEmit } = <
+  { type, children } = <
     {
       type: string
       children?: VNode[]
@@ -17,14 +17,13 @@ const mountComponent = (
     }
   >{
     type: 'div',
-    children: [h('input')],
-    autoEmit: true
+    children: [h('input')]
   }
 ) =>
   shallowMount(
     defineComponent({
       setup: () => {
-        const { inputRef } = useCurrencyInput({ currency: 'EUR' }, autoEmit)
+        const { inputRef } = useCurrencyInput({ options: { currency: 'EUR' } })
         return () => h(type, { ref: inputRef }, children)
       }
     })
@@ -33,42 +32,6 @@ const mountComponent = (
 describe('useCurrencyInput', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-  })
-
-  it('should emit the new value on input', async () => {
-    const wrapper = mountComponent()
-    await wrapper.vm.$nextTick()
-
-    vi.mocked(CurrencyInput).mock.calls[0][0].onInput({ number: 10, formatted: 'EUR 10' })
-
-    expect(wrapper.emitted('update:modelValue')).toEqual([[10]])
-  })
-
-  it('should not emit new values on input if autoEmit is false', async () => {
-    const wrapper = mountComponent({ type: 'input', autoEmit: false })
-    await wrapper.vm.$nextTick()
-
-    vi.mocked(CurrencyInput).mock.calls[0][0].onInput({ number: 10, formatted: 'EUR 10' })
-
-    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
-  })
-
-  it('should emit the new value on change', async () => {
-    const wrapper = mountComponent()
-    await wrapper.vm.$nextTick()
-
-    vi.mocked(CurrencyInput).mock.calls[0][0].onChange({ number: 10, formatted: 'EUR 10' })
-
-    expect(wrapper.emitted('change')).toEqual([[10]])
-  })
-
-  it('should not emit new values on change if autoEmit is false', async () => {
-    const wrapper = mountComponent({ type: 'input', autoEmit: false })
-    await wrapper.vm.$nextTick()
-
-    vi.mocked(CurrencyInput).mock.calls[0][0].onChange({ number: 10, formatted: 'EUR 10' })
-
-    expect(wrapper.emitted('change')).toBeUndefined()
   })
 
   it('should skip the CurrencyInput instantiation if no input element can be found', async () => {
@@ -84,7 +47,7 @@ describe('useCurrencyInput', () => {
   it('should accept a input element as template ref', async () => {
     const wrapper = shallowMount(
       defineComponent({
-        setup: () => useCurrencyInput({ currency: 'EUR' }),
+        setup: () => useCurrencyInput({ options: { currency: 'EUR' } }),
         render: () => h('input', { ref: 'inputRef' })
       })
     )
@@ -98,7 +61,7 @@ describe('useCurrencyInput', () => {
     })
     const currencyInput = mount(
       defineComponent({
-        setup: () => useCurrencyInput({ currency: 'EUR' }),
+        setup: () => useCurrencyInput({ options: { currency: 'EUR' } }),
         render: () => h(wrapper, { ref: 'inputRef' })
       })
     )
@@ -110,7 +73,7 @@ describe('useCurrencyInput', () => {
   it('should allow to update the value', async () => {
     const wrapper = shallowMount(
       defineComponent(() => {
-        const { setValue, inputRef } = useCurrencyInput({ currency: 'EUR' })
+        const { setValue, inputRef } = useCurrencyInput({ options: { currency: 'EUR' } })
         return () =>
           h('div', { ref: inputRef }, [
             h('input'),
@@ -132,7 +95,7 @@ describe('useCurrencyInput', () => {
   it('should allow to update the options', async () => {
     const wrapper = shallowMount(
       defineComponent(() => {
-        const { setOptions, inputRef } = useCurrencyInput({ currency: 'EUR' })
+        const { setOptions, inputRef } = useCurrencyInput({ options: { currency: 'EUR' } })
         return () =>
           h('div', { ref: inputRef }, [
             h('input'),
@@ -154,7 +117,7 @@ describe('useCurrencyInput', () => {
   it('should support a conditionally rendered inputRef', async () => {
     const wrapper = shallowMount(
       defineComponent(() => {
-        const { inputRef } = useCurrencyInput({ currency: 'EUR' })
+        const { inputRef } = useCurrencyInput({ options: { currency: 'EUR' } })
         const visible = ref(true)
         return () =>
           h('div', [

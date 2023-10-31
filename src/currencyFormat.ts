@@ -1,8 +1,14 @@
 import { escapeRegExp, substringBefore } from './utils'
-import { CurrencyDisplay, CurrencyInputOptions } from './api'
+import { CurrencyDisplay, CurrencyFormatOptions } from './api'
 
 export const DECIMAL_SEPARATORS = [',', '.', '٫']
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
+
+interface InputFormatOptions {
+  useGrouping?: boolean
+  minimumFractionDigits: number
+  maximumFractionDigits: number
+}
 
 export default class CurrencyFormat {
   options: Intl.NumberFormatOptions
@@ -19,7 +25,7 @@ export default class CurrencyFormat {
   suffix: string
   negativeSuffix: string
 
-  constructor(options: CurrencyInputOptions) {
+  constructor(options: CurrencyFormatOptions) {
     const { currency, currencyDisplay, locale, precision, accountingSign, useGrouping } = options
     this.locale = locale
     this.options = {
@@ -60,37 +66,33 @@ export default class CurrencyFormat {
     this.negativeSuffix = getSuffix(numberFormat.format(-1))
   }
 
-  parse(str: string | null): number | null {
-    if (str) {
-      const negative = this.isNegative(str)
-      str = this.normalizeDigits(str)
-      str = this.stripCurrency(str, negative)
-      str = this.stripSignLiterals(str)
-      const fraction = this.decimalSymbol ? `(?:${escapeRegExp(this.decimalSymbol)}(\\d*))?` : ''
-      const match = this.stripGroupingSeparator(str).match(new RegExp(`^${INTEGER_PATTERN}${fraction}$`))
-      if (match && this.isValidIntegerFormat(this.decimalSymbol ? str.split(this.decimalSymbol)[0] : str, Number(match[1]))) {
-        return Number(`${negative ? '-' : ''}${this.onlyDigits(match[1])}.${this.onlyDigits(match[2] || '')}`)
+  parse(str: string | null): bigint | null {
+    if (str?.trim()) {
+      const [integer, fraction] = this.normalizeDigits(str).split(this.decimalSymbol as string)
+      if (this.onlyDigits(`${integer}${fraction}`) !== '') {
+        const digits = `${this.onlyDigits(integer)}${this.onlyDigits(fraction || '').padEnd(this.maximumFractionDigits, '0')}`
+        return BigInt(`${this.isNegative(str) ? '-' : ''}${digits}`)
       }
     }
     return null
   }
 
-  isValidIntegerFormat(formattedNumber: string, integerNumber: number): boolean {
-    const options = { ...this.options, minimumFractionDigits: 0 }
-    return [
-      this.stripCurrency(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: true })), false),
-      this.stripCurrency(this.normalizeDigits(integerNumber.toLocaleString(this.locale, { ...options, useGrouping: false })), false)
-    ].includes(formattedNumber)
-  }
-
   format(
-    value: number | null,
-    options: Intl.NumberFormatOptions = {
+    value: bigint | null,
+    options: InputFormatOptions = {
       minimumFractionDigits: this.minimumFractionDigits,
       maximumFractionDigits: this.maximumFractionDigits
     }
   ): string {
-    return value != null ? value.toLocaleString(this.locale, { ...this.options, ...options }) : ''
+    if (value != null) {
+      const digits = `${value.toString().padStart(this.maximumFractionDigits, '0')}`
+      return new Intl.NumberFormat(this.locale, { ...this.options, ...options }).format(
+        // @ts-ignore
+        `${digits.slice(0, digits.length - this.maximumFractionDigits)}.${digits.slice(-this.maximumFractionDigits)}`
+      )
+    } else {
+      return ''
+    }
   }
 
   toFraction(str: string): string {

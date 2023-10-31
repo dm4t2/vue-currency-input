@@ -1,7 +1,7 @@
 import CurrencyFormat, { DECIMAL_SEPARATORS } from './currencyFormat'
 import { AutoDecimalDigitsInputMask, DefaultInputMask, InputMask } from './inputMask'
-import { count } from './utils'
-import { CurrencyDisplay, CurrencyInputOptions, CurrencyInputValue, ValueScaling } from './api'
+import { abs, count } from './utils'
+import { CurrencyDisplay, CurrencyInputOptions } from './api'
 
 export const DEFAULT_OPTIONS = {
   locale: undefined,
@@ -10,60 +10,73 @@ export const DEFAULT_OPTIONS = {
   hideGroupingSeparatorOnFocus: true,
   hideCurrencySymbolOnFocus: true,
   hideNegligibleDecimalDigitsOnFocus: true,
-  precision: undefined,
   autoDecimalDigits: false,
   valueRange: undefined,
-  useGrouping: undefined,
-  valueScaling: undefined
+  useGrouping: true
+}
+
+interface CurrencyInputConstructorArgs {
+  el: HTMLInputElement
+  options: CurrencyInputOptions
+  onInput?: (value: string) => void
+  onChange?: (value: string) => void
 }
 
 export class CurrencyInput {
   private readonly el: HTMLInputElement
-  private readonly onInput: (value: CurrencyInputValue) => void
-  private readonly onChange: (value: CurrencyInputValue) => void
-  private numberValue!: number | null
-  private numberValueOnFocus!: number | null
+  private readonly onInput?: (formattedValue: string) => void
+  private readonly onChange?: (value: string) => void
+  private value!: bigint | null
+  private valueOnFocus!: bigint | null
   private options!: CurrencyInputOptions
   private currencyFormat!: CurrencyFormat
   private decimalSymbolInsertedAt?: number
   private numberMask!: InputMask
   private formattedValue!: string
   private focus!: boolean
-  private minValue!: number
-  private maxValue!: number
-  private valueScaling: number | undefined
-  private valueScalingFractionDigits!: number
+  private minValue?: bigint
+  private maxValue?: bigint
 
-  constructor(args: {
-    el: HTMLInputElement
-    options: CurrencyInputOptions
-    onInput: (value: CurrencyInputValue) => void
-    onChange: (value: CurrencyInputValue) => void
-  }) {
+  constructor(args: CurrencyInputConstructorArgs) {
     this.el = args.el
-    this.onInput = args.onInput
-    this.onChange = args.onChange
     this.addEventListener()
     this.init(args.options)
+    this.onInput = args.onInput
+    this.onChange = args.onChange
   }
 
   setOptions(options: CurrencyInputOptions): void {
     this.init(options)
-    this.format(this.currencyFormat.format(this.validateValueRange(this.numberValue)))
-    this.onChange(this.getValue())
+    this.applyFixedFractionFormat(this.value, true)
   }
 
-  getValue(): CurrencyInputValue {
-    const numberValue = this.valueScaling && this.numberValue != null ? this.toInteger(this.numberValue, this.valueScaling) : this.numberValue
-    return { number: numberValue, formatted: this.formattedValue }
-  }
-
-  setValue(value: number | null): void {
-    const newValue = this.valueScaling !== undefined && value != null ? this.toFloat(value, this.valueScaling) : value
-    if (newValue !== this.numberValue) {
-      this.format(this.currencyFormat.format(this.validateValueRange(newValue)))
-      this.onChange(this.getValue())
+  setValue(value: number | string | null): void {
+    let newValue: bigint | null
+    if (typeof value === 'number') {
+      newValue = this.numberToBigInt(value)
+    } else if (typeof value === 'string') {
+      newValue = this.currencyFormat.parse(value)
+    } else {
+      newValue = null
     }
+    if (newValue !== this.value) {
+      this.applyFixedFractionFormat(newValue)
+    }
+  }
+
+  getNumberValue(): number | null {
+    if (this.value != null) {
+      if (abs(this.value) <= Number.MAX_SAFE_INTEGER) {
+        let number = Number(this.value)
+        if (this.currencyFormat.maximumFractionDigits) {
+          number /= 10 ** this.currencyFormat.maximumFractionDigits
+        }
+        return number
+      } else {
+        throw new Error('Value exceeds Number.MAX_SAFE_INTEGER')
+      }
+    }
+    return null
   }
 
   private init(options: CurrencyInputOptions) {
@@ -78,53 +91,59 @@ export class CurrencyInput {
       this.el.setAttribute('inputmode', this.options.autoDecimalDigits ? 'numeric' : 'decimal')
     }
     this.currencyFormat = new CurrencyFormat(this.options)
-    this.numberMask = this.options.autoDecimalDigits ? new AutoDecimalDigitsInputMask(this.currencyFormat) : new DefaultInputMask(this.currencyFormat)
-    const valueScalingOptions = {
-      [ValueScaling.precision]: this.currencyFormat.maximumFractionDigits,
-      [ValueScaling.thousands]: 3,
-      [ValueScaling.millions]: 6,
-      [ValueScaling.billions]: 9
+    const maximumFractionDigits = this.currencyFormat?.maximumFractionDigits
+    if (this.value) {
+      const newMaximumFractionDigits = this.currencyFormat.maximumFractionDigits
+      if (maximumFractionDigits < newMaximumFractionDigits) {
+        this.value *= 10n ** BigInt(newMaximumFractionDigits - maximumFractionDigits)
+      } else if (maximumFractionDigits > newMaximumFractionDigits) {
+        this.value /= 10n ** BigInt(maximumFractionDigits - newMaximumFractionDigits)
+      }
     }
-    this.valueScaling = this.options.valueScaling ? valueScalingOptions[this.options.valueScaling] : undefined
-    this.valueScalingFractionDigits =
-      this.valueScaling !== undefined && this.options.valueScaling !== ValueScaling.precision
-        ? this.valueScaling + this.currencyFormat.maximumFractionDigits
-        : this.currencyFormat.maximumFractionDigits
+    this.numberMask = this.options.autoDecimalDigits ? new AutoDecimalDigitsInputMask(this.currencyFormat) : new DefaultInputMask(this.currencyFormat)
     this.minValue = this.getMinValue()
     this.maxValue = this.getMaxValue()
   }
 
-  private getMinValue(): number {
-    let min = this.toFloat(-Number.MAX_SAFE_INTEGER)
-    if (this.options.valueRange?.min !== undefined) {
-      min = Math.max(this.options.valueRange?.min, this.toFloat(-Number.MAX_SAFE_INTEGER))
+  private getMinValue(): bigint | undefined {
+    const min = this.options.valueRange?.min
+    if (typeof min === 'number') {
+      return this.numberToBigInt(min)
+    } else if (typeof min === 'string') {
+      return this.currencyFormat.parse(min) ?? undefined
     }
-    return min
   }
 
-  private getMaxValue(): number {
-    let max = this.toFloat(Number.MAX_SAFE_INTEGER)
-    if (this.options.valueRange?.max !== undefined) {
-      max = Math.min(this.options.valueRange?.max, this.toFloat(Number.MAX_SAFE_INTEGER))
+  private numberToBigInt(number: number) {
+    return BigInt(number.toFixed(this.currencyFormat.maximumFractionDigits).split('.').join(''))
+  }
+
+  private getMaxValue(): bigint | undefined {
+    const max = this.options.valueRange?.max
+    if (typeof max === 'number') {
+      return this.numberToBigInt(max)
+    } else if (typeof max === 'string') {
+      return this.currencyFormat.parse(max) ?? undefined
     }
-    return max
   }
 
-  private toFloat(value: number, maxFractionDigits?: number): number {
-    return value / Math.pow(10, maxFractionDigits ?? this.valueScalingFractionDigits)
+  private validateValueRange(value: bigint | null): bigint | null {
+    if (value != null) {
+      if (this.minValue !== undefined && value < this.minValue) {
+        value = this.minValue
+      }
+      if (this.maxValue !== undefined && value > this.maxValue) {
+        value = this.maxValue
+      }
+    }
+    return value
   }
 
-  private toInteger(value: number, maxFractionDigits?: number) {
-    return Number(
-      value
-        .toFixed(maxFractionDigits ?? this.valueScalingFractionDigits)
-        .split('.')
-        .join('')
-    )
-  }
-
-  private validateValueRange(value: number | null): number | null {
-    return value != null ? Math.min(Math.max(value, this.minValue), this.maxValue) : value
+  private applyFixedFractionFormat(number: bigint | null, forcedChange = false) {
+    this.format(this.currencyFormat.format(this.validateValueRange(number)))
+    if (number !== this.value || forcedChange) {
+      this.onChange?.(this.formattedValue)
+    }
   }
 
   private format(value: string | null, hideNegligibleDecimalDigits = false) {
@@ -142,24 +161,30 @@ export class CurrencyInput {
           minimumFractionDigits = hideNegligibleDecimalDigits
             ? fractionDigits.replace(/0+$/, '').length
             : Math.min(maximumFractionDigits, fractionDigits.length)
-        } else if (Number.isInteger(numberValue) && !this.options.autoDecimalDigits && (this.options.precision === undefined || minimumFractionDigits === 0)) {
+        } else if (
+          numberValue % 10n ** BigInt(this.currencyFormat.maximumFractionDigits) === 0n &&
+          !this.options.autoDecimalDigits &&
+          (this.options.precision === undefined || minimumFractionDigits === 0)
+        ) {
           minimumFractionDigits = maximumFractionDigits = 0
         }
-        formattedValue =
-          this.toInteger(Math.abs(numberValue)) > Number.MAX_SAFE_INTEGER
-            ? this.formattedValue
-            : this.currencyFormat.format(numberValue, {
-                useGrouping: this.options.useGrouping !== false && !(this.focus && this.options.hideGroupingSeparatorOnFocus),
-                minimumFractionDigits,
-                maximumFractionDigits
-              })
+        formattedValue = this.currencyFormat.format(numberValue, {
+          useGrouping: this.options.useGrouping && !(this.focus && this.options.hideGroupingSeparatorOnFocus),
+          minimumFractionDigits,
+          maximumFractionDigits
+        })
       } else {
         formattedValue = conformedValue
       }
-      if (this.maxValue <= 0 && !this.currencyFormat.isNegative(formattedValue) && this.currencyFormat.parse(formattedValue) !== 0) {
+      if (
+        this.maxValue !== undefined &&
+        this.maxValue <= 0 &&
+        !this.currencyFormat.isNegative(formattedValue) &&
+        this.currencyFormat.parse(formattedValue) !== BigInt(0)
+      ) {
         formattedValue = formattedValue.replace(this.currencyFormat.prefix, this.currencyFormat.negativePrefix)
       }
-      if (this.minValue >= 0) {
+      if (this.minValue !== undefined && this.minValue >= 0) {
         formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
       }
       if (this.options.currencyDisplay === CurrencyDisplay.hidden || (this.focus && this.options.hideCurrencySymbolOnFocus)) {
@@ -171,13 +196,13 @@ export class CurrencyInput {
       }
 
       this.el.value = formattedValue
-      this.numberValue = this.currencyFormat.parse(formattedValue)
+      this.value = this.currencyFormat.parse(formattedValue)
     } else {
       this.el.value = ''
-      this.numberValue = null
+      this.value = null
     }
     this.formattedValue = this.el.value
-    this.onInput(this.getValue())
+    this.onInput?.(this.formattedValue)
   }
 
   private addEventListener(): void {
@@ -227,7 +252,7 @@ export class CurrencyInput {
 
     this.el.addEventListener('focus', () => {
       this.focus = true
-      this.numberValueOnFocus = this.numberValue
+      this.valueOnFocus = this.value
       setTimeout(() => {
         const { value, selectionStart, selectionEnd } = this.el
         this.format(value, this.options.hideNegligibleDecimalDigitsOnFocus)
@@ -242,19 +267,19 @@ export class CurrencyInput {
 
     this.el.addEventListener('blur', () => {
       this.focus = false
-      this.format(this.currencyFormat.format(this.validateValueRange(this.numberValue)))
-      if (this.numberValueOnFocus !== this.numberValue) {
-        this.onChange(this.getValue())
+      this.format(this.currencyFormat.format(this.validateValueRange(this.value)))
+      if (this.valueOnFocus !== this.value) {
+        this.onChange?.(this.formattedValue)
       }
     })
   }
 
   private getCaretPositionOnFocus(value: string, selectionStart: number) {
-    if (this.numberValue == null) {
+    if (this.value == null) {
       return selectionStart
     }
     const { prefix, negativePrefix, suffix, negativeSuffix, groupingSymbol, currency } = this.currencyFormat
-    const isNegative = this.numberValue < 0
+    const isNegative = this.value < 0
     const currentPrefix = isNegative ? negativePrefix : prefix
     const prefixLength = currentPrefix.length
     if (this.options.hideCurrencySymbolOnFocus || this.options.currencyDisplay === CurrencyDisplay.hidden) {

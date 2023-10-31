@@ -10,11 +10,11 @@ abstract class AbstractInputMask {
 }
 
 export interface InputMask {
-  conformToMask(str: string, previousConformedValue: string): string | { fractionDigits: string; numberValue: number }
+  conformToMask(str: string, previousConformedValue: string): string | { fractionDigits: string; numberValue: bigint }
 }
 
 export class DefaultInputMask extends AbstractInputMask implements InputMask {
-  conformToMask(str: string, previousConformedValue = ''): string | { fractionDigits: string; numberValue: number } {
+  conformToMask(str: string, previousConformedValue = ''): string | { fractionDigits: string; numberValue: bigint } {
     const negative = this.currencyFormat.isNegative(str)
     const isEmptyNegativeValue = (str: string) =>
       str === '' &&
@@ -47,7 +47,7 @@ export class DefaultInputMask extends AbstractInputMask implements InputMask {
 
     const [integer, ...fraction] = value.split(this.currencyFormat.decimalSymbol as string)
     const integerDigits = removeLeadingZeros(this.currencyFormat.onlyDigits(integer))
-    const fractionDigits = this.currencyFormat.onlyDigits(fraction.join('')).substr(0, this.currencyFormat.maximumFractionDigits)
+    const fractionDigits = this.currencyFormat.onlyDigits(fraction.join('')).substring(0, this.currencyFormat.maximumFractionDigits)
     const invalidFraction = fraction.length > 0 && fractionDigits.length === 0
 
     const invalidNegativeValue =
@@ -61,7 +61,7 @@ export class DefaultInputMask extends AbstractInputMask implements InputMask {
       return previousConformedValue
     } else if (integerDigits.match(/\d+/)) {
       return {
-        numberValue: Number(`${negative ? '-' : ''}${integerDigits}.${fractionDigits}`),
+        numberValue: BigInt(`${negative ? '-' : ''}${integerDigits}${fractionDigits.padEnd(this.currencyFormat.maximumFractionDigits, '0')}`),
         fractionDigits
       }
     } else {
@@ -71,22 +71,20 @@ export class DefaultInputMask extends AbstractInputMask implements InputMask {
 }
 
 export class AutoDecimalDigitsInputMask extends AbstractInputMask implements InputMask {
-  conformToMask(str: string, previousConformedValue = ''): string | { fractionDigits: string; numberValue: number } {
+  conformToMask(str: string, previousConformedValue = ''): string | { fractionDigits: string; numberValue: bigint } {
+    const negative = this.currencyFormat.isNegative(str)
     if (
       str === '' ||
-      (this.currencyFormat.parse(previousConformedValue) === 0 &&
-        this.currencyFormat.stripCurrency(previousConformedValue, true).slice(0, -1) === this.currencyFormat.stripCurrency(str, true))
+      (this.currencyFormat.parse(previousConformedValue) === 0n &&
+        this.currencyFormat.stripCurrency(previousConformedValue, negative).slice(0, -1) === this.currencyFormat.stripCurrency(str, negative))
     ) {
       return ''
     }
-    const negative = this.currencyFormat.isNegative(str)
     const numberValue =
-      this.currencyFormat.stripSignLiterals(str) === ''
-        ? -0
-        : Number(`${negative ? '-' : ''}${removeLeadingZeros(this.currencyFormat.onlyDigits(str))}`) / Math.pow(10, this.currencyFormat.maximumFractionDigits)
+      this.currencyFormat.stripSignLiterals(str) === '' ? -0n : BigInt(`${negative ? '-' : ''}${removeLeadingZeros(this.currencyFormat.onlyDigits(str))}`)
     return {
       numberValue,
-      fractionDigits: numberValue.toFixed(this.currencyFormat.maximumFractionDigits).slice(-this.currencyFormat.maximumFractionDigits)
+      fractionDigits: numberValue.toString().slice(-this.currencyFormat.maximumFractionDigits).padStart(this.currencyFormat.maximumFractionDigits, '0')
     }
   }
 }

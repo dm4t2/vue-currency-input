@@ -1,16 +1,11 @@
-import { Ref } from 'vue'
-
-/**
- * @internal
- */
-export interface CurrencyInputValue {
-  number: number | null
-  formatted: string | null
-}
-
 export interface NumberRange {
   min?: number
   max?: number
+}
+
+export interface ValueRange {
+  min?: number | string
+  max?: number | string
 }
 
 export enum CurrencyDisplay {
@@ -21,32 +16,25 @@ export enum CurrencyDisplay {
   hidden = 'hidden'
 }
 
-export enum ValueScaling {
-  precision = 'precision',
-  thousands = 'thousands',
-  millions = 'millions',
-  billions = 'billions'
-}
-
-export interface CurrencyInputOptions {
-  accountingSign?: boolean
-  autoDecimalDigits?: boolean
+export interface CurrencyFormatOptions {
+  locale?: string
   currency: string
   currencyDisplay?: CurrencyDisplay
+  precision?: NumberRange | number
+  accountingSign?: boolean
+  useGrouping?: boolean
+}
+
+export interface CurrencyInputOptions extends CurrencyFormatOptions {
   hideCurrencySymbolOnFocus?: boolean
   hideGroupingSeparatorOnFocus?: boolean
   hideNegligibleDecimalDigitsOnFocus?: boolean
-  locale?: string
-  precision?: NumberRange | number
-  useGrouping?: boolean
-  valueRange?: NumberRange
-  valueScaling?: ValueScaling
+  autoDecimalDigits?: boolean
+  valueRange?: ValueRange
 }
 
-export interface UseCurrencyInput {
-  formattedValue: Ref<string | null>
-  inputRef: Ref
-  numberValue: Ref<number | null>
-  setOptions: (options: CurrencyInputOptions) => void
-  setValue: (number: number | null) => void
+export interface UseCurrencyInputOptions {
+  options: CurrencyInputOptions
+  onChange?: (value: string) => void
+  onInput?: (value: string) => void
 }
