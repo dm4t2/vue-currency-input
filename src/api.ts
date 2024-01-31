@@ -32,9 +32,3 @@ export interface CurrencyInputOptions extends CurrencyFormatOptions {
   autoDecimalDigits?: boolean
   valueRange?: ValueRange
 }
-
-export interface UseCurrencyInputOptions {
-  options: CurrencyInputOptions
-  onChange?: (value: string) => void
-  onInput?: (value: string) => void
-}

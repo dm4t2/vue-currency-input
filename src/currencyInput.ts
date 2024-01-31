@@ -1,6 +1,6 @@
 import CurrencyFormat, { DECIMAL_SEPARATORS } from './currencyFormat'
 import { AutoDecimalDigitsInputMask, DefaultInputMask, InputMask } from './inputMask'
-import { abs, count } from './utils'
+import { bigIntToString, count, stringToBigInt } from './utils'
 import { CurrencyDisplay, CurrencyInputOptions } from './api'
 
 export const DEFAULT_OPTIONS = {
@@ -18,14 +18,14 @@ export const DEFAULT_OPTIONS = {
 interface CurrencyInputConstructorArgs {
   el: HTMLInputElement
   options: CurrencyInputOptions
-  onInput?: (value: string) => void
-  onChange?: (value: string) => void
+  onInput?: (value: string | null) => void
+  onChange?: (value: string | null) => void
 }
 
 export class CurrencyInput {
   private readonly el: HTMLInputElement
-  private readonly onInput?: (formattedValue: string) => void
-  private readonly onChange?: (value: string) => void
+  private readonly onInput?: (value: string | null) => void
+  private readonly onChange?: (value: string | null) => void
   private value!: bigint | null
   private valueOnFocus!: bigint | null
   private options!: CurrencyInputOptions
@@ -55,7 +55,7 @@ export class CurrencyInput {
     if (typeof value === 'number') {
       newValue = this.numberToBigInt(value)
     } else if (typeof value === 'string') {
-      newValue = this.currencyFormat.parse(value)
+      newValue = stringToBigInt(value, this.currencyFormat.maximumFractionDigits)
     } else {
       newValue = null
     }
@@ -64,19 +64,8 @@ export class CurrencyInput {
     }
   }
 
-  getNumberValue(): number | null {
-    if (this.value != null) {
-      if (abs(this.value) <= Number.MAX_SAFE_INTEGER) {
-        let number = Number(this.value)
-        if (this.currencyFormat.maximumFractionDigits) {
-          number /= 10 ** this.currencyFormat.maximumFractionDigits
-        }
-        return number
-      } else {
-        throw new Error('Value exceeds Number.MAX_SAFE_INTEGER')
-      }
-    }
-    return null
+  getValue(): string | null {
+    return bigIntToString(this.value, this.currencyFormat.maximumFractionDigits)
   }
 
   private init(options: CurrencyInputOptions) {
@@ -90,9 +79,9 @@ export class CurrencyInput {
     if (!this.el.getAttribute('inputmode')) {
       this.el.setAttribute('inputmode', this.options.autoDecimalDigits ? 'numeric' : 'decimal')
     }
-    this.currencyFormat = new CurrencyFormat(this.options)
     const maximumFractionDigits = this.currencyFormat?.maximumFractionDigits
-    if (this.value) {
+    this.currencyFormat = new CurrencyFormat(this.options)
+    if (this.value && maximumFractionDigits !== undefined) {
       const newMaximumFractionDigits = this.currencyFormat.maximumFractionDigits
       if (maximumFractionDigits < newMaximumFractionDigits) {
         this.value *= 10n ** BigInt(newMaximumFractionDigits - maximumFractionDigits)
@@ -202,7 +191,7 @@ export class CurrencyInput {
       this.value = null
     }
     this.formattedValue = this.el.value
-    this.onInput?.(this.formattedValue)
+    this.onInput?.(this.getValue())
   }
 
   private addEventListener(): void {
@@ -269,7 +258,7 @@ export class CurrencyInput {
       this.focus = false
       this.format(this.currencyFormat.format(this.validateValueRange(this.value)))
       if (this.valueOnFocus !== this.value) {
-        this.onChange?.(this.formattedValue)
+        this.onChange?.(this.getValue())
       }
     })
   }

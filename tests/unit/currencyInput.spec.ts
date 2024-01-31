@@ -44,7 +44,7 @@ describe('Currency Input', () => {
 
   describe('setValue', () => {
     it('should update the input value', () => {
-      currencyInput.setValue(1)
+      currencyInput.setValue('1')
 
       expect(el.value).toBe('€1')
     })
@@ -59,7 +59,7 @@ describe('Currency Input', () => {
 
     describe('caret position', () => {
       it('should retain the caret position if the last number before whitespace thousands separator is deleted', () => {
-        currencyInput.setValue(1500000)
+        currencyInput.setValue('1500000')
         currencyInput.setOptions({ currency: 'SEK', locale: 'sv-SV', hideGroupingSeparatorOnFocus: false })
 
         expect(el.value).toBe('1 500 000 kr')
@@ -79,7 +79,7 @@ describe('Currency Input', () => {
     })
 
     it('should update the input value', () => {
-      currencyInput.setValue(12345.6)
+      currencyInput.setValue('12345.6')
       expect(el.value).toBe('€12,345.60')
       userEvent.click(el)
       vi.runOnlyPendingTimers()
@@ -106,7 +106,7 @@ describe('Currency Input', () => {
          * -€1|,234 -> -1|234
          */
         it('should consider the sign for the new caret position', () => {
-          currencyInput.setValue(-1234)
+          currencyInput.setValue('-1234')
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true })
           expectCaretPosition(3, 2)
         })
@@ -115,7 +115,7 @@ describe('Currency Input', () => {
          * 1|,234 -> 1|234
          */
         it('should not modify the caret position if currencyDisplay is hidden', () => {
-          currencyInput.setValue(1234)
+          currencyInput.setValue('1234')
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true, currencyDisplay: CurrencyDisplay.hidden })
           expectCaretPosition(1, 1)
         })
@@ -124,7 +124,7 @@ describe('Currency Input', () => {
          * |-€1 -> -|1
          */
         it('should set the caret position in front of the first digit when targeting the sign', () => {
-          currencyInput.setValue(-1)
+          currencyInput.setValue('-1')
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true })
           expectCaretPosition(0, 1)
         })
@@ -133,7 +133,7 @@ describe('Currency Input', () => {
          * -|€1 -> -|1
          */
         it('should set the caret position in front of the first digit when targeting the currency', () => {
-          currencyInput.setValue(-1)
+          currencyInput.setValue('-1')
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: true })
           expectCaretPosition(1, 1)
         })
@@ -142,7 +142,7 @@ describe('Currency Input', () => {
          * (€ 5)| -> (5|)
          */
         it('should set the caret position after the last digit number when targeting the closing parentheses of the accounting sign', () => {
-          currencyInput.setValue(-5)
+          currencyInput.setValue('-5')
           currencyInput.setOptions({ locale: 'nl', currency: 'EUR', hideCurrencySymbolOnFocus: true, accountingSign: true })
           expectCaretPosition(el.value.length, 2)
         })
@@ -153,7 +153,7 @@ describe('Currency Input', () => {
          * |€1,234 -> €|1234
          */
         it('should set the caret position in front of the first number when targeting the prefix', () => {
-          currencyInput.setValue(1234)
+          currencyInput.setValue('1234')
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', hideCurrencySymbolOnFocus: false })
           expectCaretPosition(0, 1)
         })
@@ -162,7 +162,7 @@ describe('Currency Input', () => {
          * 1.234 €| -> 1234| €
          */
         it('should set the caret position after the last number when targeting the suffix', () => {
-          currencyInput.setValue(1234)
+          currencyInput.setValue('1234')
           currencyInput.setOptions({ locale: 'de', currency: 'EUR', hideCurrencySymbolOnFocus: false })
           expectCaretPosition(el.value.length, 4)
         })
@@ -173,7 +173,7 @@ describe('Currency Input', () => {
          * (1)| -> (1|)
          */
         it('should set the caret position after the last digit number when targeting the closing parentheses of the accounting sign', () => {
-          currencyInput.setValue(-1)
+          currencyInput.setValue('-1')
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', currencyDisplay: CurrencyDisplay.hidden, accountingSign: true })
           expectCaretPosition(el.value.length, 2)
         })
@@ -182,7 +182,7 @@ describe('Currency Input', () => {
          * 1,234| -> 1234|
          */
         it('should ignore the prefix for the new caret position', () => {
-          currencyInput.setValue(1234)
+          currencyInput.setValue('1234')
           currencyInput.setOptions({ locale: 'en', currency: 'EUR', currencyDisplay: CurrencyDisplay.hidden })
           expectCaretPosition(el.value.length, 4)
         })

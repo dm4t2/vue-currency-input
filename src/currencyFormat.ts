@@ -68,7 +68,7 @@ export default class CurrencyFormat {
 
   parse(str: string | null): bigint | null {
     if (str?.trim()) {
-      const [integer, fraction] = this.normalizeDigits(str).split(this.decimalSymbol as string)
+      const [integer, fraction] = str.split(this.decimalSymbol as string)
       if (this.onlyDigits(`${integer}${fraction}`) !== '') {
         const digits = `${this.onlyDigits(integer)}${this.onlyDigits(fraction || '').padEnd(this.maximumFractionDigits, '0')}`
         return BigInt(`${this.isNegative(str) ? '-' : ''}${digits}`)

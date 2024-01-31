@@ -58,10 +58,6 @@ export default {
       {
         text: 'Examples',
         link: '/examples'
-      },
-      {
-        text: 'API',
-        link: '/api'
       }
     ],
     repo: 'dm4t2/vue-currency-input',
