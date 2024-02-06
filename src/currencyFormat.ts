@@ -94,7 +94,7 @@ export default class CurrencyFormat {
   }
 
   toFraction(str: string): string {
-    return `${this.digits[0]}${this.decimalSymbol}${this.onlyLocaleDigits(str.substr(1)).substr(0, this.maximumFractionDigits)}`
+    return `${this.digits[0]}${this.decimalSymbol}${this.onlyLocaleDigits(str.substring(1)).substring(0, this.maximumFractionDigits)}`
   }
 
   isFractionIncomplete(str: string): boolean {
@@ -131,7 +131,7 @@ export default class CurrencyFormat {
 
   normalizeDecimalSeparator(str: string, from: number): string {
     DECIMAL_SEPARATORS.forEach((s) => {
-      str = str.substr(0, from) + str.substr(from).replace(s, this.decimalSymbol as string)
+      str = str.substring(0, from) + str.substring(from).replace(s, this.decimalSymbol as string)
     })
     return str
   }

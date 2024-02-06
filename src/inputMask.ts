@@ -47,7 +47,7 @@ export class DefaultInputMask extends AbstractInputMask implements InputMask {
 
     const [integer, ...fraction] = value.split(this.currencyFormat.decimalSymbol as string)
     const integerDigits = removeLeadingZeros(this.currencyFormat.onlyDigits(integer))
-    const fractionDigits = this.currencyFormat.onlyDigits(fraction.join('')).substr(0, this.currencyFormat.maximumFractionDigits)
+    const fractionDigits = this.currencyFormat.onlyDigits(fraction.join('')).substring(0, this.currencyFormat.maximumFractionDigits)
     const invalidFraction = fraction.length > 0 && fractionDigits.length === 0
 
     const invalidNegativeValue =
