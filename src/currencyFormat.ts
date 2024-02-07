@@ -1,7 +1,12 @@
 import { escapeRegExp, substringBefore } from './utils'
 import { CurrencyDisplay, CurrencyInputOptions } from './api'
 
-export const DECIMAL_SEPARATORS = [',', '.', '٫']
+export const DECIMAL_SEPARATORS = [
+  ',', // comma
+  '.', // dot
+  '٫', // Persian Momayyez
+  '。' // Chinese dot
+]
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 
 export default class CurrencyFormat {

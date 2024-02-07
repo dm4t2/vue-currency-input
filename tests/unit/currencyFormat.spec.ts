@@ -103,9 +103,10 @@ describe('CurrencyFormat', () => {
     })
   })
 
-  describe('normalizeDecimalSymbol', () => {
-    it('should replace the first decimal symbol with the one of the current locale', () => {
+  describe('normalizeDecimalSeparator', () => {
+    it('should replace the first decimal separator with the one of the current locale', () => {
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).normalizeDecimalSeparator('1,23,4,567', 2)).toBe('1,23.4,567')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).normalizeDecimalSeparator('1。23', 0)).toBe('1.23')
     })
   })
 
