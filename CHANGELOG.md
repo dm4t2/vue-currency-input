@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/dm4t2/vue-currency-input/compare/3.0.5...3.1.0) (2024-02-07)
+
+
+### Features
+
+* Support Chinese dot as decimal separator ([b4ecd1a](https://github.com/dm4t2/vue-currency-input/commit/b4ecd1a1bbd7440036157f4271e831266d656e5b))
+
 ## [3.0.5](https://github.com/dm4t2/vue-currency-input/compare/3.0.4...3.0.5) (2023-05-26)
 
 
