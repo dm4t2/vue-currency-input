@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`CurrencyFormat > constructing number formats > should work for respective locale and currency > ar-SA_SAR 1`] = `
 CurrencyFormat {
@@ -21,7 +21,7 @@ CurrencyFormat {
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
   "minusSign": "-",
-  "negativePrefix": "؜-",
+  "negativePrefix": "؜-‏",
   "negativeSuffix": " ر.س.‏",
   "options": {
     "currency": "SAR",
@@ -30,7 +30,7 @@ CurrencyFormat {
     "style": "currency",
     "useGrouping": undefined,
   },
-  "prefix": "",
+  "prefix": "‏",
   "suffix": " ر.س.‏",
 }
 `;
@@ -51,7 +51,7 @@ CurrencyFormat {
     "8",
     "9",
   ],
-  "groupingSymbol": undefined,
+  "groupingSymbol": " ",
   "locale": "bg-BG",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
