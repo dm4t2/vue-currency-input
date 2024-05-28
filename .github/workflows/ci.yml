@@ -24,4 +24,6 @@ jobs:
       - name: Run tests and collect coverage
         run: pnpm coverage
       - name: Upload report to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
