@@ -211,7 +211,7 @@ export class CurrencyInput {
             return newValueLength - this.currencyFormat.negativeSuffix.length > 1 ? this.formattedValue.substring(selectionStart).length : 1
           }
           if (
-            this.formattedValue.substr(selectionStart, 1) === groupingSymbol &&
+            this.formattedValue.substring(selectionStart, 1) === groupingSymbol &&
             count(this.formattedValue, groupingSymbol) === count(value, groupingSymbol) + 1
           ) {
             return newValueLength - caretPositionFromLeft - 1
@@ -225,7 +225,7 @@ export class CurrencyInput {
               return this.formattedValue.indexOf(decimalSymbol) + 1
             } else {
               if (!this.options.autoDecimalDigits && selectionStart > decimalSymbolPosition) {
-                if (this.currencyFormat.onlyDigits(value.substr(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
+                if (this.currencyFormat.onlyDigits(value.substring(decimalSymbolPosition)).length - 1 === maximumFractionDigits) {
                   caretPositionFromLeft -= 1
                 }
               }

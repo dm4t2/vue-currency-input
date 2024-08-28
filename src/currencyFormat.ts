@@ -1,7 +1,12 @@
 import { escapeRegExp, substringBefore } from './utils'
 import { CurrencyDisplay, CurrencyFormatOptions } from './api'
 
-export const DECIMAL_SEPARATORS = [',', '.', '٫']
+export const DECIMAL_SEPARATORS = [
+  ',', // comma
+  '.', // dot
+  '٫', // Persian Momayyez
+  '。' // Chinese dot
+]
 export const INTEGER_PATTERN = '(0|[1-9]\\d*)'
 
 interface InputFormatOptions {
@@ -96,7 +101,7 @@ export default class CurrencyFormat {
   }
 
   toFraction(str: string): string {
-    return `${this.digits[0]}${this.decimalSymbol}${this.onlyLocaleDigits(str.substr(1)).substr(0, this.maximumFractionDigits)}`
+    return `${this.digits[0]}${this.decimalSymbol}${this.onlyLocaleDigits(str.substring(1)).substring(0, this.maximumFractionDigits)}`
   }
 
   isFractionIncomplete(str: string): boolean {
@@ -133,7 +138,7 @@ export default class CurrencyFormat {
 
   normalizeDecimalSeparator(str: string, from: number): string {
     DECIMAL_SEPARATORS.forEach((s) => {
-      str = str.substr(0, from) + str.substr(from).replace(s, this.decimalSymbol as string)
+      str = str.substring(0, from) + str.substring(from).replace(s, this.decimalSymbol as string)
     })
     return str
   }
