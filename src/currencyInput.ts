@@ -3,9 +3,8 @@ import { AutoDecimalDigitsInputMask, DefaultInputMask, InputMask } from './input
 import { bigIntToString, count, stringToBigInt } from './utils'
 import { CurrencyDisplay, CurrencyInputOptions } from './api'
 
-export const DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS: Omit<CurrencyInputOptions, 'currency'> = {
   locale: undefined,
-  currency: undefined,
   currencyDisplay: undefined,
   hideGroupingSeparatorOnFocus: true,
   hideCurrencySymbolOnFocus: true,
@@ -50,15 +49,8 @@ export class CurrencyInput {
     this.applyFixedFractionFormat(this.value, true)
   }
 
-  setValue(value: number | string | null): void {
-    let newValue: bigint | null
-    if (typeof value === 'number') {
-      newValue = this.numberToBigInt(value)
-    } else if (typeof value === 'string') {
-      newValue = stringToBigInt(value, this.currencyFormat.maximumFractionDigits)
-    } else {
-      newValue = null
-    }
+  setValue(value: string | null): void {
+    const newValue = stringToBigInt(value, this.currencyFormat.maximumFractionDigits)
     if (newValue !== this.value) {
       this.applyFixedFractionFormat(newValue)
     }
@@ -95,25 +87,11 @@ export class CurrencyInput {
   }
 
   private getMinValue(): bigint | undefined {
-    const min = this.options.valueRange?.min
-    if (typeof min === 'number') {
-      return this.numberToBigInt(min)
-    } else if (typeof min === 'string') {
-      return this.currencyFormat.parse(min) ?? undefined
-    }
-  }
-
-  private numberToBigInt(number: number) {
-    return BigInt(number.toFixed(this.currencyFormat.maximumFractionDigits).split('.').join(''))
+    return stringToBigInt(this.options.valueRange?.min, this.currencyFormat.maximumFractionDigits) ?? undefined
   }
 
   private getMaxValue(): bigint | undefined {
-    const max = this.options.valueRange?.max
-    if (typeof max === 'number') {
-      return this.numberToBigInt(max)
-    } else if (typeof max === 'string') {
-      return this.currencyFormat.parse(max) ?? undefined
-    }
+    return stringToBigInt(this.options.valueRange?.max, this.currencyFormat.maximumFractionDigits) ?? undefined
   }
 
   private validateValueRange(value: bigint | null): bigint | null {

@@ -73,7 +73,8 @@ describe('useCurrencyInput', () => {
   it('should allow to update the value', async () => {
     const wrapper = shallowMount(
       defineComponent(() => {
-        const { numberValue, inputRef } = useCurrencyInput({ currency: 'EUR' })
+        const numberValue = ref('123')
+        const { inputRef } = useCurrencyInput({ currency: 'EUR' }, numberValue)
         return () =>
           h('div', { ref: inputRef }, [
             h('input'),

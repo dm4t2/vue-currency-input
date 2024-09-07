@@ -5,27 +5,25 @@ import { CurrencyInputOptions } from './api'
 const findInput = (el: HTMLElement | null) => (el?.matches('input') ? el : el?.querySelector('input')) as HTMLInputElement
 
 export function useCurrencyInput(
-  currencyInputOptions: CurrencyInputOptions | Ref<CurrencyInputOptions>,
-  initialValue?: string | number,
+  options: CurrencyInputOptions | Ref<CurrencyInputOptions>,
+  model?: Ref<string | null | undefined>,
   lazy?: boolean
 ): {
   formattedValue: Ref<string | null>
-  numberValue: Ref<string | null>
   inputRef: Ref<HTMLInputElement | ComponentPublicInstance | null>
 } {
   let currencyInput: CurrencyInput | null
   const inputRef: Ref<HTMLInputElement | ComponentPublicInstance | null> = ref(null)
   const formattedValue = ref<string | null>(null)
-  const numberValue = ref<string | null>(null)
 
-  if (isRef(currencyInputOptions)) {
-    watch(currencyInputOptions, (newOptions) => {
+  if (isRef(options)) {
+    watch(options, (newOptions) => {
       currencyInput?.setOptions(newOptions)
     })
   }
 
-  watch(numberValue, (value) => {
-    currencyInput?.setValue(value)
+  watch(model, (value) => {
+    currencyInput.setValue(value)
   })
 
   watch(inputRef, (value) => {
@@ -34,21 +32,21 @@ export function useCurrencyInput(
       if (el) {
         currencyInput = new CurrencyInput({
           el,
-          options: unref(currencyInputOptions),
+          options: unref(options),
           onInput: (value: string | null) => {
             formattedValue.value = el.value
             if (!lazy) {
-              numberValue.value = value
+              model.value = value
             }
           },
           onChange: (value: string | null) => {
             if (lazy) {
-              numberValue.value = value
+              model.value = value
             }
           }
         })
-        if (initialValue !== undefined) {
-          currencyInput.setValue(initialValue)
+        if (model !== undefined) {
+          currencyInput.setValue(model.value)
         }
       } else {
         console.error('No input element found. Please make sure that the "inputRef" template ref is properly assigned.')
@@ -60,7 +58,6 @@ export function useCurrencyInput(
 
   return {
     inputRef,
-    formattedValue,
-    numberValue
+    formattedValue
   }
 }

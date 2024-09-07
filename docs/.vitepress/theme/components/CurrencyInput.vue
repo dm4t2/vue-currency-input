@@ -1,13 +1,15 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { CurrencyInputOptions, useCurrencyInput } from '../../../../src'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 
-const emit = defineEmits(['update:modelValue'])
-// eslint-disable-next-line vue/require-default-prop
-const props = defineProps({ modelValue: String, options: Object })
-const options = computed(() => props.options as CurrencyInputOptions)
-const { inputRef, numberValue } = useCurrencyInput(options, props.modelValue)
-watch(numberValue, () => emit('update:modelValue', numberValue.value))
+const [model, modifiers] = defineModel<string | null>('modelValue', { required: true })
+const props = defineProps<{ options: CurrencyInputOptions }>()
+const { inputRef } = useCurrencyInput(
+  computed(() => props.options),
+  model,
+  modifiers.lazy
+)
+// watch(numberValue, () => emit('update:modelValue', numberValue.value))
 </script>
 
 <template>
