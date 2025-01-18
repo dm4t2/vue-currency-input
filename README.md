@@ -1,8 +1,8 @@
-[![Codecov](https://codecov.io/gh/dm4t2/vue-currency-input/branch/master/graph/badge.svg)](https://codecov.io/gh/dm4t2/vue-currency-input)
+[![codecov](https://codecov.io/gh/dm4t2/vue-currency-input/graph/badge.svg?token=CAgHbikCov)](https://codecov.io/gh/dm4t2/vue-currency-input)
 [![npm Version](https://badgen.net/npm/v/vue-currency-input?color=green)](https://www.npmjs.com/package/vue-currency-input)
 [![npm Downloads](https://badgen.net/npm/dw/vue-currency-input?color=green)](https://www.npmjs.com/package/vue-currency-input)
 [![Bundlephobia](https://badgen.net/bundlephobia/minzip/vue-currency-input?color=green)](https://bundlephobia.com/result?p=vue-currency-input)
-[![License](https://badgen.net/github/license/dm4t2/vue-currency-input?color=green)](https://github.com/dm4t2/vue-currency-input/blob/master/LICENSE)
+[![License](https://badgen.net/github/license/dm4t2/vue-currency-input?color=green)](https://github.com/dm4t2/vue-currency-input/blob/main/LICENSE)
 
 # Vue Currency Input
 
