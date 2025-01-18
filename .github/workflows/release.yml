@@ -31,7 +31,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
       - run: pnpm build
         if: ${{ steps.release.outputs.release_created }}
-      - run: pnpm docs
+      - run: pnpm run docs
         if: ${{ steps.release.outputs.release_created }}
       - uses: peaceiris/actions-gh-pages@v3
         with:
