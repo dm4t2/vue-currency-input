@@ -272,6 +272,7 @@ export default defineComponent({
       valueScalingOptions: [
         { value: 'precision', label: 'Precision' },
         { value: 'thousands', label: 'Thousands' },
+        { value: 'tenThousands', label: 'Ten thousands' },
         { value: 'millions', label: 'Millions' },
         { value: 'billions', label: 'Billions' }
       ],

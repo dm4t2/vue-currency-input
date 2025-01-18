@@ -24,6 +24,7 @@ export enum CurrencyDisplay {
 export enum ValueScaling {
   precision = 'precision',
   thousands = 'thousands',
+  tenThousands = 'tenThousands',
   millions = 'millions',
   billions = 'billions'
 }

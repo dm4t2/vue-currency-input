@@ -82,6 +82,7 @@ export class CurrencyInput {
     const valueScalingOptions = {
       [ValueScaling.precision]: this.currencyFormat.maximumFractionDigits,
       [ValueScaling.thousands]: 3,
+      [ValueScaling.tenThousands]: 4,
       [ValueScaling.millions]: 6,
       [ValueScaling.billions]: 9
     }
