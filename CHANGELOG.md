@@ -2,10 +2,7 @@
 
 ## [3.2.1](https://github.com/dm4t2/vue-currency-input/compare/3.2.0...3.2.1) (2025-01-19)
 
-
-### Miscellaneous Chores
-
-* **main:** release 3.2.1 ([3432e18](https://github.com/dm4t2/vue-currency-input/commit/3432e18eb6e27bf5fb9e388495ceb1e3f8f87d5b))
+This version contains no changes and only fixes the corrupt v3.2.0 release.
 
 ## [3.2.0](https://github.com/dm4t2/vue-currency-input/compare/3.1.0...3.2.0) (2025-01-18)
 
