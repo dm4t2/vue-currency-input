@@ -9,10 +9,8 @@ Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition
 ::: warning Vue Compatibility
 Vue Currency Input 3.x requires either **Vue 2.7** or **Vue 3**.
 For Vue 2.6 or earlier, please use [Vue Currency Input 2.x](https://vue-currency-input-v2.netlify.app/).
-:::
 
-::: warning Nuxt 2 Compatibility
-Vue Currency Input 3.x does not work with Nuxt 2 + Vue 2.7. See [this issue](https://github.com/dm4t2/vue-currency-input/issues/398) for more information.
+**Nuxt 2 + Vue 2.7** is not supported. See [this issue](https://github.com/dm4t2/vue-currency-input/issues/398) for more information.
 :::
 
 ## Installation
