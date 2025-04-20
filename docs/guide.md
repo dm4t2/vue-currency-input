@@ -6,12 +6,15 @@ Vue Currency Input allows an easy input of currency formatted numbers based on t
 
 Built on top of the [Vue Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html), it provides the composable function `useCurrencyInput` for decorating input components with currency format capabilities.
 
-::: warning Compatibility
+::: warning Vue Compatibility
 Vue Currency Input 3.x requires either **Vue 2.7** or **Vue 3**.
 For Vue 2.6 or earlier, please use [Vue Currency Input 2.x](https://vue-currency-input-v2.netlify.app/).
+
+**Nuxt 2 + Vue 2.7** is not supported. See [this issue](https://github.com/dm4t2/vue-currency-input/issues/398) for more information.
 :::
 
 ## Installation
+
 ```bash
 npm install vue-currency-input
 ```
@@ -82,14 +85,18 @@ export default {
 [![Edit Vue Currency Input: Vue 3 Example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-currency-input-vue-3-example-5l51f?fontsize=14&hidenavigation=1&theme=dark)
 
 ## Auto emit
+
 By default, the number value is automatically emitted on each input.
 This can be disabled by setting the `autoEmit` argument of `useCurrencyInput` to `false`, allowing you to implement a custom emit behavior for features such as debouncing.
 
-The following example component `<DebouncedCurrencyInput>` demonstrates this by using [VueUse's `watchDebounced`](https://vueuse.org/shared/watchDebounced): 
+The following example component `<DebouncedCurrencyInput>` demonstrates this by using [VueUse's `watchDebounced`](https://vueuse.org/shared/watchDebounced):
 
 ```vue
 <template>
-  <input ref="inputRef" type="text" />
+  <input
+    ref="inputRef"
+    type="text"
+  />
 </template>
 
 <script>
@@ -102,7 +109,7 @@ export default {
     modelValue: Number, // Vue 2: value
     options: Object
   },
-  setup (props, { emit }) {
+  setup(props, { emit }) {
     const { inputRef, numberValue } = useCurrencyInput(props.options, false)
 
     watchDebounced(numberValue, (value) => emit('update:modelValue', value), { debounce: 1000 }) // Vue 2: emit('input', value)
@@ -115,26 +122,18 @@ export default {
 
 [![Edit Using Vue Currency Input with debouncing](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/using-vue-currency-input-with-debouncing-vzwnss?fontsize=14&hidenavigation=1&theme=dark)
 
-
 ## Lazy value binding
 
 Sometimes you might want to update the bound value only when the input loses its focus. In this case, use `v-model.lazy` for Vue 3:
 
 ```vue
-<CurrencyInput
-  v-model.lazy="value"
-  :options="{ currency: 'EUR' }"
-/>
+<CurrencyInput v-model.lazy="value" :options="{ currency: 'EUR' }" />
 ```
 
 For Vue 2 listen to the `change` event instead of using `v-model`, since the `lazy` modifier is not supported when using `v-model` on custom components:
 
 ```vue
-<CurrencyInput
-  :value="value"
-  :options="{ currency: 'EUR' }"
-  @change="value = $event"
-/>
+<CurrencyInput :value="value" :options="{ currency: 'EUR' }" @change="value = $event" />
 ```
 
 ## External props changes

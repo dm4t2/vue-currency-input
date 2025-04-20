@@ -50,7 +50,8 @@ Whether to hide negligible decimal digits on focus. Default is `true`.
 Applies a scaling to the exported value. Possible values are:
 
 - `"precision"` for scaling float values automatically to integers depending on the current `precision`, for example 1.23 -> 123
-- `"thounsands"` for using a scaling factor of 1,000
+- `"thousands"` for using a scaling factor of 1,000
+- `"tenThousands"` for using a scaling factor of 10,000
 - `"millions""` for using scaling factor of 1,000,000
 - `"billions"` for using a scaling factor of 1,000,000,000
 

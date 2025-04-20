@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.2.1](https://github.com/dm4t2/vue-currency-input/compare/3.2.0...3.2.1) (2025-01-19)
+
+This version contains no changes and only fixes the corrupt v3.2.0 release.
+
+## [3.2.0](https://github.com/dm4t2/vue-currency-input/compare/3.1.0...3.2.0) (2025-01-18)
+
+
+### Features
+
+* Allow value scaling by 10,000 ([443321d](https://github.com/dm4t2/vue-currency-input/commit/443321d50bc8e73ed41fa3c553614012fb951745))
+
 ## [3.1.0](https://github.com/dm4t2/vue-currency-input/compare/3.0.5...3.1.0) (2024-02-07)
 
 

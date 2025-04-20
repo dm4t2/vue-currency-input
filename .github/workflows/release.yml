@@ -1,0 +1,44 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 20 ]
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          include-v-in-tag: false
+      - uses: actions/checkout@v4
+        if: ${{ steps.release.outputs.release_created }}
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9.1.3
+        if: ${{ steps.release.outputs.release_created }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+        if: ${{ steps.release.outputs.release_created }}
+      - run: pnpm install
+        if: ${{ steps.release.outputs.release_created }}
+      - run: pnpm build
+        if: ${{ steps.release.outputs.release_created }}
+      - run: pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: ${{ steps.release.outputs.release_created }}
+      - run: pnpm run docs
+        if: ${{ steps.release.outputs.release_created }}
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/.vitepress/dist
+        if: ${{ steps.release.outputs.release_created }}
