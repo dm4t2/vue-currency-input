@@ -1,6 +1,6 @@
 import CurrencyFormat, { DECIMAL_SEPARATORS } from './currencyFormat'
 import { AutoDecimalDigitsInputMask, DefaultInputMask, InputMask } from './inputMask'
-import { bigIntToString, count, stringToBigInt } from './utils'
+import { count, bigIntToDecimalString, decimalStringToBigInt } from './utils'
 import { CurrencyDisplay, CurrencyInputOptions } from './api'
 
 const DEFAULT_OPTIONS: Omit<CurrencyInputOptions, 'currency'> = {
@@ -49,15 +49,15 @@ export class CurrencyInput {
     this.applyFixedFractionFormat(this.value, true)
   }
 
-  setValue(value: string | null): void {
-    const newValue = stringToBigInt(value, this.currencyFormat.maximumFractionDigits)
+  setValue(value: string | number | null): void {
+    const newValue = value != null ? decimalStringToBigInt(value.toString(), this.currencyFormat.maximumFractionDigits) : null
     if (newValue !== this.value) {
       this.applyFixedFractionFormat(newValue)
     }
   }
 
   getValue(): string | null {
-    return bigIntToString(this.value, this.currencyFormat.maximumFractionDigits)
+    return bigIntToDecimalString(this.value, this.currencyFormat.maximumFractionDigits)
   }
 
   private init(options: CurrencyInputOptions) {
@@ -86,12 +86,14 @@ export class CurrencyInput {
     this.maxValue = this.getMaxValue()
   }
 
-  private getMinValue(): bigint | undefined {
-    return stringToBigInt(this.options.valueRange?.min, this.currencyFormat.maximumFractionDigits) ?? undefined
+  private getMinValue() {
+    const min = this.options.valueRange?.min
+    return min !== undefined ? decimalStringToBigInt(min.toString(), this.currencyFormat.maximumFractionDigits) ?? undefined : min
   }
 
   private getMaxValue(): bigint | undefined {
-    return stringToBigInt(this.options.valueRange?.max, this.currencyFormat.maximumFractionDigits) ?? undefined
+    const max = this.options.valueRange?.max
+    return max !== undefined ? decimalStringToBigInt(max.toString(), this.currencyFormat.maximumFractionDigits) ?? undefined : max
   }
 
   private validateValueRange(value: bigint | null): bigint | null {
@@ -109,7 +111,7 @@ export class CurrencyInput {
   private applyFixedFractionFormat(number: bigint | null, forcedChange = false) {
     this.format(this.currencyFormat.format(this.validateValueRange(number)))
     if (number !== this.value || forcedChange) {
-      this.onChange?.(this.formattedValue)
+      this.onChange?.(this.getValue())
     }
   }
 

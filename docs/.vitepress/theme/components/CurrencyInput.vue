@@ -2,14 +2,13 @@
 import { CurrencyInputOptions, useCurrencyInput } from '../../../../src'
 import { computed } from 'vue'
 
-const [model, modifiers] = defineModel<string | null>('modelValue', { required: true })
+const [modelValue, modelModifiers] = defineModel<string | number | null>({ required: true })
 const props = defineProps<{ options: CurrencyInputOptions }>()
-const { inputRef } = useCurrencyInput(
-  computed(() => props.options),
-  model,
-  modifiers.lazy
-)
-// watch(numberValue, () => emit('update:modelValue', numberValue.value))
+const { inputRef } = useCurrencyInput({
+  options: computed(() => props.options),
+  modelValue,
+  lazy: modelModifiers.lazy
+})
 </script>
 
 <template>

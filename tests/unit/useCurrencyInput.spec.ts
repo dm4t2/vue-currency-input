@@ -23,7 +23,7 @@ const mountComponent = (
   shallowMount(
     defineComponent({
       setup: () => {
-        const { inputRef } = useCurrencyInput({ currency: 'EUR' })
+        const { inputRef } = useCurrencyInput({ options: { currency: 'EUR' } })
         return () => h(type, { ref: inputRef }, children)
       }
     })
@@ -47,7 +47,7 @@ describe('useCurrencyInput', () => {
   it('should accept a input element as template ref', async () => {
     const wrapper = shallowMount(
       defineComponent({
-        setup: () => useCurrencyInput({ currency: 'EUR' }),
+        setup: () => useCurrencyInput({ options: { currency: 'EUR' } }),
         render: () => h('input', { ref: 'inputRef' })
       })
     )
@@ -61,7 +61,7 @@ describe('useCurrencyInput', () => {
     })
     const currencyInput = mount(
       defineComponent({
-        setup: () => useCurrencyInput({ currency: 'EUR' }),
+        setup: () => useCurrencyInput({ options: { currency: 'EUR' } }),
         render: () => h(wrapper, { ref: 'inputRef' })
       })
     )
@@ -73,14 +73,14 @@ describe('useCurrencyInput', () => {
   it('should allow to update the value', async () => {
     const wrapper = shallowMount(
       defineComponent(() => {
-        const numberValue = ref('123')
-        const { inputRef } = useCurrencyInput({ currency: 'EUR' }, numberValue)
+        const numberValue = ref(123)
+        const { inputRef } = useCurrencyInput({ options: { currency: 'EUR' }, modelValue: numberValue })
         return () =>
           h('div', { ref: inputRef }, [
             h('input'),
             h('button', {
               onClick: () => {
-                numberValue.value = '1234'
+                numberValue.value = 1234
               }
             })
           ])
@@ -89,14 +89,14 @@ describe('useCurrencyInput', () => {
 
     await wrapper.find('button').trigger('click')
 
-    expect(vi.mocked(CurrencyInput).mock.instances[0].setValue).toHaveBeenCalledWith('1234')
+    expect(vi.mocked(CurrencyInput).mock.instances[0].setValue).toHaveBeenCalledWith(1234)
   })
 
   it('should allow to update the options', async () => {
     const wrapper = shallowMount(
       defineComponent(() => {
         const options = ref({ currency: 'EUR' })
-        const { inputRef } = useCurrencyInput(options)
+        const { inputRef } = useCurrencyInput({ options })
         return () =>
           h('div', { ref: inputRef }, [
             h('input'),
@@ -118,7 +118,7 @@ describe('useCurrencyInput', () => {
   it('should support a conditionally rendered inputRef', async () => {
     const wrapper = shallowMount(
       defineComponent(() => {
-        const { inputRef } = useCurrencyInput({ currency: 'EUR' })
+        const { inputRef } = useCurrencyInput({ options: { currency: 'EUR' } })
         const visible = ref(true)
         return () =>
           h('div', [

@@ -71,13 +71,13 @@ watch(autoDecimalDigits, (value) => {
   <div class="grid gap-y-4 md:grid-cols-2 md:gap-x-8 items-center mt-8 mb-4">
     <CurrencyInput
       v-if="lazy"
-      v-model.lazy="value"
+      v-model.number.lazy="value"
       :options="options"
       class="*form-input"
     />
     <CurrencyInput
       v-else
-      v-model="value"
+      v-model.number="value"
       :options="options"
       class="*form-input"
     />

@@ -4,8 +4,8 @@ export interface NumberRange {
 }
 
 export interface ValueRange {
-  min?: string
-  max?: string
+  min?: number | string
+  max?: number | string
 }
 
 export enum CurrencyDisplay {

@@ -2,29 +2,37 @@ import { CurrencyInput } from './currencyInput'
 import { ComponentPublicInstance, isRef, Ref, ref, unref, watch } from 'vue'
 import { CurrencyInputOptions } from './api'
 
-const findInput = (el: HTMLElement | null) => (el?.matches('input') ? el : el?.querySelector('input')) as HTMLInputElement
+const findInput = (el: HTMLElement | null) => (el?.matches('input') ? el : el?.querySelector('input')) as HTMLInputElement | null
 
-export function useCurrencyInput(
-  options: CurrencyInputOptions | Ref<CurrencyInputOptions>,
-  model?: Ref<string | null | undefined>,
+export function useCurrencyInput({
+  options,
+  modelValue,
+  lazy
+}: {
+  options: CurrencyInputOptions | Ref<CurrencyInputOptions>
+  modelValue?: Ref<number | string | null>
   lazy?: boolean
-): {
-  formattedValue: Ref<string | null>
-  inputRef: Ref<HTMLInputElement | ComponentPublicInstance | null>
-} {
+}) {
   let currencyInput: CurrencyInput | null
   const inputRef: Ref<HTMLInputElement | ComponentPublicInstance | null> = ref(null)
   const formattedValue = ref<string | null>(null)
-
   if (isRef(options)) {
     watch(options, (newOptions) => {
       currencyInput?.setOptions(newOptions)
     })
   }
 
-  watch(model, (value) => {
-    currencyInput.setValue(value)
-  })
+  if (modelValue !== undefined) {
+    watch(modelValue, (value) => {
+      currencyInput?.setValue(value)
+    })
+  }
+
+  function emit(value: string | null) {
+    if (modelValue !== undefined) {
+      modelValue.value = value
+    }
+  }
 
   watch(inputRef, (value) => {
     if (value) {
@@ -36,17 +44,17 @@ export function useCurrencyInput(
           onInput: (value: string | null) => {
             formattedValue.value = el.value
             if (!lazy) {
-              model.value = value
+              emit(value)
             }
           },
           onChange: (value: string | null) => {
             if (lazy) {
-              model.value = value
+              emit(value)
             }
           }
         })
-        if (model !== undefined) {
-          currencyInput.setValue(model.value)
+        if (modelValue !== undefined) {
+          currencyInput.setValue(modelValue.value)
         }
       } else {
         console.error('No input element found. Please make sure that the "inputRef" template ref is properly assigned.')
