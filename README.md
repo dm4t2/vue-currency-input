@@ -6,7 +6,7 @@
 
 # Vue Currency Input
 
-[![](docs/vue-currency-input.gif)](https://dm4t2.github.io/vue-currency-input)
+[![](packages/docs/vue-currency-input.gif)](https://dm4t2.github.io/vue-currency-input)
 
 Vue Currency Input allows an easy input of currency formatted numbers based on the [ECMAScript Internationalization API (Intl.NumberFormat)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
 
