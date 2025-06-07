@@ -38,8 +38,10 @@
     "@vitest/eslint-plugin": "^1.1.44",
     "@vue/test-utils": "^2.4.6",
     "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.5",
     "jsdom": "^26.1.0",
     "typescript": "~5.7.3",
+    "typescript-eslint": "^8.33.1",
     "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.3",
     "vitest": "^3.2.2"

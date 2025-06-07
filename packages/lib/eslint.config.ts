@@ -1,18 +1,7 @@
-import { defineConfig } from 'eslint/config'
-// import pluginVitest from '@vitest/eslint-plugin'
-import js from '@eslint/js'
-import eslintConfigPrettier from 'eslint-config-prettier'
+import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
+import eslintConfigPrettier from 'eslint-config-prettier'
 
-export default defineConfig([
-  js.configs.recommended,
-  eslintConfigPrettier,
-  ...tseslint.configs.recommended,
-  // {
-  //   ...pluginVitest.configs.recommended,
-  //   files: ['tests/**/*']
-  // },
-  {
-    ignores: ['dist/**']
-  }
-])
+export default tseslint.config(eslint.configs.recommended, eslintConfigPrettier, tseslint.configs.recommended, {
+  ignores: ['**/dist/**']
+})
