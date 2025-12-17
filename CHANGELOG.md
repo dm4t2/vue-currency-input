@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.2](https://github.com/dm4t2/vue-currency-input/compare/3.2.1...3.2.2) (2025-12-17)
+
+
+### Bug Fixes
+
+* **autoDecimalDigits:** Ignore input of decimal symbol ([#389](https://github.com/dm4t2/vue-currency-input/issues/389)) ([4cee284](https://github.com/dm4t2/vue-currency-input/commit/4cee28446dd0d9d9d5d0dfbe190cd49254b74017))
+
 ## [3.2.1](https://github.com/dm4t2/vue-currency-input/compare/3.2.0...3.2.1) (2025-01-19)
 
 This version contains no changes and only fixes the corrupt v3.2.0 release.
