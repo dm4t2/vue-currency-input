@@ -74,6 +74,7 @@ export class AutoDecimalDigitsInputMask extends AbstractInputMask implements Inp
   conformToMask(str: string, previousConformedValue = ''): string | { fractionDigits: string; numberValue: number } {
     if (
       str === '' ||
+      str === this.currencyFormat.decimalSymbol ||
       (this.currencyFormat.parse(previousConformedValue) === 0 &&
         this.currencyFormat.stripCurrency(previousConformedValue, true).slice(0, -1) === this.currencyFormat.stripCurrency(str, true))
     ) {

@@ -157,6 +157,7 @@ describe('AutoDecimalDigitsInputMask', () => {
     const currencyFormat = new CurrencyFormat({ locale: 'nl', currency: 'EUR' })
 
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('')).toEqual('')
+    expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask(',')).toEqual('')
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('0,0', '0,00')).toEqual('')
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('-')).toEqual({ numberValue: -0, fractionDigits: '00' })
     expect(new AutoDecimalDigitsInputMask(currencyFormat).conformToMask('1')).toEqual({ numberValue: 0.01, fractionDigits: '01' })
