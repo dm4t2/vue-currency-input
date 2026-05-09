@@ -1,0 +1,11 @@
+{
+  "include-v-in-tag": false,
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "prerelease": true,
+      "prerelease-type": "beta"
+    }
+  }
+}
+

@@ -1,0 +1,9 @@
+{
+  "include-v-in-tag": false,
+  "packages": {
+    ".": {
+      "release-type": "node"
+    }
+  }
+}
+
