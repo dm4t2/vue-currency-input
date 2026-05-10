@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - uses: actions/configure-pages@v4
+      - uses: actions/configure-pages@v5
       - run: pnpm install
       - run: pnpm run docs
       - uses: actions/upload-pages-artifact@v3
