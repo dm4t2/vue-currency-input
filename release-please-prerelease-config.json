@@ -1,11 +1,14 @@
 {
   "include-v-in-tag": false,
+  "bootstrap-sha": "5e0c3510acb737d1c1c7f09a754663580a46a94e",
+  "last-release-sha": "5e0c3510acb737d1c1c7f09a754663580a46a94e",
   "packages": {
     ".": {
       "release-type": "node",
+      "component": "",
+      "include-component-in-tag": false,
       "prerelease": true,
       "prerelease-type": "beta"
     }
   }
 }
-
