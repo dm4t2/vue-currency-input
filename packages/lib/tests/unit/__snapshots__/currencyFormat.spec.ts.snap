@@ -86,7 +86,7 @@ CurrencyFormat {
     "8",
     "9",
   ],
-  "groupingSymbol": "’",
+  "groupingSymbol": "'",
   "locale": "de-CH",
   "maximumFractionDigits": 2,
   "minimumFractionDigits": 2,
