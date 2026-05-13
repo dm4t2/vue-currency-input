@@ -7,7 +7,6 @@
       "release-type": "node",
       "component": "",
       "include-component-in-tag": false,
-      "changelog-path": "/CHANGELOG.md",
       "versioning": "prerelease",
       "prerelease": true,
       "prerelease-type": "beta.0"
