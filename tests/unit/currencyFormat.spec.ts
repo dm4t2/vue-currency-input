@@ -84,6 +84,7 @@ describe('CurrencyFormat', () => {
       expect(new CurrencyFormat({ locale: 'de-AT', currency: 'EUR' }).parse('€ 66.668')).toBe(66668)
       expect(new CurrencyFormat({ locale: 'de-DE', currency: 'USD', currencyDisplay: CurrencyDisplay.name }).parse('1.234,50 US-Dollar')).toBe(1234.5)
       expect(new CurrencyFormat({ locale: 'en', currency: 'USD', accountingSign: true }).parse('(1,234.50)')).toBe(-1234.5)
+      expect(new CurrencyFormat({ locale: 'pl-PL', currency: 'PLN' }).parse('1234,50 zł')).toBe(-1234.5)
     })
 
     it('should return null if the value does not conform to the currency format', () => {
