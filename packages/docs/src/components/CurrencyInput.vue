@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { CurrencyInputOptions, useCurrencyInput } from "vue-currency-input";
 import { computed } from "vue";
-
+import { Input } from "@/components/ui/input";
 const [modelValue, modelModifiers] = defineModel<string | number | null>({
   required: true,
 });
@@ -14,5 +14,5 @@ const { inputRef } = useCurrencyInput({
 </script>
 
 <template>
-  <input ref="inputRef" type="text" />
+  <Input ref="inputRef" type="text" />
 </template>

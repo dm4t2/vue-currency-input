@@ -1,0 +1,5 @@
+/* .vitepress/theme/custom.css */
+:root {
+    --vp-c-bg: var(--background);
+    --vp-c-gutter: var(--vp-c-divider);
+}

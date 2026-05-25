@@ -1,7 +1,5 @@
 import { defineConfig } from "vitepress";
-import tailwindcss from "@tailwindcss/vite";
 import { version } from "../../lib/package.json";
-import { fileURLToPath, URL } from "node:url";
 
 export const currentVersion = `v${version}`;
 

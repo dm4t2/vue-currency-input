@@ -1,10 +1,26 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import CurrencyInput from "./CurrencyInput.vue";
-import Dialog from "./Dialog.vue";
 import OptionSection from "./OptionSection.vue";
-import Checkbox from "./Checkbox.vue";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 const range = (from: number, to: number) =>
   Array(to - from)
@@ -97,22 +113,38 @@ watch(autoDecimalDigits, (value) => {
       <code class="ml-2">{{ value != null ? value.toString() : "null" }}</code>
     </div>
   </div>
-  <div class="mb-8">
-    <Checkbox v-model="lazy" label="Use lazy value binding" />
+  <div class="flex items-center gap-3 mb-8">
+    <Checkbox v-model="lazy" id="lazy" />
+    <Label for="lazy"> Use lazy value binding </Label>
   </div>
   <div class="flex items-center justify-between mb-2">
     <span class="text-2xl font-bold">Options</span>
     <div>
-      <Button @click="exportDialogVisible = true"> Export </Button>
-      <Dialog v-model="exportDialogVisible">
-        <pre class="white--text m-0" style="margin: 0">{{
-          stringifiedOptions
-        }}</pre>
+      <Dialog>
+        <DialogTrigger as-child>
+          <Button @click="exportDialogVisible = true"> Export </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Export options</DialogTitle>
+          </DialogHeader>
+          <pre class="text-sm">{{ stringifiedOptions }}</pre>
+        </DialogContent>
       </Dialog>
     </div>
   </div>
   <hr class="mb-8" />
   <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8">
+    <Card>
+      <CardHeader>
+        <CardTitle>Card Title</CardTitle>
+        <CardDescription>Card Description</CardDescription>
+        <CardAction><Switch /></CardAction>
+      </CardHeader>
+      <CardContent>
+        <p>Card Content</p>
+      </CardContent>
+    </Card>
     <OptionSection v-model="localeEnabled" label="Locale">
       <select
         v-model="locale"

@@ -5,16 +5,17 @@
   "tailwind": {
     "config": "",
     "css": "src/styles/globals.css",
-    "baseColor": "neutral",
+    "baseColor": "slate",
     "cssVariables": true,
     "prefix": ""
   },
+  "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-    "composables": "@/composables",
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
-    "lib": "@/lib"
+    "lib": "@/lib",
+    "composables": "@/composables"
   },
-  "iconLibrary": "lucide"
+  "registries": {}
 }
