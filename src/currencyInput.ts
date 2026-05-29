@@ -159,6 +159,7 @@ export class CurrencyInput {
       }
       if (this.maxValue <= 0 && !this.currencyFormat.isNegative(formattedValue) && this.currencyFormat.parse(formattedValue) !== 0) {
         formattedValue = formattedValue.replace(this.currencyFormat.prefix, this.currencyFormat.negativePrefix)
+        formattedValue = formattedValue.length ? `${formattedValue})` : formattedValue
       }
       if (this.minValue >= 0) {
         formattedValue = formattedValue.replace(this.currencyFormat.negativePrefix, this.currencyFormat.prefix)
@@ -217,6 +218,9 @@ export class CurrencyInput {
                 }
               }
             }
+          }
+          if (selectionStart === 1 && caretPositionFromLeft === 0 && this.formattedValue.endsWith(')')) {
+            caretPositionFromLeft = 1
           }
           return this.options.hideCurrencySymbolOnFocus || this.options.currencyDisplay === CurrencyDisplay.hidden
             ? newValueLength - caretPositionFromLeft
