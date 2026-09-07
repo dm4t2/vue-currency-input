@@ -1,4 +1,4 @@
-import { escapeRegExp, substringBefore } from './utils'
+import { bigIntToDecimalString, escapeRegExp, substringBefore } from './utils'
 import { CurrencyDisplay, CurrencyFormatOptions } from './api'
 
 export const DECIMAL_SEPARATORS = [
@@ -90,10 +90,9 @@ export default class CurrencyFormat {
     }
   ): string {
     if (value != null) {
-      const digits = `${value.toString().padStart(this.maximumFractionDigits, '0')}`
       return new Intl.NumberFormat(this.locale, { ...this.options, ...options }).format(
-        // @ts-expect-error foo
-        `${digits.slice(0, digits.length - this.maximumFractionDigits)}.${digits.slice(-this.maximumFractionDigits)}`
+        // @ts-expect-error Intl.NumberFormat accepts decimal strings since ES2023, but the types do not say so yet
+        bigIntToDecimalString(value, this.maximumFractionDigits)
       )
     } else {
       return ''
