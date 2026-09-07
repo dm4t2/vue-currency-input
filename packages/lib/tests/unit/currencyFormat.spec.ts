@@ -104,6 +104,15 @@ describe('CurrencyFormat', () => {
       expect(new CurrencyFormat({ locale: 'en', currency: 'JPY' }).format(12345789n)).toBe('¥12,345,789')
     })
 
+    it('should return the formatted value for negative amounts', () => {
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).format(-1n)).toBe('-€0.01')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).format(-100n)).toBe('-€1.00')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR' }).format(-12345789n)).toBe('-€123,457.89')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: 3 }).format(-99n)).toBe('-€0.099')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: 3 }).format(-5000n)).toBe('-€5.000')
+      expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(-1234n)).toBe('-€0.1234')
+    })
+
     it('should apply the custom precision range', () => {
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(1234n)).toBe('€0.1234')
       expect(new CurrencyFormat({ locale: 'en', currency: 'EUR', precision: { min: 0, max: 4 } }).format(12345n)).toBe('€1.2345')
