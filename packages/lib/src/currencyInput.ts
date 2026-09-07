@@ -142,6 +142,13 @@ export class CurrencyInput {
           minimumFractionDigits,
           maximumFractionDigits
         })
+        if (numberValue === 0n && this.currencyFormat.isNegative(value)) {
+          // A minus sign that has been entered has to survive a value of zero, because the input
+          // value is rebuilt from `numberValue` on every keystroke and a bigint has no negative
+          // zero. Without this, typing "-0.5" loses the sign on the "0" and yields a positive
+          // number: the minus is gone from the input before the "5" is typed.
+          formattedValue = this.currencyFormat.insertCurrency(this.currencyFormat.stripCurrency(formattedValue, false), true)
+        }
       } else {
         formattedValue = conformedValue
       }

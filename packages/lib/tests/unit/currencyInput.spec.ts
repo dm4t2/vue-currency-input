@@ -57,6 +57,35 @@ describe('Currency Input', () => {
       expect(el.value).toBe('€1,234')
     })
 
+    describe('an entered minus sign on a value of zero', () => {
+      it('should survive so that a negative amount below one unit can be entered', () => {
+        userEvent.type(el, '-0.5')
+
+        expect(el.value).toBe('-0.5')
+      })
+
+      it('should still be there while the value is zero', () => {
+        userEvent.type(el, '-0')
+
+        expect(el.value).toBe('-0')
+      })
+
+      it('should use the negative affixes of the locale', () => {
+        document.body.innerHTML = `<input type="text">`
+        el = document.querySelector('input') as HTMLInputElement
+        currencyInput = new CurrencyInput({
+          el,
+          options: { locale: 'en', currency: 'USD', accountingSign: true, hideCurrencySymbolOnFocus: false },
+          onInput: vi.fn(),
+          onChange: vi.fn()
+        })
+
+        userEvent.type(el, '-0.5')
+
+        expect(el.value).toBe('($0.5)')
+      })
+    })
+
     describe('caret position', () => {
       it('should retain the caret position if the last number before whitespace thousands separator is deleted', () => {
         currencyInput.setValue(1500000)
